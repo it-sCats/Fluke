@@ -77,8 +77,11 @@ flutter:
   fonts:
     - family: Cairo
       fonts:
+        - asset: fonts/Cairo-Regular.ttf
+        - asset: fonts/Cairo-Bold.ttf
+          weight: 600
         - asset: fonts/Cairo-Black.ttf
-          style: italic
+          weight: 800
   #   - family: Trajan Pro
       # fonts:
       #   - asset: fonts/TrajanPro.ttf
