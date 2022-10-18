@@ -1,5 +1,6 @@
 import 'package:flukepro/screens/loginScreen.dart';
 import 'package:flukepro/screens/onBoardingScreen.dart';
+import 'package:flukepro/screens/regestrationScreens/intersetsScreen.dart';
 import 'package:flukepro/screens/regestrationScreens/participantRegestration.dart';
 import 'package:flukepro/screens/regestrationScreens/visitorRegestrationScreen.dart';
 import 'package:flukepro/screens/regestrationScreens/regestrationType.dart';
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
         '/log': ((context) => loginScreen()),
         '/visitorSign':((context) => VisitorRegistration()),
     '/particSign':((context) => particepantRegistrationScreen())
-        ,'/UserType':((context) => regestrationTypeScreen())
+        ,'/UserType':((context) => regestrationTypeScreen()),
+        '/interests':((context) => interestsSelection())
       }, //routes are to ease the navigation btween pages
       //we give every page a name then when we want to navigate we just call that name
     );
