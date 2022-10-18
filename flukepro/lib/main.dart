@@ -1,5 +1,8 @@
 import 'package:flukepro/screens/loginScreen.dart';
 import 'package:flukepro/screens/onBoardingScreen.dart';
+import 'package:flukepro/screens/regestrationScreens/participantRegestration.dart';
+import 'package:flukepro/screens/regestrationScreens/visitorRegestrationScreen.dart';
+import 'package:flukepro/screens/regestrationScreens/regestrationType.dart';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -13,12 +16,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
+
       home: onBoarding(),
       debugShowCheckedModeBanner:
           false, //to remove debugging banner at the top of the screen
 
       routes: {
-        '/log': ((context) => loginScreen())
+        '/log': ((context) => loginScreen()),
+        '/visitorSign':((context) => VisitorRegistration()),
+    '/particSign':((context) => particepantRegistrationScreen())
+        ,'/UserType':((context) => regestrationTypeScreen())
       }, //routes are to ease the navigation btween pages
       //we give every page a name then when we want to navigate we just call that name
     );

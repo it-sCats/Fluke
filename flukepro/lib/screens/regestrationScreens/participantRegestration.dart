@@ -1,10 +1,11 @@
 import 'package:flukepro/components/cons.dart';
 import 'package:flutter/material.dart';
 
-import '../components/customWidgets.dart';
+import '../../components/customWidgets.dart';
 
-class loginScreen extends StatelessWidget {
-  final _logFormKey = GlobalKey<FormState>();
+
+class particepantRegistrationScreen extends StatelessWidget {
+  final _particapantFormKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -12,16 +13,16 @@ class loginScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,//prevents keyboard from creating the error of overflowing
       backgroundColor: Colors.white,
       body: Form(
-        key: _logFormKey,
+        key: _particapantFormKey,//this key to unique each form so when we validate it does the work
         child: Column(
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height / 8,
+              height: MediaQuery.of(context).size.height / 10,
             ),
             Align(alignment: Alignment.centerRight,
               child: Container(margin: EdgeInsets.only(right: 65),
                 child: Text(
-                  'تسجيل دخول ',
+                  ' سجل كـجهة مشاركة ',
                   textAlign: TextAlign.right,
                   style: TextStyle(
                     fontFamily: 'Cairo',
@@ -61,50 +62,50 @@ class loginScreen extends StatelessWidget {
                 ),
                 InkWell(
                     child: Container(
-                  height: 55,
-                  decoration: BoxDecoration(
-                      color: Color(0xff3F72BE).withOpacity(.9),
-                      border: Border.all(
-                        color: Color(0xff383838),
-                      ),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(25),
-                      )),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10,left: 17),
-                        child: Text(
-                          'سجل دخول بإستخدام قوقل',
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                              fontSize: 11,
-                              fontFamily: 'Cairo',
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white),
-                        ),
-                      ),
-                      Container(
-                        height: 55,
-                        width: 51,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Color(0xff383838),
+                      height: 55,
+                      decoration: BoxDecoration(
+                          color: Color(0xff3F72BE).withOpacity(.9),
+                          border: Border.all(
+                            color: Color(0xff383838),
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(25),
+                          )),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10,left: 17),
+                            child: Text(
+                              'سجل بإستخدام قوقل',
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                  fontSize: 11,
+                                  fontFamily: 'Cairo',
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white),
                             ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(23),
-                            )),
-                        child: CircleAvatar(
-                          radius: 50,
-                          backgroundColor: Colors.white.withOpacity(1),
-                          backgroundImage: AssetImage('images/google-tile 1.png'),
-                        ),
-                      )
-                    ],
-                  ),
-                ))
+                          ),
+                          Container(
+                            height: 55,
+                            width: 51,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: Color(0xff383838),
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(23),
+                                )),
+                            child: CircleAvatar(
+                              radius: 50,
+                              backgroundColor: Colors.white.withOpacity(1),
+                              backgroundImage: AssetImage('images/google-tile 1.png'),
+                            ),
+                          )
+                        ],
+                      ),
+                    ))
               ],
             ),
             SizedBox(
@@ -146,13 +147,14 @@ class loginScreen extends StatelessWidget {
             SizedBox(
               height: 30,
             ),
-            txtFeild('إسم المستخدم أو البريد الإكتروني',false,true,false),
-            txtFeild('كلمة المرور',true,false,true),//custom widgets take the text and if its password or not
+            txtFeild('إسم المشارك أو الجهة',false,false,false),
+            txtFeild('example@mail.com',false,true,false),
+            txtFeild('كلمة المرور',true,false,false),//custom widgets take the text and if its password or not
+            txtFeild('طبيعة نشاط الفرد أو الجهة',false,false,false),
+            txtFeild('حجم الشركة أو الأعمال, كبيرة متوسطةأو صغيرة',false,false,false),
 
-            Align(alignment: Alignment.centerRight,child: InkWell(child: Container(margin: EdgeInsets.only(right:75,top: 5),
-                child: Text('نسيت كلمة المرور؟',textAlign: TextAlign.right,style: conTxtLink,)))),
-          SizedBox(height: 21 ,),
-            CTA('تسجيل دخول',(){ if (_logFormKey.currentState!.validate()) {
+            SizedBox(height: 20 ,),
+            CTA('تسجيل ',(){if (_particapantFormKey.currentState!.validate()) {
               // If the form is valid, display a snackbar. In the real world,
               // you'd often call a server or save the information in a database.
               ScaffoldMessenger.of(context).showSnackBar(
@@ -161,9 +163,12 @@ class loginScreen extends StatelessWidget {
             }}),
             Row(mainAxisAlignment: MainAxisAlignment.end,crossAxisAlignment: CrossAxisAlignment.baseline,
               textBaseline: TextBaseline.ideographic,
-              children: [ InkWell(onTap:(){ Navigator.pushNamed(context, '/UserType');},child: Container(margin: EdgeInsets.only(right:5,top: 5),
-                child: Text('سجل كـجهة منظمة أو\n زائر أو مشارك ',textAlign: TextAlign.right,style:conTxtLink,))), InkWell(child: Container(margin: EdgeInsets.only(right:75,top: 10),
-                child: Text('ليس لديك حساب؟ ',textAlign: TextAlign.right,style: TextStyle(color:conBlack,fontFamily: 'Cairo',fontSize: 12,),))),],)
+              children: [ InkWell(
+                  onTap: (){Navigator.pushNamed(context, '/log');},
+                  child: Container(
+                      margin: EdgeInsets.only(right:5,top: 5),
+                      child: Text('قم بتسجيل دخول',textAlign: TextAlign.right,style:conTxtLink,))), InkWell(child: Container(margin: EdgeInsets.only(right:100,top: 10),
+                  child: Text(' لديك حساب؟ ',textAlign: TextAlign.right,style: TextStyle(color:conBlack,fontFamily: 'Cairo',fontSize: 12,),))),],)
           ],
         ),
       ),
