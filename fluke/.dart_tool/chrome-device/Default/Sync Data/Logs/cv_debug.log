@@ -1,0 +1,53 @@
+{"logTime": "1014/063242", "correlationVector":"KZMnkbJ34d/Afjil4yXaiX.0","action":"FeedSettingFetch_homeCloud", "result":"0", "context":{}}
+{"logTime": "1014/063243", "correlationVector":"KZMnkbJ34d/Afjil4yXaiX.0","action":"SyncServerConnectionManagerRequest", "result":"SYNC_SERVER_OK", "context":{"environment":"", "server":""}}
+{"logTime": "1014/063243", "correlationVector":"ccDpEsebkI59crmJxYYrL4.1","action":"SyncServerConnectionManagerRequest", "result":"SYNC_SERVER_OK", "context":{"environment":"Prod_WestEurope", "server":"GENERAL01000002"}}
+{"logTime": "1014/063243", "correlationVector":"ccDpEsebkI59crmJxYYrL4","action":"Initial GetUpdates", "result":"", "context":Reason: NEW_CLIENT. cV=ccDpEsebkI59crmJxYYrL4}
+{"logTime": "1014/063243", "correlationVector":"ccDpEsebkI59crmJxYYrL4.2","action":"GetUpdates Response", "result":"SYNCER_OK", "context":Received 1 update(s). cV=ccDpEsebkI59crmJxYYrL4.0;server=GENERAL01000002;cloudType=Consumer;environment=Prod_WestEurope}
+{"logTime": "1014/063243", "correlationVector":"GMqinLnFhWHKNBHqqIaFyA","action":"Initial GetUpdates", "result":"", "context":Reason: NEW_CLIENT. cV=GMqinLnFhWHKNBHqqIaFyA}
+{"logTime": "1014/063245", "correlationVector":"GMqinLnFhWHKNBHqqIaFyA.1","action":"SyncServerConnectionManagerRequest", "result":"SYNC_SERVER_OK", "context":{"environment":"Prod_WestEurope", "server":"general01000000"}}
+{"logTime": "1014/063245", "correlationVector":"GMqinLnFhWHKNBHqqIaFyA.2","action":"GetUpdates Response", "result":"SYNCER_OK", "context":Received 31 update(s). cV=GMqinLnFhWHKNBHqqIaFyA.0;server=general01000000;cloudType=Consumer;environment=Prod_WestEurope}
+{"logTime": "1014/063245", "correlationVector":"e7blmdqgrjuFQcLJH9HYsg","action":"Initial GetUpdates", "result":"", "context":Reason: NEW_CLIENT. cV=e7blmdqgrjuFQcLJH9HYsg}
+{"logTime": "1014/063246", "correlationVector":"e7blmdqgrjuFQcLJH9HYsg.1","action":"SyncServerConnectionManagerRequest", "result":"SYNC_SERVER_OK", "context":{"environment":"Prod_WestEurope", "server":"GENERAL0100000L"}}
+{"logTime": "1014/063246", "correlationVector":"e7blmdqgrjuFQcLJH9HYsg.2","action":"GetUpdates Response", "result":"SYNCER_OK", "context":Received 14 update(s). cV=e7blmdqgrjuFQcLJH9HYsg.0;server=GENERAL0100000L;cloudType=Consumer;environment=Prod_WestEurope}
+{"logTime": "1014/063246", "correlationVector":"aS3AM27V1SM3dEFo82a8Ea","action":"Initial GetUpdates", "result":"", "context":Reason: NEW_CLIENT. cV=aS3AM27V1SM3dEFo82a8Ea}
+{"logTime": "1014/063246", "correlationVector":"aS3AM27V1SM3dEFo82a8Ea.1","action":"SyncServerConnectionManagerRequest", "result":"SYNC_SERVER_OK", "context":{"environment":"Prod_WestEurope", "server":"GENERAL0100000O"}}
+{"logTime": "1014/063246", "correlationVector":"aS3AM27V1SM3dEFo82a8Ea.2","action":"GetUpdates Response", "result":"SYNCER_OK", "context":Received 120 update(s). cV=aS3AM27V1SM3dEFo82a8Ea.0;server=GENERAL0100000O;cloudType=Consumer;environment=Prod_WestEurope}
+{"logTime": "1014/063246", "correlationVector":"tPq9bx/1u2roBeUuwBzvBY","action":"Normal GetUpdate request", "result":"", "context":cV=tPq9bx/1u2roBeUuwBzvBY
+Nudged types: Bookmarks, Preferences, Device Info, User Consents
+Refresh requested types: Bookmarks, Preferences, Passwords, Autofill Profiles, Autofill, Autofill Custom Data, Extensions, Extension settings, Device Info, User Consents, Send Tab To Self, Collection, Encryption Keys}
+{"logTime": "1014/063247", "correlationVector":"tPq9bx/1u2roBeUuwBzvBY.1","action":"SyncServerConnectionManagerRequest", "result":"SYNC_SERVER_OK", "context":{"environment":"Prod_WestEurope", "server":"GENERAL0100002W"}}
+{"logTime": "1014/063247", "correlationVector":"tPq9bx/1u2roBeUuwBzvBY.2","action":"GetUpdates Response", "result":"SYNCER_OK", "context":Received 0 update(s). cV=tPq9bx/1u2roBeUuwBzvBY.0;server=GENERAL0100002W;cloudType=Consumer;environment=Prod_WestEurope}
+{"logTime": "1014/063247", "correlationVector":"/1+J62KRvl611W1kI3D+18","action":"Commit Request", "result":"", "context":Item count: 1
+Contributing types: Device Info}
+{"logTime": "1014/063248", "correlationVector":"/1+J62KRvl611W1kI3D+18.1","action":"SyncServerConnectionManagerRequest", "result":"SYNC_SERVER_OK", "context":{"environment":"Prod_WestEurope", "server":"GENERAL0100002Q"}}
+{"logTime": "1014/063248", "correlationVector":"/1+J62KRvl611W1kI3D+18.2","action":"Commit Response", "result":"SYNCER_OK", "context":Result: SYNCER_OK. cV=/1+J62KRvl611W1kI3D+18.0;server=GENERAL0100002Q;cloudType=Consumer;environment=Prod_WestEurope}
+{"logTime": "1014/063248", "correlationVector":"fU0XCt5zGOq8qeI+VWNmhe","action":"Commit Request", "result":"", "context":Item count: 8
+Contributing types: Bookmarks, Preferences, User Consents}
+{"logTime": "1014/063249", "correlationVector":"fU0XCt5zGOq8qeI+VWNmhe.1","action":"SyncServerConnectionManagerRequest", "result":"SYNC_SERVER_OK", "context":{"environment":"Prod_WestEurope", "server":"general0100000T"}}
+{"logTime": "1014/063249", "correlationVector":"fU0XCt5zGOq8qeI+VWNmhe.2","action":"Commit Response", "result":"SYNCER_OK", "context":Result: SYNCER_OK. cV=fU0XCt5zGOq8qeI+VWNmhe.0;server=general0100000T;cloudType=Consumer;environment=Prod_WestEurope}
+{"logTime": "1014/063515", "correlationVector":"ZXfNyStt/j+aZ9oXdL2LDJ","action":"Commit Request", "result":"", "context":Item count: 12
+Contributing types: Passwords}
+{"logTime": "1014/063517", "correlationVector":"ZXfNyStt/j+aZ9oXdL2LDJ.1","action":"SyncServerConnectionManagerRequest", "result":"SYNC_SERVER_OK", "context":{"environment":"Prod_WestEurope", "server":"GENERAL0100002Q"}}
+{"logTime": "1014/063517", "correlationVector":"ZXfNyStt/j+aZ9oXdL2LDJ.2","action":"Commit Response", "result":"SYNCER_OK", "context":Result: SYNCER_OK. cV=ZXfNyStt/j+aZ9oXdL2LDJ.0;server=GENERAL0100002Q;cloudType=Consumer;environment=Prod_WestEurope}
+{"logTime": "1014/070115", "correlationVector":"ELaaMTkbBUORIkPfI2Z/Vi.0","action":"FeedSettingFetch_homeCloud", "result":"0", "context":{}}
+{"logTime": "1014/070215", "correlationVector":"Y50UvC9Wznko9cTPopIcld.1","action":"SyncServerConnectionManagerRequest", "result":"SYNC_SERVER_OK", "context":{"environment":"Prod_WestEurope", "server":"GENERAL0100000X"}}
+{"logTime": "1014/070215", "correlationVector":"Y50UvC9Wznko9cTPopIcld","action":"Initial GetUpdates", "result":"", "context":Reason: NEW_CLIENT. cV=Y50UvC9Wznko9cTPopIcld}
+{"logTime": "1014/070215", "correlationVector":"Y50UvC9Wznko9cTPopIcld.2","action":"GetUpdates Response", "result":"SYNCER_OK", "context":Received 1 update(s). cV=Y50UvC9Wznko9cTPopIcld.0;server=GENERAL0100000X;cloudType=Consumer;environment=Prod_WestEurope}
+{"logTime": "1014/070220", "correlationVector":"2Eo+rx1mZavJWzTp6f1G+T","action":"SyncServerConnectionManagerRequest", "result":"SYNC_SERVER_OK", "context":{"environment":"", "server":""}}
+{"logTime": "1014/070220", "correlationVector":"2uHOhzSEcYrnAfY6xMmTOS","action":"Normal GetUpdate request", "result":"", "context":cV=2uHOhzSEcYrnAfY6xMmTOS
+Nudged types: Preferences
+Refresh requested types: Bookmarks, Preferences, Autofill Custom Data, Extensions, Extension settings, Device Info, User Consents, Send Tab To Self, Collection, Encryption Keys}
+{"logTime": "1014/070221", "correlationVector":"2uHOhzSEcYrnAfY6xMmTOS.1","action":"SyncServerConnectionManagerRequest", "result":"SYNC_SERVER_OK", "context":{"environment":"Prod_WestEurope", "server":"GENERAL0100002U"}}
+{"logTime": "1014/070221", "correlationVector":"2uHOhzSEcYrnAfY6xMmTOS.2","action":"GetUpdates Response", "result":"SYNCER_OK", "context":Received 8 update(s). cV=2uHOhzSEcYrnAfY6xMmTOS.0;server=GENERAL0100002U;cloudType=Consumer;environment=Prod_WestEurope}
+{"logTime": "1014/070221", "correlationVector":"1kHYEKyfRpAaTQhtr8Ydqz","action":"Commit Request", "result":"", "context":Item count: 1
+Contributing types: Preferences}
+{"logTime": "1014/070222", "correlationVector":"1kHYEKyfRpAaTQhtr8Ydqz.1","action":"SyncServerConnectionManagerRequest", "result":"SYNC_SERVER_OK", "context":{"environment":"Prod_WestEurope", "server":"GENERAL01000006"}}
+{"logTime": "1014/070222", "correlationVector":"1kHYEKyfRpAaTQhtr8Ydqz.2","action":"Commit Response", "result":"SYNCER_OK", "context":Result: SYNCER_OK. cV=1kHYEKyfRpAaTQhtr8Ydqz.0;server=GENERAL01000006;cloudType=Consumer;environment=Prod_WestEurope}
+{"logTime": "1014/070222", "correlationVector":"P6a9BBsJMTZrjcjl59BO7o","action":"Initial GetUpdates", "result":"", "context":Reason: NEWLY_SUPPORTED_DATATYPE. cV=P6a9BBsJMTZrjcjl59BO7o}
+{"logTime": "1014/070224", "correlationVector":"P6a9BBsJMTZrjcjl59BO7o.1","action":"SyncServerConnectionManagerRequest", "result":"SYNC_SERVER_OK", "context":{"environment":"Prod_WestEurope", "server":"GENERAL0100002N"}}
+{"logTime": "1014/070224", "correlationVector":"P6a9BBsJMTZrjcjl59BO7o.2","action":"GetUpdates Response", "result":"SYNCER_OK", "context":Received 18 update(s). cV=P6a9BBsJMTZrjcjl59BO7o.0;server=GENERAL0100002N;cloudType=Consumer;environment=Prod_WestEurope}
+{"logTime": "1014/070224", "correlationVector":"uEsrvfWycjn9NExBWzFyI5","action":"Normal GetUpdate request", "result":"", "context":cV=uEsrvfWycjn9NExBWzFyI5
+Nudged types: Preferences
+Refresh requested types: Bookmarks, Preferences, Passwords, Autofill Profiles, Autofill, Autofill Custom Data, Extensions, Extension settings, Device Info, User Consents, Send Tab To Self, Collection, Encryption Keys}
+{"logTime": "1014/070224", "correlationVector":"uEsrvfWycjn9NExBWzFyI5.1","action":"SyncServerConnectionManagerRequest", "result":"SYNC_SERVER_OK", "context":{"environment":"Prod_WestEurope", "server":"GENERAL01000009"}}
+{"logTime": "1014/070224", "correlationVector":"uEsrvfWycjn9NExBWzFyI5.2","action":"GetUpdates Response", "result":"SYNCER_OK", "context":Received 1 update(s). cV=uEsrvfWycjn9NExBWzFyI5.0;server=GENERAL01000009;cloudType=Consumer;environment=Prod_WestEurope}

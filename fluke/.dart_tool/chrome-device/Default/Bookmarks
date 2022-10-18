@@ -1,0 +1,130 @@
+{
+   "checksum": "f505e530b4ed9de8cdd0cff36bdfe181",
+   "roots": {
+      "bookmark_bar": {
+         "children": [ {
+            "date_added": "13291845852673015",
+            "date_last_used": "0",
+            "guid": "a695c497-5a52-4dbd-8cfc-4f1aa7e14280",
+            "id": "8",
+            "name": "orange,blue 1",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "https://colorhunt.co/palette/37066535589af14a16fc9918"
+         }, {
+            "date_added": "13291845889504239",
+            "date_last_used": "0",
+            "guid": "8d5fcf87-9140-4d04-9699-9d354634a40b",
+            "id": "9",
+            "name": "Orange,blue 2",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "https://colorhunt.co/palette/fef1e6f9d5a7ffb08590aacb"
+         }, {
+            "date_added": "13291845955073910",
+            "date_last_used": "0",
+            "guid": "df5eef7a-efa1-4c74-9fd6-014cfbf5b457",
+            "id": "10",
+            "name": "orange,blue 3..",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "https://colorhunt.co/palette/dddddd125d983c8dadf5a962"
+         }, {
+            "date_added": "13291846012819692",
+            "date_last_used": "0",
+            "guid": "839e0532-8027-40a1-be25-c0aaf56776af",
+            "id": "11",
+            "name": "orange,blue",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "https://colorhunt.co/palette/d9eeec64b2cd3c70a4da9833"
+         }, {
+            "date_added": "13291848865945597",
+            "date_last_used": "0",
+            "guid": "7e2bfdca-fe88-4e06-9987-0ddcdb899eec",
+            "id": "12",
+            "name": "Free Vector | Flat design web developers",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "https://www.freepik.com/free-vector/flat-design-web-developers_12064750.htm"
+         }, {
+            "children": [ {
+               "date_added": "13288587164984063",
+               "date_last_used": "0",
+               "guid": "dc3aea02-8046-47c7-b228-7936d53a90cb",
+               "id": "14",
+               "name": "Lenovo Support",
+               "show_icon": false,
+               "source": "import_fre",
+               "type": "url",
+               "url": "http://support.lenovo.com/"
+            }, {
+               "date_added": "13288587164984063",
+               "date_last_used": "0",
+               "guid": "a638ddb4-d515-4506-8998-8e454f894758",
+               "id": "15",
+               "name": "Lenovo",
+               "show_icon": false,
+               "source": "import_fre",
+               "type": "url",
+               "url": "http://www.lenovo.com/"
+            } ],
+            "date_added": "13310202757611511",
+            "date_last_used": "0",
+            "date_modified": "13310202766014465",
+            "guid": "1a43c519-5452-46cd-a3ff-107815b17729",
+            "id": "13",
+            "name": "Lenovo",
+            "source": "import_fre",
+            "type": "folder"
+         }, {
+            "date_added": "13293786195939903",
+            "date_last_used": "0",
+            "guid": "fa9e676d-64af-45d0-a2e4-b58cddb8dc02",
+            "id": "16",
+            "name": "purple",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "https://colorhunt.co/palette/46244c712b75c74b50d49b54"
+         } ],
+         "date_added": "13310202753255743",
+         "date_last_used": "0",
+         "date_modified": "13293786195939903",
+         "guid": "0bc5d13f-2cba-5d74-951f-3f233fe6c908",
+         "id": "1",
+         "name": "Favorites bar",
+         "source": "unknown",
+         "type": "folder"
+      },
+      "other": {
+         "children": [  ],
+         "date_added": "13310202753255746",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "82b081ec-3dd3-529c-8475-ab6c344590dd",
+         "id": "2",
+         "name": "Other favorites",
+         "source": "unknown",
+         "type": "folder"
+      },
+      "synced": {
+         "children": [  ],
+         "date_added": "13310202753255749",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "4cf2e351-0e85-532b-bb37-df045d8f8d0f",
+         "id": "3",
+         "name": "Mobile favorites",
+         "source": "unknown",
+         "type": "folder"
+      }
+   },
+   "sync_metadata": "Ci4KDgiIgQISCHXJI9ODAQAAEgAgASoYdk9SZmRyWkdISVA4VEhqNEVxYm9lZz09EokBCAMShAEKHG5qZ0R1ODhlQ3J2WHA4NnBEN2ZIR2NxRnA4OD0SJDYzZWMxNzk2LWY4OWUtNTJlZC1hNGM5LWI3NDkxYzFmMmNmNRgAIAAoADCdjOHL7i84h47hy+4vQIeO4cvuL0oceXpOQjAxY241NEE3Y1JVMHVUKy9QZ21UdFVvPVoAZQAAAAASiQEIAhKEAQocWWNTVG9udkVTUHdxQ3M0TDJjclZodjY4TDk4PRIkZmEzMDM5YmItNGJjMi01NDEzLTlhNmMtZDcwNjZjYzA2NDNhGAAgACgAMJ2M4cvuLzi5jeHL7i9AuY3hy+4vShxvUFZraHdCUmJWNjVLQ1dSMitJT05IV29PdTg9WgBlAAAAABKnAQgIEqIBChxsNjRJNVRYYzZHMnd2bGRlVlNVellxQ0JXQXc9EiRhNjk1YzQ5Ny01YTUyLTRkYmQtOGNmYy00ZjFhYTdlMTQyODAYACACKAIwufaimL0wOOKrkOf4L0DA9cepvTBKHGM1VVZLUmZlVVBMNXFSL1FoZmlMTWtiYXZwOD1aHiIcL0hKVnNPNkRXMENGbGNkT1g0bkdsUHdMMFZzPWUn3MbAEqgBCAwSowEKHDluM0VIRnl2MVNqU2NqWnpvVFFjK3ZER1c1az0SJDdlMmJmZGNhLWZlODgtNGUwNi05OTg3LTBkZGNkYjg5OWVlYxgAIAIoAjC59qKYvTA4opzI6PgvQML1x6m9MEocMGxvSWU1T2pUS1FTbHhoVHBUQWdaSk5ramc4PVofIh3uam9xd2hHTDNLbTdaUFZMTTFicnZ6Qk1HV3JjPWUsiY5JEqcBCAkSogEKHE12OGc1ZmQ1Q3MxWlpGMDdLRm5JdW9SK1BHaz0SJDhkNWZjZjg3LTkxNDAtNGQwNC05Njk5LTlkMzU0NjM0YTQwYhgAIAIoAjC59qKYvTA48MeS5/gvQMD1x6m9MEocdklQa2VjRGExdlNsM0ZQelovV3hZSkhEQmlNPVoeIhx0cldSTGYxUXE3ZTFFQ0N3RDhlRUZZTWMyNUU9ZSfcxsASqAEIEBKjAQocUldtNlN4VHlTZnpucU82VHhjcVVWUVdyNVpFPRIkZmE5ZTY3NmQtNjRhZi00NWQwLWEyZTQtYjU4Y2RkYjhkYzAyGAAgAigCMLn2opi9MDja/KuEgDBAw/XHqb0wShxwTW1KbFQvOHNrcWxwTjVHTWp0bVVMKzlDTDg9Wh8iHftDSEJKTnR5M3NCcVpEc0svTWY5VWJpQ1FhemM9ZSfcxsASqAEIChKjAQocWVFSYk9QOTNFZzE1V29EbldMTnRXS3RkSGpjPRIkZGY1ZWVmN2EtZWZhMS00Yzc0LTlmZDYtMDE0Y2ZiZjViNDU3GAAgAigCMLn2opi9MDiVypbn+C9AwfXHqb0wShxYVjc2S3dzazc5aEc3bGwxSGR2UXUxeHNjQ0E9Wh8iHbo5UW4rdWkybyt6NXZHNFUvY1dRanUxT1JjOGs9ZSfcxsASpwEIDhKiAQocODlmSmZzdGZTOEcwcDBEVGRLTzlVRVoxb2pZPRIkZGMzYWVhMDItODA0Ni00N2M3LWIyMjgtNzkzNmQ1M2E5MGNiGAAgACgAMKWzxYb8LzjVtMWG/C9A1bTFhvwvShxjZXJicEhJckRjZUpSUlFZT0ltWDNFWnp5bVU9Wh4iHFhiVTE3Q1NUMGNDbllXdloxL2pOS1QycE9NQT1lAAAAABKoAQgLEqMBChxoWis5NmNMSEZZZGtqODRGdUlnRXlmQzNqVzQ9EiQ4MzllMDUzMi04MDI3LTQwYTEtYmUyNS1jMGFhZjU2Nzc2YWYYACACKAIwufaimL0wOIqMmuf4L0DB9cepvTBKHDcwRlZpaTFpU0ltc1lhUittOFluKzI4QWVVST1aHyId3S9QU0JSejNrblFYRmloWmxXZWZGMnpmM0NJcz1lJ9zGwBKJAQgBEoQBChx5eEovNmZ2a2VjcjdrcDVFUXpCNHRXTHBkYkU9EiRiNDk3NGQ3OS00ZmU0LTVkMWQtYTc3My1lMDBkMGJiY2ZlMzUYACAAKAAwnYzhy+4vOKmN4cvuL0CpjeHL7i9KHGFSQ1dMZ2hGOWI1SW5xS0lEdnVKL2p2UWtGYz1aAGUAAAAAEqgBCA8SowEKHHk0ci9oaWlWcjAwSVFUaWZmeXFoa1V4bWZPaz0SJGE2MzhkZGI0LWQ1MTUtNDUwNi04OTk4LThlNDU0Zjg5NDc1OBgAIAAoADCls8WG/C849LTFhvwvQPS0xYb8L0ocRjRacEh6aXFlNHB4QzRQREdPTHJ5aFc0dVRnPVofIh2sRWUxN2tQYjRoWFVvSzgzQzZOMjFMWE9ET3hFPWUAAAAAEqgBCA0SowEKHHVndlk5OENqZ0Q0clB2R0lKM0kwby94emF0bz0SJDFhNDNjNTE5LTU0NTItNDZjZC1hM2ZmLTEwNzgxNWIxNzcyORgAIAAoADCls8WG/C84ubPFhvwvQLmzxYb8L0ocLzlBQUd5OGVqZ1FqeWZIdkJ0angwKzE4NzZjPVofIh33ZFFLMWhUQWRTUlNRZXlQMVBsQUs3ZjZPMkZFPWUAAAAAMAA4AA==",
+   "version": 1
+}
