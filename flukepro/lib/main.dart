@@ -1,11 +1,13 @@
 import 'package:flukepro/screens/loginScreen.dart';
 import 'package:flukepro/screens/onBoardingScreen.dart';
 import 'dart:io';
+import 'dashboard.dart';
 
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  // runApp(MyApp());
+  runApp(DashBoard());
 }
 
 class MyApp extends StatelessWidget {
@@ -24,3 +26,14 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+class DashBoard extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+     
+    ); 
+  }
+}
+ 
