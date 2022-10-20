@@ -10,8 +10,8 @@ import 'dashboard.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  // runApp(MyApp());
-  runApp(DashBoard());
+  runApp(MyApp());
+  // runApp(DashBoard());
 }
 
 class MyApp extends StatelessWidget {
@@ -19,18 +19,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
-
       home: onBoarding(),
       debugShowCheckedModeBanner:
           false, //to remove debugging banner at the top of the screen
 
       routes: {
         '/log': ((context) => loginScreen()),
-        '/visitorSign':((context) => VisitorRegistration()),
-    '/particSign':((context) => particepantRegistrationScreen())
-        ,'/UserType':((context) => regestrationTypeScreen()),
-        '/interests':((context) => interestsSelection())
+        '/visitorSign': ((context) => VisitorRegistration()),
+        '/particSign': ((context) => particepantRegistrationScreen()),
+        '/UserType': ((context) => regestrationTypeScreen()),
+        '/interests': ((context) => interestsSelection())
       }, //routes are to ease the navigation btween pages
       //we give every page a name then when we want to navigate we just call that name
     );
@@ -41,9 +39,6 @@ class DashBoard extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-     
-    ); 
+    return MaterialApp();
   }
 }
- 
