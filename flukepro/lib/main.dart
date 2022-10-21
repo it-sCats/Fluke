@@ -7,6 +7,7 @@ import 'package:flukepro/screens/regestrationScreens/participantRegestration.dar
 import 'package:flukepro/screens/regestrationScreens/visitorRegestrationScreen.dart';
 import 'package:flukepro/screens/regestrationScreens/regestrationType.dart';
 import 'dart:io';
+import 'dashboard.dart';
 
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,7 @@ void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
+  // runApp(DashBoard());
 }
 
 class MyApp extends StatelessWidget {
@@ -21,21 +23,34 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
-
       home: onBoarding(),
       debugShowCheckedModeBanner:
           false, //to remove debugging banner at the top of the screen
 
       routes: {
         '/log': ((context) => loginScreen()),
+<<<<<<< HEAD
         '/visitorSign':((context) => VisitorRegistration()),
     '/particSign':((context) => particepantRegistrationScreen())
         ,'/UserType':((context) => regestrationTypeScreen()),
         '/interests':((context) => interestsSelection()),
         '/home':((context) => HomeScreen())
+=======
+        '/visitorSign': ((context) => VisitorRegistration()),
+        '/particSign': ((context) => particepantRegistrationScreen()),
+        '/UserType': ((context) => regestrationTypeScreen()),
+        '/interests': ((context) => interestsSelection())
+>>>>>>> ae180c20fd9d9ba789d2e6716c67e8c5841f0bdb
       }, //routes are to ease the navigation btween pages
       //we give every page a name then when we want to navigate we just call that name
     );
+  }
+}
+
+class DashBoard extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp();
   }
 }
