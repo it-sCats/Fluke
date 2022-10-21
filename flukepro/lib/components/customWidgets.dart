@@ -30,6 +30,7 @@ class txtFeild extends StatefulWidget {
   final bool isEmail;
   final bool isLogin;
 
+
   @override
   State<txtFeild> createState() => _txtFeildState();
 }
@@ -90,6 +91,7 @@ class _txtFeildState extends State<txtFeild> {
       width: 290,
       height: 70,
       child: TextFormField(
+
         style: TextStyle(fontSize: 15,fontFamily: 'Cairo',color: conBlack),
 
 focusNode: toSetLabel,

@@ -34,6 +34,7 @@ OutlineInputBorder roundedTxtFeild = OutlineInputBorder(
 OutlineInputBorder roundedPasswordFeild = OutlineInputBorder(
     borderSide: BorderSide(width: 1, color: conBlack),
     borderRadius: BorderRadius.circular(25));
+OutlineInputBorder errorBorder= OutlineInputBorder(borderSide: BorderSide(width: 2,color: conRed),borderRadius: BorderRadius.circular(25));
 //--------------colors
 Color conBlack = Color(0xff383838);
 Color conORange = Color(0xffFF7124);

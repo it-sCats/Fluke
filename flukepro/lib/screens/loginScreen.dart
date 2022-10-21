@@ -1,10 +1,19 @@
 import 'package:flukepro/components/cons.dart';
+import 'package:flukepro/components/signInWithGoogleAndFacebookButtons.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../components/customWidgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../utils/authentication.dart';
 
 class loginScreen extends StatelessWidget {
   final _logFormKey = GlobalKey<FormState>();
+  final myController = TextEditingController();
+  final _auth=FirebaseAuth.instance;
+  String? Email;
+  String? password;
 
   @override
   Widget build(BuildContext context) {
@@ -35,79 +44,14 @@ class loginScreen extends StatelessWidget {
             SizedBox(
               height: 30,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                InkWell(
-                  child: Container(
-                    height: 55,
-                    width: 51,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Color(0xff383838),
-                        ),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(25),
-                        )),
-                    child: CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Colors.white.withOpacity(1),
-                      backgroundImage: AssetImage('images/image 1.png'),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-                InkWell(
-                    child: Container(
-                  height: 55,
-                  decoration: BoxDecoration(
-                      color: Color(0xff3F72BE).withOpacity(.9),
-                      border: Border.all(
-                        color: Color(0xff383838),
-                      ),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(25),
-                      )),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10,left: 17),
-                        child: Text(
-                          'سجل دخول بإستخدام قوقل',
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                              fontSize: 11,
-                              fontFamily: 'Cairo',
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white),
-                        ),
-                      ),
-                      Container(
-                        height: 55,
-                        width: 51,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Color(0xff383838),
-                            ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(23),
-                            )),
-                        child: CircleAvatar(
-                          radius: 50,
-                          backgroundColor: Colors.white.withOpacity(1),
-                          backgroundImage: AssetImage('images/google-tile 1.png'),
-                        ),
-                      )
-                    ],
-                  ),
-                ))
-              ],
-            ),
-            SizedBox(
+            FutureBuilder(future: Authentication.initializeFirebase(),builder: (context,snapshot){
+              if(snapshot.hasError){
+                return Text('Error initializing Firebase');
+              }else if(snapshot.connectionState==ConnectionState.done){
+                return GoogleAndFacebookButtons();
+              }return CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(conORange),);
+            })
+           , SizedBox(
               height: 20,
             ),
             Row(
@@ -146,18 +90,85 @@ class loginScreen extends StatelessWidget {
             SizedBox(
               height: 30,
             ),
-            txtFeild('إسم المستخدم أو البريد الإكتروني',false,true,false),
-            txtFeild('كلمة المرور',true,false,true),//custom widgets take the text and if its password or not
+            SizedBox(
+              width: 290,
+              height: 70,
+              child: TextFormField(
+
+                  style: TextStyle(fontSize: 15,fontFamily: 'Cairo',color: conBlack),
+
+
+                  onChanged: (value) =>Email=value,
+                  validator: (value){  if (value == null || value.isEmpty) {
+                    return 'الرجاء إدخال البيانات المطلوبة';
+                  }
+                  return null;},
+                  textDirection: TextDirection.rtl,
+                  textAlign: TextAlign.right,
+                  keyboardType:TextInputType.emailAddress,
+
+                  decoration: InputDecoration(
+
+                      hintText:'إسم المستخدم أو البريد الإكتروني',
+
+                      errorStyle: TextStyle(fontFamily: 'Cairo',fontSize: 12,color: conRed),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 25),
+
+
+                      hintStyle: conTxtFeildHint,
+                      enabledBorder: roundedTxtFeild,
+                      errorBorder:errorBorder ,
+                      focusedBorder: roundedPasswordFeild)),
+            ),
+            SizedBox(
+              width: 290,
+              height: 70,
+              child: TextFormField(
+                  style: TextStyle(fontSize: 15,fontFamily: 'Cairo',color: conBlack),
+                  onChanged: (value) =>password=value,
+                  validator: (value){  if (value == null || value.isEmpty) {
+                    return 'الرجاء إدخال البيانات المطلوبة';
+                  }
+                  return null;},
+                  textDirection: TextDirection.rtl,
+                  textAlign: TextAlign.right,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                      hintText:'كلمة المرور',
+                      errorStyle: TextStyle(fontFamily: 'Cairo',fontSize: 12,color: conRed),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 25),
+                      hintStyle: conTxtFeildHint,
+                      enabledBorder: roundedTxtFeild,
+                      errorBorder:errorBorder ,
+                      focusedBorder: roundedPasswordFeild)),
+            )
+            ,//custom widgets take the text and if its password or not
 
             Align(alignment: Alignment.centerRight,child: InkWell(child: Container(margin: EdgeInsets.only(right:75,top: 5),
                 child: Text('نسيت كلمة المرور؟',textAlign: TextAlign.right,style: conTxtLink,)))),
           SizedBox(height: 21 ,),
-            CTA('تسجيل دخول',(){ if (_logFormKey.currentState!.validate()) {
+            CTA('تسجيل دخول',()async{ if (_logFormKey.currentState!.validate()) {
               // If the form is valid, display a snackbar. In the real world,
               // you'd often call a server or save the information in a database.
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Processing Data')),
+                const SnackBar(content: Text('جاري تسجيل الدخول..',style: TextStyle(fontSize: 12,fontFamily: 'Cairo',),)),
+
               );
+              try{
+          final user = await _auth.signInWithEmailAndPassword(email: Email.toString(), password: password.toString());
+            if(user!= null){
+              Navigator.pushNamed(context, '/home');
+
+            }
+              }
+              on FirebaseAuthException catch  (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                   SnackBar(content: Text(e.message.toString(),style: TextStyle(fontSize: 12,fontFamily: 'Cairo',),)),
+
+                );
+                print('Failed with error code: ${e.code}');
+                print(e.message);
+              }
             }}),
             Row(mainAxisAlignment: MainAxisAlignment.end,crossAxisAlignment: CrossAxisAlignment.baseline,
               textBaseline: TextBaseline.ideographic,

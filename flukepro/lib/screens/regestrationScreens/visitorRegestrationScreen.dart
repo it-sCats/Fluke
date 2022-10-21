@@ -1,12 +1,75 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flukepro/components/cons.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/customWidgets.dart';
 
 
-class VisitorRegistration extends StatelessWidget {
+class VisitorRegistration extends StatefulWidget {
 
+  @override
+  State<VisitorRegistration> createState() => _VisitorRegistrationState();
+}
+
+class _VisitorRegistrationState extends State<VisitorRegistration> {
   final _visitorFormKey = GlobalKey<FormState>();
+  //sign in vars
+  final _auth=FirebaseAuth.instance;
+  String? email;
+  String? password;
+
+
+  late String _password;
+
+  double _strength = 0;
+
+  RegExp numReg = RegExp(r".*[0-9].*");
+
+  RegExp letterReg = RegExp(r".*[A-Za-z].*");
+
+  String _displayText='كلمة المرور يجب أن تكون قوية ' ;
+
+  FocusNode toSetLabel = new FocusNode();
+//to set label for password it creates a var to see where is the focus
+ void  _checkPassword(String value) {
+    _password = value.trim();
+
+    if (_password.isEmpty) {
+      setState(() {
+        _strength = 0;
+        _displayText = 'أدخل كلمة المرور';
+
+      });
+    } else if (_password.length < 6) {
+      setState(() {
+        _strength = 1 / 4;
+        _displayText = 'كلمة المرور قصيرة جداً';
+
+      });
+    } else if (_password.length < 8) {
+      setState(() {
+        _strength = 2 / 4;
+        _displayText = 'كلمة المرور مقبولة ولكن ليست قوية';
+      });
+    } else {
+      if (!letterReg.hasMatch(_password) || !numReg.hasMatch(_password)) {
+        setState(() {
+          // Password length >= 8
+          // But doesn't contain both letter and digit characters
+          _strength = 3 / 4;
+          _displayText = 'كلمة المرور قوية';
+        });
+      } else {
+        // Password length >= 8
+        // Password contains both letter and digit characters
+        setState(() {
+          _strength = 1;
+          _displayText = 'كلمة مرورك ممتازة';
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,23 +211,95 @@ class VisitorRegistration extends StatelessWidget {
               ),
               SizedBox(
                 height: 30,
+              ), SizedBox(
+                width: 290,
+                height: 70,
+                child: TextFormField(
+
+                    style: TextStyle(fontSize: 15,fontFamily: 'Cairo',color: conBlack),
+
+
+                    onChanged: (value) =>email=value,
+                    validator: (value){  if (value == null || value.isEmpty) {
+                      return 'الرجاء إدخال البيانات المطلوبة';
+                    }
+                    return null;},
+                    textDirection: TextDirection.rtl,
+                    textAlign: TextAlign.right,
+                    keyboardType:TextInputType.emailAddress,
+
+                    decoration: InputDecoration(
+
+                        hintText:'أدخل البريد الإكتروني',
+
+                        errorStyle: TextStyle(fontFamily: 'Cairo',fontSize: 12,color: conRed),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 25),
+
+
+                        hintStyle: conTxtFeildHint,
+                        enabledBorder: roundedTxtFeild,
+                        errorBorder:errorBorder ,
+                        focusedBorder: roundedPasswordFeild)),
               ),
-              txtFeild('الإسم الكامل',false,false,false),
-              txtFeild('example@mail.com',false,true,false),
-              txtFeild('كلمة المرور',true,false,false),//custom widgets take the text and if its password or not
-              txtFeild('التخصص, مجال العمل أو مجال الدراسة ',false,false,false),
-              txtFeild('العمر',false,false,false),
+        SizedBox(
+          width: 290,
+          height: 70,
+          child: TextFormField(
+
+              style: TextStyle(fontSize: 15,fontFamily: 'Cairo',color: conBlack),
+
+              focusNode: toSetLabel,
+              onChanged: (value) { _checkPassword(value); password=value;},
+              validator: (value){  if (value == null || value.isEmpty) {
+                return 'الرجاء إدخال البيانات المطلوبة';
+              }else if(_strength<3/4){
+                return 'الرجاء إدخال كلمة مرور أقوى';
+              }
+              return null;},
+              textDirection: TextDirection.rtl,
+              textAlign: TextAlign.right,
+
+              obscureText: true,
+
+              decoration: InputDecoration(
+                  label: toSetLabel.hasFocus?Text( _displayText,style: conTxtFeildHint,):null,
+
+                  labelStyle: conTxtFeildHint,
+                  hintText: 'أدخل كلمة المرور',
+
+                  errorStyle: TextStyle(fontFamily: 'Cairo',fontSize: 12,color: conRed),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 25),
+
+
+                  hintStyle: conTxtFeildHint,
+                  enabledBorder: roundedTxtFeild,
+                  errorBorder:OutlineInputBorder(borderSide: BorderSide(width: 2,color: conRed),borderRadius: BorderRadius.circular(25)) ,
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 1, color:_strength <= 1 / 4
+                          ? Colors.red
+                          : _strength == 2 / 4
+                          ? Colors.yellow
+                          : _strength == 3 / 4
+                          ? Colors.blue
+                          : Colors.green) ,
+                      borderRadius: BorderRadius.circular(25)))),
+        ),
 
               SizedBox(height: 20 ,),
-              CTA('تسجيل ',(){
+              CTA('تسجيل ',()async{
                 // Validate returns true if the form is valid, or false otherwise.
                 if (_visitorFormKey.currentState!.validate()) {
                   // If the form is valid, display a snackbar. In the real world,
                   // you'd often call a server or save the information in a database.
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('تم تسجيلك بنجاح ')),
-                  );
-                  Navigator.pushNamed(context, '/interests');
+
+                  try{
+                  final newUser=await _auth.createUserWithEmailAndPassword(email: email.toString(), password: password.toString());
+                  if(newUser!=null){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('تم تسجيلك بنجاح ',textAlign: TextAlign.center,style: TextStyle(fontFamily: 'Cairo',fontSize: 13),)),
+                    );
+                  Navigator.pushNamed(context, '/interests');}}
+                      catch(e){print(e);}
                 }
               }),
               Row(mainAxisAlignment: MainAxisAlignment.end,crossAxisAlignment: CrossAxisAlignment.baseline,

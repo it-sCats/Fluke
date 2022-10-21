@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "141070963911",
+    "project_id": "fluke-db",
+    "storage_bucket": "fluke-db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:141070963911:android:09398d6028212ba7cb5ae2",
+        "android_client_info": {
+          "package_name": "com.example.flukepro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "141070963911-mt6dmnum53ssiufh2d72ne4n5mb1je9d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmXC132Cn6nWKtkzYY0pDwz_Ry_e5cSuQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "141070963911-mt6dmnum53ssiufh2d72ne4n5mb1je9d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
