@@ -29,18 +29,12 @@ class MyApp extends StatelessWidget {
 
       routes: {
         '/log': ((context) => loginScreen()),
-<<<<<<< HEAD
+
         '/visitorSign':((context) => VisitorRegistration()),
     '/particSign':((context) => particepantRegistrationScreen())
         ,'/UserType':((context) => regestrationTypeScreen()),
         '/interests':((context) => interestsSelection()),
         '/home':((context) => HomeScreen())
-=======
-        '/visitorSign': ((context) => VisitorRegistration()),
-        '/particSign': ((context) => particepantRegistrationScreen()),
-        '/UserType': ((context) => regestrationTypeScreen()),
-        '/interests': ((context) => interestsSelection())
->>>>>>> ae180c20fd9d9ba789d2e6716c67e8c5841f0bdb
       }, //routes are to ease the navigation btween pages
       //we give every page a name then when we want to navigate we just call that name
     );
