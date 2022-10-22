@@ -1,6 +1,9 @@
 import 'package:flukepro/components/cons.dart';
+import 'package:flukepro/components/customWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../../utils/authentication.dart';
 class HomeScreen extends StatefulWidget {
 
   @override
@@ -28,8 +31,8 @@ void getCurrentUser()async{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: conORange,
-      body: SafeArea(child: SingleChildScrollView(child: Column(children: [Text('lo')],),),),);
+      backgroundColor: Colors.white,
+      body: SafeArea(child: SingleChildScrollView(child: Column(children: [Text('lo'),CTA('sign out', ()async{ await Authentication.signOut(context: context);})],),),),);
   }
 }
 

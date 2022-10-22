@@ -1,22 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../utils/authentication.dart';
 
-
-
 class GoogleAndFacebookButtons extends StatefulWidget {
-  const GoogleAndFacebookButtons({Key? key}) : super(key: key);
+  GoogleAndFacebookButtons({this.userType});
+  final int? userType;
 
   @override
-  State<GoogleAndFacebookButtons> createState() => _GoogleAndFacebookButtonsState();
+  State<GoogleAndFacebookButtons> createState() =>
+      _GoogleAndFacebookButtonsState();
 }
 
 class _GoogleAndFacebookButtonsState extends State<GoogleAndFacebookButtons> {
+  final _firestore =FirebaseFirestore.instance;
   bool _isSigningIn = false;
   @override
   Widget build(BuildContext context) {
-    return   Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         InkWell(
@@ -41,14 +42,32 @@ class _GoogleAndFacebookButtonsState extends State<GoogleAndFacebookButtons> {
           width: 15,
         ),
         InkWell(
-            onTap: ()async{
-
-
+            onTap: () async {
               User? user =
-              await Authentication.signInWithGoogle(context: context);
+                  await Authentication.signInWithGoogle(context: context);
+              if (user != null) {
+              if (widget.userType==0) {
+                //0 stands for visitors //if the argument that was passed to the screen is 0 that means its a visitorf
+                _firestore
+                    .collection('visitors')
+                    .add({'UserID': user?.uid});
+              } else if (widget.userType==1) {
+                //1 means user clicked on the Organizers card
+                _firestore
+                    .collection('organizingAgen')
+                    .add({'UserID': user?.uid});
+              } else if (widget.userType==2) {
+                //2 is for participants
+                _firestore
+                    .collection('paticipants')
+                    .add({'UserID': user?.uid});
+              }
 
 
-              if(user != null){Navigator.pushNamed(context, '/home');}else{  print('fuck');}
+                Navigator.pushNamed(context, '/home');
+              } else {
+
+              }
             },
             child: Container(
               height: 55,
@@ -64,7 +83,7 @@ class _GoogleAndFacebookButtonsState extends State<GoogleAndFacebookButtons> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(right: 10,left: 17),
+                    padding: const EdgeInsets.only(right: 10, left: 17),
                     child: Text(
                       'سجل دخول بإستخدام قوقل',
                       textAlign: TextAlign.right,

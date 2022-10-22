@@ -46,7 +46,7 @@ class loginScreen extends StatelessWidget {
             ),
             FutureBuilder(future: Authentication.initializeFirebase(),builder: (context,snapshot){
               if(snapshot.hasError){
-                return Text('Error initializing Firebase');
+                return Text('مشكلة في الاتصال...');
               }else if(snapshot.connectionState==ConnectionState.done){
                 return GoogleAndFacebookButtons();
               }return CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(conORange),);

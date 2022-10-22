@@ -30,7 +30,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/log': ((context) => loginScreen()),
 
-        '/visitorSign':((context) => VisitorRegistration()),
+        VisitorRegistration.routeName: (context) =>
+         VisitorRegistration(),
     '/particSign':((context) => particepantRegistrationScreen())
         ,'/UserType':((context) => regestrationTypeScreen()),
         '/interests':((context) => interestsSelection()),
