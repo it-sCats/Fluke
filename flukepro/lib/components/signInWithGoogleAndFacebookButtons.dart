@@ -2,6 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../utils/authentication.dart';
+import '../utils/fireStoreQueries.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+
 
 class GoogleAndFacebookButtons extends StatefulWidget {
   GoogleAndFacebookButtons({this.userType});
@@ -20,7 +23,38 @@ class _GoogleAndFacebookButtonsState extends State<GoogleAndFacebookButtons> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        InkWell(
+        InkWell(onTap: ()async{
+        final userID=await  Authentication().signInWithFacebook();
+        if(userID!=null ||userID !='') {
+          if (widget.userType == 0) {
+            //0 stands for visitors //if the argument that was passed to the screen is 0 that means its a visitorf
+            if (await isDuplicateUniqueID(
+                'visitors', userID.toString())) //check if userID already exists
+              _firestore
+                  .collection('visitors')
+                  .add({'UserID': userID.toString()});
+          } else if (widget.userType == 2) {
+            //2 is for participants
+            if (await isDuplicateUniqueID('paticipants', userID.toString()))
+              _firestore
+                  .collection('paticipants')
+                  .add({'UserID': userID.toString()});
+          }
+
+
+          Navigator.pushNamed(context, '/home');
+        }else{
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text(
+                  'حدث خطأ في عملية التسجيل.. أعد المحاولة',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontFamily: 'Cairo', fontSize: 13),
+                )),
+          );
+        }
+
+        },
           child: Container(
             height: 55,
             width: 51,
@@ -45,23 +79,20 @@ class _GoogleAndFacebookButtonsState extends State<GoogleAndFacebookButtons> {
             onTap: () async {
               User? user =
                   await Authentication.signInWithGoogle(context: context);
+              //check if user ID already exists in the database
               if (user != null) {
-              if (widget.userType==0) {
-                //0 stands for visitors //if the argument that was passed to the screen is 0 that means its a visitorf
-                _firestore
-                    .collection('visitors')
-                    .add({'UserID': user?.uid});
-              } else if (widget.userType==1) {
-                //1 means user clicked on the Organizers card
-                _firestore
-                    .collection('organizingAgen')
-                    .add({'UserID': user?.uid});
-              } else if (widget.userType==2) {
+                if (widget.userType==2) {
                 //2 is for participants
+                if(   await isDuplicateUniqueID('paticipants',user.uid))
                 _firestore
                     .collection('paticipants')
                     .add({'UserID': user?.uid});
-              }
+              }else
+                  //0 stands for visitors //if the argument that was passed to the screen is 0 that means its a visitorf
+                  if( await isDuplicateUniqueID('visitors',user.uid)) //check if userID already exists
+                    _firestore
+                        .collection('visitors')
+                        .add({'UserID': user?.uid});
 
 
                 Navigator.pushNamed(context, '/home');

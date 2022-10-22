@@ -110,19 +110,9 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
               SizedBox(
                 height: 30,
               ),
-              FutureBuilder(
-                  future: Authentication.initializeFirebase(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Text('مشكلة في الاتصال...');
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.done) {
-                      return GoogleAndFacebookButtons(userType: args.first,);//نبو نبعتو نوع المستخدم للودجت هذي باش يتم تسجيله في الفايرستور
-                    }
-                    return CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(conORange),
-                    );
-                  }),
+              GoogleAndFacebookButtons(userType: args.first,)//نبو نبعتو نوع المستخدم للودجت هذي باش يتم تسجيله في الفايرستور
+
+                   ,
               SizedBox(
                 height: 20,
               ),

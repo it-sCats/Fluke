@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;//helps to know what platform we're on
 class Authentication{
@@ -76,6 +77,7 @@ static Future<User?> signInWithGoogle({required BuildContext context})async {
   return user;
 }
   static Future<void> signOut({required BuildContext context}) async {
+
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     try {
@@ -100,6 +102,26 @@ static Future<User?> signInWithGoogle({required BuildContext context})async {
       ),
     );
   }
+  Future<String?> signInWithFacebook() async {
+    String? userID;
+    final AccessToken accessToken;
+    // Trigger the sign-in flow
+    final LoginResult result = await FacebookAuth.instance.login(
+      permissions: ['public_profile', 'email', 'pages_show_list', 'pages_messaging', 'pages_manage_metadata'],
+    );
+    if (result.status == LoginStatus.success) {
+      // you are logged
+      accessToken = result.accessToken!;
+   userID= accessToken.userId;
+    } else {
+      print(result.status);
+      print(result.message);
+    }
+return  userID;//return userID so we can add it to google
+  }
+
+  Future<void> logOutOfFb()async{
+  await FacebookAuth.instance.logOut();}
 }
 
 
