@@ -1,10 +1,11 @@
+import 'package:flukepro/screens/regestrationScreens/visitorRegestrationScreen.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/cons.dart';
 import '../../components/customWidgets.dart';
 class regestrationTypeScreen extends StatelessWidget {
 
-
+int? UserType;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +31,7 @@ class regestrationTypeScreen extends StatelessWidget {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(mainAxisAlignment: MainAxisAlignment.spaceAround
-              ,children: [InkWell(onTap:  (){Navigator.pushNamed(context, '/visitorSign');},
+              ,children: [InkWell(onTap:  (){Navigator.pushNamed(context, VisitorRegistration.routeName, arguments: {0},);},
                 child: Column(
                   children: [ Container(
                     width: 150,height: 160,
@@ -40,7 +41,7 @@ class regestrationTypeScreen extends StatelessWidget {
                     Text('زائر',style: TextStyle(fontSize: 17,fontFamily: 'Cairo',color: conBlack,fontWeight: FontWeight.bold),
                     )],
                 ),),
-                InkWell( onTap:  (){Navigator.pushNamed(context, '/visitorSign');},
+                InkWell( onTap:  (){Navigator.pushNamed(context, VisitorRegistration.routeName, arguments: {1},);},//Organizers
                   child: Column(
                   children: [
                     Container(width: 150,height: 160,
@@ -53,7 +54,7 @@ class regestrationTypeScreen extends StatelessWidget {
                 ),),
               ],),
           SizedBox(height: 15,),
-          InkWell(onTap: (){Navigator.pushNamed(context, '/particSign');},
+          InkWell(onTap: (){Navigator.pushNamed(context, VisitorRegistration.routeName, arguments: {2},);},//participants
             child: Column(
             children: [Container(margin: EdgeInsets.only(left: 10),width: 150,height: 160,
     child: Image.asset('images/The Little Things Working.png'),

@@ -1,4 +1,6 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flukepro/screens/loginScreen.dart';
+import 'package:flukepro/screens/mainScreens/home.dart';
 import 'package:flukepro/screens/onBoardingScreen.dart';
 import 'package:flukepro/screens/regestrationScreens/intersetsScreen.dart';
 import 'package:flukepro/screens/regestrationScreens/participantRegestration.dart';
@@ -9,7 +11,9 @@ import 'dashboard.dart';
 
 import 'package:flutter/material.dart';
 
-void main() {
+void main()async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
   // runApp(DashBoard());
 }
@@ -25,10 +29,13 @@ class MyApp extends StatelessWidget {
 
       routes: {
         '/log': ((context) => loginScreen()),
-        '/visitorSign': ((context) => VisitorRegistration()),
-        '/particSign': ((context) => particepantRegistrationScreen()),
-        '/UserType': ((context) => regestrationTypeScreen()),
-        '/interests': ((context) => interestsSelection())
+
+        VisitorRegistration.routeName: (context) =>
+         VisitorRegistration(),
+    '/particSign':((context) => particepantRegistrationScreen())
+        ,'/UserType':((context) => regestrationTypeScreen()),
+        '/interests':((context) => interestsSelection()),
+        '/home':((context) => HomeScreen())
       }, //routes are to ease the navigation btween pages
       //we give every page a name then when we want to navigate we just call that name
     );
