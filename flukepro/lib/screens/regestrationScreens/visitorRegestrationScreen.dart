@@ -214,6 +214,9 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
                         contentPadding: EdgeInsets.symmetric(horizontal: 25),
                         hintStyle: conTxtFeildHint,
                         enabledBorder: roundedTxtFeild,
+                        focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 2, color: conRed),
+                            borderRadius: BorderRadius.circular(25)),
                         errorBorder: OutlineInputBorder(
                             borderSide: BorderSide(width: 2, color: conRed),
                             borderRadius: BorderRadius.circular(25)),

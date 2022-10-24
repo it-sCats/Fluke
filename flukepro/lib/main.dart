@@ -3,7 +3,7 @@ import 'package:flukepro/screens/loginScreen.dart';
 import 'package:flukepro/screens/mainScreens/home.dart';
 import 'package:flukepro/screens/onBoardingScreen.dart';
 import 'package:flukepro/screens/regestrationScreens/intersetsScreen.dart';
-import 'package:flukepro/screens/regestrationScreens/participantRegestration.dart';
+import 'package:flukepro/screens/regestrationScreens/ORganizersRegestration.dart';
 import 'package:flukepro/screens/regestrationScreens/visitorRegestrationScreen.dart';
 import 'package:flukepro/screens/regestrationScreens/regestrationType.dart';
 import 'dart:io';
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
 
         VisitorRegistration.routeName: (context) =>
          VisitorRegistration(),
-    '/particSign':((context) => particepantRegistrationScreen())
+    '/OrganizSign':((context) => organizersRegistrationScreen())
         ,'/UserType':((context) => regestrationTypeScreen()),
         '/interests':((context) => interestsSelection()),
         '/home':((context) => HomeScreen())

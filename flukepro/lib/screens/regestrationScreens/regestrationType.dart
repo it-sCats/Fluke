@@ -41,7 +41,7 @@ int? UserType;
                     Text('زائر',style: TextStyle(fontSize: 17,fontFamily: 'Cairo',color: conBlack,fontWeight: FontWeight.bold),
                     )],
                 ),),
-                InkWell( onTap:  (){Navigator.pushNamed(context, VisitorRegistration.routeName, arguments: {1},);},//Organizers
+                InkWell( onTap:  (){Navigator.pushNamed(context,'/OrganizSign' );},//Organizers
                   child: Column(
                   children: [
                     Container(width: 150,height: 160,
