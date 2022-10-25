@@ -1,18 +1,30 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flukepro/components/cons.dart';
 import 'package:flukepro/components/customWidgets.dart';
 import 'package:flutter/material.dart';
 
 class interestsSelection extends StatefulWidget {
+  interestsSelection({this.userType});
+  int? userType;
+  static const routeName = '/interests';
   @override
   State<interestsSelection> createState() => _interestsSelectionState();
 }
 
 class _interestsSelectionState extends State<interestsSelection> {
+  final _auth=FirebaseAuth.instance;
+  final _firestore=FirebaseFirestore.instance;
+
+
 List<String> interesets=['المجال الطبي','برمجة','مالية','قانون','مجال التقنية','أعمال حرة','أخرى','محاسبة','كتابة محتوى','تصميم جرافيكي'];
 
 List<String> selectedinterestes = [];
   @override
   Widget build(BuildContext context) {
+
+    final args = ModalRoute.of(context)!.settings.arguments
+    as Set;
     return Scaffold(backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(margin: EdgeInsets.only(top:   MediaQuery.of(context).size.height / 10,),
@@ -34,7 +46,19 @@ List<String> selectedinterestes = [];
                     });
                   },),
                 ),SizedBox(height: MediaQuery.of(context).size.height/3.5,),CTA('حفظ',
-                        (){Navigator.pushNamed(context, '/home');
+                        (){ final visitoeRef = _firestore.collection("visitors");
+                        final partic = _firestore.collection("paticipants");
+if(args.elementAt(0)==0){
+visitoeRef.doc(args.elementAt(1)).update({'interests':selectedinterestes});
+
+
+
+}else if(args.elementAt(0)==2){
+  partic.doc(args.elementAt(1)).update({'interests':selectedinterestes});
+
+}
+Navigator.pushNamed(context, '/home');
+                  // Navigator.pushNamed(context, '/home');
                 } )
          ] )),
         ),

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flukepro/components/cons.dart';
+import 'package:flukepro/errorsHandling/AuthExceptionHandler.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/customWidgets.dart';
@@ -30,6 +31,10 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
   RegExp letterReg = RegExp(r".*[A-Za-z].*");
 
   String _displayText = 'كلمة المرور يجب أن تكون قوية ';
+
+  String? errorMessage = 'مشكلة في الباس';
+
+  bool LogInError=false;
 
   FocusNode toSetLabel = new FocusNode();
 //to set label for password it creates a var to see where is the focus
@@ -110,9 +115,11 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
               SizedBox(
                 height: 30,
               ),
-              GoogleAndFacebookButtons(userType: args.first,)//نبو نبعتو نوع المستخدم للودجت هذي باش يتم تسجيله في الفايرستور
+              GoogleAndFacebookButtons(
+                userType: args.elementAt(0),
+              ) //نبو نبعتو نوع المستخدم للودجت هذي باش يتم تسجيله في الفايرستور
 
-                   ,
+              ,
               SizedBox(
                 height: 20,
               ),
@@ -231,6 +238,12 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
                                             ? Colors.blue
                                             : Colors.green),
                             borderRadius: BorderRadius.circular(25)))),
+              ),Visibility(visible: LogInError,
+                child: Text(
+                  errorMessage.toString(),
+                  textAlign: TextAlign.right,
+                  style: conErorTxtStyle,
+                ),
               ),
               SizedBox(
                 height: 20,
@@ -273,8 +286,27 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
 
                       Navigator.pushNamed(context, '/interests');
                     }
-                  } catch (e) {
-                    print(e);
+                  } on FirebaseAuthException catch (e) {
+                    setState(() {
+
+                      errorMessage= AuthExceptionHandler.generateErrorMessage(  AuthExceptionHandler.handleAuthException(e));
+                      LogInError=!LogInError;
+
+                    });
+
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                          content: Text(
+                            e.message.toString(),
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'Cairo',
+                            ),
+                          )),
+                    );
+                    print('Failed with error code: ${e.code}');
+                    print(e.message);
                   }
                 }
               }),
