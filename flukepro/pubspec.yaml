@@ -69,6 +69,8 @@ flutter:
   # To add images to your application, add an images section, like this:
   assets:
     - images/
+    - icons/
+    
   
 
   # An image asset can refer to one or more resolution-specific "variants", see

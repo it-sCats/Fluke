@@ -7,11 +7,10 @@ import 'package:flukepro/screens/regestrationScreens/ORganizersRegestration.dart
 import 'package:flukepro/screens/regestrationScreens/visitorRegestrationScreen.dart';
 import 'package:flukepro/screens/regestrationScreens/regestrationType.dart';
 import 'dart:io';
-import 'dashboard.dart';
 
 import 'package:flutter/material.dart';
 
-void main()async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
@@ -29,13 +28,11 @@ class MyApp extends StatelessWidget {
 
       routes: {
         '/log': ((context) => loginScreen()),
-
-        VisitorRegistration.routeName: (context) =>
-         VisitorRegistration(),
-    '/OrganizSign':((context) => organizersRegistrationScreen())
-        ,'/UserType':((context) => regestrationTypeScreen()),
-        '/interests':((context) => interestsSelection()),
-        '/home':((context) => HomeScreen())
+        VisitorRegistration.routeName: (context) => VisitorRegistration(),
+        '/OrganizSign': ((context) => organizersRegistrationScreen()),
+        '/UserType': ((context) => regestrationTypeScreen()),
+        '/interests': ((context) => interestsSelection()),
+        '/home': ((context) => HomeScreen())
       }, //routes are to ease the navigation btween pages
       //we give every page a name then when we want to navigate we just call that name
     );
