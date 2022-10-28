@@ -50,5 +50,8 @@ OutlineInputBorder errorBorder = OutlineInputBorder(
 Color conBlack = Color(0xff383838);
 Color conORange = Color(0xffFF7124);
 Color conRed = Color(0xffFF000D);
+const primaryColor = Color(0xFFF1E6FF);
+
+const kprimaryColor = Color.fromARGB(255, 104, 75, 123);
 //---------Padding
 double defaultPadding = 16.0;
