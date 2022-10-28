@@ -32,7 +32,12 @@ TextStyle conCTATxt = TextStyle(
 TextStyle conTxtFeildHint = TextStyle(
   fontFamily: 'Cairo',
   fontSize: 14,
+
 );
+TextStyle conLittelTxt12= TextStyle(
+color: conBlack,
+fontFamily: 'Cairo',
+fontSize: 12);
 //------error style for forms
 TextStyle conErorTxtStyle =
     TextStyle(fontFamily: 'Cairo', fontSize: 12, color: conRed);

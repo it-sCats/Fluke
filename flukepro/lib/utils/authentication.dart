@@ -6,11 +6,10 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;//helps to know what platform we're on
 class Authentication{
-
+  final _auth=FirebaseAuth.instance;
   static Future<FirebaseApp> initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
 
-    // TODO: Add auto login logic
 
     return firebaseApp;
   }
@@ -82,7 +81,8 @@ static Future<User?> signInWithGoogle({required BuildContext context})async {
 
     try {
       if (!kIsWeb) {
-        await googleSignIn.signOut();//on the Web platform you do not need to call the googleSignIn.signOut() method (it would result in an error), just calling FirebaseAuth.instance.signOut() will do the job.
+        await googleSignIn.signOut();
+        Navigator.pushNamed(context, '/log');//on the Web platform you do not need to call the googleSignIn.signOut() method (it would result in an error), just calling FirebaseAuth.instance.signOut() will do the job.
       }
       await FirebaseAuth.instance.signOut();
     } catch (e) {
@@ -114,8 +114,10 @@ static Future<User?> signInWithGoogle({required BuildContext context})async {
       accessToken = result.accessToken!;
    userID= accessToken.userId;
     } else {
+
       print(result.status);
       print(result.message);
+
     }
 return  userID;//return userID so we can add it to google
   }

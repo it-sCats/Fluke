@@ -12,9 +12,9 @@ class organizersRegistrationScreen extends StatefulWidget {
 class _organizersRegistrationScreenState
     extends State<organizersRegistrationScreen> {
   final _particapantFormKey = GlobalKey<FormState>();
-  final _firestore=FirebaseFirestore.instance;
+  final _firestore = FirebaseFirestore.instance;
 
-  List<String> items = [
+  List<String> typeOfevents = [
     'معارض ',
     'ورش عمل ',
     'مؤتمرات',
@@ -22,13 +22,25 @@ class _organizersRegistrationScreenState
     'جلسات حوارية ',
     'جميع أنواع الاحداث'
   ];
+  List<String> yesOrNo = [
+    'نعم قمنا بتنظيم عدة أحداث ',
+    'لازلنا في بداية الطريق',
+    'لا لم نقم بتنظيم أي أحداث حتى الآن',
+  ];
 
-  String? selectedItem;
+  String? selectedEventType;
+  String? selectedEventExper;//the selected level of previous work
   String? phoneNum;
   String? email;
   String? OrganizerName;
-  String? EIN;//employer identification numbers,
-String? eventType;
+  String? EIN; //employer identification numbers,
+  String? eventType;
+  bool agreeOnterms = false;
+  Color borderLabelColor=conBlack;
+  String? errorMessage = 'مشكلة في الباس';
+
+  bool LogInError=false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -81,35 +93,33 @@ String? eventType;
                 height: 30,
               ),
 
-              txtFeild('إسم المشارك أو الجهة', false, false, false),
-              txtFeild('example@mail.com', false, true,
-                  false), //custom widgets take the text and if its password or not
               SizedBox(
                 width: 290,
                 height: 70,
-                child: TextFormField(
+                child: TextFormField(autovalidateMode: AutovalidateMode.onUserInteraction,
                     style: TextStyle(fontSize: 15, fontFamily: 'Cairo', color: conBlack),
 
-                    onChanged: (value) {phoneNum=value;},
+                    onChanged: (value) => OrganizerName=value,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'الرجاء إدخال البيانات المطلوبة';
-                      }
+                      }else
                       return null;
                     },
                     textDirection: TextDirection.rtl,
                     textAlign: TextAlign.right,
-                    keyboardType:TextInputType. number,
+                    keyboardType: TextInputType.name,
 
                     decoration: InputDecoration(
 
                         labelStyle: conTxtFeildHint,
-                        hintText:'رقم التعريف الوظيفي',
+                        hintText: ''
+                            'إسم الجهة أو المنظم',
                         focusedErrorBorder: OutlineInputBorder(
                             borderSide: BorderSide(width: 2, color: conRed),
                             borderRadius: BorderRadius.circular(25)),
                         errorStyle:
-                        TextStyle(fontFamily: 'Cairo', fontSize: 12, color: conRed),
+                        conErorTxtStyle,
                         contentPadding: EdgeInsets.symmetric(horizontal: 25),
                         hintStyle: conTxtFeildHint,
                         enabledBorder: roundedTxtFeild,
@@ -119,63 +129,141 @@ String? eventType;
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 width: 1,
-                                color: conBlack),
+                                color:
+                                conBlack),
                             borderRadius: BorderRadius.circular(25)))),
               ),
-        SizedBox(
-          width: 290,
-          height: 70,
-          child: TextFormField(
-              style: TextStyle(fontSize: 15, fontFamily: 'Cairo', color: conBlack),
 
-              onChanged: (value) {phoneNum=value;},
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'الرجاء إدخال البيانات المطلوبة';
-                }
-                return null;
-              },
-              textDirection: TextDirection.rtl,
-              textAlign: TextAlign.right,
-              keyboardType:TextInputType.phone,
-
-              decoration: InputDecoration(
-
-                  labelStyle: conTxtFeildHint,
-                  hintText:'رقم الهاتف',
-                  focusedErrorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 2, color: conRed),
-                      borderRadius: BorderRadius.circular(25)),
-                  errorStyle:
-                  TextStyle(fontFamily: 'Cairo', fontSize: 12, color: conRed),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 25),
-                  hintStyle: conTxtFeildHint,
-                  enabledBorder: roundedTxtFeild,
-                  errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 2, color: conRed),
-                      borderRadius: BorderRadius.circular(25)),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          width: 1,
-                          color: conBlack),
-                      borderRadius: BorderRadius.circular(25)))),
-        ),
               SizedBox(
                 width: 290,
                 height: 70,
+                child: TextFormField(
+                    style: TextStyle(fontSize: 15, fontFamily: 'Cairo', color: conBlack),
+
+                    onChanged: (value) => email=value,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'الرجاء إدخال البيانات المطلوبة';
+                      }else if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email.toString())){
+                        return 'تأكد من صحة كتابة الايميل المدخل';
+                      }
+                      return null;
+                    },
+                    textDirection: TextDirection.rtl,
+                    textAlign: TextAlign.right,
+                    keyboardType: TextInputType.emailAddress ,
+
+                    decoration: InputDecoration(
+
+                        labelStyle: conTxtFeildHint,
+                        hintText: 'company@Email.com',
+                        focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 2, color: conRed),
+                            borderRadius: BorderRadius.circular(25)),
+                        errorStyle:
+                        conErorTxtStyle,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 25),
+                        hintStyle: conTxtFeildHint,
+                        enabledBorder: roundedTxtFeild,
+                        errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 2, color: conRed),
+                            borderRadius: BorderRadius.circular(25)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 1,
+                                color:
+                                conBlack),
+                            borderRadius: BorderRadius.circular(25)))),
+              ),//custom widgets take the text and if its password or not
+              SizedBox(
+                width: 290,
+                height: 70,
+                child: TextFormField(
+                    style: TextStyle(
+                        fontSize: 15, fontFamily: 'Cairo', color: conBlack),
+                    onChanged: (value) {
+                      phoneNum = value;
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'الرجاء إدخال البيانات المطلوبة';
+                      }
+                      return null;
+                    },
+                    textDirection: TextDirection.rtl,
+                    textAlign: TextAlign.right,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        labelStyle: conTxtFeildHint,
+                        hintText: 'رقم التعريف الوظيفي',
+                        focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 2, color: conRed),
+                            borderRadius: BorderRadius.circular(25)),
+                        errorStyle: TextStyle(
+                            fontFamily: 'Cairo', fontSize: 12, color: conRed),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 25),
+                        hintStyle: conTxtFeildHint,
+                        enabledBorder: roundedTxtFeild,
+                        errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 2, color: conRed),
+                            borderRadius: BorderRadius.circular(25)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: conBlack),
+                            borderRadius: BorderRadius.circular(25)))),
+              ),
+              SizedBox(
+                width: 290,
+                height: 70,
+                child: TextFormField(
+                    style: TextStyle(
+                        fontSize: 15, fontFamily: 'Cairo', color: conBlack),
+                    onChanged: (value) {
+                      phoneNum = value;
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'الرجاء إدخال البيانات المطلوبة';
+                      }else if(value.trim().length < 10){
+                        return 'رقم الهاتف يتكون من عشرة حروف  ';}
+                      return null;
+                    },
+                    textDirection: TextDirection.rtl,
+                    textAlign: TextAlign.right,
+                    keyboardType: TextInputType.phone,
+                    decoration: InputDecoration(
+                        labelStyle: conTxtFeildHint,
+                        hintText: 'رقم الهاتف',
+                        focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 2, color: conRed),
+                            borderRadius: BorderRadius.circular(25)),
+                        errorStyle: TextStyle(
+                            fontFamily: 'Cairo', fontSize: 11, color: conRed),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 25),
+                        hintStyle: conTxtFeildHint,
+                        enabledBorder: roundedTxtFeild,
+                        errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 2, color: conRed),
+                            borderRadius: BorderRadius.circular(25)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: conBlack),
+                            borderRadius: BorderRadius.circular(25)))),
+              ),
+              SizedBox(
+                width: 290,
+                height: 80,
                 child: Directionality(
                   textDirection: TextDirection.rtl,
                   child: DropdownButtonFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       focusColor: Colors.white,
                       dropdownColor: Colors.white,
                       elevation: 8,
-
-                      decoration: InputDecoration(enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                        color: conBlack,
-                      ),
-                      borderRadius: BorderRadius.circular(25)),
+                      decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: conBlack,
+                              ),
+                              borderRadius: BorderRadius.circular(25)),
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: conBlack,
@@ -184,10 +272,9 @@ String? eventType;
                           // focusedErrorBorder:OutlineInputBorder(
                           // borderSide: BorderSide(width: 2, color: conRed),
                           // borderRadius: BorderRadius.circular(25)) ,
-                        errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 2, color: conRed),
-                            borderRadius: BorderRadius.circular(25)),
-
+                          errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(width: 2, color: conRed),
+                              borderRadius: BorderRadius.circular(25)),
                           focusColor: Colors.white,
                           fillColor: Colors.white,
                           border: OutlineInputBorder(
@@ -199,7 +286,7 @@ String? eventType;
                         'مانوع الاحداث التي تقوم بتنظيمها',
                         style: conTxtFeildHint,
                       ),
-                      items: items
+                      items: typeOfevents
                           .map((item) => DropdownMenuItem<String>(
                                 child: Text(
                                   item,
@@ -210,24 +297,101 @@ String? eventType;
                               ))
                           .toList(),
                       onChanged: (item) => setState(() {
-                            selectedItem = item.toString();
+                            selectedEventType = item.toString();
+                          })),
+                ),
+              ),
+              SizedBox(
+                width: 290,
+                height: 70,
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: DropdownButtonFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      focusColor: Colors.white,
+                      dropdownColor: Colors.white,
+                      elevation: 8,
+                      decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: conBlack,
+                              ),
+                              borderRadius: BorderRadius.circular(25)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: conBlack,
+                              ),
+                              borderRadius: BorderRadius.circular(25)),
+                          // focusedErrorBorder:OutlineInputBorder(
+                          // borderSide: BorderSide(width: 2, color: conRed),
+                          // borderRadius: BorderRadius.circular(25)) ,
+                          errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(width: 2, color: conRed),
+                              borderRadius: BorderRadius.circular(25)),
+                          focusColor: Colors.white,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: conBlack,
+                              ),
+                              borderRadius: BorderRadius.circular(25))),
+                      hint: Text(
+                        'هل قمت بتنظيم أحداث من قبل؟',
+                        style: conTxtFeildHint,
+                      ),
+                      items: yesOrNo
+                          .map((item) => DropdownMenuItem<String>(
+                                child: Text(
+                                  item,
+                                  style: TextStyle(
+                                      fontFamily: 'Cairo', fontSize: 13),
+                                ),
+                                value: item,
+                              ))
+                          .toList(),
+                      onChanged: (item) => setState(() {
+                        selectedEventExper = item.toString();
                           })),
                 ),
               ),
 
               SizedBox(
-                height: 20,
+                height: 8,
               ),
-              CTA('تسجيل ', () {
+              Directionality(textDirection: TextDirection.rtl,
+                child: Row(mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [ Checkbox(
+                      shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(6),side: BorderSide(color: conRed)),
+                      value: agreeOnterms,
+                      onChanged: (v) {
+                        setState(() {
+                          agreeOnterms = !agreeOnterms;
+                        });
+                      }),
+                    Text('أوافق على شروط التسجيل وإستخدام البيانات',textAlign: TextAlign.right,style: conLittelTxt12.copyWith(fontSize: 11,color: borderLabelColor),),
+
+                  ],
+                ),
+              ),
+              CTA('تسجيل ', () async{
                 if (_particapantFormKey.currentState!.validate()) {
+                  if(agreeOnterms){
                   // If the form is valid, display a snackbar. In the real world,
-                  // you'd often call a server or save the information in a database.
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Processing Data')),
-
                   );
-                  _firestore.collection('requests').add({'name':OrganizerName,'email':email,'phone':phoneNum,'EIN':EIN});
-                }
+                  final d=await _firestore.collection('requests').add({
+                    'name': OrganizerName,
+                    'email': email,
+                    'phone': phoneNum,
+                    'EIN': EIN,
+                    'eventsType': selectedEventType,'previousEvents':selectedEventExper
+                  });
+                  if(d!=null){Navigator.pushNamed(context, '/home');}
+                }else {setState(() {
+                  borderLabelColor=conRed;
+                });}}
               }),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -251,11 +415,8 @@ String? eventType;
                           child: Text(
                             ' لديك حساب؟ ',
                             textAlign: TextAlign.right,
-                            style: TextStyle(
-                              color: conBlack,
-                              fontFamily: 'Cairo',
-                              fontSize: 12,
-                            ),
+                            style: conLittelTxt12,
+
                           ))),
                 ],
               )
