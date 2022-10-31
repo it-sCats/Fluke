@@ -2,7 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flukepro/components/cons.dart';
 import 'package:flukepro/errorsHandling/AuthExceptionHandler.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flukepro/utils/authentication.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../components/customWidgets.dart';
 import '../../components/signInWithGoogleAndFacebookButtons.dart';
 import '../../utils/authentication.dart';
@@ -19,6 +20,7 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
   //sign in vars
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
+
   String? email;
   String? password;
 
@@ -34,7 +36,8 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
 
   String? errorMessage = 'مشكلة في الباس';
 
-  bool LogInError=false;
+  bool LogInError = false;
+  bool isLoading = false;
 
   FocusNode toSetLabel = new FocusNode();
 //to set label for password it creates a var to see where is the focus
@@ -73,6 +76,24 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
         });
       }
     }
+  }
+
+  Future<void> _submit() async {
+    if (!_visitorFormKey.currentState!.validate()) {
+      // Invalid!
+      return;
+    }
+    _visitorFormKey.currentState!.save();
+    setState(() {
+      isLoading = true;
+    });
+    await Authentication().signUp(
+      email.toString(),
+      password.toString(),
+    );
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -238,7 +259,9 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
                                             ? Colors.blue
                                             : Colors.green),
                             borderRadius: BorderRadius.circular(25)))),
-              ),Visibility(visible: LogInError,
+              ),
+              Visibility(
+                visible: LogInError,
                 child: Text(
                   errorMessage.toString(),
                   textAlign: TextAlign.right,
@@ -248,68 +271,101 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
               SizedBox(
                 height: 20,
               ),
-              CTA('تسجيل ', () async {
-                // Validate returns true if the form is valid, or false otherwise.
-                if (_visitorFormKey.currentState!.validate()) {
-                  // If the form is valid, display a snackbar. In the real world,
-                  // you'd often call a server or save the information in a database.
-
-                  try {
-                    final newUser = await _auth.createUserWithEmailAndPassword(
-                        email: email.toString(),
-                        password: password.toString()); //creating users
-                    if (newUser != null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text(
-                          'تم تسجيلك بنجاح ',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontFamily: 'Cairo', fontSize: 13),
-                        )),
-                      );
-                      if (args.contains(0)) {
-                        //0 stands for visitors //if the argument that was passed to the screen is 0 that means its a visitorf
-                        _firestore
-                            .collection('visitors')
-                            .add({'UserID': newUser.user?.uid});
-                      } else if (args.contains(1)) {
-                        //1 means user clicked on the Organizers card
-                        _firestore
-                            .collection('organizingAgen')
-                            .add({'UserID': newUser.user?.uid});
-                      } else if (args.contains(2)) {
-                        //2 is for participants
-                        _firestore
-                            .collection('paticipants')
-                            .add({'UserID': newUser.user?.uid});
-                      }
-
-                      Navigator.pushNamed(context, '/interests');
-                    }
-                  } on FirebaseAuthException catch (e) {
+              if (isLoading)
+                CircularProgressIndicator()
+              else
+                CTA('تسجيل ', () async {
+                  var docID;
+                  // Validate returns true if the form is valid, or false otherwise.
+                  if (_visitorFormKey.currentState!.validate()) {
+                    // If the form is valid, display a snackbar. In the real world,
+                    // you'd often call a server or save the information in a database.
                     setState(() {
-
-                      errorMessage= AuthExceptionHandler.generateErrorMessage(  AuthExceptionHandler.handleAuthException(e));
-                      LogInError=!LogInError;
-
+                      isLoading = true;
                     });
+                    try {
+                      final result = await Authentication()
+                          .signUp(email.toString(), password.toString());
+                      result.when(
+                          (error) => setState(() {
+
+                                  errorMessage =AuthExceptionHandler.generateErrorMessage(  AuthExceptionHandler.handleAuthException(error));
+
+print(error);
 
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                          content: Text(
-                            e.message.toString(),
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: 'Cairo',
-                            ),
+
+
+
+
+
+                                LogInError = !LogInError;
+                            isLoading=false;
+                              }), (success) async {
+                        // SharedPreferences sharedPreferences =//for restAPI
+                        //     await SharedPreferences.getInstance();
+                        // final userID = sharedPreferences.getString("userID");
+
+                        User user=success;
+                       String userID=user.uid;
+                        // final newUser = await _auth.createUserWithEmailAndPassword(
+                        //     email: email.toString(),
+                        //     password: password.toString()); //creating users
+                        // if (newUser != null) {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        if (args.contains(0)) {
+                          //0 stands for visitors //if the argument that was passed to the screen is 0 that means its a visitorf
+                          docID = await _firestore
+                              .collection('visitors')
+                              .add({'UserID': userID});
+                          print(userID);
+                          print(args.contains(0));
+                          Navigator.pushNamed(
+                            context,
+                            '/interests',
+                            arguments: {0, docID.id},
+                          );
+                        } else if (args.contains(2)) {
+                          //2 is for participants
+                          docID = await _firestore
+                              .collection('paticipants')
+                              .add({'UserID': userID});
+                          Navigator.pushNamed(
+                            context,
+                            '/interests',
+                            arguments: {2, docID.id},
+                          );
+                        }
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text(
+                            'تم تسجيلك بنجاح ',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontFamily: 'Cairo', fontSize: 13),
                           )),
-                    );
-                    print('Failed with error code: ${e.code}');
-                    print(e.message);
+                        );
+                      });
+
+                    } on FirebaseAuthException catch (e) {}
+
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(
+                    //         content: Text(
+                    //           e.message.toString(),
+                    //           style: TextStyle(
+                    //             fontSize: 12,
+                    //             fontFamily: 'Cairo',
+                    //           ),
+                    //         )),
+                    //   );
+                    //   print('Failed with error code: ${e.code}');
+                    //   print(e.message);
+                    // }
                   }
-                }
-              }),
+                }),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.baseline,

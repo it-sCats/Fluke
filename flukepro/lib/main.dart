@@ -6,6 +6,8 @@ import 'package:flukepro/screens/regestrationScreens/intersetsScreen.dart';
 import 'package:flukepro/screens/regestrationScreens/ORganizersRegestration.dart';
 import 'package:flukepro/screens/regestrationScreens/visitorRegestrationScreen.dart';
 import 'package:flukepro/screens/regestrationScreens/regestrationType.dart';
+import 'package:flukepro/screens/resetPassScreen.dart';
+import 'package:flukepro/screens/updatePasswordScreen.dart';
 import 'dart:io';
 import 'dashboard.dart';
 
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: onBoarding(),
+      home: loginScreen(),
       debugShowCheckedModeBanner:
           false, //to remove debugging banner at the top of the screen
 
@@ -32,10 +34,12 @@ class MyApp extends StatelessWidget {
 
         VisitorRegistration.routeName: (context) =>
          VisitorRegistration(),
+        '/reset':(context) => resetPass(),
     '/OrganizSign':((context) => organizersRegistrationScreen())
         ,'/UserType':((context) => regestrationTypeScreen()),
         '/interests':((context) => interestsSelection()),
-        '/home':((context) => HomeScreen())
+        '/home':((context) => HomeScreen()),
+        '/updatepass':((context) => updatePass())
       }, //routes are to ease the navigation btween pages
       //we give every page a name then when we want to navigate we just call that name
     );

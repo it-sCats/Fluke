@@ -14,13 +14,21 @@
       },
       "oauth_client": [
         {
+          "client_id": "141070963911-0qksepvpk7hoo5csnqvgnkmj2ggpha53.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flukepro",
+            "certificate_hash": "3f434599d06a1d1652ca389734ab3ead6231c24f"
+          }
+        },
+        {
           "client_id": "141070963911-mt6dmnum53ssiufh2d72ne4n5mb1je9d.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDmXC132Cn6nWKtkzYY0pDwz_Ry_e5cSuQ"
+          "current_key": "AIzaSyA32jXIyc72d2QIse1chkTjCeC__d0gPsg"
         }
       ],
       "services": {
