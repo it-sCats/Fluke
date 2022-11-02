@@ -12,7 +12,11 @@ class Body extends StatelessWidget {
       height: size.height,
       width: double.infinity,
       child: Stack(
-        children: <Widget>[],
+        children: <Widget>[
+          Positioned(
+            child: Image(image: ('images/ُEventmanaging.png'),
+          )
+        ],
       ),
     );
   }

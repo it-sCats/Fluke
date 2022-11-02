@@ -27,7 +27,7 @@ class _loginScreenState extends State<loginScreen> {
 
   String? errorMessage = 'مشكلة في الباس';
 
-  bool LogInError=false;
+  bool LogInError = false;
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +164,8 @@ class _loginScreenState extends State<loginScreen> {
                       errorBorder: errorBorder,
                       focusedBorder: roundedPasswordFeild)),
             ), //custom widgets take the text and if its password or not
-            Visibility(visible: LogInError,
+            Visibility(
+              visible: LogInError,
               child: Text(
                 errorMessage.toString(),
                 textAlign: TextAlign.right,
@@ -186,7 +187,6 @@ class _loginScreenState extends State<loginScreen> {
             ),
             CTA('تسجيل دخول', () async {
               if (_logFormKey.currentState!.validate()) {
-
                 // If the form is valid, display a snackbar. In the real world,
                 // you'd often call a server or save the information in a database.
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -205,15 +205,12 @@ class _loginScreenState extends State<loginScreen> {
                   if (user != null) {
                     Navigator.pushNamed(context, '/home');
                   }
-
                 } on FirebaseAuthException catch (e) {
                   setState(() {
-
-                 errorMessage= AuthExceptionHandler.generateErrorMessage(  AuthExceptionHandler.handleAuthException(e));
-                    LogInError=!LogInError;
-
+                    errorMessage = AuthExceptionHandler.generateErrorMessage(
+                        AuthExceptionHandler.handleAuthException(e));
+                    LogInError = !LogInError;
                   });
-
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
