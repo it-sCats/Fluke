@@ -14,6 +14,7 @@ class Body extends StatelessWidget {
       child: Stack(
         children: <Widget>[
           Positioned(
+           
             child: Image(image: ('images/ُEventmanaging.png'),
           )
         ],
