@@ -6,6 +6,7 @@ enum AuthStatus {
   emailAlreadyExists,
   invalidEmail,
   weakPassword,
+  userNotFound,
   unknown,
 }
 
@@ -24,6 +25,12 @@ class AuthExceptionHandler {
         break;
       case "email-already-in-use":
         status = AuthStatus.emailAlreadyExists;
+        break;
+      case "user-not-found":
+        status = AuthStatus.userNotFound;
+        break;
+      case "user-not-found":
+        status = AuthStatus.userNotFound;
         break;
       default:
         status = AuthStatus.unknown;
@@ -45,6 +52,10 @@ class AuthExceptionHandler {
       case AuthStatus.emailAlreadyExists:
         errorMessage =
         "هذا عنوان البريد مستعمل مسبقاً";
+        break;
+      case AuthStatus.userNotFound:
+        errorMessage =
+       " لا يوجد حساب بهذا البريد الالكتروني, تأكد من البريد الالكتروني المدخل";
         break;
       default:
         errorMessage = "حصل خطأ ما الرجاء إعادة المحاولة";

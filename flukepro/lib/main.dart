@@ -7,6 +7,12 @@ import 'package:flukepro/screens/regestrationScreens/intersetsScreen.dart';
 import 'package:flukepro/screens/regestrationScreens/ORganizersRegestration.dart';
 import 'package:flukepro/screens/regestrationScreens/visitorRegestrationScreen.dart';
 import 'package:flukepro/screens/regestrationScreens/regestrationType.dart';
+
+import 'package:flukepro/screens/resetPassScreen.dart';
+import 'package:flukepro/screens/updatePasswordScreen.dart';
+import 'dart:io';
+import 'package:flukepro/screens/dashboard/dashBoardLoginScreen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flukepro/components/cons.dart';
 
@@ -22,12 +28,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: onBoarding(),
+      home: loginScreen(),
       debugShowCheckedModeBanner:
           false, //to remove debugging banner at the top of the screen
 
       routes: {
         '/log': ((context) => loginScreen()),
+        VisitorRegistration.routeName: (context) => VisitorRegistration(),
+        '/reset': (context) => resetPass(),
+        '/OrganizSign': ((context) => organizersRegistrationScreen()),
+        '/UserType': ((context) => regestrationTypeScreen()),
+        '/interests': ((context) => interestsSelection()),
+        '/home': ((context) => HomeScreen()),
+        '/updatepass': ((context) => updatePass()),
         VisitorRegistration.routeName: (context) => VisitorRegistration(),
         '/OrganizSign': ((context) => organizersRegistrationScreen()),
         '/UserType': ((context) => regestrationTypeScreen()),

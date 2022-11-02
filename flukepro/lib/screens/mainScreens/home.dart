@@ -43,6 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Text('lo'),
               CTA('sign out', () async {
                 await Authentication.signOut(context: context);
+              }),  CTA('delete user', () async {
+                await Authentication().deleteUser();
               })
             ],
           ),

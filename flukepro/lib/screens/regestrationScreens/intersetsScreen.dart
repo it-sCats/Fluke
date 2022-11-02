@@ -26,6 +26,7 @@ List<String> selectedinterestes = [];
     final args = ModalRoute.of(context)!.settings.arguments
     as Set;
     return Scaffold(backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Container(margin: EdgeInsets.only(top:   MediaQuery.of(context).size.height / 10,),
           child: Align(

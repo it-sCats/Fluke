@@ -25,9 +25,10 @@ class _loginScreenState extends State<loginScreen> {
 
   String? password;
 
-  String? errorMessage = 'مشكلة في الباس';
+  String? errorMessage;
 
   bool LogInError = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -175,6 +176,9 @@ class _loginScreenState extends State<loginScreen> {
             Align(
                 alignment: Alignment.centerRight,
                 child: InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/reset');
+                    },
                     child: Container(
                         margin: EdgeInsets.only(right: 75, top: 5),
                         child: Text(
@@ -185,48 +189,75 @@ class _loginScreenState extends State<loginScreen> {
             SizedBox(
               height: 21,
             ),
-            CTA('تسجيل دخول', () async {
-              if (_logFormKey.currentState!.validate()) {
-                // If the form is valid, display a snackbar. In the real world,
-                // you'd often call a server or save the information in a database.
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text(
-                    'جاري تسجيل الدخول..',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontFamily: 'Cairo',
-                    ),
-                  )),
-                );
-                try {
-                  final user = await _auth.signInWithEmailAndPassword(
-                      email: Email.toString(), password: password.toString());
-                  if (user != null) {
-                    Navigator.pushNamed(context, '/home');
-                  }
-                } on FirebaseAuthException catch (e) {
+            if (isLoading)
+              CircularProgressIndicator()
+            else
+              CTA('تسجيل دخول', () async {
+                if (_logFormKey.currentState!.validate()) {
                   setState(() {
-                    errorMessage = AuthExceptionHandler.generateErrorMessage(
-                        AuthExceptionHandler.handleAuthException(e));
-                    LogInError = !LogInError;
+                    isLoading = true;
                   });
-
+                  // If the form is valid, display a snackbar. In the real world,
+                  // you'd often call a server or save the information in a database.
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
+                    const SnackBar(
                         content: Text(
-                      e.message.toString(),
+                      'جاري تسجيل الدخول..',
                       style: TextStyle(
                         fontSize: 12,
                         fontFamily: 'Cairo',
                       ),
                     )),
                   );
-                  print('Failed with error code: ${e.code}');
-                  print(e.message);
+                  try {
+                    final result = await Authentication()
+                        .login(Email.toString(), password.toString());
+                    result.when(
+                        (error) => setState(() {
+                              errorMessage =
+                                  AuthExceptionHandler.generateErrorMessage(
+                                      AuthExceptionHandler.handleAuthException(
+                                          error));
+
+                              print(error);
+                              LogInError = !LogInError;
+                              isLoading = false;
+                            }), (success) async {
+                      Navigator.pushNamed(context, '/home');
+
+                      // final newUser = await _auth.createUserWithEmailAndPassword(
+                      //     email: email.toString(),
+                      //     password: password.toString()); //creating users
+                      // if (newUser != null) {
+                      setState(() {
+                        isLoading = true;
+                      });
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text(
+                          'تم تسجيلك بنجاح ',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontFamily: 'Cairo', fontSize: 13),
+                        )),
+                      );
+                    });
+                  } on FirebaseAuthException catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                          content: Text(
+                        e.message.toString(),
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'Cairo',
+                        ),
+                      )),
+                    );
+                    print('Failed with error code: ${e.code}');
+                    print(e.message);
+                  }
                 }
-              }
-            }),
+              }),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.baseline,
