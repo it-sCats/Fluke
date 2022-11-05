@@ -32,13 +32,13 @@ class _GoogleAndFacebookButtonsState extends State<GoogleAndFacebookButtons> {
               if (widget.userType == 2) {//if particepant
                 //2 is for participants
                 if (await isUniqueID('paticipants',userID)) {
-                  docID = await _firestore
+                 await _firestore
                       .collection('paticipants')
-                      .add({'UserID': userID});
+                      .doc(userID);
                   Navigator.pushNamed(
                     context,
                     interestsSelection.routeName,
-                    arguments: {2, docID?.id},
+                    arguments: {2},
                   );
                 } else {
                   Navigator.pushNamed(context, '/home');
@@ -51,14 +51,14 @@ class _GoogleAndFacebookButtonsState extends State<GoogleAndFacebookButtons> {
 
                   docID = await _firestore
                       .collection('visitors')
-                      .add({'UserID':userID});
+                      .doc(userID);
                   print('register user');
 
                   // .then((value) => )
                   Navigator.pushNamed(
                     context,
                     interestsSelection.routeName,
-                    arguments: {0, docID?.id },
+                    arguments: {0},
                   );
                 } else {
                   Navigator.pushNamed(context, '/home');
@@ -99,7 +99,7 @@ class _GoogleAndFacebookButtonsState extends State<GoogleAndFacebookButtons> {
         ),
         InkWell(
             onTap: () async {
-              var docID;
+
               User? user =
                   await Authentication.signInWithGoogle(context: context);
               //check if user ID already exists in the database
@@ -107,13 +107,12 @@ class _GoogleAndFacebookButtonsState extends State<GoogleAndFacebookButtons> {
                 if (widget.userType == 2) {//if particepant
                   //2 is for participants
                   if (await isUniqueID('paticipants', user.uid)) {
-                    docID = await _firestore
-                        .collection('paticipants')
-                        .add({'UserID': user?.uid});
+                await _firestore
+                        .collection('paticipants').doc(user!.uid).set({"email":user.email,"name":user.displayName,"phone":user.phoneNumber});
                     Navigator.pushNamed(
                       context,
                       interestsSelection.routeName,
-                      arguments: {2, docID.id},
+                      arguments: {2},
                     );
                   } else {
                     Navigator.pushNamed(context, '/home');
@@ -124,16 +123,15 @@ class _GoogleAndFacebookButtonsState extends State<GoogleAndFacebookButtons> {
                   if (await isUniqueID('visitors', user.uid)) {
                     //check if userID already exists
 
-                    docID = await _firestore
-                        .collection('visitors')
-                        .add({'UserID': user?.uid});
-                    print('register user');
 
+                    await _firestore
+                        .collection('visitors').doc(user!.uid).set({"email":user.email,"name":user.displayName,"phone":user.phoneNumber})//TODO create documentID with userID
+                        ;
                     // .then((value) => )
                     Navigator.pushNamed(
                       context,
                       interestsSelection.routeName,
-                      arguments: {0, docID.id},
+                      arguments: {0},
                     );
                   } else {
                     Navigator.pushNamed(context, '/home');

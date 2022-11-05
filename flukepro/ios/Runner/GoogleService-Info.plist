@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>141070963911-balou9ptqr22m7gkv7o46odlsq0f15n7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.141070963911-balou9ptqr22m7gkv7o46odlsq0f15n7</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>141070963911-0qksepvpk7hoo5csnqvgnkmj2ggpha53.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCPuOUwjTZ41sEFjxsDxLoflSwVCcbir2w</string>
+	<key>GCM_SENDER_ID</key>
+	<string>141070963911</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.flukepro</string>
+	<key>PROJECT_ID</key>
+	<string>fluke-db</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fluke-db.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:141070963911:ios:df3bc0439501dd4bcb5ae2</string>
+</dict>
+</plist>

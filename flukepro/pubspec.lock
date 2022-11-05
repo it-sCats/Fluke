@@ -8,7 +8,8 @@ packages:
       sha256: "7fd97426e3be10af6d09b7dfe189aca2dcdd612a2a90d11e69a0300f3c23f4ec"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.6"
+
+    version: "1.0.7"
   archive:
     dependency: transitive
     description:
@@ -56,7 +57,9 @@ packages:
       sha256: b6e6c789009634a691372faacf3a9f2b780618edd9230690311ebf265391b7c7
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.3"
+
+    version: "4.0.4"
+
   cloud_firestore_platform_interface:
     dependency: transitive
     description:
@@ -64,7 +67,9 @@ packages:
       sha256: "1f72d10dfd1a020d18fa9beff9f3ab5bd39d922290a4b8d09a239ab150df4067"
       url: "https://pub.dev"
     source: hosted
-    version: "5.8.3"
+
+    version: "5.8.4"
+
   cloud_firestore_web:
     dependency: transitive
     description:
@@ -72,7 +77,9 @@ packages:
       sha256: a5ac28b400e95863053548aa402f8d81989b8bda90cebd650f982d8051643c81
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.3"
+
+    version: "3.0.4"
+
   collection:
     dependency: transitive
     description:
@@ -144,7 +151,9 @@ packages:
       sha256: a0b2f3e19080e6143d9a8b42755efb7c97355ace3750239d4b699dc2ec518730
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.0"
+
+    version: "4.1.1"
+
   firebase_auth_platform_interface:
     dependency: transitive
     description:
@@ -152,7 +161,9 @@ packages:
       sha256: "89a7b894bd977a457f5f7f8b8aacf6246efa320444972e18cd0fe742737604a1"
       url: "https://pub.dev"
     source: hosted
-    version: "6.11.0"
+
+    version: "6.11.1"
+
   firebase_auth_web:
     dependency: transitive
     description:
@@ -160,7 +171,9 @@ packages:
       sha256: a4562dbcc4e699cfeec4ac7d632156874fcc17b0c8756dd3654d331eeeaf0e09
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.0"
+
+    version: "5.1.1"
+
   firebase_core:
     dependency: "direct main"
     description:
@@ -305,7 +318,7 @@ packages:
     source: hosted
     version: "4.0.2"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       sha256: "910f85bce16fb5c6f614e117efa303e85a1731bb0081edf3604a2ae6e9a3cc91"
@@ -380,16 +393,22 @@ packages:
     dependency: transitive
     description:
       name: path_drawing
+
       sha256: bbb1934c0cbb03091af082a6389ca2080345291ef07a5fa6d6e078ba8682f977
       url: "https://pub.dev"
+
+
     source: hosted
     version: "1.0.1"
   path_parsing:
     dependency: transitive
     description:
       name: path_parsing
+
       sha256: e3e67b1629e6f7e8100b367d3db6ba6af4b1f0bb80f64db18ef1fbabd2fa9ccf
-      url: "https://pub.dev"
+
+      url: "https://pub.dartlang.org"
+
     source: hosted
     version: "1.0.1"
   path_provider_linux:
@@ -417,6 +436,7 @@ packages:
     source: hosted
     version: "2.1.3"
   petitparser:
+
     dependency: transitive
     description:
       name: petitparser
@@ -430,6 +450,19 @@ packages:
       name: platform
       sha256: "4a451831508d7d6ca779f7ac6e212b4023dd5a7d08a27a63da33756410e32b76"
       url: "https://pub.dev"
+    source: hosted
+
+    dependency: transitive
+    description:
+      name: petitparser
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.1.0"
+  platform:
+    dependency: transitive
+    description:
+      name: platform
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.0"
   plugin_platform_interface:
@@ -588,7 +621,10 @@ packages:
       sha256: "80b3257d1492ce4d091729e3a67a60407d227c27241d6927be0130c98e741803"
       url: "https://pub.dev"
     source: hosted
+
     version: "2.1.4"
+
+
   win32:
     dependency: transitive
     description:
@@ -615,4 +651,5 @@ packages:
     version: "6.2.0"
 sdks:
   dart: ">=2.18.0 <4.0.0"
+
   flutter: ">=3.3.0"

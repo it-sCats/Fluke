@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flukepro/errorsHandling/AuthExceptionHandler.dart';
@@ -10,15 +11,57 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:multiple_result/multiple_result.dart';
-import 'package:shared_preferences/shared_preferences.dart'; //helps to know what platform we're on
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../firebase_options.dart'; //helps to know what platform we're on
 
 class Authentication {
+
+
+  static FirebaseOptions? get platformOptions {
+    if (kIsWeb) {
+      // Web
+      return const FirebaseOptions(
+        apiKey: 'AIzaSyAgUhHU8wSJgO5MVNy95tMT07NEjzMOfz0',
+        authDomain: 'react-native-firebase-testing.firebaseapp.com',
+        databaseURL: 'https://react-native-firebase-testing.firebaseio.com',
+        projectId: 'react-native-firebase-testing',
+        storageBucket: 'react-native-firebase-testing.appspot.com',
+        messagingSenderId: '448618578101',
+        appId: '1:448618578101:web:0b650370bb29e29cac3efc',
+        measurementId: 'G-F79DJ0VFGS',
+      );
+    } else if (Platform.isIOS || Platform.isMacOS) {
+      // iOS and MacOS
+       log("Analytics Dart-only initializer doesn't work on Android, please make sure to add the config file.");
+       return null;
+    } else {
+      // Android
+
+      FirebaseOptions(
+        apiKey: 'AIzaSyAgUhHU8wSJgO5MVNy95tMT07NEjzMOfz0',
+        authDomain: 'react-native-firebase-testing.firebaseapp.com',
+        databaseURL: 'https://react-native-firebase-testing.firebaseio.com',
+        projectId: 'react-native-firebase-testing',
+        storageBucket: 'react-native-firebase-testing.appspot.com',
+        messagingSenderId: '448618578101',
+        appId: '1:448618578101:web:0b650370bb29e29cac3efc',
+        measurementId: 'G-F79DJ0VFGS',
+      );
+
+    }
+  }
+
+
+
   String? _token;
   String? userID;
   final _auth = FirebaseAuth.instance;
   static late AuthStatus _status;
   static Future<FirebaseApp> initializeFirebase() async {
-    FirebaseApp firebaseApp = await Firebase.initializeApp();
+    FirebaseApp firebaseApp = await Firebase.initializeApp(
+      options:    DefaultFirebaseOptions.currentPlatform,
+    );
 
     return firebaseApp;
   }
@@ -289,6 +332,7 @@ class Authentication {
     if (result.status == LoginStatus.success) {
       // you are logged
       accessToken = result.accessToken!;
+
       userID = accessToken.userId;
     } else {
       print(result.status);

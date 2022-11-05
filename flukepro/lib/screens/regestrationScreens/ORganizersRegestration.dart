@@ -373,7 +373,8 @@ class _organizersRegistrationScreenState
                   ],
                 ),
               ),
-              CTA('تسجيل ', () async{
+              CTA('تسجيل ',true, () async{
+                FocusManager.instance.primaryFocus?.unfocus();
                 if (_particapantFormKey.currentState!.validate()) {
                   if(agreeOnterms){
                   // If the form is valid, display a snackbar. In the real world,

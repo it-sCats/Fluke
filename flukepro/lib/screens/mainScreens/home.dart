@@ -41,9 +41,9 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               Text('lo'),
-              CTA('sign out', () async {
+              CTA('sign out',false, () async {
                 await Authentication.signOut(context: context);
-              }),  CTA('delete user', () async {
+              }),  CTA('delete user',false,() async {
                 await Authentication().deleteUser();
               })
             ],

@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "141070963911",
+    "project_id": "fluke-db",
+    "storage_bucket": "fluke-db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:141070963911:android:09398d6028212ba7cb5ae2",
+        "android_client_info": {
+          "package_name": "com.example.flukepro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "141070963911-0qksepvpk7hoo5csnqvgnkmj2ggpha53.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flukepro",
+            "certificate_hash": "3f434599d06a1d1652ca389734ab3ead6231c24f"
+          }
+        },
+        {
+          "client_id": "141070963911-mt6dmnum53ssiufh2d72ne4n5mb1je9d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA32jXIyc72d2QIse1chkTjCeC__d0gPsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "141070963911-mt6dmnum53ssiufh2d72ne4n5mb1je9d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "141070963911-balou9ptqr22m7gkv7o46odlsq0f15n7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flukepro"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -274,7 +274,7 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
               if (isLoading)
                 CircularProgressIndicator()
               else
-                CTA('تسجيل ', () async {
+                CTA('تسجيل ',true,() async {
                   var docID;
                   // Validate returns true if the form is valid, or false otherwise.
                   if (_visitorFormKey.currentState!.validate()) {
@@ -317,21 +317,21 @@ print(error);
                         });
                         if (args.contains(0)) {
                           //0 stands for visitors //if the argument that was passed to the screen is 0 that means its a visitorf
-                          docID = await _firestore
-                              .collection('visitors')
-                              .add({'UserID': userID});
-                          print(userID);
-                          print(args.contains(0));
+                           await _firestore
+                              .collection('visitors').doc(userID).set({"email":user.email,"phone":user.phoneNumber})//TODO create documentID with userID
+                              ;
+
                           Navigator.pushNamed(
                             context,
                             '/interests',
-                            arguments: {0, docID.id},
+
+                            arguments: {0, docID},
                           );
                         } else if (args.contains(2)) {
                           //2 is for participants
                           docID = await _firestore
                               .collection('paticipants')
-                              .add({'UserID': userID});
+                              .doc( userID);
                           Navigator.pushNamed(
                             context,
                             '/interests',
@@ -365,7 +365,7 @@ print(error);
                     //   print(e.message);
                     // }
                   }
-                }),
+                },),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.baseline,

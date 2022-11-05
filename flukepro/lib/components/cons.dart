@@ -27,17 +27,14 @@ TextStyle conTxtLink = TextStyle(
 TextStyle conCTATxt = TextStyle(
     fontFamily: 'Cairo',
     color: Colors.white,
-    fontSize: 17,
+    fontSize: 14,
     fontWeight: FontWeight.bold);
 TextStyle conTxtFeildHint = TextStyle(
   fontFamily: 'Cairo',
   fontSize: 14,
-
 );
-TextStyle conLittelTxt12= TextStyle(
-color: conBlack,
-fontFamily: 'Cairo',
-fontSize: 12);
+TextStyle conLittelTxt12 =
+    TextStyle(color: conBlack, fontFamily: 'Cairo', fontSize: 12);
 //------error style for forms
 TextStyle conErorTxtStyle =
     TextStyle(fontFamily: 'Cairo', fontSize: 12, color: conRed);
@@ -51,6 +48,21 @@ OutlineInputBorder roundedPasswordFeild = OutlineInputBorder(
 OutlineInputBorder errorBorder = OutlineInputBorder(
     borderSide: BorderSide(width: 2, color: conRed),
     borderRadius: BorderRadius.circular(25));
+//--------------------field decoration
+InputDecoration conFieldDeco = InputDecoration(
+    focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide(width: 2, color: conRed),
+        borderRadius: BorderRadius.circular(25)),
+    errorStyle: TextStyle(fontFamily: 'Cairo', fontSize: 12, color: conRed),
+    contentPadding: EdgeInsets.symmetric(horizontal: 25),
+    hintStyle: conTxtFeildHint,
+    enabledBorder: roundedTxtFeild,
+    errorBorder: OutlineInputBorder(
+        borderSide: BorderSide(width: 2, color: conRed),
+        borderRadius: BorderRadius.circular(25)),
+    focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(width: 1, color: conBlack),
+        borderRadius: BorderRadius.circular(25)));
 //--------------colors
 Color conBlack = Color(0xff383838);
 Color conORange = Color(0xffFF7124);

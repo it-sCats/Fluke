@@ -4,8 +4,9 @@ import 'cons.dart';
 
 //call to action buttons THE ORANGE BUTTON
 class CTA extends StatelessWidget {
-  CTA(this.txt, this.onTap);
+  CTA(this.txt,this.isFullwidth, this.onTap);
   final String txt;
+  final bool isFullwidth;
   Function onTap;
 
   @override
@@ -13,9 +14,10 @@ class CTA extends StatelessWidget {
     return InkWell(
       onTap: () => onTap(),
       child: Container(
+
         padding: EdgeInsets.symmetric(vertical: 15),
-        width: 290,
-        height: 70,
+        width:isFullwidth? 290: 145,
+        height: 60,
         child: Text(
           txt,
           textAlign: TextAlign.center,
@@ -32,13 +34,30 @@ class CTA extends StatelessWidget {
   }
 }
 
+class DiscartButton extends StatelessWidget {
+
+//Todo make constructor for this with name and action
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(child: Text('إلغاء التغيرات',style: conTxtFeildHint.copyWith(color: Colors.blueGrey,fontSize: 13),),);
+  }
+}
+
+
 //Txt feilds
 class txtFeild extends StatefulWidget {
-  txtFeild(this.txt, this.isPassword, this.isEmail, this.isLogin);
+  txtFeild(this.txt, this.isPassword, this.isEmail,this.onchange,this.ontap,this.isDateTime,this.icon,this.readOnly,this.con);
   final String txt;
+  Function onchange;
+  Function ontap;
+  bool readOnly;
   final bool isPassword;
   final bool isEmail;
-  final bool isLogin;
+  final bool isDateTime;
+  final TextEditingController con;
+  final Icon icon;
+
+
 
   @override
   State<txtFeild> createState() => _txtFeildState();
@@ -57,42 +76,6 @@ class _txtFeildState extends State<txtFeild> {
   FocusNode toSetLabel =
       new FocusNode(); //to set label for password it creates a var to see where is the focus
 
-  void _checkPassword(String value) {
-    _password = value.trim();
-
-    if (_password.isEmpty) {
-      setState(() {
-        _strength = 0;
-        _displayText = 'أدخل كلمة المرور';
-      });
-    } else if (_password.length < 6) {
-      setState(() {
-        _strength = 1 / 4;
-        _displayText = 'كلمة المرور قصيرة جداً';
-      });
-    } else if (_password.length < 8) {
-      setState(() {
-        _strength = 2 / 4;
-        _displayText = 'كلمة المرور مقبولة ولكن ليست قوية';
-      });
-    } else {
-      if (!letterReg.hasMatch(_password) || !numReg.hasMatch(_password)) {
-        setState(() {
-          // Password length >= 8
-          // But doesn't contain both letter and digit characters
-          _strength = 3 / 4;
-          _displayText = 'كلمة المرور قوية';
-        });
-      } else {
-        // Password length >= 8
-        // Password contains both letter and digit characters
-        setState(() {
-          _strength = 1;
-          _displayText = 'كلمة مرورك ممتازة';
-        });
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,52 +83,23 @@ class _txtFeildState extends State<txtFeild> {
       width: 290,
       height: 70,
       child: TextFormField(
+        controller: widget.con,
           style: TextStyle(fontSize: 15, fontFamily: 'Cairo', color: conBlack),
           focusNode: toSetLabel,
-          onChanged: (value) => !widget.isLogin ? _checkPassword(value) : null,
+          onChanged:(value) => widget.onchange,
+          onTap:(){  widget.ontap();},
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'الرجاء إدخال البيانات المطلوبة';
             }
             return null;
           },
+          readOnly: widget.readOnly,
           textDirection: TextDirection.rtl,
           textAlign: TextAlign.right,
           keyboardType: widget.isEmail ? TextInputType.emailAddress : null,
           obscureText: widget.isPassword,
-          decoration: InputDecoration(
-              label: widget.isPassword && toSetLabel.hasFocus && !widget.isLogin
-                  ? Text(
-                      _displayText,
-                      style: conTxtFeildHint,
-                    )
-                  : null,
-              labelStyle: conTxtFeildHint,
-              hintText: widget.txt,
-              focusedErrorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 2, color: conRed),
-                  borderRadius: BorderRadius.circular(25)),
-              errorStyle:
-                  TextStyle(fontFamily: 'Cairo', fontSize: 12, color: conRed),
-              contentPadding: EdgeInsets.symmetric(horizontal: 25),
-              hintStyle: conTxtFeildHint,
-              enabledBorder: roundedTxtFeild,
-              errorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 2, color: conRed),
-                  borderRadius: BorderRadius.circular(25)),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      width: 1,
-                      color: widget.isPassword && !widget.isLogin
-                          ? _strength <= 1 / 4
-                              ? Colors.red
-                              : _strength == 2 / 4
-                                  ? Colors.yellow
-                                  : _strength == 3 / 4
-                                      ? Colors.blue
-                                      : Colors.green
-                          : conBlack),
-                  borderRadius: BorderRadius.circular(25)))),
+          decoration:conFieldDeco.copyWith(hintText: widget.txt,prefixIcon: widget.icon)),
     );
   }
 
