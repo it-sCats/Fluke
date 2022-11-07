@@ -33,6 +33,7 @@ class _interestsSelectionState extends State<interestsSelection> {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Set;
+    final userId=_auth.currentUser!.uid;
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
@@ -81,11 +82,11 @@ class _interestsSelectionState extends State<interestsSelection> {
                     final partic = _firestore.collection("paticipants");
                     if (args.elementAt(0) == 0) {
                       visitoeRef
-                          .doc(args.elementAt(1))
+                          .doc(userId)
                           .update({'interests': selectedinterestes});
                     } else if (args.elementAt(0) == 2) {
                       partic
-                          .doc(args.elementAt(1))
+                          .doc(userId)
                           .update({'interests': selectedinterestes});
                     }
                     Navigator.pushNamed(context, 'personalInfo');

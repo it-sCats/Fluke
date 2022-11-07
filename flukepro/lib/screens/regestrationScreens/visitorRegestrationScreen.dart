@@ -21,6 +21,7 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
 
+  String name='';
   String? email;
   String? password;
 
@@ -78,23 +79,7 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
     }
   }
 
-  Future<void> _submit() async {
-    if (!_visitorFormKey.currentState!.validate()) {
-      // Invalid!
-      return;
-    }
-    _visitorFormKey.currentState!.save();
-    setState(() {
-      isLoading = true;
-    });
-    await Authentication().signUp(
-      email.toString(),
-      password.toString(),
-    );
-    setState(() {
-      isLoading = false;
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -179,6 +164,30 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
               ),
               SizedBox(
                 height: 30,
+              ),  SizedBox(
+                width: 290,
+                height: 70,
+                child: TextFormField(
+                    style: TextStyle(
+                        fontSize: 15, fontFamily: 'Cairo', color: conBlack),
+                    onChanged: (value) => name = value,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'الرجاء إدخال البيانات المطلوبة';
+                      }
+                      return null;
+                    },
+                    textDirection: TextDirection.rtl,
+                    textAlign: TextAlign.right,
+                    decoration: InputDecoration(
+                        hintText: 'أدخل إسمك',
+                        errorStyle: TextStyle(
+                            fontFamily: 'Cairo', fontSize: 12, color: conRed),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 25),
+                        hintStyle: conTxtFeildHint,
+                        enabledBorder: roundedTxtFeild,
+                        errorBorder: errorBorder,
+                        focusedBorder: roundedPasswordFeild)),
               ),
               SizedBox(
                 width: 290,
@@ -283,9 +292,10 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
                     setState(() {
                       isLoading = true;
                     });
-                    try {
+                    try {print('^^^^^');
+                      print(name);
                       final result = await Authentication()
-                          .signUp(email.toString(), password.toString());
+                          .signUp(email.toString(), password.toString(),name);
                       result.when(
                           (error) => setState(() {
 
@@ -318,24 +328,24 @@ print(error);
                         if (args.contains(0)) {
                           //0 stands for visitors //if the argument that was passed to the screen is 0 that means its a visitorf
                            await _firestore
-                              .collection('visitors').doc(userID).set({"email":user.email,"phone":user.phoneNumber})//TODO create documentID with userID
+                              .collection('visitors').doc(userID).set({"email":user.email,"name":user.displayName})// create documentID with userID
                               ;
-
+print(user.displayName);
                           Navigator.pushNamed(
                             context,
                             '/interests',
 
-                            arguments: {0, docID},
+                            arguments: {0 },
                           );
                         } else if (args.contains(2)) {
                           //2 is for participants
-                          docID = await _firestore
+                          await _firestore
                               .collection('paticipants')
-                              .doc( userID);
+                              .doc( userID).set({"email":user.email,"name":user.displayName});
                           Navigator.pushNamed(
                             context,
                             '/interests',
-                            arguments: {2, docID.id},
+                            arguments: {2},
                           );
                         }
 

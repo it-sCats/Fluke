@@ -108,7 +108,7 @@ class _userInfoScreenState extends State<userInfoScreen> {
                       ),
                       SizedBox(
                         height: 20,
-                      ), //TODO place the text with info from UserInfo
+                      ),
                       txtFeild(_Emailcon.text, false, true, (value) {
                         _Emailcon.text = value;
                       }, () {}, false, Icon(Icons.edit), false, _Emailcon),
@@ -119,12 +119,8 @@ class _userInfoScreenState extends State<userInfoScreen> {
                           false,
                           false, (value) {
                         _gendercon.text = value;
-                        debugPrint(enabled.toString());
-                        enabled=true;
-                        setState(() {
 
-                        });
-                        print(enabled);
+
                       }, () {}, false, Icon(Icons.edit), false, _gendercon),
                       txtFeild(
                           userInfo['phone'] == null
@@ -200,6 +196,7 @@ class _userInfoScreenState extends State<userInfoScreen> {
                                     _gendercon.text == null &&
                                     _Phonecon.text == null &&
                                     _Emailcon.text == null) {}
+                                print(userInfo['name']);
                                 _firestore
                                     .collection('visitors')
                                     .doc(user!.uid)
