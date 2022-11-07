@@ -32,6 +32,12 @@ TextStyle conCTATxt = TextStyle(
 TextStyle conTxtFeildHint = TextStyle(
   fontFamily: 'Cairo',
   fontSize: 14,
+<<<<<<< Updated upstream
+=======
+
+  //
+  //h
+>>>>>>> Stashed changes
 );
 TextStyle conLittelTxt12 =
     TextStyle(color: conBlack, fontFamily: 'Cairo', fontSize: 12);

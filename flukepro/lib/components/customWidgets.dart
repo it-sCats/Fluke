@@ -11,13 +11,20 @@ class CTA extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return InkWell(
       onTap: () => onTap(),
       child: Container(
 
         padding: EdgeInsets.symmetric(vertical: 15),
+<<<<<<< Updated upstream
         width:isFullwidth? 290: 145,
         height: 60,
+=======
+        margin: EdgeInsets.symmetric(vertical: size.height * 0.02),
+        width: 290,
+        height: 70,
+>>>>>>> Stashed changes
         child: Text(
           txt,
           textAlign: TextAlign.center,
@@ -34,6 +41,7 @@ class CTA extends StatelessWidget {
   }
 }
 
+<<<<<<< Updated upstream
 class DiscartButton extends StatelessWidget {
 
 //Todo make constructor for this with name and action
@@ -44,6 +52,39 @@ class DiscartButton extends StatelessWidget {
 }
 
 
+=======
+class CTA2 extends StatelessWidget {
+  CTA2(this.txt, this.onTap);
+  final String txt;
+  Function onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    // Size size = MediaQuery.of(context).size;
+    return InkWell(
+      onTap: () => onTap(),
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 15),
+        // margin: EdgeInsets.symmetric(vertical: size.height * 0.02),
+        width: 290,
+        height: 70,
+        child: Text(
+          txt,
+          textAlign: TextAlign.center,
+          style: conCTATxt,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.blueAccent,
+          borderRadius: BorderRadius.all(
+            Radius.circular(25),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+>>>>>>> Stashed changes
 //Txt feilds
 class txtFeild extends StatefulWidget {
   txtFeild(this.txt, this.isPassword, this.isEmail,this.onchange,this.ontap,this.isDateTime,this.icon,this.readOnly,this.con);
@@ -102,7 +143,4 @@ class _txtFeildState extends State<txtFeild> {
           decoration:conFieldDeco.copyWith(hintText: widget.txt,prefixIcon: widget.icon)),
     );
   }
-
 }
-
-
