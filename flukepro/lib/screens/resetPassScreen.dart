@@ -227,7 +227,7 @@ final _auth=FirebaseAuth.instance;
                       style: conErorTxtStyle,
                     ),
                   ),
-                  CTA(_authMode==AuthMode.verify ? 'إرسال رمز تأكيد' : 'تأكيد',true, () async {
+                  CTA(txt: _authMode==AuthMode.verify ? 'إرسال رمز تأكيد' : 'تأكيد',isFullwidth: true,onTap:  () async {
                     if (_resetFormKey.currentState!.validate()) {
                       try {
                         //this commented code calls reset pass function which sends an email to rest password

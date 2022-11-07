@@ -158,7 +158,7 @@ final _auth=FirebaseAuth.instance;
                   ),
                   SizedBox(height: 20,),
 
-                 _isLoading?CircularProgressIndicator(): CTA('تأكيد',true,() async {
+                 _isLoading?CircularProgressIndicator(): CTA(txt: 'تأكيد',isFullwidth: true,onTap: () async {
                     if (_resetFormKey.currentState!.validate()) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

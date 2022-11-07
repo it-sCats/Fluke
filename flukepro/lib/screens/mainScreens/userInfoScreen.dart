@@ -189,9 +189,9 @@ class _userInfoScreenState extends State<userInfoScreen> {
 
                           Opacity(opacity: enabled?1:0.5,
                             child: CTA(
-                              'حفظ التغيرات',
-                              false,
-                              () {
+                             txt: 'حفظ التغيرات',
+                           isFullwidth:    false,
+                          onTap:     () {
                                 if (_birthDatecon.text == null &&
                                     _gendercon.text == null &&
                                     _Phonecon.text == null &&

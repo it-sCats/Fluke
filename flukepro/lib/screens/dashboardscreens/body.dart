@@ -11,7 +11,7 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     //this size to provide total height and width
-    return Background(
+    return Container(  width: double.infinity,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -23,7 +23,8 @@ class Body extends StatelessWidget {
             'images/Eventmanaging.png',
             height: size.height * 0.3,
           ),
-          CTA("سجل الدخول", () {}),
+
+          CTA(txt: "سجل الدخول",isFullwidth: true, onTap: () {}),
           CTA2("الدخول لحسابك", () {}),
         ],
       ),

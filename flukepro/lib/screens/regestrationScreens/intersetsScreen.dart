@@ -77,7 +77,7 @@ class _interestsSelectionState extends State<interestsSelection> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height / 5,
                   ),
-                  CTA('حفظ',true,() {
+                  CTA(txt: 'حفظ',isFullwidth:  true,onTap: () {
                     final visitoeRef = _firestore.collection("visitors");
                     final partic = _firestore.collection("paticipants");
                     if (args.elementAt(0) == 0) {

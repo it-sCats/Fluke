@@ -283,7 +283,7 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
               if (isLoading)
                 CircularProgressIndicator()
               else
-                CTA('تسجيل ',true,() async {
+                CTA(txt: 'تسجيل ',isFullwidth: true,onTap: () async {
                   var docID;
                   // Validate returns true if the form is valid, or false otherwise.
                   if (_visitorFormKey.currentState!.validate()) {

@@ -4,7 +4,7 @@ import 'cons.dart';
 
 //call to action buttons THE ORANGE BUTTON
 class CTA extends StatelessWidget {
-  CTA(this.txt,this.isFullwidth, this.onTap);
+  CTA({required this.txt,required this.isFullwidth, required this.onTap});
   final String txt;
   final bool isFullwidth;
   Function onTap;
@@ -17,14 +17,13 @@ class CTA extends StatelessWidget {
       child: Container(
 
         padding: EdgeInsets.symmetric(vertical: 15),
-<<<<<<< Updated upstream
+
         width:isFullwidth? 290: 145,
         height: 60,
-=======
+
         margin: EdgeInsets.symmetric(vertical: size.height * 0.02),
-        width: 290,
-        height: 70,
->>>>>>> Stashed changes
+
+
         child: Text(
           txt,
           textAlign: TextAlign.center,
@@ -41,7 +40,7 @@ class CTA extends StatelessWidget {
   }
 }
 
-<<<<<<< Updated upstream
+
 class DiscartButton extends StatelessWidget {
 
 //Todo make constructor for this with name and action
@@ -52,7 +51,7 @@ class DiscartButton extends StatelessWidget {
 }
 
 
-=======
+
 class CTA2 extends StatelessWidget {
   CTA2(this.txt, this.onTap);
   final String txt;
@@ -84,7 +83,7 @@ class CTA2 extends StatelessWidget {
   }
 }
 
->>>>>>> Stashed changes
+
 //Txt feilds
 class txtFeild extends StatefulWidget {
   txtFeild(this.txt, this.isPassword, this.isEmail,this.onchange,this.ontap,this.isDateTime,this.icon,this.readOnly,this.con);

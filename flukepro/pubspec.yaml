@@ -80,7 +80,9 @@ flutter:
 
   # To add images to your application, add an images section, like this:
   assets:
-   - images/
+    - images/Eventmanaging.png
+    - images/
+
     
   
 

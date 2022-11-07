@@ -223,7 +223,7 @@ class _loginScreenState extends State<loginScreen> {
               if (isLoading)
                 CircularProgressIndicator()
               else
-                CTA('تسجيل دخول', true,() async {
+                CTA( txt: 'تسجيل دخول',isFullwidth:  true,onTap: () async {
                   if (_logFormKey.currentState!.validate()) {
                     setState(() {
                       isLoading = true;

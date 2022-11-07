@@ -373,7 +373,7 @@ class _organizersRegistrationScreenState
                   ],
                 ),
               ),
-              CTA('تسجيل ',true, () async{
+              CTA(txt: 'تسجيل ',isFullwidth: true, onTap: () async{
                 FocusManager.instance.primaryFocus?.unfocus();
                 if (_particapantFormKey.currentState!.validate()) {
                   if(agreeOnterms){

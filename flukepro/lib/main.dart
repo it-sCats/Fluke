@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
 
-      home:loginScreen(),
+      home:DashBoard(),
       debugShowCheckedModeBanner:
           false, //to remove debugging banner at the top of the screen
 
