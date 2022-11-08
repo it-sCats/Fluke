@@ -13,7 +13,7 @@ final _firestore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
 String? ErrorMessage;
 bool isErrored = false;
-
+User? user = _auth.currentUser;
 late Future<QueryDocumentSnapshot?> UserInfo;
 
 class userInfoScreen extends StatefulWidget {
@@ -47,18 +47,24 @@ class _userInfoScreenState extends State<userInfoScreen> {
   DocumentSnapshot? data;
   String? dateinput;
   SharedPreferences? userTypeShared;
-  User? user = _auth.currentUser;
+  final currentVisitorRef= _firestore.collection('users').doc('visitors')
+      .collection('visitor').doc(user!.uid);
+  final currentPartsRef=_firestore.collection('users').doc('paticipants').collection('paticipant')
+      .doc( user!.uid);
+  final currentOrganisRef=_firestore.collection('users').doc('organizingAgens').collection('organizingAgen').doc(user?.uid);
+
   bool enabled=false;
   Future<DocumentSnapshot<Object?>>? getUserData() async {
     userTypeShared = await SharedPreferences.getInstance();
     _userType = userTypeShared?.getString("userType");
 
+
     if (_userType == '0') {
-      return await _firestore.collection('visitors').doc(user?.uid).get();
+      return await currentVisitorRef.get();
     } else if (_userType == '2') {
-      return _firestore.collection('paticipants').doc(user?.uid).get();
+      return currentPartsRef.get();
     } else {
-      return _firestore.collection('organizingAgen').doc(user?.uid).get();
+      return currentOrganisRef.get();
     }
 
   }
@@ -197,10 +203,8 @@ class _userInfoScreenState extends State<userInfoScreen> {
                                     _Phonecon.text == null &&
                                     _Emailcon.text == null) {}
                                 print(userInfo['name']);
-                                _firestore
-                                    .collection('visitors')
-                                    .doc(user!.uid)
-                                    .set({
+
+                               _userType=='0'? currentVisitorRef:_userType=='2'?currentPartsRef:currentOrganisRef .set({
                                   'email': _Emailcon.text == ''
                                       ? userInfo['email']
                                       : _Emailcon

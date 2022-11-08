@@ -15,6 +15,7 @@ class VisitorRegistration extends StatefulWidget {
   State<VisitorRegistration> createState() => _VisitorRegistrationState();
 }
 
+
 class _VisitorRegistrationState extends State<VisitorRegistration> {
   final _visitorFormKey = GlobalKey<FormState>();
   //sign in vars
@@ -22,6 +23,7 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
   final _firestore = FirebaseFirestore.instance;
 
   String name='';
+  TextEditingController _nameCon=TextEditingController();
   String? email;
   String? password;
 
@@ -168,9 +170,10 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
                 width: 290,
                 height: 70,
                 child: TextFormField(
+                    controller: _nameCon,
                     style: TextStyle(
                         fontSize: 15, fontFamily: 'Cairo', color: conBlack),
-                    onChanged: (value) => name = value,
+                    onChanged: (value) { _nameCon.text = value;},
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'الرجاء إدخال البيانات المطلوبة';
@@ -292,16 +295,15 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
                     setState(() {
                       isLoading = true;
                     });
-                    try {print('^^^^^');
-                      print(name);
+                    try {
                       final result = await Authentication()
-                          .signUp(email.toString(), password.toString(),name);
+                          .signUp(email.toString(), password.toString());
                       result.when(
                           (error) => setState(() {
 
-                                  errorMessage =AuthExceptionHandler.generateErrorMessage(  AuthExceptionHandler.handleAuthException(error));
+errorMessage =AuthExceptionHandler.generateErrorMessage(  AuthExceptionHandler.handleAuthException(error));
 
-print(error);
+
 
 
 
@@ -327,8 +329,8 @@ print(error);
                         });
                         if (args.contains(0)) {
                           //0 stands for visitors //if the argument that was passed to the screen is 0 that means its a visitorf
-                           await _firestore
-                              .collection('visitors').doc(userID).set({"email":user.email,"name":user.displayName})// create documentID with userID
+                           await _firestore.collection('users').doc('visitors')
+                              .collection('visitor').doc(userID).set({"email":user.email,"name":_nameCon.text,"role":"user"})// create documentID with userID
                               ;
 print(user.displayName);
                           Navigator.pushNamed(

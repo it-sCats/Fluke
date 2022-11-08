@@ -78,18 +78,19 @@ class _interestsSelectionState extends State<interestsSelection> {
                     height: MediaQuery.of(context).size.height / 5,
                   ),
                   CTA(txt: 'حفظ',isFullwidth:  true,onTap: () {
-                    final visitoeRef = _firestore.collection("visitors");
-                    final partic = _firestore.collection("paticipants");
+
                     if (args.elementAt(0) == 0) {
-                      visitoeRef
-                          .doc(userId)
+
+                       _firestore.collection('users').doc('visitors')
+                          .collection('visitor') .doc(userId)
                           .update({'interests': selectedinterestes});
                     } else if (args.elementAt(0) == 2) {
-                      partic
-                          .doc(userId)
+
+                      _firestore.collection('users').doc('visitors')
+                          .collection('visitor') .doc(userId)
                           .update({'interests': selectedinterestes});
                     }
-                    Navigator.pushNamed(context, 'personalInfo');
+                    Navigator.pushNamed(context, '/redirect');
                     // Navigator.pushNamed(context, '/home');
                   })
                 ])),

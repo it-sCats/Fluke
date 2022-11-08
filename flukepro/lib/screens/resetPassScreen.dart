@@ -15,8 +15,10 @@ enum AuthMode {
 //الاولى وهي نسيان كلمة المرور الي حيدخل فيها المستحدم الايميل والثانية الي حيطلعله حقل يدخل فيه الكود الي انبعتله
 //باش يأكده
 class resetPass extends StatefulWidget {
+
   @override
   State<resetPass> createState() => _resetPassState();
+
 }
 
 class _resetPassState extends State<resetPass> {
