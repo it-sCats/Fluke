@@ -10,6 +10,7 @@ import 'package:flukepro/screens/resetPassScreen.dart';
 import 'package:flukepro/screens/updatePasswordScreen.dart';
 import 'package:flutter/material.dart';
 
+import 'dashboardScreens/mainDashboard.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -17,8 +18,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  runApp(MainDashboard());
   // runApp(MyApp());
-  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
