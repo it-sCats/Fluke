@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flukepro/screens/loginScreen.dart';
 import 'package:flukepro/screens/mainScreens/home.dart';
+
 import 'package:flukepro/screens/mainScreens/userInfoScreen.dart';
 import 'package:flukepro/screens/regestrationScreens/ORganizersRegestration.dart';
 import 'package:flukepro/screens/regestrationScreens/intersetsScreen.dart';
@@ -8,9 +9,16 @@ import 'package:flukepro/screens/regestrationScreens/regestrationType.dart';
 import 'package:flukepro/screens/regestrationScreens/visitorRegestrationScreen.dart';
 import 'package:flukepro/screens/resetPassScreen.dart';
 import 'package:flukepro/screens/updatePasswordScreen.dart';
+
 import 'package:flutter/material.dart';
 
-import 'dashboardScreens/mainDashboard.dart';
+import 'package:flukepro/utils/RoleRedicetion.dart';
+
+import 'package:flutter/material.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flukepro/components/cons.dart';
+
 import 'firebase_options.dart';
 
 void main() async {
@@ -40,7 +48,6 @@ class MyApp extends StatelessWidget {
         '/interests': ((context) => interestsSelection()),
         '/home': ((context) => HomeScreen()),
         '/updatepass': ((context) => updatePass()),
-        VisitorRegistration.routeName: (context) => VisitorRegistration(),
         '/reset': (context) => resetPass(),
         '/OrganizSign': ((context) => organizersRegistrationScreen()),
         '/UserType': ((context) => regestrationTypeScreen()),
@@ -51,9 +58,8 @@ class MyApp extends StatelessWidget {
         '/OrganizSign': ((context) => organizersRegistrationScreen()),
         '/UserType': ((context) => regestrationTypeScreen()),
         '/interests': ((context) => interestsSelection()),
-        '/home': ((context) => HomeScreen()),
-        '/home': ((context) => HomeScreen()),
-        'personalInfo': ((context) => userInfoScreen())
+        'personalInfo': ((context) => userInfoScreen()),
+        '/redirect': ((context) => recdirectRole())
       }, //routes are to ease the navigation btween pages
       //we give every page a name then when we want to navigate we just call that name
     );

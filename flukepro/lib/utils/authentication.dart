@@ -110,17 +110,17 @@ class Authentication {
   //
   //   return  _authenticate(email, password, 'signUp');
   // }
-  Future<Result> signUp(String email, String password,String name) async {
+  Future<Result> signUp(String email, String password) async {
     User? user;
     try {
       final userCridantial = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
-      user = userCridantial.user;
+user=userCridantial.user;
 
-      print(name);
+
       if (user != null) {
-        user?.updateDisplayName(name);
+
         return Success(user);
       } else {
         return Error(Exception('لم يتم التسجيل'));

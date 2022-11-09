@@ -252,7 +252,8 @@ class _loginScreenState extends State<loginScreen> {
                                 LogInError = !LogInError;
                                 isLoading = false;
                               }), (success) async {
-                        Navigator.pushNamed(context, 'personalInfo');
+
+                        Navigator.pushNamed(context, '/redirect');//here we redirect the user based on his role
 
                         // final newUser = await _auth.createUserWithEmailAndPassword(
                         //     email: email.toString(),
