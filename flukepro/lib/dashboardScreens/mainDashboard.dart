@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'db_loginScreen/loginDashboard.dart';
 
 class MainDashboard extends StatelessWidget {
-  const MainDashboard({Key? key}) : super(key: key);
+  MainDashboard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class MainDashboard extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.amber,
       ),
-      home: const LoginDashboard(),
+      home: LoginDashboard(),
     );
   }
 }
