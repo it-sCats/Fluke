@@ -5,6 +5,16 @@ class LoginPage_L_DB extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Expanded(
+      child: Container(
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('image/Eventmanaging.png'),
+                fit: BoxFit.cover),
+          ),
+        ),
+      ),
+    );
   }
 }
