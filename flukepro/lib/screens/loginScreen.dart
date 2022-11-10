@@ -270,7 +270,7 @@ class _loginScreenState extends State<loginScreen> {
                           )),
                         );
 
-             
+
                         });
                       } on FirebaseAuthException catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(

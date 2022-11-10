@@ -19,7 +19,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MainDashboard());
+  runApp(MyApp());
   // runApp(MyApp());
 }
 
@@ -43,22 +43,11 @@ class MyApp extends StatelessWidget {
         '/updatepass': ((context) => updatePass()),
         '/reset': (context) => resetPass(),
         '/OrganizSign': ((context) => organizersRegistrationScreen()),
-
         '/interests': ((context) => interestsSelection()),
-
         VisitorRegistration.routeName: (context) => VisitorRegistration(),
-
-
-        'personalInfo': ((context) => userInfoScreen())
-,
-
-
-        '/redirect':((context) => recdirectRole()),
-
-
         'personalInfo': ((context) => userInfoScreen()),
-
-
+        '/redirect': ((context) => recdirectRole()),
+        'personalInfo': ((context) => userInfoScreen()),
       }, //routes are to ease the navigation btween pages
       //we give every page a name then when we want to navigate we just call that name
     );
