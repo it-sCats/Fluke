@@ -140,7 +140,7 @@ user=userCridantial.user;
       if (userCredintals != null) {
         return Success(userCredintals.user);
       } else {
-        return Error('لم يتم التسجيل.');
+        return Error('لم يتم تسجيل الدخول.');
       }
     } on FirebaseAuthException catch (e) {
       return Error(e);

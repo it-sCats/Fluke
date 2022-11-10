@@ -1,7 +1,6 @@
 import 'package:flukepro/components/cons.dart';
 import 'package:flukepro/components/signInWithGoogleAndFacebookButtons.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import '../components/customWidgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -128,7 +127,7 @@ class _loginScreenState extends State<loginScreen> {
                     textAlign: TextAlign.right,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                        hintText: 'إسم المستخدم أو البريد الإكتروني',
+                        hintText: ' البريد الإكتروني',
                         errorStyle: TextStyle(
                             fontFamily: 'Cairo', fontSize: 12, color: conRed),
                         contentPadding: EdgeInsets.symmetric(horizontal: 25),
@@ -246,12 +245,12 @@ class _loginScreenState extends State<loginScreen> {
                           .login(Email.toString(), password.toString());
                       result.when(
                           (error) => setState(() {
-                            errorMessage =AuthExceptionHandler.generateErrorMessage(  AuthExceptionHandler.handleAuthException(error));
+                            errorMessage =AuthExceptionHandler.generateErrorMessage(  AuthExceptionHandler.handleAuthException(error));//تظهر هذه الدوال رسالة خطأ بناء على كود الخطأ
 
-                            print(error);
                                 LogInError = !LogInError;
                                 isLoading = false;
-                              }), (success) async {
+                              }),
+                              (success) async {
 
                         Navigator.pushNamed(context, '/redirect');//here we redirect the user based on his role
 

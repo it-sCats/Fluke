@@ -55,14 +55,11 @@ class MyApp extends StatelessWidget {
         '/home': ((context) => HomeScreen()),
         '/updatepass': ((context) => updatePass()),
         VisitorRegistration.routeName: (context) => VisitorRegistration(),
-        '/OrganizSign': ((context) => organizersRegistrationScreen()),
-        '/UserType': ((context) => regestrationTypeScreen()),
-        '/interests': ((context) => interestsSelection()),
 
         'personalInfo': ((context) => userInfoScreen())
 ,
 
-   
+
         '/redirect':((context) => recdirectRole())
 
       }, //routes are to ease the navigation btween pages
