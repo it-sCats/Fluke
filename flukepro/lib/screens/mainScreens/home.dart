@@ -3,6 +3,7 @@ import 'package:flukepro/components/customWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../OrganizersRequests/requestsList.dart';
 import '../../utils/authentication.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -40,12 +41,23 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              Container(
+                  width: MediaQuery.of(context).size.width / 2,
+                  height: 500,
+                  child: requestsList()), //هنا يتم عرض قائمة الطلبات قابلة
               Text('lo'),
-              CTA(txt: 'sign out',isFullwidth: false, onTap: () async {
-                await Authentication.signOut(context: context);
-              }),  CTA(txt:'delete user',isFullwidth: false,onTap: () async {
-                await Authentication().deleteUser();
-              })
+              CTA(
+                  txt: 'sign out',
+                  isFullwidth: false,
+                  onTap: () async {
+                    await Authentication.signOut(context: context);
+                  }),
+              CTA(
+                  txt: 'delete user',
+                  isFullwidth: false,
+                  onTap: () async {
+                    await Authentication().deleteUser();
+                  })
             ],
           ),
         ),

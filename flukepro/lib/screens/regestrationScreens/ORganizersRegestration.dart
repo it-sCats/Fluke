@@ -29,18 +29,17 @@ class _organizersRegistrationScreenState
   ];
 
   String? selectedEventType;
-  String? selectedEventExper;//the selected level of previous work
+
   String? phoneNum;
   String? email;
   String? OrganizerName;
-  String? EIN; //employer identification numbers,
+  String? breif; //employer identification numbers,
   String? eventType;
   bool agreeOnterms = false;
-  Color borderLabelColor=conBlack;
+  Color borderLabelColor = conBlack;
   String? errorMessage = 'مشكلة في الباس';
 
-  bool LogInError=false;
-
+  bool LogInError = false;
 
   @override
   Widget build(BuildContext context) {
@@ -96,30 +95,28 @@ class _organizersRegistrationScreenState
               SizedBox(
                 width: 290,
                 height: 70,
-                child: TextFormField(autovalidateMode: AutovalidateMode.onUserInteraction,
-                    style: TextStyle(fontSize: 15, fontFamily: 'Cairo', color: conBlack),
-
-                    onChanged: (value) => OrganizerName=value,
+                child: TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    style: TextStyle(
+                        fontSize: 15, fontFamily: 'Cairo', color: conBlack),
+                    onChanged: (value) => OrganizerName = value,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'الرجاء إدخال البيانات المطلوبة';
-                      }else
-                      return null;
+                      } else
+                        return null;
                     },
                     textDirection: TextDirection.rtl,
                     textAlign: TextAlign.right,
                     keyboardType: TextInputType.name,
-
                     decoration: InputDecoration(
-
                         labelStyle: conTxtFeildHint,
                         hintText: ''
                             'إسم الجهة أو المنظم',
                         focusedErrorBorder: OutlineInputBorder(
                             borderSide: BorderSide(width: 2, color: conRed),
                             borderRadius: BorderRadius.circular(25)),
-                        errorStyle:
-                        conErorTxtStyle,
+                        errorStyle: conErorTxtStyle,
                         contentPadding: EdgeInsets.symmetric(horizontal: 25),
                         hintStyle: conTxtFeildHint,
                         enabledBorder: roundedTxtFeild,
@@ -127,10 +124,7 @@ class _organizersRegistrationScreenState
                             borderSide: BorderSide(width: 2, color: conRed),
                             borderRadius: BorderRadius.circular(25)),
                         focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                width: 1,
-                                color:
-                                conBlack),
+                            borderSide: BorderSide(width: 1, color: conBlack),
                             borderRadius: BorderRadius.circular(25)))),
               ),
 
@@ -138,30 +132,29 @@ class _organizersRegistrationScreenState
                 width: 290,
                 height: 70,
                 child: TextFormField(
-                    style: TextStyle(fontSize: 15, fontFamily: 'Cairo', color: conBlack),
-
-                    onChanged: (value) => email=value,
+                    style: TextStyle(
+                        fontSize: 15, fontFamily: 'Cairo', color: conBlack),
+                    onChanged: (value) => email = value,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'الرجاء إدخال البيانات المطلوبة';
-                      }else if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email.toString())){
+                      } else if (!RegExp(
+                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                          .hasMatch(email.toString())) {
                         return 'تأكد من صحة كتابة الايميل المدخل';
                       }
                       return null;
                     },
                     textDirection: TextDirection.rtl,
                     textAlign: TextAlign.right,
-                    keyboardType: TextInputType.emailAddress ,
-
+                    keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-
                         labelStyle: conTxtFeildHint,
                         hintText: 'company@Email.com',
                         focusedErrorBorder: OutlineInputBorder(
                             borderSide: BorderSide(width: 2, color: conRed),
                             borderRadius: BorderRadius.circular(25)),
-                        errorStyle:
-                        conErorTxtStyle,
+                        errorStyle: conErorTxtStyle,
                         contentPadding: EdgeInsets.symmetric(horizontal: 25),
                         hintStyle: conTxtFeildHint,
                         enabledBorder: roundedTxtFeild,
@@ -169,12 +162,9 @@ class _organizersRegistrationScreenState
                             borderSide: BorderSide(width: 2, color: conRed),
                             borderRadius: BorderRadius.circular(25)),
                         focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                width: 1,
-                                color:
-                                conBlack),
+                            borderSide: BorderSide(width: 1, color: conBlack),
                             borderRadius: BorderRadius.circular(25)))),
-              ),//custom widgets take the text and if its password or not
+              ), //custom widgets take the text and if its password or not
               SizedBox(
                 width: 290,
                 height: 70,
@@ -195,7 +185,7 @@ class _organizersRegistrationScreenState
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         labelStyle: conTxtFeildHint,
-                        hintText: 'رقم التعريف الوظيفي',
+                        hintText: 'رقم الهاتف',
                         focusedErrorBorder: OutlineInputBorder(
                             borderSide: BorderSide(width: 2, color: conRed),
                             borderRadius: BorderRadius.circular(25)),
@@ -211,43 +201,7 @@ class _organizersRegistrationScreenState
                             borderSide: BorderSide(width: 1, color: conBlack),
                             borderRadius: BorderRadius.circular(25)))),
               ),
-              SizedBox(
-                width: 290,
-                height: 70,
-                child: TextFormField(
-                    style: TextStyle(
-                        fontSize: 15, fontFamily: 'Cairo', color: conBlack),
-                    onChanged: (value) {
-                      phoneNum = value;
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'الرجاء إدخال البيانات المطلوبة';
-                      }else if(value.trim().length < 10){
-                        return 'رقم الهاتف يتكون من عشرة حروف  ';}
-                      return null;
-                    },
-                    textDirection: TextDirection.rtl,
-                    textAlign: TextAlign.right,
-                    keyboardType: TextInputType.phone,
-                    decoration: InputDecoration(
-                        labelStyle: conTxtFeildHint,
-                        hintText: 'رقم الهاتف',
-                        focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 2, color: conRed),
-                            borderRadius: BorderRadius.circular(25)),
-                        errorStyle: TextStyle(
-                            fontFamily: 'Cairo', fontSize: 11, color: conRed),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 25),
-                        hintStyle: conTxtFeildHint,
-                        enabledBorder: roundedTxtFeild,
-                        errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 2, color: conRed),
-                            borderRadius: BorderRadius.circular(25)),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 1, color: conBlack),
-                            borderRadius: BorderRadius.circular(25)))),
-              ),
+
               SizedBox(
                 width: 290,
                 height: 80,
@@ -304,96 +258,101 @@ class _organizersRegistrationScreenState
               SizedBox(
                 width: 290,
                 height: 70,
-                child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: DropdownButtonFormField(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      focusColor: Colors.white,
-                      dropdownColor: Colors.white,
-                      elevation: 8,
-                      decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: conBlack,
-                              ),
-                              borderRadius: BorderRadius.circular(25)),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: conBlack,
-                              ),
-                              borderRadius: BorderRadius.circular(25)),
-                          // focusedErrorBorder:OutlineInputBorder(
-                          // borderSide: BorderSide(width: 2, color: conRed),
-                          // borderRadius: BorderRadius.circular(25)) ,
-                          errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 2, color: conRed),
-                              borderRadius: BorderRadius.circular(25)),
-                          focusColor: Colors.white,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: conBlack,
-                              ),
-                              borderRadius: BorderRadius.circular(25))),
-                      hint: Text(
-                        'هل قمت بتنظيم أحداث من قبل؟',
-                        style: conTxtFeildHint,
-                      ),
-                      items: yesOrNo
-                          .map((item) => DropdownMenuItem<String>(
-                                child: Text(
-                                  item,
-                                  style: TextStyle(
-                                      fontFamily: 'Cairo', fontSize: 13),
-                                ),
-                                value: item,
-                              ))
-                          .toList(),
-                      onChanged: (item) => setState(() {
-                        selectedEventExper = item.toString();
-                          })),
-                ),
+                child: TextFormField(
+                    maxLines: 5,
+                    style: TextStyle(
+                        fontSize: 15, fontFamily: 'Cairo', color: conBlack),
+                    onChanged: (value) {
+                      breif = value;
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'الرجاء إدخال البيانات المطلوبة';
+                      } else if (value.trim().length < 10) {
+                        return 'رقم الهاتف يتكون من عشرة حروف  ';
+                      }
+                      return null;
+                    },
+                    textDirection: TextDirection.rtl,
+                    textAlign: TextAlign.right,
+                    decoration: InputDecoration(
+                        labelStyle: conTxtFeildHint,
+                        hintText:
+                            'ماالقيمة التي يمكنك إضافتها كمنظم لمجتمع المعارض؟',
+                        focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 2, color: conRed),
+                            borderRadius: BorderRadius.circular(25)),
+                        errorStyle: TextStyle(
+                            fontFamily: 'Cairo', fontSize: 11, color: conRed),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+                        hintStyle: conTxtFeildHint,
+                        enabledBorder: roundedTxtFeild,
+                        errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 2, color: conRed),
+                            borderRadius: BorderRadius.circular(25)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: conBlack),
+                            borderRadius: BorderRadius.circular(25)))),
               ),
-
               SizedBox(
                 height: 8,
               ),
-              Directionality(textDirection: TextDirection.rtl,
-                child: Row(mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [ Checkbox(
-                      shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(6),side: BorderSide(color: conRed)),
-                      value: agreeOnterms,
-                      onChanged: (v) {
-                        setState(() {
-                          agreeOnterms = !agreeOnterms;
-                        });
-                      }),
-                    Text('أوافق على شروط التسجيل وإستخدام البيانات',textAlign: TextAlign.right,style: conLittelTxt12.copyWith(fontSize: 11,color: borderLabelColor),),
-
+              Directionality(
+                textDirection: TextDirection.rtl,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Checkbox(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                            side: BorderSide(color: conRed)),
+                        value: agreeOnterms,
+                        onChanged: (v) {
+                          setState(() {
+                            agreeOnterms = !agreeOnterms;
+                          });
+                        }),
+                    Text(
+                      'أوافق على شروط التسجيل وإستخدام البيانات',
+                      textAlign: TextAlign.right,
+                      style: conLittelTxt12.copyWith(
+                          fontSize: 11, color: borderLabelColor),
+                    ),
                   ],
                 ),
               ),
-              CTA(txt: 'تسجيل ',isFullwidth: true, onTap: () async{
-                FocusManager.instance.primaryFocus?.unfocus();
-                if (_particapantFormKey.currentState!.validate()) {
-                  if(agreeOnterms){
-                  // If the form is valid, display a snackbar. In the real world,
+              CTA(
+                  txt: 'تسجيل ',
+                  isFullwidth: true,
+                  onTap: () async {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    if (_particapantFormKey.currentState!.validate()) {
+                      if (agreeOnterms) {
+                        // If the form is valid, display a snackbar. In the real world,
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Processing Data')),
-                  );
-                  final d=await _firestore.collection('requests').add({
-                    'name': OrganizerName,
-                    'email': email,
-                    'phone': phoneNum,
-                    'EIN': EIN,
-                    'eventsType': selectedEventType,'previousEvents':selectedEventExper
-                  });
-                  if(d!=null){Navigator.pushNamed(context, '/home');}
-                }else {setState(() {
-                  borderLabelColor=conRed;
-                });}}
-              }),
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Processing Data')),
+                        );
+                        final d = await _firestore.collection('requests').add({
+                          'name': OrganizerName,
+                          'email': email,
+                          'phone': phoneNum,
+                          'brief': breif,
+                          'eventsType': selectedEventType,
+                          'status': "waiting"
+                        });
+                        if (d != null) {
+                          Navigator.pushNamed(context, '/home');
+                        }
+                      } else {
+                        setState(() {
+                          borderLabelColor = conRed;
+                        });
+                      }
+                    }
+                  }),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -417,7 +376,6 @@ class _organizersRegistrationScreenState
                             ' لديك حساب؟ ',
                             textAlign: TextAlign.right,
                             style: conLittelTxt12,
-
                           ))),
                 ],
               )

@@ -11,7 +11,7 @@ import 'package:flukepro/screens/resetPassScreen.dart';
 import 'package:flukepro/screens/updatePasswordScreen.dart';
 import 'package:flukepro/utils/RoleRedicetion.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flukepro/OrganizersRequests/OraginzersRequest.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: loginScreen(),
+      home: HomeScreen(),
       debugShowCheckedModeBanner:
           false, //to remove debugging banner at the top of the screen
 
@@ -42,9 +42,7 @@ class MyApp extends StatelessWidget {
         '/home': ((context) => HomeScreen()),
         '/updatepass': ((context) => updatePass()),
         '/reset': (context) => resetPass(),
-        '/OrganizSign': ((context) => organizersRegistrationScreen()),
-        '/interests': ((context) => interestsSelection()),
-        VisitorRegistration.routeName: (context) => VisitorRegistration(),
+        '/requests': ((context) => OrgRequest()),
         'personalInfo': ((context) => userInfoScreen()),
         '/redirect': ((context) => recdirectRole()),
         'personalInfo': ((context) => userInfoScreen()),

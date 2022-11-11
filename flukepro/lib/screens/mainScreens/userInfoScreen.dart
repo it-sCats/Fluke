@@ -22,22 +22,20 @@ class userInfoScreen extends StatefulWidget {
 }
 
 class _userInfoScreenState extends State<userInfoScreen> {
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _birthDatecon.addListener(() {
-
-      enabled=true;});
+      enabled = true;
+    });
     _gendercon.addListener(() {
-
-      enabled=true;});
+      enabled = true;
+    });
     _Phonecon.addListener(() {
-
-      enabled=true;});
+      enabled = true;
+    });
     getUserData();
-
   }
 
   final TextEditingController _birthDatecon = TextEditingController();
@@ -47,17 +45,26 @@ class _userInfoScreenState extends State<userInfoScreen> {
   DocumentSnapshot? data;
   String? dateinput;
   SharedPreferences? userTypeShared;
-  final currentVisitorRef= _firestore.collection('users').doc('visitors')
-      .collection('visitor').doc(user!.uid);
-  final currentPartsRef=_firestore.collection('users').doc('paticipants').collection('paticipant')
-      .doc( user!.uid);
-  final currentOrganisRef=_firestore.collection('users').doc('organizingAgens').collection('organizingAgen').doc(user?.uid);
+  final currentVisitorRef = _firestore
+      .collection('users')
+      .doc('visitors')
+      .collection('visitor')
+      .doc(user!.uid);
+  final currentPartsRef = _firestore
+      .collection('users')
+      .doc('paticipants')
+      .collection('paticipant')
+      .doc(user!.uid);
+  final currentOrganisRef = _firestore
+      .collection('users')
+      .doc('organizingAgens')
+      .collection('organizingAgen')
+      .doc(user?.uid);
 
-  bool enabled=false;
+  bool enabled = false;
   Future<DocumentSnapshot<Object?>>? getUserData() async {
     userTypeShared = await SharedPreferences.getInstance();
     _userType = userTypeShared?.getString("userType");
-
 
     if (_userType == '0') {
       return await currentVisitorRef.get();
@@ -66,21 +73,25 @@ class _userInfoScreenState extends State<userInfoScreen> {
     } else {
       return currentOrganisRef.get();
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: IconButton(onPressed: (){Navigator.pop(context);},
-         icon: Icon( Icons.arrow_back,),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back,
+          ),
           color: conBlack,
-        ),actions: [],
+        ),
+        actions: [],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -99,7 +110,7 @@ class _userInfoScreenState extends State<userInfoScreen> {
                 if (snapshot.connectionState == ConnectionState.done) {
                   Map<String, dynamic> userInfo =
                       snapshot.data!.data() as Map<String, dynamic>;
-                _Emailcon.text=  userInfo['email'];
+                  _Emailcon.text = userInfo['email'];
                   return Column(
                     children: [
                       Text(
@@ -125,8 +136,6 @@ class _userInfoScreenState extends State<userInfoScreen> {
                           false,
                           false, (value) {
                         _gendercon.text = value;
-
-
                       }, () {}, false, Icon(Icons.edit), false, _gendercon),
                       txtFeild(
                           userInfo['phone'] == null
@@ -181,45 +190,48 @@ class _userInfoScreenState extends State<userInfoScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          InkWell(
-                            onTap: (){Navigator.pushNamed(context, '/home');},
-                            child: Text(
-                              'إلغاء التغيرات',
-                              style: conTxtFeildHint.copyWith(
-                                  color: Colors.blueGrey, fontSize: 13),
-                            ),
+                          CancleButton(
+                            txt: 'لغاء التغيرات',
+                            ontap: () {
+                              Navigator.pushNamed(context, '/home');
+                            },
                           ),
                           SizedBox(
                             width: MediaQuery.of(context).size.width / 10,
                           ),
-
-                          Opacity(opacity: enabled?1:0.5,
+                          Opacity(
+                            opacity: enabled ? 1 : 0.5,
                             child: CTA(
-                             txt: 'حفظ التغيرات',
-                           isFullwidth:    false,
-                          onTap:     () {
+                              txt: 'حفظ التغيرات',
+                              isFullwidth: false,
+                              onTap: () {
                                 if (_birthDatecon.text == null &&
                                     _gendercon.text == null &&
                                     _Phonecon.text == null &&
                                     _Emailcon.text == null) {}
                                 print(userInfo['name']);
 
-                               _userType=='0'? currentVisitorRef:_userType=='2'?currentPartsRef:currentOrganisRef .set({
-                                  'email': _Emailcon.text == ''
-                                      ? userInfo['email']
-                                      : _Emailcon
-                                          .text, //ي حال لم تتغير قيمة الايميل ابقى على القيمة السابقة وفي حال تغير نعطي القيمة الجديدة
-                                  'name': _gendercon.text,
-                                  'phone': _Phonecon.text,
-                                  'birthDate': _birthDatecon.text
-                                }).then((value) {
-                                  Navigator.pushNamed(context, '/home');
-                                }, onError: (error) {
-                                  setState(() {
-                                    ErrorMessage = error.toString();
-                                    isErrored = !isErrored;
-                                  });
-                                });
+                                _userType == '0'
+                                    ? currentVisitorRef
+                                    : _userType == '2'
+                                        ? currentPartsRef
+                                        : currentOrganisRef.set({
+                                            'email': _Emailcon.text == ''
+                                                ? userInfo['email']
+                                                : _Emailcon
+                                                    .text, //ي حال لم تتغير قيمة الايميل ابقى على القيمة السابقة وفي حال تغير نعطي القيمة الجديدة
+                                            'name': _gendercon.text,
+                                            'phone': _Phonecon.text,
+                                            'birthDate': _birthDatecon.text
+                                          }).then((value) {
+                                            Navigator.pushNamed(
+                                                context, '/home');
+                                          }, onError: (error) {
+                                            setState(() {
+                                              ErrorMessage = error.toString();
+                                              isErrored = !isErrored;
+                                            });
+                                          });
                               },
                             ),
                           ),
