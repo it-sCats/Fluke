@@ -1,5 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flukepro/dashboardScreens/mainDashboard.dart';
+// import 'package:flukepro/dashboardScreens/mainDashboard.dart';
 import 'package:flukepro/screens/loginScreen.dart';
 import 'package:flukepro/screens/mainScreens/home.dart';
 import 'package:flukepro/screens/mainScreens/userInfoScreen.dart';
@@ -19,8 +19,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MainDashboard());
-  // runApp(MyApp());
+  // runApp(MainDashboard());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
