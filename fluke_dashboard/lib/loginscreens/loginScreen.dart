@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'leftLoginScreen.dart';
+import 'rightLoginScreen.dart';
+
 class LogInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -16,13 +19,13 @@ class LogInScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(24),
               color: Color.fromARGB(255, 245, 167, 114),
             ),
-            //  child: Row(
-            //   children: [
-            //     const LoginPageLeftSide(),
-            //     if (MediaQuery.of(context).size.width > 900)
-            //       const LoginPageRightSide(),
-            //   ],
-            // ),
+            child: Row(
+              children: [
+                Rghit_LoginScreen(),
+                if (MediaQuery.of(context).size.width > 900)
+                  const Left_LoginScreen(),
+              ],
+            ),
           ),
         ),
       ),
