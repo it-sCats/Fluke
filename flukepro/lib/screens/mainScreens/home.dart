@@ -57,6 +57,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   isFullwidth: false,
                   onTap: () async {
                     await Authentication().deleteUser();
+                  }),
+              CTA(
+                  txt: ' user info',
+                  isFullwidth: false,
+                  onTap: () async {
+                    Navigator.pushNamed(context, 'personalInfo');
                   })
             ],
           ),

@@ -15,15 +15,14 @@ class VisitorRegistration extends StatefulWidget {
   State<VisitorRegistration> createState() => _VisitorRegistrationState();
 }
 
-
 class _VisitorRegistrationState extends State<VisitorRegistration> {
   final _visitorFormKey = GlobalKey<FormState>();
   //sign in vars
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
 
-  String name='';
-  TextEditingController _nameCon=TextEditingController();
+  String name = '';
+
   String? email;
   String? password;
 
@@ -80,8 +79,6 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
       }
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -166,21 +163,22 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
               ),
               SizedBox(
                 height: 30,
-              ),  SizedBox(
+              ),
+              SizedBox(
                 width: 290,
                 height: 70,
                 child: TextFormField(
-                    controller: _nameCon,
                     style: TextStyle(
                         fontSize: 15, fontFamily: 'Cairo', color: conBlack),
-                    onChanged: (value) { _nameCon.text = value;},
+                    onChanged: (value) {
+                      name = value;
+                    },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'الرجاء إدخال البيانات المطلوبة';
                       }
                       return null;
                     },
-                    textDirection: TextDirection.rtl,
                     textAlign: TextAlign.right,
                     decoration: InputDecoration(
                         hintText: 'أدخل إسمك',
@@ -286,100 +284,107 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
               if (isLoading)
                 CircularProgressIndicator()
               else
-                CTA(txt: 'تسجيل ',isFullwidth: true,onTap: () async {
-                  var docID;
-                  // Validate returns true if the form is valid, or false otherwise.
-                  if (_visitorFormKey.currentState!.validate()) {
-                    // If the form is valid, display a snackbar. In the real world,
-                    // you'd often call a server or save the information in a database.
-                    setState(() {
-                      isLoading = true;
-                    });
-                    try {
-                      final result = await Authentication()
-                          .signUp(email.toString(), password.toString());
-                      result.when(
-                          (error) => setState(() {
-
-errorMessage =AuthExceptionHandler.generateErrorMessage(  AuthExceptionHandler.handleAuthException(error));
-
-
-
-
-
-
-
-
-
-                                LogInError = !LogInError;
-                            isLoading=false;
-                              }), (success) async {
-                        // SharedPreferences sharedPreferences =//for restAPI
-                        //     await SharedPreferences.getInstance();
-                        // final userID = sharedPreferences.getString("userID");
-
-                        User user=success;
-                       String userID=user.uid;
-                        // final newUser = await _auth.createUserWithEmailAndPassword(
-                        //     email: email.toString(),
-                        //     password: password.toString()); //creating users
-                        // if (newUser != null) {
-                        setState(() {
-                          isLoading = true;
-                        });
-                        if (args.contains(0)) {
-                          //0 stands for visitors //if the argument that was passed to the screen is 0 that means its a visitorf
-                           await _firestore.collection('users').doc('visitors')
-                              .collection('visitor').doc(userID).set({"email":user.email,"name":_nameCon.text,"role":"user"})// create documentID with userID
-                              ;
-print(user.displayName);
-                          Navigator.pushNamed(
-                            context,
-                            '/interests',
-
-                            arguments: {0 },
-                          );
-                        } else if (args.contains(2)) {
-                          //2 is for participants
-                          await _firestore
-                              .collection('paticipants')
-                              .doc( userID).set({"email":user.email,"name":user.displayName});
-                          Navigator.pushNamed(
-                            context,
-                            '/interests',
-                            arguments: {2},
-                          );
-                        }
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text(
-                            'تم تسجيلك بنجاح ',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontFamily: 'Cairo', fontSize: 13),
-                          )),
-                        );
+                CTA(
+                  txt: 'تسجيل ',
+                  isFullwidth: true,
+                  onTap: () async {
+                    var docID;
+                    // Validate returns true if the form is valid, or false otherwise.
+                    if (_visitorFormKey.currentState!.validate()) {
+                      // If the form is valid, display a snackbar. In the real world,
+                      // you'd often call a server or save the information in a database.
+                      setState(() {
+                        isLoading = true;
                       });
+                      try {
+                        final result = await Authentication()
+                            .signUp(email.toString(), password.toString());
+                        result.when(
+                            (error) => setState(() {
+                                  errorMessage =
+                                      AuthExceptionHandler.generateErrorMessage(
+                                          AuthExceptionHandler
+                                              .handleAuthException(error));
 
-                    } on FirebaseAuthException catch (e) {
+                                  LogInError = !LogInError;
+                                  isLoading = false;
+                                }), (success) async {
+                          // SharedPreferences sharedPreferences =//for restAPI
+                          //     await SharedPreferences.getInstance();
+                          // final userID = sharedPreferences.getString("userID");
 
+                          User user = success;
+                          String userID = user.uid;
+                          // final newUser = await _auth.createUserWithEmailAndPassword(
+                          //     email: email.toString(),
+                          //     password: password.toString()); //creating users
+                          // if (newUser != null) {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          if (args.contains(0)) {
+                            //0 stands for visitors //if the argument that was passed to the screen is 0 that means its a visitorf
+                            await _firestore
+                                    .collection('users')
+                                    .doc('visitors')
+                                    .collection('visitor')
+                                    .doc(userID)
+                                    .set({
+                              "email": user.email,
+                              "name": name.toString(),
+                              "role": "user"
+                            }) // create documentID with userID
+                                ;
+                            print(user.displayName);
+                            Navigator.pushNamed(
+                              context,
+                              '/interests',
+                              arguments: {0},
+                            );
+                          } else if (args.contains(2)) {
+                            //2 is for participants
+                            await _firestore
+                                .collection('paticipants')
+                                .doc(userID)
+                                .set({
+                              "email": user.email,
+                              "name": user.displayName
+                            });
+                            Navigator.pushNamed(
+                              context,
+                              '/interests',
+                              arguments: {2},
+                            );
+                          }
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text(
+                              'تم تسجيلك بنجاح ',
+                              textAlign: TextAlign.center,
+                              style:
+                                  TextStyle(fontFamily: 'Cairo', fontSize: 13),
+                            )),
+                          );
+                        });
+                      } on FirebaseAuthException catch (e) {}
+
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     SnackBar(
+                      //         content: Text(
+                      //           e.message.toString(),
+                      //           style: TextStyle(
+                      //             fontSize: 12,
+                      //             fontFamily: 'Cairo',
+                      //           ),
+                      //         )),
+                      //   );
+                      //   print('Failed with error code: ${e.code}');
+                      //   print(e.message);
+                      // }
                     }
-
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     SnackBar(
-                    //         content: Text(
-                    //           e.message.toString(),
-                    //           style: TextStyle(
-                    //             fontSize: 12,
-                    //             fontFamily: 'Cairo',
-                    //           ),
-                    //         )),
-                    //   );
-                    //   print('Failed with error code: ${e.code}');
-                    //   print(e.message);
-                    // }
-                  }
-                },),
+                  },
+                ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.baseline,

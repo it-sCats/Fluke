@@ -18,13 +18,9 @@ class regestrationTypeScreen extends StatelessWidget {
           SizedBox(
             height: MediaQuery.of(context).size.height / 8,
           ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Container(
-              margin: EdgeInsets.only(right: 65),
-              child: Text('هل ترغب في التسجيل كـ',
-                  textAlign: TextAlign.center, style: conHeadingsStyle),
-            ),
+          Center(
+            child: Text('هل ترغب في التسجيل كـ',
+                textAlign: TextAlign.center, style: conHeadingsStyle),
           ),
           SizedBox(
             height: 60,
@@ -103,8 +99,8 @@ class regestrationTypeScreen extends StatelessWidget {
                   height: 15,
                 ),
                 InkWell(
-                  onTap: ()async {
-                    userTypeShared= await SharedPreferences.getInstance();
+                  onTap: () async {
+                    userTypeShared = await SharedPreferences.getInstance();
                     userTypeShared?.setString("userType", '2');
                     Navigator.pushNamed(
                       context,

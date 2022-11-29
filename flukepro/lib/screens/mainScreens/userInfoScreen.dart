@@ -9,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 String? _userType;
 final _firestore = FirebaseFirestore.instance;
-
 final _auth = FirebaseAuth.instance;
 String? ErrorMessage;
 bool isErrored = false;
@@ -45,6 +44,7 @@ class _userInfoScreenState extends State<userInfoScreen> {
   DocumentSnapshot? data;
   String? dateinput;
   SharedPreferences? userTypeShared;
+
   final currentVisitorRef = _firestore
       .collection('users')
       .doc('visitors')
@@ -70,13 +70,16 @@ class _userInfoScreenState extends State<userInfoScreen> {
       return await currentVisitorRef.get();
     } else if (_userType == '2') {
       return currentPartsRef.get();
-    } else {
+    } else if (_userType == '1') {
       return currentOrganisRef.get();
+    } else {
+      return await currentVisitorRef.get();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    var ref = currentVisitorRef;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -212,26 +215,28 @@ class _userInfoScreenState extends State<userInfoScreen> {
                                 print(userInfo['name']);
 
                                 _userType == '0'
-                                    ? currentVisitorRef
+                                    ? ref = currentVisitorRef
                                     : _userType == '2'
-                                        ? currentPartsRef
-                                        : currentOrganisRef.set({
-                                            'email': _Emailcon.text == ''
-                                                ? userInfo['email']
-                                                : _Emailcon
-                                                    .text, //ي حال لم تتغير قيمة الايميل ابقى على القيمة السابقة وفي حال تغير نعطي القيمة الجديدة
-                                            'name': _gendercon.text,
-                                            'phone': _Phonecon.text,
-                                            'birthDate': _birthDatecon.text
-                                          }).then((value) {
-                                            Navigator.pushNamed(
-                                                context, '/home');
-                                          }, onError: (error) {
-                                            setState(() {
-                                              ErrorMessage = error.toString();
-                                              isErrored = !isErrored;
-                                            });
-                                          });
+                                        ? ref = currentPartsRef
+                                        : ref = currentOrganisRef;
+                                ref.set({
+                                  'email': _Emailcon.text == ''
+                                      ? userInfo['email']
+                                      : _Emailcon
+                                          .text, //ي حال لم تتغير قيمة الايميل ابقى على القيمة السابقة وفي حال تغير نعطي القيمة الجديدة
+                                  'name': _gendercon.text == ''
+                                      ? userInfo['name']
+                                      : _gendercon.text,
+                                  'phone': _Phonecon.text,
+                                  'birthDate': _birthDatecon.text
+                                }).then((value) {
+                                  Navigator.pushNamed(context, '/home');
+                                }, onError: (error) {
+                                  setState(() {
+                                    ErrorMessage = error.toString();
+                                    isErrored = !isErrored;
+                                  });
+                                });
                               },
                             ),
                           ),
