@@ -72,3 +72,30 @@ const primaryColor = Color(0xFFF1E6FF);
 const kprimaryColor = Color.fromARGB(255, 104, 75, 123);
 //---------Padding
 double defaultPadding = 16.0;
+//CTA Decoration
+BoxDecoration conCTADecoration = BoxDecoration(
+  color: conORange,
+  borderRadius: BorderRadius.all(
+    Radius.circular(25),
+  ),
+);
+
+//Request Divider 'the divider between text in OrganizerRequest
+class conRequestDivider extends StatelessWidget {
+  const conRequestDivider({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(
+        left: 70,
+      ),
+      child: new Divider(
+        color: conBlack.withOpacity(.3),
+        height: 4,
+      ),
+    );
+  }
+}

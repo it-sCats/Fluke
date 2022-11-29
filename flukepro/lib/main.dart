@@ -11,7 +11,7 @@ import 'package:flukepro/screens/resetPassScreen.dart';
 import 'package:flukepro/screens/updatePasswordScreen.dart';
 import 'package:flukepro/utils/RoleRedicetion.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flukepro/OrganizersRequests/OraginzersRequest.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -19,8 +19,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // runApp(MainDashboard());
+
   runApp(MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: loginScreen(),
+      home: HomeScreen(),
       debugShowCheckedModeBanner:
           false, //to remove debugging banner at the top of the screen
 
@@ -42,17 +43,10 @@ class MyApp extends StatelessWidget {
         '/home': ((context) => HomeScreen()),
         '/updatepass': ((context) => updatePass()),
         '/reset': (context) => resetPass(),
-        '/OrganizSign': ((context) => organizersRegistrationScreen()),
-        '/UserType': ((context) => regestrationTypeScreen()),
-        '/interests': ((context) => interestsSelection()),
-        '/home': ((context) => HomeScreen()),
-        '/updatepass': ((context) => updatePass()),
-        VisitorRegistration.routeName: (context) => VisitorRegistration(),
-        '/OrganizSign': ((context) => organizersRegistrationScreen()),
-        '/UserType': ((context) => regestrationTypeScreen()),
-        '/interests': ((context) => interestsSelection()),
+        '/requests': ((context) => OrgRequest()),
         'personalInfo': ((context) => userInfoScreen()),
-        '/redirect': ((context) => recdirectRole())
+        '/redirect': ((context) => recdirectRole()),
+        'personalInfo': ((context) => userInfoScreen()),
       }, //routes are to ease the navigation btween pages
       //we give every page a name then when we want to navigate we just call that name
     );

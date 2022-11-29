@@ -361,7 +361,9 @@ print(user.displayName);
                         );
                       });
 
-                    } on FirebaseAuthException catch (e) {}
+                    } on FirebaseAuthException catch (e) {
+
+                    }
 
                     //   ScaffoldMessenger.of(context).showSnackBar(
                     //     SnackBar(

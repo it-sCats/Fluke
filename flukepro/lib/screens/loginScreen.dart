@@ -127,7 +127,7 @@ class _loginScreenState extends State<loginScreen> {
                     textAlign: TextAlign.right,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                        hintText: 'إسم المستخدم أو البريد الإكتروني',
+                        hintText: ' البريد الإكتروني',
                         errorStyle: TextStyle(
                             fontFamily: 'Cairo', fontSize: 12, color: conRed),
                         contentPadding: EdgeInsets.symmetric(horizontal: 25),
@@ -220,60 +220,57 @@ class _loginScreenState extends State<loginScreen> {
               if (isLoading)
                 CircularProgressIndicator()
               else
-                CTA(
-                  txt: 'تسجيل دخول',
-                  isFullwidth: true,
-                  onTap: () async {
-                    if (_logFormKey.currentState!.validate()) {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      // If the form is valid, display a snackbar. In the real world,
-                      // you'd often call a server or save the information in a database.
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text(
-                          'جاري تسجيل الدخول..',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'Cairo',
-                          ),
-                        )),
-                      );
-                      try {
-                        final result = await Authentication()
-                            .login(Email.toString(), password.toString());
-                        result.when(
-                            (error) => setState(() {
-                                  errorMessage =
-                                      AuthExceptionHandler.generateErrorMessage(
-                                          AuthExceptionHandler
-                                              .handleAuthException(error));
 
-                                  print(error);
-                                  LogInError = !LogInError;
-                                  isLoading = false;
-                                }), (success) async {
-                          Navigator.pushNamed(context,
-                              '/redirect'); //here we redirect the user based on his role
+                CTA( txt: 'تسجيل دخول',isFullwidth:  true,onTap: () async {
+                  if (_logFormKey.currentState!.validate()) {
+                    setState(() {
+                      isLoading = true;
 
-                          // final newUser = await _auth.createUserWithEmailAndPassword(
-                          //     email: email.toString(),
-                          //     password: password.toString()); //creating users
-                          // if (newUser != null) {
-                          setState(() {
-                            isLoading = true;
-                          });
+                    });
+                    // If the form is valid, display a snackbar. In the real world,
+                    // you'd often call a server or save the information in a database.
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text(
+                        'جاري تسجيل الدخول..',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'Cairo',
+                        ),
+                      )),
+                    );
+                    try {
+                      final result = await Authentication()
+                          .login(Email.toString(), password.toString());
+                      result.when(
+                          (error) => setState(() {
+                            errorMessage =AuthExceptionHandler.generateErrorMessage(  AuthExceptionHandler.handleAuthException(error));//تظهر هذه الدوال رسالة خطأ بناء على كود الخطأ
 
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text(
-                              'تم تسجيلك بنجاح ',
-                              textAlign: TextAlign.center,
-                              style:
-                                  TextStyle(fontFamily: 'Cairo', fontSize: 13),
-                            )),
-                          );
+                                LogInError = !LogInError;
+                                isLoading = false;
+                              }),
+                              (success) async {
+
+                        Navigator.pushNamed(context, '/redirect');//here we redirect the user based on his role
+
+                        // final newUser = await _auth.createUserWithEmailAndPassword(
+                        //     email: email.toString(),
+                        //     password: password.toString()); //creating users
+                        // if (newUser != null) {
+                        setState(() {
+                          isLoading = true;
+                        });
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text(
+                            'تم تسجيلك بنجاح ',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontFamily: 'Cairo', fontSize: 13),
+                          )),
+                        );
+
+
                         });
                       } on FirebaseAuthException catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(
