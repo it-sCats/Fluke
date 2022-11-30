@@ -208,7 +208,7 @@ class _GoogleAndFacebookButtonsState extends State<GoogleAndFacebookButtons> {
                     arguments: {0},
                   );
                 } else {
-                  Navigator.pushNamed(context, '/home');
+                  Navigator.pushNamed(context, 'base');
                 }
               } else {
                 //Error in sign in

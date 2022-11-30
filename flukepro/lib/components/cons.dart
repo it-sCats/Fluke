@@ -68,6 +68,7 @@ Color conBlack = Color(0xff383838);
 Color conORange = Color(0xffFF7124);
 Color conRed = Color(0xffFF000D);
 const primaryColor = Color(0xFFF1E6FF);
+Color conBlue = Color(0xff3F72BE);
 
 const kprimaryColor = Color.fromARGB(255, 104, 75, 123);
 //---------Padding

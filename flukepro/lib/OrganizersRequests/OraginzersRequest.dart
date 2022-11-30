@@ -74,8 +74,9 @@ class _OrgRequestState extends State<OrgRequest> {
             SizedBox(
               height: 6,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+            Wrap(
+              // mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: WrapCrossAlignment.end,
               //last Row
               children: [
                 Expanded(

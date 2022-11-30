@@ -114,135 +114,137 @@ class _userInfoScreenState extends State<userInfoScreen> {
                   Map<String, dynamic> userInfo =
                       snapshot.data!.data() as Map<String, dynamic>;
                   _Emailcon.text = userInfo['email'];
-                  return Column(
-                    children: [
-                      Text(
-                        'معلوماتك الشخصية',
-                        textAlign: TextAlign.center,
-                        style: conHeadingsStyle.copyWith(fontSize: 18),
-                      ),
-                      Text(
-                        'أكتب معلوماتك الشخصية, حتى إذا كان\n حساب شركة لن يتم عرض هذه المعلومات\n في ملفك العام ',
-                        style: conLittelTxt12,
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      txtFeild(_Emailcon.text, false, true, (value) {
-                        _Emailcon.text = value;
-                      }, () {}, false, Icon(Icons.edit), false, _Emailcon),
-                      txtFeild(
-                          userInfo['name'] == null
-                              ? 'أدخل إسمك'
-                              : userInfo['name'],
-                          false,
-                          false, (value) {
-                        _gendercon.text = value;
-                      }, () {}, false, Icon(Icons.edit), false, _gendercon),
-                      txtFeild(
-                          userInfo['phone'] == null
-                              ? 'دخل رقم هاتفك'
-                              : userInfo['phone'],
-                          false,
-                          false, (value) {
-                        _Phonecon.text = value;
-                      }, () {}, false, Icon(Icons.edit), false, _Phonecon),
-                      txtFeild(
-                          userInfo['birthDate'] == null
-                              ? 'تاريخ الميلاد'
-                              : userInfo['birthDate'],
-                          false,
-                          false,
-                          () {}, () async {
-                        DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(
-                                2000), //DateTime.now() - not to allow to choose before today.
-                            lastDate: DateTime(2101));
-
-                        if (pickedDate != null) {
-                          print(
-                              pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                          String formattedDate =
-                              DateFormat('yyyy-MM-dd').format(pickedDate);
-                          print(
-                              formattedDate); //formatted date output using intl package =>  2021-03-16
-                          //you can implement different kind of Date Format here according to your requirement
-
-                          setState(() {
-                            _birthDatecon.text =
-                                formattedDate; //set output date to TextField value.
-                          });
-                        } else {
-                          print("Date is not selected");
-                        }
-                      }, true, Icon(Icons.calendar_month_rounded), true,
-                          _birthDatecon),
-                      Visibility(
-                        visible: isErrored, //the Error Text
-                        child: Text(
-                          ErrorMessage.toString(),
-                          style: conErorTxtStyle,
+                  return Form(
+                    child: Column(
+                      children: [
+                        Text(
+                          'معلوماتك الشخصية',
+                          textAlign: TextAlign.center,
+                          style: conHeadingsStyle.copyWith(fontSize: 18),
                         ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height / 4,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CancleButton(
-                            txt: 'لغاء التغيرات',
-                            ontap: () {
-                              Navigator.pushNamed(context, '/home');
-                            },
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 10,
-                          ),
-                          Opacity(
-                            opacity: enabled ? 1 : 0.5,
-                            child: CTA(
-                              txt: 'حفظ التغيرات',
-                              isFullwidth: false,
-                              onTap: () {
-                                if (_birthDatecon.text == null &&
-                                    _gendercon.text == null &&
-                                    _Phonecon.text == null &&
-                                    _Emailcon.text == null) {}
-                                print(userInfo['name']);
+                        Text(
+                          'أكتب معلوماتك الشخصية, حتى إذا كان\n حساب شركة لن يتم عرض هذه المعلومات\n في ملفك العام ',
+                          style: conLittelTxt12,
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        txtFeild(_Emailcon.text, false, true, (value) {
+                          _Emailcon.text = value;
+                        }, () {}, false, Icon(Icons.edit), false, _Emailcon),
+                        txtFeild(
+                            userInfo['name'] == null
+                                ? 'أدخل إسمك'
+                                : userInfo['name'],
+                            false,
+                            false, (value) {
+                          _gendercon.text = value;
+                        }, () {}, false, Icon(Icons.edit), false, _gendercon),
+                        txtFeild(
+                            userInfo['phone'] == null
+                                ? 'دخل رقم هاتفك'
+                                : userInfo['phone'],
+                            false,
+                            false, (value) {
+                          _Phonecon.text = value;
+                        }, () {}, false, Icon(Icons.edit), false, _Phonecon),
+                        txtFeild(
+                            userInfo['birthDate'] == null
+                                ? 'تاريخ الميلاد'
+                                : userInfo['birthDate'],
+                            false,
+                            false,
+                            () {}, () async {
+                          DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(
+                                  2000), //DateTime.now() - not to allow to choose before today.
+                              lastDate: DateTime(2101));
 
-                                _userType == '0'
-                                    ? ref = currentVisitorRef
-                                    : _userType == '2'
-                                        ? ref = currentPartsRef
-                                        : ref = currentOrganisRef;
-                                ref.set({
-                                  'email': _Emailcon.text == ''
-                                      ? userInfo['email']
-                                      : _Emailcon
-                                          .text, //ي حال لم تتغير قيمة الايميل ابقى على القيمة السابقة وفي حال تغير نعطي القيمة الجديدة
-                                  'name': _gendercon.text == ''
-                                      ? userInfo['name']
-                                      : _gendercon.text,
-                                  'phone': _Phonecon.text,
-                                  'birthDate': _birthDatecon.text
-                                }).then((value) {
-                                  Navigator.pushNamed(context, '/home');
-                                }, onError: (error) {
-                                  setState(() {
-                                    ErrorMessage = error.toString();
-                                    isErrored = !isErrored;
-                                  });
-                                });
+                          if (pickedDate != null) {
+                            print(
+                                pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                            String formattedDate =
+                                DateFormat('yyyy-MM-dd').format(pickedDate);
+                            print(
+                                formattedDate); //formatted date output using intl package =>  2021-03-16
+                            //you can implement different kind of Date Format here according to your requirement
+
+                            setState(() {
+                              _birthDatecon.text =
+                                  formattedDate; //set output date to TextField value.
+                            });
+                          } else {
+                            print("Date is not selected");
+                          }
+                        }, true, Icon(Icons.calendar_month_rounded), true,
+                            _birthDatecon),
+                        Visibility(
+                          visible: isErrored, //the Error Text
+                          child: Text(
+                            ErrorMessage.toString(),
+                            style: conErorTxtStyle,
+                          ),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 4,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CancleButton(
+                              txt: 'لغاء التغيرات',
+                              ontap: () {
+                                Navigator.pushNamed(context, '/home');
                               },
                             ),
-                          ),
-                        ],
-                      )
-                    ], //TODO implement updating the database
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 10,
+                            ),
+                            Opacity(
+                              opacity: enabled ? 1 : 0.5,
+                              child: CTA(
+                                txt: 'حفظ التغيرات',
+                                isFullwidth: false,
+                                onTap: () {
+                                  if (_birthDatecon.text == null &&
+                                      _gendercon.text == null &&
+                                      _Phonecon.text == null &&
+                                      _Emailcon.text == null) {}
+                                  print(userInfo['name']);
+
+                                  _userType == '0'
+                                      ? ref = currentVisitorRef
+                                      : _userType == '2'
+                                          ? ref = currentPartsRef
+                                          : ref = currentOrganisRef;
+                                  ref.set({
+                                    'email': _Emailcon.text == ''
+                                        ? userInfo['email']
+                                        : _Emailcon
+                                            .text, //ي حال لم تتغير قيمة الايميل ابقى على القيمة السابقة وفي حال تغير نعطي القيمة الجديدة
+                                    'name': _gendercon.text == ''
+                                        ? userInfo['name']
+                                        : _gendercon.text,
+                                    'phone': _Phonecon.text,
+                                    'birthDate': _birthDatecon.text
+                                  }).then((value) {
+                                    Navigator.pushNamed(context, '/home');
+                                  }, onError: (error) {
+                                    setState(() {
+                                      ErrorMessage = error.toString();
+                                      isErrored = !isErrored;
+                                    });
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        )
+                      ], //TODO implement updating the database
+                    ),
                   );
                 }
 

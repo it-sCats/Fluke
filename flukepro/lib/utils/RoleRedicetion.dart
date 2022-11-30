@@ -65,7 +65,7 @@ class _recdirectRoleState extends State<recdirectRole> {
     });
     if (role == 'user') {
       //المستخدم العادي يتم توجيهه للصفحة الرئيسية
-      NavigateNext('/home'); //دالة تقوم تأخذ إسم الروت وتنقل المستخد له
+      NavigateNext('base'); //دالة تقوم تأخذ إسم الروت وتنقل المستخد له
 
     } else if (role == 'admin') {
       //والأدمن يتم توجييه للداشبورد
