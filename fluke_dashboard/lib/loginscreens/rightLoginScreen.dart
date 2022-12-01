@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Rghit_LoginScreen extends StatelessWidget {
-  Rghit_LoginScreen({Key? key}) : super(key: key);
+class Right_LoginScreen extends StatelessWidget {
+  Right_LoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,26 +14,40 @@ class Rghit_LoginScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Login",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+            Align(
+              alignment: Alignment.centerRight,
+              child: new Text(
+                "اسمتع بالتجربة",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+              ),
             ),
+            // Text(
+            //   "سجل دخولك",
+            //   textAlign: TextAlign.right,
+            //   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+            // ),
             const SizedBox(
               height: 12,
             ),
-            const Text(
-              " Fluke مرحبا بك في ",
-              style: TextStyle(fontSize: 12),
+            Align(
+              alignment: Alignment.centerRight,
+              child: new Text("Fluke مرحبا بك في  "),
             ),
+            // const Text(
+            //   " Fluke مرحبا بك في ",
+            //   style: TextStyle(fontSize: 12),
+            //   textAlign: TextAlign.right,
+            // ),
             const SizedBox(height: 24),
             TextFormField(
-              decoration: InputDecoration(
-                  label: Text("إسم المستخدم"),
-                  hintText: "الرجاء إدخال إسم المستخدم"),
+              textAlign: TextAlign.right,
+              decoration: const InputDecoration(
+                hintText: "الرجاء إدخال إسم المستخدم",
+              ),
             ),
             const TextField(
-              decoration: InputDecoration(
-                  label: Text("الرمز"), hintText: "الرجاء إدخال الرمز"),
+              textAlign: TextAlign.right,
+              decoration: InputDecoration(hintText: "الرجاء إدخال الرمز"),
             ),
             const SizedBox(height: 24),
             Align(
@@ -50,7 +64,7 @@ class Rghit_LoginScreen extends StatelessWidget {
               minWidth: double.infinity,
               height: 52,
               elevation: 24,
-              color: Colors.amber.shade700,
+              color: Color.fromARGB(255, 255, 170, 0),
               textColor: Colors.white,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32)),
