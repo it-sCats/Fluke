@@ -326,13 +326,11 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
                             //0 stands for visitors //if the argument that was passed to the screen is 0 that means its a visitorf
                             await _firestore
                                     .collection('users')
-                                    .doc('visitors')
-                                    .collection('visitor')
                                     .doc(userID)
                                     .set({
                               "email": user.email,
                               "name": name.toString(),
-                              "role": "user"
+                              "userType": 0
                             }) // create documentID with userID
                                 ;
                             print(user.displayName);
@@ -344,11 +342,12 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
                           } else if (args.contains(2)) {
                             //2 is for participants
                             await _firestore
-                                .collection('paticipants')
+                                .collection('users')
                                 .doc(userID)
                                 .set({
                               "email": user.email,
-                              "name": user.displayName
+                              "name": user.displayName,
+                              "userType": 2
                             });
                             Navigator.pushNamed(
                               context,

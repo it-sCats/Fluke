@@ -25,10 +25,10 @@ class _baseState extends State<base> {
   ];
   int? pageIndex = 2;
 
-  getPage() async {
-    _selectedPage = await SharedPreferences.getInstance();
-    pageIndex = _selectedPage?.getInt("pageIndex");
-  }
+  // getPage() async {
+  //   _selectedPage = await SharedPreferences.getInstance();
+  //   pageIndex = _selectedPage?.getInt("pageIndex");
+  // }
 
   @override
   void initState() {
