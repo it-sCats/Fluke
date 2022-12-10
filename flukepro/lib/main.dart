@@ -1,5 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flukepro/dashboardScreens/mainDashboard.dart';
+
 import 'package:flukepro/screens/loginScreen.dart';
 import 'package:flukepro/screens/mainScreens/explorePage.dart';
 import 'package:flukepro/screens/mainScreens/home.dart';
