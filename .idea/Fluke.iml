@@ -12,6 +12,9 @@
       <excludeFolder url="file://$MODULE_DIR$/flukepro/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/flukepro/build" />
       <excludeFolder url="file://$MODULE_DIR$/flukepro/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/adminpannel/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/adminpannel/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/adminpannel/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
