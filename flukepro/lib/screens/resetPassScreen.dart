@@ -6,6 +6,7 @@ import 'package:flukepro/utils/authentication.dart';
 import 'package:flutter/material.dart ';
 
 import '../errorsHandling/AuthExceptionHandler.dart';
+import '../utils/fireStoreQueries.dart';
 
 enum AuthMode {
   forgot,
@@ -38,6 +39,16 @@ class _resetPassState extends State<resetPass> {
       _auth
           .sendPasswordResetEmail(email: _emailController.text)
           .whenComplete(() {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text(
+            'تفقد بريدك وأعد تسجيل الدخول بكلمة المرور الجديدة',
+            style: TextStyle(
+              fontSize: 12,
+              fontFamily: 'Cairo',
+            ),
+          )),
+        );
         Navigator.pushNamed(context, '/log');
       });
     } on FirebaseAuthException catch (e) {
@@ -272,9 +283,13 @@ class _resetPassState extends State<resetPass> {
                                     fontFamily: 'Cairo',
                                   ),
                                 )),
-                              );
-
-                              sendOtp();
+                              ); //مش متأكدة لو تخدم TODO
+                              await EmailExists(_emailController.text)
+                                  ? sendOtp()
+                                  : setState(() {
+                                      errorMessage =
+                                          'البريد المدخل غير مسجل مسبقاً';
+                                    });
                             }
                           } on FirebaseAuthException catch (e) {
                             setState(() {

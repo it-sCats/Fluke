@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flukepro/components/cons.dart';
 import 'package:flukepro/components/customWidgets.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 isFullwidth: false,
                 onTap: () async {
                   await Authentication.signOut(context: context);
+                  Navigator.pushNamed(context, '/log');
                 }),
             CTA(
                 txt: 'delete user',
