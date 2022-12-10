@@ -13,11 +13,26 @@
       </file>
     </leaf>
   </component>
+<<<<<<< Updated upstream
   <component name="ToolWindowManager">
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
     </layout>
+=======
+  <component name="ChangeListManager">
+    <list default="true" id="89ba031f-5d70-4d17-a299-c5bf2f368ba2" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/adminpannel.iml" beforeDir="false" afterPath="$PROJECT_DIR$/adminpannel.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/adminpannel_android.iml" beforeDir="false" afterPath="$PROJECT_DIR$/android/adminpannel_android.iml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+>>>>>>> Stashed changes
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
