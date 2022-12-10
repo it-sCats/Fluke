@@ -11,6 +11,7 @@ import 'package:flukepro/screens/regestrationScreens/intersetsScreen.dart';
 import 'package:flukepro/screens/regestrationScreens/regestrationType.dart';
 import 'package:flukepro/screens/regestrationScreens/visitorRegestrationScreen.dart';
 import 'package:flukepro/screens/resetPassScreen.dart';
+import 'package:flukepro/screens/sideScreens/settingsScreen.dart';
 import 'package:flukepro/screens/updatePasswordScreen.dart';
 import 'package:flukepro/utils/RoleRedicetion.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         '4': ((context) => ExploreScreen()),
         '1': ((context) => notifiScreen()),
         '0': ((context) => profile()),
+        'settings': ((context) => settingScreen()),
         '/updatepass': ((context) => updatePass()),
         '/reset': (context) => resetPass(),
         '/requests': ((context) => OrgRequest()),
