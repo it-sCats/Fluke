@@ -1,5 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flukepro/dashboardScreens/mainDashboard.dart';
+
+import 'package:flukepro/screens/OrganizersScreens/Notifications.dart';
+import 'package:flukepro/screens/OrganizersScreens/ODashboard.dart';
+import 'package:flukepro/screens/OrganizersScreens/Oevents.dart';
+import 'package:flukepro/screens/OrganizersScreens/Oprofile.dart';
+import 'package:flukepro/utils/fireStoreQueries.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+
+import 'package:flukepro/screens/OrganizersScreens/OHome.dart';
+
 import 'package:flukepro/screens/loginScreen.dart';
 import 'package:flukepro/screens/mainScreens/explorePage.dart';
 import 'package:flukepro/screens/mainScreens/home.dart';
@@ -11,6 +20,7 @@ import 'package:flukepro/screens/regestrationScreens/intersetsScreen.dart';
 import 'package:flukepro/screens/regestrationScreens/regestrationType.dart';
 import 'package:flukepro/screens/regestrationScreens/visitorRegestrationScreen.dart';
 import 'package:flukepro/screens/resetPassScreen.dart';
+import 'package:flukepro/screens/sideScreens/settingsScreen.dart';
 import 'package:flukepro/screens/updatePasswordScreen.dart';
 import 'package:flukepro/utils/RoleRedicetion.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +33,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  getOngoing();
   runApp(MyApp());
   // runApp(MyApp());
 }
@@ -32,7 +43,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: loginScreen(),
+      builder: (context, child) => ResponsiveWrapper.builder(child,
+          maxWidth: 3000,
+          minWidth: 480,
+          defaultScale: true,
+          breakpoints: [
+            ResponsiveBreakpoint.resize(480, name: MOBILE),
+            ResponsiveBreakpoint.autoScale(800, name: TABLET),
+            ResponsiveBreakpoint.resize(1200, name: DESKTOP),
+          ],
+          background: Container(color: Color(0xFFF5F5F5))),
+      home: Ohome(),
       debugShowCheckedModeBanner:
           false, //to remove debugging banner at the top of the screen
 
@@ -48,12 +69,19 @@ class MyApp extends StatelessWidget {
         '4': ((context) => ExploreScreen()),
         '1': ((context) => notifiScreen()),
         '0': ((context) => profile()),
+        'settings': ((context) => settingScreen()),
         '/updatepass': ((context) => updatePass()),
         '/reset': (context) => resetPass(),
         '/requests': ((context) => OrgRequest()),
         'personalInfo': ((context) => userInfoScreen()),
         '/redirect': ((context) => recdirectRole()),
         'personalInfo': ((context) => userInfoScreen()),
+        //routes of Organizers Screens
+        'OHome': ((context) => Ohome()),
+        '/Odash': ((context) => Odashboard()),
+        '/Oevent': ((context) => Oevents()),
+        '/Onotification': ((context) => notifaction()),
+        '/Oprofile': ((context) => Oprofile())
       }, //routes are to ease the navigation btween pages
       //we give every page a name then when we want to navigate we just call that name
     );

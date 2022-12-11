@@ -45,34 +45,38 @@ class _userInfoScreenState extends State<userInfoScreen> {
   String? dateinput;
   SharedPreferences? userTypeShared;
 
-  final currentVisitorRef = _firestore
+  DocumentReference currentVisitorRef = _firestore
       .collection('users')
       .doc('visitors')
       .collection('visitor')
       .doc(user!.uid);
-  final currentPartsRef = _firestore
+  DocumentReference currentPartsRef = _firestore
       .collection('users')
       .doc('paticipants')
       .collection('paticipant')
       .doc(user!.uid);
-  final currentOrganisRef = _firestore
+  DocumentReference currentOrganisRef = _firestore
       .collection('users')
       .doc('organizingAgens')
       .collection('organizingAgen')
       .doc(user?.uid);
 
   bool enabled = false;
+
+  //الدالة الي تجيب من الداتا بيز
   Future<DocumentSnapshot<Object?>>? getUserData() async {
     userTypeShared = await SharedPreferences.getInstance();
     _userType = userTypeShared?.getString("userType");
 
     if (_userType == '0') {
+      print('typeone ');
       return await currentVisitorRef.get();
     } else if (_userType == '2') {
-      return currentPartsRef.get();
+      return await currentPartsRef.get();
     } else if (_userType == '1') {
-      return currentOrganisRef.get();
+      return await currentOrganisRef.get();
     } else {
+      print('notype');
       return await currentVisitorRef.get();
     }
   }
@@ -197,7 +201,7 @@ class _userInfoScreenState extends State<userInfoScreen> {
                             CancleButton(
                               txt: 'لغاء التغيرات',
                               ontap: () {
-                                Navigator.pushNamed(context, '/home');
+                                Navigator.pop(context);
                               },
                             ),
                             SizedBox(

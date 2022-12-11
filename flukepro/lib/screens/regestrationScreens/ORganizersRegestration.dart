@@ -58,34 +58,31 @@ class _organizersRegistrationScreenState
                 height: MediaQuery.of(context).size.height / 10,
               ),
               Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  margin: EdgeInsets.only(right: 70),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        'سجل كـجهة منظمة',
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontFamily: 'Cairo',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25,
-                          color: conBlack,
-                        ),
+                alignment: Alignment.center,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      'سجل كـجهة منظمة',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                        color: conBlack,
                       ),
-                      Text(
-                        'سجل معلومات شركتك ستتم مراجعتها\n والإجابة على طلبك عن طريق الإيميل',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: 'Cairo',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          color: conBlack,
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                    Text(
+                      'سجل معلومات شركتك ستتم مراجعتها\n والإجابة على طلبك عن طريق الإيميل',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12,
+                        color: conBlack,
+                      ),
+                    )
+                  ],
                 ),
               ),
               SizedBox(
@@ -333,7 +330,8 @@ class _organizersRegistrationScreenState
                         // If the form is valid, display a snackbar. In the real world,
 
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Processing Data')),
+                          const SnackBar(
+                              content: Text('سيصلك إيميل يؤكد إنضمامك')),
                         );
                         final d = await _firestore.collection('requests').add({
                           'name': OrganizerName,
@@ -344,7 +342,7 @@ class _organizersRegistrationScreenState
                           'status': "waiting"
                         });
                         if (d != null) {
-                          Navigator.pushNamed(context, '/home');
+                          Navigator.pushNamed(context, '/log');
                         }
                       } else {
                         setState(() {
@@ -354,7 +352,7 @@ class _organizersRegistrationScreenState
                     }
                   }),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.ideographic,
                 children: [
@@ -366,15 +364,15 @@ class _organizersRegistrationScreenState
                           margin: EdgeInsets.only(right: 5, top: 5),
                           child: Text(
                             'قم بتسجيل دخول',
-                            textAlign: TextAlign.right,
+                            textAlign: TextAlign.center,
                             style: conTxtLink,
                           ))),
                   InkWell(
                       child: Container(
-                          margin: EdgeInsets.only(right: 100, top: 10),
+                          margin: EdgeInsets.only(top: 10),
                           child: Text(
                             ' لديك حساب؟ ',
-                            textAlign: TextAlign.right,
+                            textAlign: TextAlign.center,
                             style: conLittelTxt12,
                           ))),
                 ],
