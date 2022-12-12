@@ -3,10 +3,8 @@ import 'package:flukepro/screens/mainScreens/home.dart';
 import 'package:flukepro/screens/mainScreens/notificationScreen.dart';
 import 'package:flukepro/screens/mainScreens/profile.dart';
 import 'package:flutter/material.dart';
-
 import 'components/bottomNav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'components/cons.dart';
 
 class base extends StatefulWidget {
@@ -24,11 +22,6 @@ class _baseState extends State<base> {
     HomeScreen(),
   ];
   int? pageIndex = 2;
-
-  // getPage() async {
-  //   _selectedPage = await SharedPreferences.getInstance();
-  //   pageIndex = _selectedPage?.getInt("pageIndex");
-  // }
 
   @override
   void initState() {

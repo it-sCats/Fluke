@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flukepro/components/cons.dart';
 import 'package:flukepro/components/customWidgets.dart';
+import 'package:flukepro/components/eventsList.dart';
+import 'package:flukepro/screens/OrganizersScreens/Sections/ongoingEvents.dart';
+import 'package:flukepro/utils/fireStoreQueries.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -40,33 +43,52 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: SingleChildScrollView(
         reverse: true,
-        child: Column(
-          children: [
-            Container(
-                width: MediaQuery.of(context).size.width,
-                height: 500,
-                child: requestsList()), //هنا يتم عرض قائمة الطلبات قابلة
-            Text('lo'),
-            CTA(
-                txt: 'sign out',
-                isFullwidth: false,
-                onTap: () async {
-                  await Authentication.signOut(context: context);
-                  Navigator.pushNamed(context, '/log');
-                }),
-            CTA(
-                txt: 'delete user',
-                isFullwidth: false,
-                onTap: () async {
-                  await Authentication().deleteUser();
-                }),
-            CTA(
-                txt: ' user info',
-                isFullwidth: false,
-                onTap: () async {
-                  Navigator.pushNamed(context, 'personalInfo');
-                })
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(35.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              TextFormField(
+                textAlign: TextAlign.right,
+                decoration: new InputDecoration(
+                  hintText: "...ابحث عن أحداث",
+                  hintStyle: conTxtFeildHint,
+                  prefixIcon: new Icon(Icons.search),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    borderSide: BorderSide(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 24,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Text(
+                  "الأحداث الأكثر تداولا",
+                  textAlign: TextAlign.right,
+                  style: conHeadingsStyle.copyWith(
+                    fontSize: 20,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              // eventList(evento)
+              SizedBox(
+                height: 10,
+              ),
+            ],
+          ),
         ),
       ),
     );
