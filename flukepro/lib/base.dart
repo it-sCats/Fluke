@@ -53,7 +53,6 @@ class _baseState extends State<base> {
           onTap: (value) {
             setState(() {
               print(value);
-
               currentIndexOfNav = value;
               pageIndex = value;
             });

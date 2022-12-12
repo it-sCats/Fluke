@@ -45,12 +45,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       builder: (context, child) => ResponsiveWrapper.builder(child,
           maxWidth: 3000,
-          minWidth: 480,
+          minWidth: 1000,
           defaultScale: true,
           breakpoints: [
             ResponsiveBreakpoint.resize(480, name: MOBILE),
             ResponsiveBreakpoint.autoScale(800, name: TABLET),
-            ResponsiveBreakpoint.resize(1200, name: DESKTOP),
+            ResponsiveBreakpoint.resize(1000, name: DESKTOP),
           ],
           background: Container(color: Color(0xFFF5F5F5))),
       home: Ohome(),
