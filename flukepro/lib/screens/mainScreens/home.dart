@@ -48,45 +48,49 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              TextFormField(
-                textAlign: TextAlign.right,
-                decoration: new InputDecoration(
-                  hintText: "...ابحث عن أحداث",
-                  hintStyle: conTxtFeildHint,
-                  prefixIcon: new Icon(Icons.search),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    borderSide: BorderSide(
-                      color: Colors.grey,
+              Container(
+                width: 600,
+                child: TextFormField(
+                  textAlign: TextAlign.right,
+                  decoration: new InputDecoration(
+                    hintText: "...ابحث عن أحداث",
+                    hintStyle: conTxtFeildHint,
+                    prefixIcon: new Icon(Icons.search),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                      ),
                     ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: Colors.blue),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: BorderSide(color: Colors.blue),
+                    ),
                   ),
                 ),
               ),
               SizedBox(
                 height: 24,
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
-                  "الأحداث الأكثر تداولا",
-                  textAlign: TextAlign.right,
-                  style: conHeadingsStyle.copyWith(
-                    fontSize: 20,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              // eventList(evento)
-              SizedBox(
-                height: 10,
-              ),
+
+              Container(
+                  padding: EdgeInsets.all(25),
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: GridView.count(
+                    physics: NeverScrollableScrollPhysics(),
+                    crossAxisCount: 1,
+                    shrinkWrap: true,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 30,
+                    children: [
+                      dashboardSection('الأحداث الأكثر تداولا ', getOngoing()),
+                      dashboardSection('لأحداث الأكثر تداول', getOngoing()),
+                      dashboardSection('لأحداث الأكثر تداول', getOngoing())
+                    ],
+                  )),
+              // SizedBox(
+              //   height: 10,
+              // ),
             ],
           ),
         ),
