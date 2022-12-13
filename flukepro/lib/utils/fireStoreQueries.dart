@@ -26,11 +26,30 @@ getMarker() async {
 }
 
 getOngoing() async {
-  QuerySnapshot query = await _firestore
+  final Timestamp now = Timestamp.fromDate(DateTime.now());
+  QuerySnapshot Starter = await _firestore
       .collection('events')
-      .where('starterDate', isEqualTo: DateTime.now())
-      .where('endDate', isGreaterThanOrEqualTo: DateTime.now())
+      .where(
+        'starterDate',
+        isLessThanOrEqualTo: now,
+      )
       .get();
-
-  return query.docs;
+  QuerySnapshot end = await _firestore
+      .collection('events')
+      .where(
+        'endDate',
+        isGreaterThanOrEqualTo: now,
+      )
+      .get();
+  QuerySnapshot list = Starter;
+  list.docs.remove(Starter);
+  Starter.docs.forEach((startrelement) {
+    end.docs.forEach((endelement) {
+      if (startrelement.id == endelement.id) {
+        list.docs.add(startrelement);
+      }
+    });
+  });
+  print(list.docs.length);
+  return list.docs;
 }

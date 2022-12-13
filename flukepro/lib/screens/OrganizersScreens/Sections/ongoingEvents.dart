@@ -4,18 +4,6 @@ import 'package:flutter/material.dart';
 import '../../../components/eventsList.dart';
 import '../../../utils/fireStoreQueries.dart';
 
-<<<<<<< Updated upstream
-class ongoingEvents extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Text(
-            'أحداث تقام الآن',
-            style: conHeadingsStyle.copyWith(
-                fontWeight: FontWeight.bold, fontSize: 15),
-=======
 class dashboardSection extends StatelessWidget {
   //here is the section that is displayed in Organizer dashboard
   dashboardSection(this.txt,
@@ -45,14 +33,19 @@ class dashboardSection extends StatelessWidget {
               style: conHeadingsStyle.copyWith(
                   fontWeight: FontWeight.bold, fontSize: 16),
             ),
->>>>>>> Stashed changes
           ),
-          Container(
-            color: conBlue,
-            child: eventList(getOngoing()),
-          )
-        ],
-      ),
+        ),
+        Expanded(
+            flex: 10,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Color(0xffD9D9D9).withOpacity(.14),
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              width: MediaQuery.of(context).size.width / 1.2,
+              height: MediaQuery.of(context).size.height / 1.5,
+              child: eventList(eventToDisplay),
+            ))
+      ],
     );
   }
 }

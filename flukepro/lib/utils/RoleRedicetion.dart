@@ -25,6 +25,7 @@ class _recdirectRoleState extends State<recdirectRole> {
     snap = await _firestore.collection('users').doc(user!.uid).get();
 
     if (snap!['userType'] == 1) {
+      //المنظم يتم توجيهه للداش بورد الخاصة به
       Navigator.pushNamed(context, 'OHome');
     } else {
       Navigator.pushNamed(context, '3');

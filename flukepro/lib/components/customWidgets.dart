@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'cons.dart';
@@ -32,6 +33,120 @@ class CTA extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class AgendaTextButton extends StatelessWidget {
+  bool visibale = false;
+  AgendaTextButton(
+    this.visibale,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      child: Text(
+        'إنشاء أجندة ',
+        style: conHeadingsStyle.copyWith(fontSize: 20),
+      ),
+    );
+  }
+}
+
+//زر الاضافة في الداشبورد
+class AddButton extends StatelessWidget {
+  AddButton({
+    required this.txt,
+    required this.onTap,
+  });
+  final String txt;
+  Function onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: GestureDetector(
+        onTap: () {
+          onTap();
+        },
+        child: Container(
+          width: defaultTargetPlatform == TargetPlatform.android ||
+                  defaultTargetPlatform == TargetPlatform.iOS
+              ? 85
+              : 70,
+          height: 85,
+          margin: EdgeInsets.symmetric(
+              vertical: size.height * 0.04, horizontal: size.width * 0.02),
+          child: Text(
+            txt,
+            textAlign: TextAlign.center,
+            style:
+                conCTATxt.copyWith(fontSize: 37, fontWeight: FontWeight.w200),
+          ),
+          decoration: BoxDecoration(
+            color: conORange,
+            borderRadius: BorderRadius.all(
+              Radius.circular(200),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+//زر إضافة أجندة
+class AddEventButton extends StatefulWidget {
+  //
+  AddEventButton(
+      {required this.txt, required this.onTap, required this.showCreating});
+  final String txt;
+  Function onTap;
+  bool showCreating;
+
+  @override
+  State<AddEventButton> createState() => _AddEventButtonState();
+}
+
+class _AddEventButtonState extends State<AddEventButton> {
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Visibility(
+        visible: widget.showCreating,
+        child: Align(
+          alignment: Alignment.bottomRight,
+          child: Container(
+            width: defaultTargetPlatform == TargetPlatform.android ||
+                    defaultTargetPlatform == TargetPlatform.iOS
+                ? 100
+                : 150,
+            height: 40,
+            padding: EdgeInsets.symmetric(vertical: 5),
+            margin: EdgeInsets.symmetric(
+                vertical: size.height * 0.090, horizontal: size.width * 0.080),
+            child: InkWell(
+              onTap: () => widget.onTap(),
+              child: Text(
+                widget.txt,
+                textAlign: TextAlign.center,
+                style: conCTATxt.copyWith(
+                    fontSize: 13, fontWeight: FontWeight.w200),
+              ),
+            ),
+            decoration: BoxDecoration(
+              color: conORange.withOpacity(1),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(0),
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+          ),
+        ));
   }
 }
 
