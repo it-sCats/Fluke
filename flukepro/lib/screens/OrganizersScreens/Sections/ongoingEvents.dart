@@ -6,7 +6,8 @@ import '../../../utils/fireStoreQueries.dart';
 
 class dashboardSection extends StatelessWidget {
   //here is the section that is displayed in Organizer dashboard
-  dashboardSection(this.txt, this.eventToDisplay);//كونستركتور ياخذ عنوان يتعرض فوق القسم, وياخذ دالة تجيب حاجة من الداتابيز
+  dashboardSection(this.txt,
+      this.eventToDisplay); //كونستركتور ياخذ عنوان يتعرض فوق القسم, وياخذ دالة تجيب حاجة من الداتابيز
   final String txt;
   Future<dynamic> eventToDisplay;
   @override
@@ -14,6 +15,14 @@ class dashboardSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
+        Container(
+          padding: EdgeInsets.only(bottom: 20),
+          // margin: const EdgeInsets.only(left: 5, right: 15),
+          child: new Divider(
+            color: conBlack.withOpacity(.6),
+            height: 4,
+          ),
+        ),
         Expanded(
           flex: 1,
           child: Padding(

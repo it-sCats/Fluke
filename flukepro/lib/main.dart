@@ -1,14 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
-
 import 'package:flukepro/screens/OrganizersScreens/Notifications.dart';
 import 'package:flukepro/screens/OrganizersScreens/ODashboard.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oevents.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oprofile.dart';
 import 'package:flukepro/utils/fireStoreQueries.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-
 import 'package:flukepro/screens/OrganizersScreens/OHome.dart';
-
 import 'package:flukepro/screens/loginScreen.dart';
 import 'package:flukepro/screens/mainScreens/explorePage.dart';
 import 'package:flukepro/screens/mainScreens/home.dart';

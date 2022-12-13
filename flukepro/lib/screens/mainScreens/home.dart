@@ -6,7 +6,6 @@ import 'package:flukepro/screens/OrganizersScreens/Sections/ongoingEvents.dart';
 import 'package:flukepro/utils/fireStoreQueries.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '../../OrganizersRequests/requestsList.dart';
 import '../../components/bottomNav.dart';
 import '../../utils/authentication.dart';
@@ -87,6 +86,21 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 10,
               ),
+
+              Container(
+                  padding: EdgeInsets.all(25),
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: GridView.count(
+                    physics: NeverScrollableScrollPhysics(),
+                    crossAxisCount: 1,
+                    shrinkWrap: true,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 30,
+                    children: [
+                      dashboardSection('الأحداث الأكثر تداولا ', getOngoing()),
+                      dashboardSection('لأحداث الأكثر تداول', getOngoing()),
+                    ],
+                  )),
             ],
           ),
         ),
