@@ -6,7 +6,6 @@ import 'package:flukepro/screens/OrganizersScreens/Sections/ongoingEvents.dart';
 import 'package:flukepro/utils/fireStoreQueries.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '../../OrganizersRequests/requestsList.dart';
 import '../../components/bottomNav.dart';
 import '../../utils/authentication.dart';
@@ -48,29 +47,44 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Container(
-                width: 600,
-                child: TextFormField(
-                  textAlign: TextAlign.right,
-                  decoration: new InputDecoration(
-                    hintText: "...ابحث عن أحداث",
-                    hintStyle: conTxtFeildHint,
-                    prefixIcon: new Icon(Icons.search),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                      borderSide: BorderSide(
-                        color: Colors.grey,
-                      ),
+              TextFormField(
+                textAlign: TextAlign.right,
+                decoration: new InputDecoration(
+                  hintText: "...ابحث عن أحداث",
+                  hintStyle: conTxtFeildHint,
+                  prefixIcon: new Icon(Icons.search),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    borderSide: BorderSide(
+                      color: Colors.grey,
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      borderSide: BorderSide(color: Colors.blue),
-                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    borderSide: BorderSide(color: Colors.blue),
                   ),
                 ),
               ),
               SizedBox(
                 height: 24,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Text(
+                  "الأحداث الأكثر تداولا",
+                  textAlign: TextAlign.right,
+                  style: conHeadingsStyle.copyWith(
+                    fontSize: 20,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              // eventList(evento)
+              SizedBox(
+                height: 10,
               ),
 
               Container(
@@ -85,12 +99,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       dashboardSection('الأحداث الأكثر تداولا ', getOngoing()),
                       dashboardSection('لأحداث الأكثر تداول', getOngoing()),
-                      dashboardSection('لأحداث الأكثر تداول', getOngoing())
                     ],
                   )),
-              // SizedBox(
-              //   height: 10,
-              // ),
             ],
           ),
         ),
