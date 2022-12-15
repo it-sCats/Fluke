@@ -26,18 +26,22 @@ class dashboardSection extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Padding(
-            padding: const EdgeInsets.only(right: 8.0),
+            padding: EdgeInsets.only(right: 8.0, top: 10),
             child: Text(
               txt,
               textAlign: TextAlign.right,
               style: conHeadingsStyle.copyWith(
-                  fontWeight: FontWeight.bold, fontSize: 16),
+                  fontWeight: FontWeight.bold, fontSize: 20),
             ),
           ),
         ),
+        SizedBox(
+          height: 10,
+        ),
         Expanded(
-            flex: 10,
+            flex: 7,
             child: Container(
+              padding: EdgeInsets.only(top: 10),
               decoration: BoxDecoration(
                   color: Color(0xffD9D9D9).withOpacity(.14),
                   borderRadius: BorderRadius.all(Radius.circular(10))),

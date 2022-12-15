@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flukepro/components/cons.dart';
 import 'package:flutter/foundation.dart';
@@ -9,13 +11,14 @@ class event extends StatelessWidget {
   String? eventType;
   Timestamp starterDate;
   Timestamp endDate;
-  Timestamp starterTime;
-  Timestamp endTime;
+  int starterTime;
+  int endTime;
   var field;
   String description;
   Timestamp creationDate;
   List<String>? room;
   String? location;
+  String? city;
   bool acceptsParticapants;
   List<String>? targetedAudiance;
   bool eventVisibilty;
@@ -32,6 +35,7 @@ class event extends StatelessWidget {
     this.field,
     required this.creationDate,
     this.location,
+    this.city,
     required this.acceptsParticapants,
     required this.eventVisibilty,
     this.room,
@@ -60,10 +64,18 @@ class event extends StatelessWidget {
         child: Stack(
           fit: StackFit.passthrough,
           children: [
-            Image.asset(
-              'images/The Little Things Working.png',
-              fit: BoxFit.fitWidth,
-            ),
+            image != null
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(25),
+                    child: Image.file(
+                      fit: BoxFit.fill,
+                      File(image.toString()),
+                    ),
+                  )
+                : Image.asset(
+                    'images/The Little Things Working.png',
+                    fit: BoxFit.fill,
+                  ),
             Container(
               decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -88,7 +100,8 @@ class event extends StatelessWidget {
                         fontSize: 20, color: Colors.white),
                   ),
                   Text(
-                    description.toString(),
+                    description.toString().substring(0, 70) +
+                        '\n أظهار المزيد..',
                     textAlign: TextAlign.right,
                     style: conHeadingsStyle.copyWith(
                         fontSize: 15,
@@ -106,7 +119,7 @@ class event extends StatelessWidget {
                         width: 5,
                       ),
                       Text(
-                        location.toString(),
+                        city.toString(),
                         style: conOnboardingText.copyWith(fontSize: 13),
                       )
                     ],

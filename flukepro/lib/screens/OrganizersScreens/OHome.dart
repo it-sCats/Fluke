@@ -143,7 +143,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
           ),
           Padding(
             padding:
-                EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.03),
+                EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04),
             child: Row(
               children: [
                 Column(
@@ -245,6 +245,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
           ),
           Expanded(
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.01,
@@ -277,7 +278,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
     //ويدجيت خاصة بعناصر المينو
     return Padding(
       padding: EdgeInsets.only(
-          left: MediaQuery.of(context).size.width * .03, top: 30),
+          left: MediaQuery.of(context).size.width * .07, top: 30),
       child: InkWell(
           onTap: () => callback(),
           child: Row(
@@ -408,11 +409,11 @@ class _AddEventButtonState extends State<AddEventButton> {
         margin: EdgeInsets.symmetric(
             vertical: defaultTargetPlatform == TargetPlatform.android ||
                     defaultTargetPlatform == TargetPlatform.iOS
-                ? size.height * 0.0800
+                ? size.height * 0.0700
                 : size.height * 0.090,
             horizontal: defaultTargetPlatform == TargetPlatform.android ||
                     defaultTargetPlatform == TargetPlatform.iOS
-                ? size.height * 0.0990
+                ? size.height * 0.0900
                 : size.width * 0.080),
         child: InkWell(
           onTap: () => widget.onTap(),
@@ -424,7 +425,7 @@ class _AddEventButtonState extends State<AddEventButton> {
           ),
         ),
         decoration: BoxDecoration(
-          color: conORange.withOpacity(.9),
+          color: conORange,
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20),
             bottomRight: Radius.circular(0),

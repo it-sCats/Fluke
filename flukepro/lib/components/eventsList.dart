@@ -9,11 +9,9 @@ class eventList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(8),
+    return Container(
       child: FutureBuilder(
 
-          //باش نبنو الداتا الي بنجيبوها من قاعدة البيانات نحتاجو نحطوها في الفيوتشر بيلدر
           //باش نبنو الداتا الي بنجيبوها من قاعدة البيانات نحتاجو نحطوها في الفيوتشر بيلدر
           future: EventQuery,
           builder: (context, AsyncSnapshot snapshot) {
@@ -47,14 +45,14 @@ class eventList extends StatelessWidget {
                   itemBuilder: (context, index) {
                     var eventData = snapshot.data![index];
 
-                    //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
                     return event(
                         //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
-
-                        title: eventData['tilte'],
+                        title: eventData['title'],
                         image: eventData['image'],
                         description: eventData['description'],
                         field: eventData['field'],
+                        location: eventData['location'],
+                        city: eventData['eventCity'],
                         starterDate: eventData['starterDate'],
                         endDate: eventData['endDate'],
                         starterTime: eventData['starterTime'],

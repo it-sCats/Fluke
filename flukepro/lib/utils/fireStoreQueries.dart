@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart' as intl;
 
 final _firestore = FirebaseFirestore.instance;
 // this function checks if uniqueName already exists
@@ -26,19 +27,20 @@ getMarker() async {
 }
 
 getOngoing() async {
-  final Timestamp now = Timestamp.fromDate(DateTime.now());
+  DateTime now = DateTime.now();
+  String formattedDate = intl.DateFormat('yyyy-MM-dd').format(now);
   QuerySnapshot Starter = await _firestore
       .collection('events')
       .where(
         'starterDate',
-        isLessThanOrEqualTo: now,
+        isLessThanOrEqualTo: formattedDate,
       )
       .get();
   QuerySnapshot end = await _firestore
       .collection('events')
       .where(
         'endDate',
-        isGreaterThanOrEqualTo: now,
+        isGreaterThanOrEqualTo: formattedDate,
       )
       .get();
   QuerySnapshot list = Starter;
@@ -52,4 +54,10 @@ getOngoing() async {
   });
   print(list.docs.length);
   return list.docs;
+}
+
+getAllEvents() async {
+  QuerySnapshot AllEvents = await _firestore.collection('events').get();
+
+  return AllEvents.docs;
 }

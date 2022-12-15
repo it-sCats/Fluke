@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               TextFormField(
                 textAlign: TextAlign.right,
-                decoration: new InputDecoration(
+                decoration: InputDecoration(
                   hintText: "...ابحث عن أحداث",
                   hintStyle: conTxtFeildHint,
                   prefixIcon: new Icon(Icons.search),
@@ -69,6 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 24,
               ),
+
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
