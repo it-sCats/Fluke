@@ -61,7 +61,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: Colors.blue),
+                    borderSide:
+                        BorderSide(color: Color.fromARGB(255, 155, 5, 33)),
                   ),
                 ),
               ),
