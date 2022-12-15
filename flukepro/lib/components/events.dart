@@ -41,8 +41,11 @@ class event extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration:
-          BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(25))),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(25),
+        ),
+      ),
       margin: EdgeInsets.all(20),
       width: defaultTargetPlatform == TargetPlatform.android ||
               defaultTargetPlatform == TargetPlatform.iOS
