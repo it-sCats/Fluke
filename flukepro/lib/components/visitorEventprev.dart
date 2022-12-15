@@ -1,5 +1,8 @@
 import 'package:flukepro/components/cons.dart';
+import 'package:flukepro/components/customWidgets.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'creatingEventsForm.dart';
 
 class visitorEventPrev extends StatelessWidget {
   visitorEventPrev(this.title, this.Qr);
@@ -32,6 +35,14 @@ class visitorEventPrev extends StatelessWidget {
                       width: 50,
                       height: 50,
                     ),
+                    onTap: () {
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        elevation: 100,
+                        context: context,
+                        builder: (context) => QrImage(),
+                      );
+                    },
                   ),
                 ),
               ],
@@ -49,6 +60,39 @@ class visitorEventPrev extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class QrImage extends StatelessWidget {
+  const QrImage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(10),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              'images/qrcode.png',
+              height: 300,
+              width: 300,
+            ),
+            Text(
+              "أظهر هذا الرمز يوم المعرض",
+              style: conHeadingsStyle.copyWith(fontSize: 15),
+            ),
+            CTA(
+              txt: "عرض الحدث",
+              isFullwidth: false,
+              onTap: () {},
+            )
+          ],
+        ),
       ),
     );
   }
