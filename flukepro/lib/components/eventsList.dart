@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flukepro/components/eventDisplay.dart';
 import 'package:flukepro/components/events.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -52,22 +53,43 @@ class eventList extends StatelessWidget {
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: eventHorizCard(
-                          //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
-                          title: eventData['title'],
-                          image: eventData['image'],
-                          description: eventData['description'],
-                          field: eventData['field'],
-                          location: eventData['location'],
-                          city: eventData['eventCity'],
-                          starterDate: eventData['starterDate'],
-                          endDate: eventData['endDate'],
-                          starterTime: eventData['starterTime'],
-                          endTime: eventData['endTime'],
-                          eventType: eventData['eventType'],
-                          creationDate: eventData['creationDate'],
-                          acceptsParticapants: eventData['acceptsParticapants'],
-                          eventVisibilty: eventData['eventVisibility']),
+                      child: GestureDetector(
+                        child: eventHorizCard(
+                            //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
+                            title: eventData['title'],
+                            image: eventData['image'],
+                            description: eventData['description'],
+                            field: eventData['field'],
+                            location: eventData['location'],
+                            city: eventData['eventCity'],
+                            starterDate: eventData['starterDate'],
+                            endDate: eventData['endDate'],
+                            starterTime: eventData['starterTime'],
+                            endTime: eventData['endTime'],
+                            eventType: eventData['eventType'],
+                            creationDate: eventData['creationDate'],
+                            acceptsParticapants:
+                                eventData['acceptsParticapants'],
+                            eventVisibilty: eventData['eventVisibility']),
+                        onTap: () {
+                          showModalBottomSheet(
+                            isScrollControlled: true,
+                            elevation: 100,
+                            context: context,
+                            builder: (context) => eventDisplay(
+                                title: eventData['title'],
+                                description: eventData['description'],
+                                starterDate: eventData['starterDate'],
+                                endDate: eventData['endDate'],
+                                starterTime: eventData['starterTime'],
+                                endTime: eventData['endTime'],
+                                creationDate: eventData['creationDate'],
+                                acceptsParticapants:
+                                    eventData['acceptsParticapants'],
+                                eventVisibilty: eventData['eventVisibility']),
+                          );
+                        },
+                      ),
                     );
                   },
                   itemCount: snapshot.data?.length,
