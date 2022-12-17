@@ -262,14 +262,6 @@ class _organizersRegistrationScreenState
                     onChanged: (value) {
                       breif = value;
                     },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'الرجاء إدخال البيانات المطلوبة';
-                      } else if (value.trim().length < 10) {
-                        return 'رقم الهاتف يتكون من عشرة حروف  ';
-                      }
-                      return null;
-                    },
                     textDirection: TextDirection.rtl,
                     textAlign: TextAlign.right,
                     decoration: InputDecoration(

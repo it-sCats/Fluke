@@ -11,7 +11,7 @@ class visitorEventPrev extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 13, horizontal: 20),
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
       decoration: BoxDecoration(
         border: Border.all(width: 2, color: Colors.black.withOpacity(.2)),
         color: Color.fromARGB(255, 255, 255, 255),
@@ -53,7 +53,7 @@ class visitorEventPrev extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  "معرض القهوة",
+                  title,
                   style: conHeadingsStyle.copyWith(fontSize: 15),
                 )
               ],

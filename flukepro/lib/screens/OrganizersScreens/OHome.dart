@@ -77,58 +77,53 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
     return Scaffold(
       backgroundColor: conBlue,
       resizeToAvoidBottomInset: false,
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
-            children: [
-              menu(context),
-              Dashboard(context),
-              AddButton(
-                txt: '+',
-                onTap: () {
-                  setState(() {
-                    showCreating = !showCreating;
-                    print(showCreating);
-                  });
+      body: Stack(
+        children: [
+          menu(context),
+          Dashboard(context),
+          AddButton(
+            txt: '+',
+            onTap: () {
+              setState(() {
+                showCreating = !showCreating;
+                print(showCreating);
+              });
 
-                  // showCreation();
-                },
-              ),
-              Visibility(
-                visible: showCreating,
-                child: AddEventButton(
-                  txt: "إنشاء حدث",
-                  onTap: () {
-                    showModalBottomSheet(
-                      isScrollControlled: true,
-                      elevation: 100,
-                      context: context,
-                      builder: (context) => creatingEvent(),
-                    );
-
-                    setState(() {});
-                  },
-                ),
-              ),
-              Visibility(
-                visible: showCreating,
-                child: Transform.translate(
-                  offset: Offset(20, 0),
-                  child: Container(
-                    margin: EdgeInsets.symmetric(
-                      vertical: size.height * 0.07,
-                    ),
-                    child: AddEventButton(
-                      txt: "إنشاء أجندة",
-                      onTap: () {},
-                    ),
-                  ),
-                ),
-              ) //TODO edit the add button
-            ], // جزئين رئيسيين والي هما المينيو الجانبية و"الداش بورد" مقصود بيها الصفحة البيضا الي نحطو عليها في المكونات التانية
+              // showCreation();
+            },
           ),
-        ),
+          Visibility(
+            visible: showCreating,
+            child: AddEventButton(
+              txt: "إنشاء حدث",
+              onTap: () {
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  elevation: 100,
+                  context: context,
+                  builder: (context) => creatingEvent(),
+                );
+
+                setState(() {});
+              },
+            ),
+          ),
+          Visibility(
+            visible: showCreating,
+            child: Transform.translate(
+              offset: Offset(20, 0),
+              child: Container(
+                margin: EdgeInsets.symmetric(
+                  vertical: size.height * 0.07,
+                ),
+                child: AddEventButton(
+                  txt: "إنشاء أجندة",
+                  onTap: () {},
+                ),
+              ),
+            ),
+          ) //TODO edit the add button
+        ], // جزئين رئيسيين والي هما المينيو الجانبية و"الداش بورد" مقصود بيها الصفحة البيضا الي نحطو عليها في المكونات التانية
       ),
     );
   }

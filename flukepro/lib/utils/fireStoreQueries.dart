@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart%20';
 import 'package:intl/intl.dart' as intl;
 
 final _firestore = FirebaseFirestore.instance;
@@ -27,20 +28,20 @@ getMarker() async {
 }
 
 getOngoing() async {
-  DateTime now = DateTime.now();
-  String formattedDate = intl.DateFormat('yyyy-MM-dd').format(now);
+  Timestamp now = Timestamp.now();
+
   QuerySnapshot Starter = await _firestore
       .collection('events')
       .where(
         'starterDate',
-        isLessThanOrEqualTo: formattedDate,
+        isLessThanOrEqualTo: now,
       )
       .get();
   QuerySnapshot end = await _firestore
       .collection('events')
       .where(
         'endDate',
-        isGreaterThanOrEqualTo: formattedDate,
+        isGreaterThanOrEqualTo: now,
       )
       .get();
   QuerySnapshot list = Starter;
@@ -54,6 +55,15 @@ getOngoing() async {
   });
   print(list.docs.length);
   return list.docs;
+  // QuerySnapshot Starter = await _firestore
+  //     .collection('events')
+  //     .where(
+  //     (event){
+  //       DateTime start=event['starterDate'];
+  //       DateTime end=event['endDate'];
+  //      if(start.isBefore(DateTime.now()) || && DateTime)}
+  //     )
+  //     .get();
 }
 
 getAllEvents() async {

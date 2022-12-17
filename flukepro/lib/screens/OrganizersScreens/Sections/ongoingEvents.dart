@@ -15,40 +15,43 @@ class dashboardSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
+        Expanded(
+          flex: 3,
+          child: Padding(
+            padding: EdgeInsets.only(right: 35.0, top: 10),
+            child: Text(
+              txt,
+              textAlign: TextAlign.right,
+              style: conHeadingsStyle.copyWith(
+                  fontWeight: FontWeight.normal, fontSize: 20),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: SizedBox(
+            height: 20,
+          ),
+        ),
+        Expanded(
+            flex: 15,
+            child: Container(
+              padding: EdgeInsets.only(top: 10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              child: eventList(eventToDisplay),
+            )),
+        SizedBox(
+          height: 30,
+        ),
         Container(
-          padding: EdgeInsets.only(bottom: 20),
+          padding: EdgeInsets.only(bottom: 10),
           // margin: const EdgeInsets.only(left: 5, right: 15),
           child: new Divider(
             color: conBlack.withOpacity(.6),
             height: 4,
           ),
         ),
-        Expanded(
-          flex: 1,
-          child: Padding(
-            padding: EdgeInsets.only(right: 8.0, top: 10),
-            child: Text(
-              txt,
-              textAlign: TextAlign.right,
-              style: conHeadingsStyle.copyWith(
-                  fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Expanded(
-            flex: 7,
-            child: Container(
-              padding: EdgeInsets.only(top: 10),
-              decoration: BoxDecoration(
-                  color: Color(0xffD9D9D9).withOpacity(.14),
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              width: MediaQuery.of(context).size.width / 1.2,
-              height: MediaQuery.of(context).size.height / 1.5,
-              child: eventList(eventToDisplay),
-            ))
       ],
     );
   }

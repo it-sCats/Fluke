@@ -44,8 +44,10 @@ class _creatingEventState extends State<creatingEvent> {
   ];
   TextEditingController _eventNameCont = TextEditingController();
   TextEditingController _eventTypeCont = TextEditingController();
-  TextEditingController endDate = TextEditingController();
+  TextEditingController endDateCont = TextEditingController();
   Timestamp starterDate = Timestamp(1, 0);
+  Timestamp endDate = Timestamp(1, 0);
+  TextEditingController starterDateCont = TextEditingController();
   TextEditingController starterTime = TextEditingController();
   TextEditingController endTime = TextEditingController();
   TextEditingController _eventFieldCont = TextEditingController();
@@ -322,7 +324,7 @@ class _creatingEventState extends State<creatingEvent> {
                           child: Container(
                             margin: EdgeInsets.symmetric(vertical: 10),
                             child: TextFormField(
-                              controller: endDate,
+                              controller: endDateCont,
                               onTap: () async {
                                 DateTime? pickedDate = await showDatePicker(
                                     context: context,
@@ -341,7 +343,9 @@ class _creatingEventState extends State<creatingEvent> {
                                   //you can implement different kind of Date Format here according to your requirement
 
                                   setState(() {
-                                    endDate.text = formattedDate
+                                    endDate = Timestamp.fromDate(
+                                        pickedDate); //set output date to TextField value.
+                                    endDateCont.text = formattedDate
                                         .toString(); //set output date to TextField value.
                                   });
                                 }
@@ -373,6 +377,7 @@ class _creatingEventState extends State<creatingEvent> {
                               margin: EdgeInsets.symmetric(vertical: 10),
                               child: InkWell(
                                 child: TextFormField(
+                                  controller: starterDateCont,
                                   onTap: () async {
                                     DateTime? pickedDate = await showDatePicker(
                                         context: context,
@@ -391,6 +396,7 @@ class _creatingEventState extends State<creatingEvent> {
                                       //you can implement different kind of Date Format here according to your requirement
 
                                       setState(() {
+                                        starterDateCont.text = formattedDate;
                                         starterDate = Timestamp.fromDate(
                                             pickedDate); //set output date to TextField value.
                                       });
@@ -748,9 +754,9 @@ class _creatingEventState extends State<creatingEvent> {
                                     'description': _eventDescriptionCont.text,
                                     'eventType': _eventTypeCont.text,
                                     'starterDate': starterDate,
-                                    'endDate': endDate.text,
-                                    'starterTime': starterTime.text,
-                                    'endTime': endTime.text,
+                                    'endDate': endDate,
+                                    'starterTime': int.parse(starterTime.text),
+                                    'endTime': int.parse(endTime.text),
                                     'eventCity': _eventCityCont.text,
                                     'location': _eventLocationCont.text,
                                     'field': _eventFieldCont.text,
