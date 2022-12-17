@@ -18,7 +18,7 @@ class _organizersRegistrationScreenState
     'معارض ',
     'ورش عمل ',
     'مؤتمرات',
-    'محاضرات',
+    'جلسات',
     'جلسات حوارية ',
     'جميع أنواع الاحداث'
   ];
@@ -266,8 +266,7 @@ class _organizersRegistrationScreenState
                     textAlign: TextAlign.right,
                     decoration: InputDecoration(
                         labelStyle: conTxtFeildHint,
-                        hintText:
-                            'ماالقيمة التي يمكنك إضافتها كمنظم لمجتمع المعارض؟',
+                        hintText: 'أرفق نبذة عنك كمنظم أو كشركة؟ ',
                         focusedErrorBorder: OutlineInputBorder(
                             borderSide: BorderSide(width: 2, color: conRed),
                             borderRadius: BorderRadius.circular(25)),

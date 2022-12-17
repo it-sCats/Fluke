@@ -1,13 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flukepro/components/cons.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../../components/bottomNav.dart';
-
-import '../../components/cons.dart';
 
 import '../../components/visitorEventprev.dart';
 import '../../utils/fireStoreQueries.dart';
-import '../OrganizersScreens/Sections/ongoingEvents.dart';
+
+final _auth = FirebaseAuth.instance;
 
 class profile extends StatelessWidget {
   @override
@@ -68,7 +67,7 @@ class profile extends StatelessWidget {
                       child: Column(
                         children: [
                           Text(
-                            "  عبد السلام المقلش",
+                            _auth.currentUser!.displayName.toString(),
                             textAlign: TextAlign.center,
                             style: conHeadingsStyle.copyWith(
                                 color: Color(0xFFffffff), fontSize: 20),
@@ -123,8 +122,8 @@ class profile extends StatelessWidget {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 15.0),
-                                  child: visitorEventPrev(
-                                      eventData['title'], eventData['image']),
+                                  child: visitorEventPrev(eventData['title'],
+                                      eventData['image'].toString()),
                                 );
                               },
                               itemCount: snapshot.data?.length,

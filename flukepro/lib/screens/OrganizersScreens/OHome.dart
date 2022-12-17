@@ -224,17 +224,6 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
               isCollapsed = !isCollapsed;
             });
           }, '/Onotification', context),
-          menuNavs(Icons.person, 'الملف شخصي ', () {
-            setState(() {
-              pageIndex = 3;
-              defaultTargetPlatform == TargetPlatform.android ||
-                      defaultTargetPlatform == TargetPlatform.iOS &&
-                          !isCollapsed
-                  ? _controller!.reverse()
-                  : _controller!.forward();
-              isCollapsed = !isCollapsed;
-            });
-          }, '/Oprofile', context),
           SizedBox(
             height: 220,
           ),
@@ -258,7 +247,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                     color: Colors.white,
                     onPressed: () {
                       _auth.signOut();
-                      Navigator.pushNamed(context, '/task');
+                      Navigator.pushNamed(context, '/log');
                     })
               ],
             ),
