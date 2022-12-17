@@ -149,10 +149,10 @@
       "name": "adminpannel",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "2.18"
     }
   ],
-  "generated": "2022-12-10T00:58:35.342607Z",
+  "generated": "2022-12-17T19:45:00.049768Z",
   "generator": "pub",
   "generatorVersion": "2.19.0-255.2.beta"
 }
