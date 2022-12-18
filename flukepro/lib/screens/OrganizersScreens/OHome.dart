@@ -77,58 +77,53 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
     return Scaffold(
       backgroundColor: conBlue,
       resizeToAvoidBottomInset: false,
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
-            children: [
-              menu(context),
-              Dashboard(context),
-              AddButton(
-                txt: '+',
-                onTap: () {
-                  setState(() {
-                    showCreating = !showCreating;
-                    print(showCreating);
-                  });
+      body: Stack(
+        children: [
+          menu(context),
+          Dashboard(context),
+          AddButton(
+            txt: '+',
+            onTap: () {
+              setState(() {
+                showCreating = !showCreating;
+                print(showCreating);
+              });
 
-                  // showCreation();
-                },
-              ),
-              Visibility(
-                visible: showCreating,
-                child: AddEventButton(
-                  txt: "إنشاء حدث",
-                  onTap: () {
-                    showModalBottomSheet(
-                      isScrollControlled: true,
-                      elevation: 100,
-                      context: context,
-                      builder: (context) => creatingEvent(),
-                    );
-
-                    setState(() {});
-                  },
-                ),
-              ),
-              Visibility(
-                visible: showCreating,
-                child: Transform.translate(
-                  offset: Offset(20, 0),
-                  child: Container(
-                    margin: EdgeInsets.symmetric(
-                      vertical: size.height * 0.07,
-                    ),
-                    child: AddEventButton(
-                      txt: "إنشاء أجندة",
-                      onTap: () {},
-                    ),
-                  ),
-                ),
-              ) //TODO edit the add button
-            ], // جزئين رئيسيين والي هما المينيو الجانبية و"الداش بورد" مقصود بيها الصفحة البيضا الي نحطو عليها في المكونات التانية
+              // showCreation();
+            },
           ),
-        ),
+          Visibility(
+            visible: showCreating,
+            child: AddEventButton(
+              txt: "إنشاء حدث",
+              onTap: () {
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  elevation: 100,
+                  context: context,
+                  builder: (context) => creatingEvent(),
+                );
+
+                setState(() {});
+              },
+            ),
+          ),
+          Visibility(
+            visible: showCreating,
+            child: Transform.translate(
+              offset: Offset(20, 0),
+              child: Container(
+                margin: EdgeInsets.symmetric(
+                  vertical: size.height * 0.07,
+                ),
+                child: AddEventButton(
+                  txt: "إنشاء أجندة",
+                  onTap: () {},
+                ),
+              ),
+            ),
+          ) //TODO edit the add button
+        ], // جزئين رئيسيين والي هما المينيو الجانبية و"الداش بورد" مقصود بيها الصفحة البيضا الي نحطو عليها في المكونات التانية
       ),
     );
   }
@@ -143,7 +138,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
           ),
           Padding(
             padding:
-                EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.03),
+                EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04),
             child: Row(
               children: [
                 Column(
@@ -229,22 +224,12 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
               isCollapsed = !isCollapsed;
             });
           }, '/Onotification', context),
-          menuNavs(Icons.person, 'الملف شخصي ', () {
-            setState(() {
-              pageIndex = 3;
-              defaultTargetPlatform == TargetPlatform.android ||
-                      defaultTargetPlatform == TargetPlatform.iOS &&
-                          !isCollapsed
-                  ? _controller!.reverse()
-                  : _controller!.forward();
-              isCollapsed = !isCollapsed;
-            });
-          }, '/Oprofile', context),
           SizedBox(
             height: 220,
           ),
           Expanded(
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.01,
@@ -262,7 +247,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                     color: Colors.white,
                     onPressed: () {
                       _auth.signOut();
-                      Navigator.pushNamed(context, '/task');
+                      Navigator.pushNamed(context, '/log');
                     })
               ],
             ),
@@ -277,7 +262,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
     //ويدجيت خاصة بعناصر المينو
     return Padding(
       padding: EdgeInsets.only(
-          left: MediaQuery.of(context).size.width * .03, top: 30),
+          left: MediaQuery.of(context).size.width * .07, top: 30),
       child: InkWell(
           onTap: () => callback(),
           child: Row(
@@ -408,11 +393,11 @@ class _AddEventButtonState extends State<AddEventButton> {
         margin: EdgeInsets.symmetric(
             vertical: defaultTargetPlatform == TargetPlatform.android ||
                     defaultTargetPlatform == TargetPlatform.iOS
-                ? size.height * 0.0800
+                ? size.height * 0.0700
                 : size.height * 0.090,
             horizontal: defaultTargetPlatform == TargetPlatform.android ||
                     defaultTargetPlatform == TargetPlatform.iOS
-                ? size.height * 0.0990
+                ? size.height * 0.0900
                 : size.width * 0.080),
         child: InkWell(
           onTap: () => widget.onTap(),
@@ -424,7 +409,7 @@ class _AddEventButtonState extends State<AddEventButton> {
           ),
         ),
         decoration: BoxDecoration(
-          color: conORange.withOpacity(.9),
+          color: conORange,
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20),
             bottomRight: Radius.circular(0),

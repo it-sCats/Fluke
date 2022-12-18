@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../OrganizersRequests/requestsList.dart';
 import '../../components/bottomNav.dart';
 import '../../utils/authentication.dart';
+import '../OrganizersScreens/Sections/VisitorFeedSection.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -41,67 +42,48 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
-        reverse: true,
-        child: Padding(
-          padding: const EdgeInsets.all(35.0),
+        physics: AlwaysScrollableScrollPhysics(),
+        child: Container(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              TextFormField(
-                textAlign: TextAlign.right,
-                decoration: new InputDecoration(
-                  hintText: "...ابحث عن أحداث",
-                  hintStyle: conTxtFeildHint,
-                  prefixIcon: new Icon(Icons.search),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    borderSide: BorderSide(
-                      color: Colors.grey,
+              Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: TextFormField(
+                  textAlign: TextAlign.right,
+                  decoration: InputDecoration(
+                    hintText: "...ابحث عن أحداث",
+                    hintStyle: conTxtFeildHint,
+                    prefixIcon: new Icon(Icons.search),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 155, 5, 33)),
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide:
-                        BorderSide(color: Color.fromARGB(255, 155, 5, 33)),
-                  ),
                 ),
               ),
               SizedBox(
-                height: 24,
+                height: 20,
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
-                  "الأحداث الأكثر تداولا",
-                  textAlign: TextAlign.right,
-                  style: conHeadingsStyle.copyWith(
-                    fontSize: 20,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              // eventList(evento)
-              SizedBox(
-                height: 10,
-              ),
-
               Container(
-                  padding: EdgeInsets.all(25),
-                  margin: EdgeInsets.only(bottom: 10),
                   child: GridView.count(
-                    physics: NeverScrollableScrollPhysics(),
-                    crossAxisCount: 1,
-                    shrinkWrap: true,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 30,
-                    children: [
-                      dashboardSection('الأحداث الأكثر تداولا ', getOngoing()),
-                      dashboardSection('لأحداث الأكثر تداول', getOngoing()),
-                    ],
-                  )),
+                physics: NeverScrollableScrollPhysics(),
+                crossAxisCount: 1,
+                shrinkWrap: true,
+                crossAxisSpacing: 20,
+                mainAxisSpacing: 30,
+                children: [
+                  dashboardSection('الأحداث الأكثر تداولا ', getAllEvents()),
+                  VisitorFeedSection('أحداث تهمك', getAllEvents()),
+                ],
+              )),
             ],
           ),
         ),

@@ -15,7 +15,7 @@ class interestsSelection extends StatefulWidget {
 class _interestsSelectionState extends State<interestsSelection> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
-
+  bool isErrored = false;
   List<String> interesets = [
     'المجال الطبي',
     'برمجة',
@@ -33,7 +33,7 @@ class _interestsSelectionState extends State<interestsSelection> {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Set;
-    final userId=_auth.currentUser!.uid;
+    final userId = _auth.currentUser!.uid;
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
@@ -44,56 +44,67 @@ class _interestsSelectionState extends State<interestsSelection> {
               top: MediaQuery.of(context).size.height / 10,
             ),
             child: Align(
-                alignment: Alignment.topRight,
-                child: Column(children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 60.0),
-                    child: Text(
-                      'شاركنا بمجالك أو المجال \nالذي يهمك',
-                      textAlign: TextAlign.right,
-                      style: conHeadingsStyle,
-                    ),
-                  ),
-                  Text(
-                    'لنوفر لك تجربة استخدام افضل',
-                    textDirection: TextDirection.rtl,
-                    textAlign: TextAlign.right,
-                    style: conOnboardingText.copyWith(color: conBlack),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(18.0),
-                    child: multiSelectChip(
-                      interesets,
-                      onSelectionChanged: (selectedList) {
-                        setState(() {
-                          selectedinterestes = selectedList;
-                        });
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height / 5,
-                  ),
-                  CTA(txt: 'حفظ',isFullwidth:  true,onTap: () {
+                alignment: Alignment.center,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'شاركنا بمجالك أو المجال \nالذي يهمك',
+                        textAlign: TextAlign.center,
+                        style: conHeadingsStyle,
+                      ),
+                      Text(
+                        'لنوفر لك تجربة استخدام افضل',
+                        textDirection: TextDirection.rtl,
+                        textAlign: TextAlign.center,
+                        style: conOnboardingText.copyWith(color: conBlack),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: multiSelectChip(
+                          interesets,
+                          onSelectionChanged: (selectedList) {
+                            setState(() {
+                              selectedinterestes = selectedList;
+                            });
+                          },
+                        ),
+                      ),
+                      Center(
+                        child: Visibility(
+                          visible: isErrored,
+                          child: Text(
+                            'يجب أن تختار إهتمامتك قبل الانتقال للصفحة التانية',
+                            style: conErorTxtStyle,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 5,
+                      ),
+                      CTA(
+                          txt: 'حفظ',
+                          isFullwidth: true,
+                          onTap: () {
+                            if (selectedinterestes.isEmpty) {
+                              setState(() {
+                                isErrored = true;
+                              });
+                            } else {
+                              _firestore
+                                  .collection('users')
+                                  .doc(userId)
+                                  .update({'interests': selectedinterestes});
 
-                    if (args.elementAt(0) == 0) {
-
-                       _firestore.collection('users').doc('visitors')
-                          .collection('visitor') .doc(userId)
-                          .update({'interests': selectedinterestes});
-                    } else if (args.elementAt(0) == 2) {
-
-                      _firestore.collection('users').doc('visitors')
-                          .collection('visitor') .doc(userId)
-                          .update({'interests': selectedinterestes});
-                    }
-                    Navigator.pushNamed(context, '/redirect');
-                    // Navigator.pushNamed(context, '/home');
-                  })
-                ])),
+                              Navigator.pushNamed(context, '/redirect');
+                            }
+                            // Navigator.pushNamed(context, '/home');
+                          })
+                    ])),
           ),
         ),
       ),

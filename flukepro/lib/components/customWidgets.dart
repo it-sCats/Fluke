@@ -36,6 +36,38 @@ class CTA extends StatelessWidget {
   }
 }
 
+class halfCTA extends StatelessWidget {
+  halfCTA({required this.txt, required this.onTap});
+  final String txt;
+
+  Function onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return InkWell(
+      onTap: () => onTap(),
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 15),
+        width: 230,
+        height: 60,
+        margin: EdgeInsets.symmetric(vertical: size.height * 0.02),
+        child: Text(
+          txt,
+          textAlign: TextAlign.center,
+          style: conCTATxt.copyWith(fontSize: 17),
+        ),
+        decoration: BoxDecoration(
+          color: conORange,
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class AgendaTextButton extends StatelessWidget {
   bool visibale = false;
   AgendaTextButton(
@@ -74,16 +106,16 @@ class AddButton extends StatelessWidget {
         child: Container(
           width: defaultTargetPlatform == TargetPlatform.android ||
                   defaultTargetPlatform == TargetPlatform.iOS
-              ? 85
+              ? 60
               : 70,
-          height: 85,
+          height: 60,
           margin: EdgeInsets.symmetric(
               vertical: size.height * 0.04, horizontal: size.width * 0.02),
           child: Text(
             txt,
             textAlign: TextAlign.center,
             style:
-                conCTATxt.copyWith(fontSize: 37, fontWeight: FontWeight.w200),
+                conCTATxt.copyWith(fontSize: 28, fontWeight: FontWeight.w200),
           ),
           decoration: BoxDecoration(
             color: conORange,

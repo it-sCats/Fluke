@@ -93,7 +93,11 @@ class _GoogleAndFacebookButtonsState extends State<GoogleAndFacebookButtons> {
                 //if particepant
                 //2 is for participants
                 if (await isUniqueID(user!.uid)) {
-                  await _firestore.collection('users').doc(user!.uid);
+                  await _firestore.collection('users').doc(user!.uid).set({
+                    'email': user.email,
+                    'name': user.displayName,
+                    'userType': 0
+                  });
                   Navigator.pushNamed(
                     context,
                     interestsSelection.routeName,
@@ -104,7 +108,7 @@ class _GoogleAndFacebookButtonsState extends State<GoogleAndFacebookButtons> {
                       await _firestore.collection('users').doc(user!.uid).get();
                   snap['userType'] == 1
                       ? Navigator.pushNamed(context, 'OHome')
-                      : Navigator.pushNamed(context, '/home');
+                      : Navigator.pushNamed(context, 'base');
                 }
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
