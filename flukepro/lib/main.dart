@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
             ResponsiveBreakpoint.resize(1000, name: DESKTOP),
           ],
           background: Container(color: Color(0xFFF5F5F5))),
-      home: loginScreen(),
+      home: base(),
       debugShowCheckedModeBanner:
           false, //to remove debugging banner at the top of the screen
 
