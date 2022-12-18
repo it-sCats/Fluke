@@ -51,7 +51,7 @@ class eventList extends StatelessWidget {
                     return event(
                         //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
 
-                        title: eventData['tilte'],
+                        title: eventData['title'],
                         image: eventData['image'],
                         description: eventData['description'],
                         field: eventData['field'],

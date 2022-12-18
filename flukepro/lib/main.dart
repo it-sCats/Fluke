@@ -51,10 +51,7 @@ class MyApp extends StatelessWidget {
           ],
           background: Container(color: Color(0xFFF5F5F5))),
       home: base(),
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
       debugShowCheckedModeBanner:
           false, //to remove debugging banner at the top of the screen
 
