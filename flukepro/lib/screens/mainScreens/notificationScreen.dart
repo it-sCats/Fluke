@@ -1,6 +1,21 @@
 import 'package:flukepro/components/cons.dart';
 import 'package:flutter/material.dart';
+//trying some thing
+// class Visibility_ extends StatelessWidget {
 
+//   @override
+// _VisibilityState createState() {
+//       return _VisibilityState();
+//     }
+// }
+// class _VisibilityState extends StatelessWidget {
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container();
+//   }
+// }
+// //trying some thing
 class notifiScreen extends StatelessWidget {
   const notifiScreen({Key? key}) : super(key: key);
 
