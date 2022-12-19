@@ -32,7 +32,7 @@ class _notifiScreenState extends State<notifiScreen> {
           ),
           InkWell(
             child: Container(
-              height: isVisible ? 180 : 110,
+              height: isVisible ? 200 : 150,
               padding: EdgeInsets.symmetric(vertical: 10),
               // height: 150,
               decoration: BoxDecoration(
@@ -86,22 +86,20 @@ class _notifiScreenState extends State<notifiScreen> {
                           Text(
                             "منذ عشرة دقائق",
                             style: conLittelTxt12.copyWith(
-                                color: Color(0xff676767), fontSize: 8),
+                                color: Color(0xff676767), fontSize: 10),
                           )
                         ],
                       ), //this row for date
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 5),
+                    padding: const EdgeInsets.only(left: 10, right: 10),
                     child: CircleAvatar(
                       //Avatar
                       backgroundColor: Color(0xff).withOpacity(0),
-                      radius: 70,
-                      child: Image.asset(
-                        'images/TechEventCo.png',
-                        fit: BoxFit.contain,
-                      ),
+                      radius: 50,
+                      backgroundImage: NetworkImage(
+                          'https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=45&dpr=2&s=none'),
                     ),
                   )
                 ],
@@ -120,80 +118,80 @@ class _notifiScreenState extends State<notifiScreen> {
 }
 
 //  child: Container(
-          // child: Column(
-          //   children: [
-          //     Padding(
-          //       padding: const EdgeInsets.all(30),
-          //       child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.end,
-              //     children: [
-              //       Text(
-              //         "إشعارات",
-              //         style: conHeadingsStyle,
-              //         textAlign: TextAlign.right,
-              //       )
-              //     ],
-              //   ),
-              // ),
-              // InkWell(
-              //   child: Container(
-              //     decoration: BoxDecoration(
-              //       // color: Color(0xffB2C6E4),
-              //       color: Color(0xffffffff),
-              //     ),
-              //     child: Row(
-              //       children: [
-              //         Expanded(
-              //           flex: 3,
-              //           child: Column(
-              //             crossAxisAlignment: CrossAxisAlignment.end,
-              //             children: [
-              //               Text(
-                            //   "معرض التقنية",
-                            //   style: conHeadingsStyle,
-                            //   textAlign: TextAlign.right,
-                            // ),
-                            // Text(
-                            //   "سيقام معرض التقنية  بتاريخ 14-11-2022",
-                            //   style: conLittelTxt12,
-                            //   textAlign: TextAlign.right,
-                            // ),
-                            // // Row(
-                            // //   children: [
-                            // // halfCTA(txt: "عرض الحدث", onTap: () {}),
-                            // //     SizedBox(width: 10),
-                            // //     halfCTA(txt: "عرض الحدث", onTap: () {}),
-                            // //   ],
-                            // // ),
-                            // Text(
-                            //   "منذ عشرة من الدقائق",
-                            //   style: conLittelTxt12.copyWith(
-                            //       fontSize: 10, color: Colors.black38),
-                            //   textAlign: TextAlign.right,
-                            // ),
-                            // SizedBox(height: 10),
-      //                     ],
-      //                   ),
-      //                 ),
-      //                 // Visibility(child: child),
-      //                 Expanded(
-      //                   flex: 1,
-      //                   child: CircleAvatar(
-      //                     //Avatar
-      //                     backgroundColor: Color(0xff).withOpacity(0),
-      //                     radius: 50,
-      //                     child: Image.asset(
-      //                       'images/avatar.png',
-      //                       fit: BoxFit.contain,
-      //                     ),
-      //                   ),
-      //                 ),
-      //               ],
-      //             ),
-      //           ),
-      //           onTap: () {},
-      //         ),
-      //       ],
-      //     ),
-      //   ),
-      // ),
+// child: Column(
+//   children: [
+//     Padding(
+//       padding: const EdgeInsets.all(30),
+//       child: Row(
+//     mainAxisAlignment: MainAxisAlignment.end,
+//     children: [
+//       Text(
+//         "إشعارات",
+//         style: conHeadingsStyle,
+//         textAlign: TextAlign.right,
+//       )
+//     ],
+//   ),
+// ),
+// InkWell(
+//   child: Container(
+//     decoration: BoxDecoration(
+//       // color: Color(0xffB2C6E4),
+//       color: Color(0xffffffff),
+//     ),
+//     child: Row(
+//       children: [
+//         Expanded(
+//           flex: 3,
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.end,
+//             children: [
+//               Text(
+//   "معرض التقنية",
+//   style: conHeadingsStyle,
+//   textAlign: TextAlign.right,
+// ),
+// Text(
+//   "سيقام معرض التقنية  بتاريخ 14-11-2022",
+//   style: conLittelTxt12,
+//   textAlign: TextAlign.right,
+// ),
+// // Row(
+// //   children: [
+// // halfCTA(txt: "عرض الحدث", onTap: () {}),
+// //     SizedBox(width: 10),
+// //     halfCTA(txt: "عرض الحدث", onTap: () {}),
+// //   ],
+// // ),
+// Text(
+//   "منذ عشرة من الدقائق",
+//   style: conLittelTxt12.copyWith(
+//       fontSize: 10, color: Colors.black38),
+//   textAlign: TextAlign.right,
+// ),
+// SizedBox(height: 10),
+//                     ],
+//                   ),
+//                 ),
+//                 // Visibility(child: child),
+//                 Expanded(
+//                   flex: 1,
+//                   child: CircleAvatar(
+//                     //Avatar
+//                     backgroundColor: Color(0xff).withOpacity(0),
+//                     radius: 50,
+//                     child: Image.asset(
+//                       'images/avatar.png',
+//                       fit: BoxFit.contain,
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//           onTap: () {},
+//         ),
+//       ],
+//     ),
+//   ),
+// ),
