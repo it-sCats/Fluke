@@ -67,7 +67,8 @@ class profile extends StatelessWidget {
                       child: Column(
                         children: [
                           Text(
-                            _auth.currentUser!.displayName.toString(),
+                            // _auth.currentUser!.displayName.toString(),
+                            "الاسم",
                             textAlign: TextAlign.center,
                             style: conHeadingsStyle.copyWith(
                                 color: Color(0xFFffffff), fontSize: 20),
