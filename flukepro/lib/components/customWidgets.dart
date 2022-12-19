@@ -304,3 +304,72 @@ class CancleButton extends StatelessWidget {
     );
   }
 }
+
+//this CTA for notifications and accept and descard
+
+class CTAshowEvent extends StatelessWidget {
+  CTAshowEvent(
+      {required this.txt, required this.isFullwidth, required this.onTap});
+  final String txt;
+  final bool isFullwidth;
+  Function onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return InkWell(
+      onTap: () => onTap(),
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 5),
+        width: isFullwidth ? 290 : 120,
+        height: 40,
+        margin: EdgeInsets.symmetric(vertical: size.height * 0.02),
+        child: Text(
+          txt,
+          textAlign: TextAlign.center,
+          style: conCTATxt.copyWith(fontSize: 13),
+        ),
+        decoration: BoxDecoration(
+          color: conORange,
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CTAsdelEvent extends StatelessWidget {
+  CTAsdelEvent(
+      {required this.txt, required this.isFullwidth, required this.onTap});
+  final String txt;
+  final bool isFullwidth;
+  Function onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return InkWell(
+      onTap: () => onTap(),
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 5),
+        width: isFullwidth ? 290 : 120,
+        height: 40,
+        margin: EdgeInsets.symmetric(vertical: size.height * 0.02),
+        child: Text(
+          txt,
+          textAlign: TextAlign.center,
+          style: conCTATxt.copyWith(fontSize: 13, color: Color(0xff676767)),
+        ),
+        decoration: BoxDecoration(
+          border: Border.all(width: 1, color: Colors.black.withOpacity(.1)),
+          color: Color(0xffffffff),
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+      ),
+    );
+  }
+}

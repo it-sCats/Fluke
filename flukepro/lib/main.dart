@@ -40,18 +40,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      builder: (context, child) => ResponsiveWrapper.builder(child,
-          maxWidth: 3000,
-          minWidth: 1000,
-          defaultScale: true,
-          breakpoints: [
-            ResponsiveBreakpoint.resize(480, name: MOBILE),
-            ResponsiveBreakpoint.autoScale(800, name: TABLET),
-            ResponsiveBreakpoint.resize(1000, name: DESKTOP),
-          ],
-          background: Container(color: Color(0xFFF5F5F5))),
+      title: "Fluke",
+      builder: (context, child) => ResponsiveWrapper.builder(
+        child,
+        maxWidth: 3000,
+        minWidth: 1000,
+        defaultScale: true,
+        breakpoints: [
+          ResponsiveBreakpoint.resize(480, name: MOBILE),
+          ResponsiveBreakpoint.autoScale(800, name: TABLET),
+          ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+        ],
+        background: Container(
+          color: Color(0xFFF5F5F5),
+        ),
+      ),
 
-      home: Ohome(),
+      home: base(),
       debugShowCheckedModeBanner:
           false, //to remove debugging banner at the top of the screen
 
