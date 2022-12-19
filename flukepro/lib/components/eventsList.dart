@@ -77,13 +77,17 @@ class eventList extends StatelessWidget {
                             elevation: 100,
                             context: context,
                             builder: (context) => eventDisplay(
+                                id: eventData['id'],
                                 title: eventData['title'],
                                 description: eventData['description'],
                                 starterDate: eventData['starterDate'],
+                                location: eventData['location'],
+                                image: eventData['image'],
                                 endDate: eventData['endDate'],
                                 starterTime: eventData['starterTime'],
                                 endTime: eventData['endTime'],
                                 creationDate: eventData['creationDate'],
+                                city: eventData['eventCity'],
                                 acceptsParticapants:
                                     eventData['acceptsParticapants'],
                                 eventVisibilty: eventData['eventVisibility']),
