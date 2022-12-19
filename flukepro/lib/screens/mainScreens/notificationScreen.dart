@@ -1,22 +1,9 @@
-<<<<<<< Updated upstream
-=======
 import 'package:flukepro/components/cons.dart';
 import 'package:flutter/foundation.dart';
->>>>>>> Stashed changes
 import 'package:flutter/material.dart';
 
 import '../../components/customWidgets.dart';
 
-<<<<<<< Updated upstream
-class notifiScreen extends StatelessWidget {
-  const notifiScreen({Key? key}) : super(key: key);
-=======
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container();
-//   }
-// }
-// //trying some thing
 class notifiScreen extends StatefulWidget {
   @override
   State<notifiScreen> createState() => _notifiScreenState();
@@ -24,7 +11,6 @@ class notifiScreen extends StatefulWidget {
 
 class _notifiScreenState extends State<notifiScreen> {
   bool isVisible = false;
->>>>>>> Stashed changes
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +32,6 @@ class _notifiScreenState extends State<notifiScreen> {
           ),
           InkWell(
             child: Container(
-<<<<<<< Updated upstream
-              padding: EdgeInsets.symmetric(vertical: 10),
-              height: 150,
-              decoration: BoxDecoration(
-                // color: Color(0xffB2C6E4),
-                color: Color.fromARGB(255, 166, 147, 220),
-=======
               height: isVisible ? 180 : 110,
               padding: EdgeInsets.symmetric(vertical: 10),
               // height: 150,
@@ -61,7 +40,6 @@ class _notifiScreenState extends State<notifiScreen> {
                 color: isVisible
                     ? Color(0xffffffff)
                     : Color(0xffB2C6E4).withOpacity(.70),
->>>>>>> Stashed changes
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -74,24 +52,6 @@ class _notifiScreenState extends State<notifiScreen> {
                         style: conHeadingsStyle.copyWith(fontSize: 18),
                         textAlign: TextAlign.right,
                       ),
-<<<<<<< Updated upstream
-                      Text(
-                        "سيقام معرض التقنية  بتاريخ 14-11-2022",
-                        style: conHeadingsStyle.copyWith(fontSize: 15),
-                        textAlign: TextAlign.right,
-                      ), //this row is for the event name pic and title
-                      Row(), //this row is for the heddin btns
-                      Row(), //this row for date
-                    ],
-                  ),
-                  CircleAvatar(
-                    //Avatar
-                    backgroundColor: Color(0xff).withOpacity(0),
-                    radius: 50,
-                    child: Image.asset(
-                      'images/avatar.png',
-                      fit: BoxFit.contain,
-=======
                       Padding(
                         padding: isVisible
                             ? const EdgeInsets.only(bottom: 0)
@@ -142,20 +102,16 @@ class _notifiScreenState extends State<notifiScreen> {
                         'images/TechEventCo.png',
                         fit: BoxFit.contain,
                       ),
->>>>>>> Stashed changes
                     ),
                   )
                 ],
               ),
             ),
-<<<<<<< Updated upstream
-=======
             onTap: () {
               setState(() {
                 isVisible = !isVisible;
               });
             },
->>>>>>> Stashed changes
           ),
         ],
       ),
