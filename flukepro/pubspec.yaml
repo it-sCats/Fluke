@@ -51,6 +51,7 @@ dependencies:
   intl: ^0.17.0
   responsive_framework: ^0.2.0
   image_picker: ^0.8.6
+  url_launcher: ^6.1.7
 
 
 

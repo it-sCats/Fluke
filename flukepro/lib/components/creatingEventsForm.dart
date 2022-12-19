@@ -324,6 +324,16 @@ class _creatingEventState extends State<creatingEvent> {
                           child: Container(
                             margin: EdgeInsets.symmetric(vertical: 10),
                             child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'الرجاء إدخال تاريخ الحدث';
+                                } else if (starterDate.compareTo(endDate) >=
+                                    0) {
+                                  return 'تأ:د من صحة تاريخ النهاية';
+                                }
+
+                                return null;
+                              },
                               controller: endDateCont,
                               onTap: () async {
                                 DateTime? pickedDate = await showDatePicker(
@@ -769,6 +779,7 @@ class _creatingEventState extends State<creatingEvent> {
                                     'eventVisibility': true,
                                     'creationDate': Timestamp.now()
                                   });
+
                                   if (event == null) {
                                     isLoading = false;
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -782,6 +793,9 @@ class _creatingEventState extends State<creatingEvent> {
                                       )),
                                     );
                                   } else {
+                                    await eventRef
+                                        .doc(event.id)
+                                        .update({'id': event.id});
                                     isLoading = false;
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
