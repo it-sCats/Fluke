@@ -1,14 +1,38 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flukepro/components/cons.dart';
+import 'package:flukepro/screens/mainScreens/userInfoScreen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
+import '../../components/QrCodeWidget.dart';
 import '../../components/visitorEventprev.dart';
 import '../../utils/fireStoreQueries.dart';
 
 final _auth = FirebaseAuth.instance;
+final _firestore = FirebaseFirestore.instance;
+Map<String, dynamic>? userInfo;
 
-class profile extends StatelessWidget {
+class profile extends StatefulWidget {
+  @override
+  State<profile> createState() => _profileState();
+}
+
+class _profileState extends State<profile> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUser();
+  }
+
+  getUser() async {
+    final user =
+        await _firestore.collection('users').doc(_auth.currentUser!.uid).get();
+    userInfo = user.data();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -88,6 +112,7 @@ class profile extends StatelessWidget {
               ),
               Expanded(
                 child: Container(
+                  width: double.maxFinite,
                   padding: EdgeInsets.only(top: 30),
                   // color: Color.fromARGB(255, 255, 255, 255),
                   decoration: BoxDecoration(
@@ -120,12 +145,17 @@ class profile extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 var eventData = snapshot.data![index];
 
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15.0),
-                                  child: visitorEventPrev(eventData['title'],
-                                      eventData['image'].toString()),
-                                );
+                                return visitorEventPrev(
+                                    eventData['id'],
+                                    eventData['title'],
+                                    userInfo!['name'],
+                                    userInfo!['phone'],
+                                    QrImage(
+                                        padding: EdgeInsets.all(1),
+                                        size: 60,
+                                        data: '${userInfo!['name']},\n' +
+                                            '${userInfo!['phone']}\n' +
+                                            '${eventData!['title']}\n'));
                               },
                               itemCount: snapshot.data?.length,
                             );
