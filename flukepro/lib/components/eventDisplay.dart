@@ -2,13 +2,16 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flukepro/components/visitorEventprev.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'cons.dart';
 import 'customWidgets.dart';
 
 final _firestore = FirebaseFirestore.instance;
 final _Auth = FirebaseAuth.instance;
+bool isLoading = false;
 
 class eventDisplay extends StatefulWidget {
   String id;
@@ -55,6 +58,62 @@ class eventDisplay extends StatefulWidget {
 
 class _eventDisplayState extends State<eventDisplay>
     with TickerProviderStateMixin {
+  registerVisitor(eventID, context, title) async {
+    User? user = await _Auth.currentUser;
+
+    final userInfo = await _firestore.collection('users').doc(user!.uid).get();
+
+    final userInfoDoc = userInfo.data();
+
+    final vistors = _firestore //checks if user aleadry registered
+        .collection('events')
+        .doc(eventID.toString().trim())
+        .collection('visitors')
+        .doc(user!.uid)
+        .get();
+    if (vistors == null) {
+      //in case no documents were returned which means user is not registered then register user
+      final vistors0 = _firestore
+          .collection('events')
+          .doc(eventID.toString().trim())
+          .collection('visitors')
+          .doc(user!.uid)
+          .set({
+        'email': user.email,
+        'phone': userInfoDoc!['phone'],
+        'name': userInfoDoc!['name']
+      }).whenComplete(() {
+        setState(() {
+          isLoading = true;
+        });
+        showModalBottomSheet(
+          isScrollControlled: true,
+          elevation: 100,
+          context: context,
+          builder: (context) => Qrwidget(
+            userInfoDoc!['name'],
+            userInfoDoc!['phone'],
+            title,
+          ),
+        ).whenComplete(() {
+          setState(() {
+            isLoading = false;
+          });
+        });
+      });
+    } else {
+      showModalBottomSheet(
+        isScrollControlled: true,
+        elevation: 100,
+        context: context,
+        builder: (context) =>
+            Qrwidget(userInfoDoc!['name'], userInfoDoc!['phone'], title),
+      );
+      // showQr();
+
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     TabController _tabCont = TabController(length: 2, vsync: this);
@@ -306,31 +365,35 @@ class _eventDisplayState extends State<eventDisplay>
               ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              InkWell(
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  decoration: BoxDecoration(
-                      border:
-                          Border.all(color: conBlue.withOpacity(.5), width: 2),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Text(
-                    ' التسجيل كمشارك',
-                    style: conTxtFeildHint.copyWith(
-                        color: conBlue.withOpacity(.7), fontSize: 18),
-                  ),
-                ),
-                onTap: () async {},
-              ),
-              halfCTA(
-                  txt: ' التسجيل كزائر',
-                  onTap: () async {
-                    await registerVisitor(widget.id);
-                  }),
-            ],
-          )
+          isLoading
+              ? CircularProgressIndicator()
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    InkWell(
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: conBlue.withOpacity(.5), width: 2),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          ' التسجيل كمشارك',
+                          style: conTxtFeildHint.copyWith(
+                              color: conBlue.withOpacity(.7), fontSize: 18),
+                        ),
+                      ),
+                      onTap: () async {},
+                    ),
+                    halfCTA(
+                        txt: ' التسجيل كزائر',
+                        onTap: () async {
+                          await registerVisitor(
+                              widget.id, context, widget.title);
+                        }),
+                  ],
+                )
         ],
       ),
     ));
@@ -358,34 +421,36 @@ class EventInfo extends StatelessWidget {
   }
 }
 
-registerVisitor(eventID) async {
-  User? user = await _Auth.currentUser;
+class Qrwidget extends StatelessWidget {
+  String name;
+  String phone;
+  String eventName;
+  Qrwidget(this.name, this.phone, this.eventName);
 
-  final userInfo = await _firestore.collection('users').doc(user!.uid).get();
-
-  final userInfoDoc = userInfo.data();
-
-  final vistors = _firestore //checks if user aleadry registered
-      .collection('events')
-      .doc(eventID.toString().trim())
-      .collection('visitors')
-      .doc(user!.uid)
-      .get();
-  if (vistors == null) {
-    //in case no documents were returned which means user is not registered then register user
-    final vistors0 = _firestore
-        .collection('events')
-        .doc(eventID.toString().trim())
-        .collection('visitors')
-        .doc(user!.uid)
-        .set({
-      'email': user.email,
-      'phone': userInfoDoc!['phone'],
-      'name': userInfoDoc!['name']
-    }).whenComplete(() => print('done'));
-  } else {
-    print('already regersted');
-    // showQr();
-
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(10),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            QrImage(
+                data: '$eventName\n' + '$name \n' + '$phone\n',
+                padding: EdgeInsets.all(50)),
+            Text(
+              "أظهر هذا الرمز يوم المعرض",
+              style: conHeadingsStyle.copyWith(fontSize: 15),
+            ),
+            CTA(
+              txt: "عرض الحدث",
+              isFullwidth: false,
+              onTap: () {},
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

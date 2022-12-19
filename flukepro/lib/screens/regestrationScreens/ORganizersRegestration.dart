@@ -174,6 +174,10 @@ class _organizersRegistrationScreenState
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'الرجاء إدخال البيانات المطلوبة';
+                      } else {
+                        if (phoneNum!.trim().length < 10) {
+                          return 'رقم الهاتف يتكون من عشرة ارقام';
+                        }
                       }
                       return null;
                     },

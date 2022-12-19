@@ -22,7 +22,7 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
   final _firestore = FirebaseFirestore.instance;
 
   String name = '';
-
+  String? phoneNum;
   String? email;
   String? password;
 
@@ -270,6 +270,46 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
                                             : Colors.green),
                             borderRadius: BorderRadius.circular(25)))),
               ),
+              SizedBox(
+                width: 290,
+                height: 70,
+                child: TextFormField(
+                    style: TextStyle(
+                        fontSize: 15, fontFamily: 'Cairo', color: conBlack),
+                    onChanged: (value) {
+                      phoneNum = value;
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'الرجاء إدخال البيانات المطلوبة';
+                      } else {
+                        if (phoneNum!.trim().length < 10) {
+                          return 'رقم الهاتف يتكون من عشرة ارقام';
+                        }
+                      }
+                      return null;
+                    },
+                    textDirection: TextDirection.rtl,
+                    textAlign: TextAlign.right,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        labelStyle: conTxtFeildHint,
+                        hintText: 'رقم الهاتف',
+                        focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 2, color: conRed),
+                            borderRadius: BorderRadius.circular(25)),
+                        errorStyle: TextStyle(
+                            fontFamily: 'Cairo', fontSize: 12, color: conRed),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 25),
+                        hintStyle: conTxtFeildHint,
+                        enabledBorder: roundedTxtFeild,
+                        errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 2, color: conRed),
+                            borderRadius: BorderRadius.circular(25)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: conBlack),
+                            borderRadius: BorderRadius.circular(25)))),
+              ),
               Visibility(
                 visible: LogInError,
                 child: Text(
@@ -330,7 +370,8 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
                                     .set({
                               "email": user.email,
                               "name": name.toString(),
-                              "userType": 0
+                              "userType": 0,
+                              "phone": phoneNum.toString()
                             }) // create documentID with userID
                                 ;
                             print(user.displayName);
@@ -347,7 +388,8 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
                                 .set({
                               "email": user.email,
                               "name": user.displayName,
-                              "userType": 2
+                              "userType": 2,
+                              "phone": phoneNum.toString()
                             });
                             Navigator.pushNamed(
                               context,

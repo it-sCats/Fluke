@@ -40,7 +40,7 @@ class visitorEventPrev extends StatelessWidget {
                         isScrollControlled: true,
                         elevation: 100,
                         context: context,
-                        builder: (context) => QrImage(),
+                        builder: (context) => Qrwidgett(),
                       );
                     },
                   ),
@@ -65,8 +65,8 @@ class visitorEventPrev extends StatelessWidget {
   }
 }
 
-class QrImage extends StatelessWidget {
-  const QrImage({super.key});
+class Qrwidgett extends StatelessWidget {
+  const Qrwidgett({super.key});
 
   @override
   Widget build(BuildContext context) {
