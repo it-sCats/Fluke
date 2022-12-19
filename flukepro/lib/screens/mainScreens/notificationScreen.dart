@@ -3,20 +3,16 @@ import 'package:flutter/material.dart';
 import '../../components/cons.dart';
 import '../../components/customWidgets.dart';
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container();
-//   }
-// }
-// //trying some thing
-class notifiScreen extends StatelessWidget {
-  const notifiScreen({Key? key}) : super(key: key);
+class notifiScreen extends StatefulWidget {
+  @override
+  State<notifiScreen> createState() => _notifiScreenState();
+}
+
+class _notifiScreenState extends State<notifiScreen> {
+  bool isVisible = false;
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< Updated upstream
-    return Container();
-=======
     return SafeArea(
       child: Column(
         //alla
@@ -120,7 +116,6 @@ class notifiScreen extends StatelessWidget {
         ],
       ),
     );
->>>>>>> Stashed changes
   }
 }
 
