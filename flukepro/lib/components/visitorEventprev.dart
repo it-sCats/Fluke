@@ -2,12 +2,18 @@ import 'package:flukepro/components/cons.dart';
 import 'package:flukepro/components/customWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'QrCodeWidget.dart';
 import 'creatingEventsForm.dart';
 
 class visitorEventPrev extends StatelessWidget {
-  visitorEventPrev(this.title, this.Qr);
+  visitorEventPrev(this.id, this.title, this.name, this.phone, this.Qr);
+
+  String id;
   String title;
-  String Qr;
+  String name;
+  String phone;
+  Widget Qr;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,17 +36,18 @@ class visitorEventPrev extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: InkWell(
-                    child: Image.asset(
-                      'images/qrcode.png',
-                      width: 50,
-                      height: 50,
-                    ),
+                    child: Qr,
                     onTap: () {
                       showModalBottomSheet(
                         isScrollControlled: true,
                         elevation: 100,
                         context: context,
-                        builder: (context) => Qrwidgett(),
+                        builder: (context) => QrwidgetProfile(
+                          id,
+                          name,
+                          phone,
+                          title,
+                        ),
                       );
                     },
                   ),
@@ -65,8 +72,14 @@ class visitorEventPrev extends StatelessWidget {
   }
 }
 
-class Qrwidgett extends StatelessWidget {
-  const Qrwidgett({super.key});
+class QrwidgetProfile extends StatelessWidget {
+  QrwidgetProfile(this.id, this.name, this.phone, this.eventName);
+
+  String id;
+  String name;
+  String phone;
+  String eventName;
+  getEvent() {}
 
   @override
   Widget build(BuildContext context) {
@@ -77,11 +90,9 @@ class Qrwidgett extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset(
-              'images/qrcode.png',
-              height: 300,
-              width: 300,
-            ),
+            QrImage(
+                data: '$eventName\n' + '$name \n' + '$phone\n',
+                padding: EdgeInsets.all(50)),
             Text(
               "أظهر هذا الرمز يوم المعرض",
               style: conHeadingsStyle.copyWith(fontSize: 15),
