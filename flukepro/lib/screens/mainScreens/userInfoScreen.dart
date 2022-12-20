@@ -14,6 +14,7 @@ String? ErrorMessage;
 bool isErrored = false;
 User? user = _auth.currentUser;
 late Future<QueryDocumentSnapshot?> UserInfo;
+final _userInfoFormKey = GlobalKey<FormState>();
 
 class userInfoScreen extends StatefulWidget {
   @override
@@ -23,7 +24,6 @@ class userInfoScreen extends StatefulWidget {
 class _userInfoScreenState extends State<userInfoScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _birthDatecon.addListener(() {
       enabled = true;
@@ -45,22 +45,6 @@ class _userInfoScreenState extends State<userInfoScreen> {
   String? dateinput;
   SharedPreferences? userTypeShared;
 
-  DocumentReference currentVisitorRef = _firestore
-      .collection('users')
-      .doc('visitors')
-      .collection('visitor')
-      .doc(user!.uid);
-  DocumentReference currentPartsRef = _firestore
-      .collection('users')
-      .doc('paticipants')
-      .collection('paticipant')
-      .doc(user!.uid);
-  DocumentReference currentOrganisRef = _firestore
-      .collection('users')
-      .doc('organizingAgens')
-      .collection('organizingAgen')
-      .doc(user?.uid);
-
   bool enabled = false;
 
   //الدالة الي تجيب من الداتا بيز
@@ -68,22 +52,11 @@ class _userInfoScreenState extends State<userInfoScreen> {
     userTypeShared = await SharedPreferences.getInstance();
     _userType = userTypeShared?.getString("userType");
 
-    if (_userType == '0') {
-      print('typeone ');
-      return await currentVisitorRef.get();
-    } else if (_userType == '2') {
-      return await currentPartsRef.get();
-    } else if (_userType == '1') {
-      return await currentOrganisRef.get();
-    } else {
-      print('notype');
-      return await currentVisitorRef.get();
-    }
+    return await _firestore.collection('users').doc(user!.uid).get();
   }
 
   @override
   Widget build(BuildContext context) {
-    var ref = currentVisitorRef;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -119,6 +92,7 @@ class _userInfoScreenState extends State<userInfoScreen> {
                       snapshot.data!.data() as Map<String, dynamic>;
                   _Emailcon.text = userInfo['email'];
                   return Form(
+                    key: _userInfoFormKey,
                     child: Column(
                       children: [
                         Text(
@@ -164,22 +138,27 @@ class _userInfoScreenState extends State<userInfoScreen> {
                               context: context,
                               initialDate: DateTime.now(),
                               firstDate: DateTime(
-                                  2000), //DateTime.now() - not to allow to choose before today.
-                              lastDate: DateTime(2101));
+                                  1910), //DateTime.now() - not to allow to choose before today.
+                              lastDate: DateTime(2010));
 
                           if (pickedDate != null) {
-                            print(
-                                pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                            String formattedDate =
-                                DateFormat('yyyy-MM-dd').format(pickedDate);
-                            print(
-                                formattedDate); //formatted date output using intl package =>  2021-03-16
-                            //you can implement different kind of Date Format here according to your requirement
+                            if (pickedDate.isBefore(DateTime(2011))) {
+                              String formattedDate =
+                                  DateFormat('yyyy-MM-dd').format(pickedDate);
+                              print(
+                                  formattedDate); //formatted date output using intl package =>  2021-03-16
+                              //you can implement different kind of Date Format here according to your requirement
 
-                            setState(() {
-                              _birthDatecon.text =
-                                  formattedDate; //set output date to TextField value.
-                            });
+                              setState(() {
+                                _birthDatecon.text =
+                                    formattedDate; //set output date to TextField value.
+                              });
+                            } else {
+                              setState(() {
+                                ErrorMessage = 'لايمكن التسجيل لأقل من 13 سنة ';
+                                isErrored = !isErrored;
+                              });
+                            }
                           } else {
                             print("Date is not selected");
                           }
@@ -219,12 +198,10 @@ class _userInfoScreenState extends State<userInfoScreen> {
                                       _Emailcon.text == null) {}
                                   print(userInfo['name']);
 
-                                  _userType == '0'
-                                      ? ref = currentVisitorRef
-                                      : _userType == '2'
-                                          ? ref = currentPartsRef
-                                          : ref = currentOrganisRef;
-                                  ref.set({
+                                  _firestore
+                                      .collection('users')
+                                      .doc(user!.uid)
+                                      .set({
                                     'email': _Emailcon.text == ''
                                         ? userInfo['email']
                                         : _Emailcon
@@ -247,7 +224,7 @@ class _userInfoScreenState extends State<userInfoScreen> {
                             ),
                           ],
                         )
-                      ], //TODO implement updating the database
+                      ],
                     ),
                   );
                 }

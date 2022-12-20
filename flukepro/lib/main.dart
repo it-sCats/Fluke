@@ -24,13 +24,15 @@ import 'package:flutter/material.dart';
 import 'package:flukepro/OrganizersRequests/OraginzersRequest.dart';
 import 'base.dart';
 import 'firebase_options.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  getOngoing();
+  await FirebaseMessaging.instance.getInitialMessage();
+  await getOngoing();
   runApp(MyApp());
   // runApp(MyApp());
 }
@@ -49,7 +51,7 @@ class MyApp extends StatelessWidget {
             ResponsiveBreakpoint.autoScale(800, name: TABLET),
             ResponsiveBreakpoint.resize(1000, name: DESKTOP),
           ],
-          background: Container(color: Color(0xFFF5F5F5))), //TODO dhsjdfh
+          background: Container(color: Color(0xFFF5F5F5))),
 
       home: loginScreen(),
       debugShowCheckedModeBanner:

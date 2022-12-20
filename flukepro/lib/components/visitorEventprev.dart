@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flukepro/components/cons.dart';
 import 'package:flukepro/components/customWidgets.dart';
+import 'package:flukepro/components/eventDisplay.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'QrCodeWidget.dart';
 import 'creatingEventsForm.dart';
+
+final _firebase = FirebaseFirestore.instance;
 
 class visitorEventPrev extends StatelessWidget {
   visitorEventPrev(this.id, this.title, this.name, this.phone, this.Qr);
@@ -100,7 +104,34 @@ class QrwidgetProfile extends StatelessWidget {
             CTA(
               txt: "عرض الحدث",
               isFullwidth: false,
-              onTap: () {},
+              onTap: () async {
+                final event = await _firebase
+                    .collection('events')
+                    .doc(id.trim().toString())
+                    .get();
+                final eventInfo = event.data();
+                print(eventInfo!.length);
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  elevation: 100,
+                  context: context,
+                  builder: (context) => eventDisplay(
+                      justDisplay: true,
+                      id: eventInfo!['id'],
+                      title: eventInfo['title'],
+                      description: eventInfo['description'],
+                      starterDate: eventInfo['starterDate'],
+                      location: eventInfo['location'],
+                      image: eventInfo['image'],
+                      endDate: eventInfo['endDate'],
+                      starterTime: eventInfo!['starterTime'],
+                      endTime: eventInfo!['endTime'],
+                      creationDate: eventInfo!['creationDate'],
+                      city: eventInfo!['eventCity'],
+                      acceptsParticapants: eventInfo!['acceptsParticapants'],
+                      eventVisibilty: eventInfo!['eventVisibility']),
+                );
+              },
             )
           ],
         ),

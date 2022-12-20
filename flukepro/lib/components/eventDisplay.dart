@@ -11,8 +11,11 @@ import 'cons.dart';
 import 'customWidgets.dart';
 
 final _firestore = FirebaseFirestore.instance;
+final _auth = FirebaseAuth.instance;
 final _Auth = FirebaseAuth.instance;
+
 bool isLoading = false;
+int? userType;
 
 class eventDisplay extends StatefulWidget {
   String id;
@@ -32,8 +35,10 @@ class eventDisplay extends StatefulWidget {
   bool acceptsParticapants;
   List<String>? targetedAudiance;
   bool eventVisibilty;
+  bool justDisplay;
 
   eventDisplay({
+    required this.justDisplay,
     required this.id,
     required this.title,
     required this.description,
@@ -59,12 +64,28 @@ class eventDisplay extends StatefulWidget {
 
 class _eventDisplayState extends State<eventDisplay>
     with TickerProviderStateMixin {
+  @override
+  void initState() {
+    super.initState();
+    getUsertype();
+  }
+
+  getUsertype() async {
+    User? user = await _Auth.currentUser;
+
+    final userInfo = await _firestore.collection('users').doc(user!.uid).get();
+
+    final userInfoDoc = userInfo.data();
+    userType = userInfoDoc!['userType'];
+  }
+
   registerVisitor(eventID, context, title) async {
     User? user = await _Auth.currentUser;
 
     final userInfo = await _firestore.collection('users').doc(user!.uid).get();
 
     final userInfoDoc = userInfo.data();
+    userType = userInfoDoc!['userType'];
 
     final vistors = _firestore //checks if user aleadry registered
         .collection('events')
@@ -366,27 +387,30 @@ class _eventDisplayState extends State<eventDisplay>
               ],
             ),
           ),
-          isLoading
-              ? CircularProgressIndicator()
+          widget.justDisplay
+              ? Container()
               : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    InkWell(
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: conBlue.withOpacity(.5), width: 2),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Text(
-                          ' التسجيل كمشارك',
-                          style: conTxtFeildHint.copyWith(
-                              color: conBlue.withOpacity(.7), fontSize: 18),
-                        ),
-                      ),
-                      onTap: () async {},
-                    ),
+                    userType == 2
+                        ? InkWell(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 20),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: conBlue.withOpacity(.5), width: 2),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Text(
+                                ' التسجيل كمشارك',
+                                style: conTxtFeildHint.copyWith(
+                                    color: conBlue.withOpacity(.7),
+                                    fontSize: 18),
+                              ),
+                            ),
+                            onTap: () async {},
+                          )
+                        : Container(),
                     halfCTA(
                         txt: ' التسجيل كزائر',
                         onTap: () async {

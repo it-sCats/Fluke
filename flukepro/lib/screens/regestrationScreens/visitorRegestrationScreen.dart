@@ -387,7 +387,7 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
                                 .doc(userID)
                                 .set({
                               "email": user.email,
-                              "name": user.displayName,
+                              "name": name.toString(),
                               "userType": 2,
                               "phone": phoneNum.toString()
                             });

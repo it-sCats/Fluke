@@ -12,6 +12,7 @@ import '../../utils/fireStoreQueries.dart';
 
 final _auth = FirebaseAuth.instance;
 final _firestore = FirebaseFirestore.instance;
+String? userId;
 Map<String, dynamic>? userInfo;
 
 class profile extends StatefulWidget {
@@ -22,8 +23,8 @@ class profile extends StatefulWidget {
 class _profileState extends State<profile> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    userId = _auth.currentUser!.uid;
     getUser();
   }
 
@@ -51,7 +52,7 @@ class _profileState extends State<profile> {
             children: [
               IconButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, 'personalInfo');
+                    Navigator.pushNamed(context, 'settings');
                   },
                   padding: EdgeInsets.all(20),
                   icon: Icon(
@@ -125,7 +126,7 @@ class _profileState extends State<profile> {
                   child: FutureBuilder(
 
                       //باش نبنو الداتا الي بنجيبوها من قاعدة البيانات نحتاجو نحطوها في الفيوتشر بيلدر
-                      future: getAllEvents(),
+                      future: getUserReegiteredEvents(userId.toString()),
                       builder: (context, AsyncSnapshot snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {

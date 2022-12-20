@@ -16,8 +16,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../firebase_options.dart'; //helps to know what platform we're on
 
 class Authentication {
-
-
   static FirebaseOptions? get platformOptions {
     if (kIsWeb) {
       // Web
@@ -33,8 +31,8 @@ class Authentication {
       );
     } else if (Platform.isIOS || Platform.isMacOS) {
       // iOS and MacOS
-       log("Analytics Dart-only initializer doesn't work on Android, please make sure to add the config file.");
-       return null;
+      log("Analytics Dart-only initializer doesn't work on Android, please make sure to add the config file.");
+      return null;
     } else {
       // Android
 
@@ -48,11 +46,8 @@ class Authentication {
         appId: '1:448618578101:web:0b650370bb29e29cac3efc',
         measurementId: 'G-F79DJ0VFGS',
       );
-
     }
   }
-
-
 
   String? _token;
   String? userID;
@@ -60,7 +55,7 @@ class Authentication {
   static late AuthStatus _status;
   static Future<FirebaseApp> initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp(
-      options:    DefaultFirebaseOptions.currentPlatform,
+      options: DefaultFirebaseOptions.currentPlatform,
     );
 
     return firebaseApp;
@@ -116,11 +111,9 @@ class Authentication {
       final userCridantial = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
-user=userCridantial.user;
-
+      user = userCridantial.user;
 
       if (user != null) {
-
         return Success(user);
       } else {
         return Error(Exception('لم يتم التسجيل'));
@@ -175,22 +168,20 @@ user=userCridantial.user;
   //     Error(throw error);
   //   }
   // }
-  Future<void> changePassword(String code,String newPassword,context) async{
-    try{
+  Future<void> changePassword(String code, String newPassword, context) async {
+    try {
       _auth.confirmPasswordReset(code: code, newPassword: newPassword);
-
-    }on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(
+        SnackBar(
             content: Text(
-              e.message.toString(),
-              textAlign: TextAlign.center,
-              style: TextStyle(fontFamily: 'Cairo', fontSize: 13),
-            )),
+          e.message.toString(),
+          textAlign: TextAlign.center,
+          style: TextStyle(fontFamily: 'Cairo', fontSize: 13),
+        )),
       );
     }
   }
-
 
   // Future<Result> deleteUser() async {
   //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -220,13 +211,13 @@ user=userCridantial.user;
   // }
 
   Future<void> deleteUser() async {
-
-      try {
-       _auth.currentUser?.delete();
-      } catch (error) {
-        Error(throw error);
-      }
+    try {
+      _auth.currentUser?.delete();
+    } catch (error) {
+      Error(throw error);
     }
+  }
+
   static Future<User?> signInWithGoogle({required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
@@ -357,8 +348,7 @@ user=userCridantial.user;
           .catchError(
               (e) => _status = AuthExceptionHandler.handleAuthException(e));
     } catch (e) {
-      print(
-          e); //TODO do Exeption handling + send code to user is way more secure
+      print(e); //TODO send code to user is way more secure
     }
     return _status;
   }

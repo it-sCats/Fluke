@@ -183,7 +183,6 @@ class _AddEventButtonState extends State<AddEventButton> {
 }
 
 class DiscartButton extends StatelessWidget {
-//Todo make constructor for this with name and action
   @override
   Widget build(BuildContext context) {
     return InkWell(

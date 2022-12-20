@@ -53,7 +53,6 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controller = AnimationController(vsync: this, duration: duration);
     _scaleAnimation = Tween<double>(
@@ -64,7 +63,6 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _controller!.dispose();
     super.dispose();
   }
@@ -122,7 +120,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                 ),
               ),
             ),
-          ) //TODO edit the add button
+          )
         ], // جزئين رئيسيين والي هما المينيو الجانبية و"الداش بورد" مقصود بيها الصفحة البيضا الي نحطو عليها في المكونات التانية
       ),
     );

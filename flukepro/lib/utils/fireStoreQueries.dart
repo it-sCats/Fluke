@@ -77,3 +77,14 @@ getAllEvents() async {
 
   return AllEvents.docs;
 }
+
+getUserReegiteredEvents(String userId) async {
+  DocumentSnapshot AllEvents = await _firestore
+      .collection('events')
+      .doc()
+      .collection('visitors')
+      .doc(userId.trim().toString())
+      .get();
+
+  return AllEvents.data();
+}

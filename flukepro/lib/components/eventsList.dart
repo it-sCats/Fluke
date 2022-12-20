@@ -77,6 +77,7 @@ class eventList extends StatelessWidget {
                             elevation: 100,
                             context: context,
                             builder: (context) => eventDisplay(
+                                justDisplay: false,
                                 id: eventData['id'],
                                 title: eventData['title'],
                                 description: eventData['description'],
@@ -140,7 +141,6 @@ class VisitorVerticalEventList extends StatelessWidget {
                   itemBuilder: (context, index) {
                     var eventData = snapshot.data![index];
 
-
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 18.0),
                       child: eventVertiCard(
@@ -160,7 +160,6 @@ class VisitorVerticalEventList extends StatelessWidget {
                           acceptsParticapants: eventData['acceptsParticapants'],
                           eventVisibilty: eventData['eventVisibility']),
                     );
-
                   },
                   itemCount: snapshot.data?.length,
                 );
