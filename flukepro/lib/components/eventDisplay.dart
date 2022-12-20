@@ -524,7 +524,7 @@ class _ParticiEventPrevState extends State<ParticiEventPrev> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    "${userInfoDoc!['phone']}",
+                    "${userInfoDoc!['interests']}",
                     style: conHeadingsStyle.copyWith(
                         fontSize: 16, color: Color(0xFF605A5A)),
                   ),
