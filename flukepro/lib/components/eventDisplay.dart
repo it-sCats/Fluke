@@ -7,6 +7,7 @@ import 'package:flukepro/components/visitorEventprev.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../screens/mainScreens/userInfoScreen.dart';
 import 'cons.dart';
 import 'customWidgets.dart';
 
@@ -15,7 +16,7 @@ final _Auth = FirebaseAuth.instance; //كائن من الفاير بيز ايث2
 
 bool isLoading = false;
 int? userType;
-User? user;
+
 Map<String, dynamic>? userInfoDoc;
 
 class eventDisplay extends StatefulWidget {
@@ -69,10 +70,11 @@ class _eventDisplayState extends State<eventDisplay>
   void initState() {
     super.initState();
     getUsertype();
+    print('$userType' + '---------------------');
   }
 
   getUsertype() async {
-    user = await _Auth.currentUser;
+    final user = await _Auth.currentUser;
 
     final userInfo = await _firestore.collection('users').doc(user!.uid).get();
 
@@ -81,7 +83,7 @@ class _eventDisplayState extends State<eventDisplay>
   }
 
   registerVisitor(eventID, context, title) async {
-    User? user = await _Auth.currentUser;
+    final user = await _Auth.currentUser;
 
     final userInfo = await _firestore.collection('users').doc(user!.uid).get();
 
@@ -102,7 +104,7 @@ class _eventDisplayState extends State<eventDisplay>
           .collection('visitors')
           .doc(user!.uid)
           .set({
-        'email': user.email,
+        'email': user!.email,
         'phone': userInfoDoc!['phone'],
         'name': userInfoDoc!['name']
       }).whenComplete(() {
@@ -415,7 +417,6 @@ class _eventDisplayState extends State<eventDisplay>
                                 context: context,
                                 builder: (context) => ParticiEventPrev(),
                               );
-                              ;
                             },
                           )
                         : Container(),
@@ -524,7 +525,7 @@ class _ParticiEventPrevState extends State<ParticiEventPrev> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    "${userInfoDoc!['interests']}",
+                    "${userInfoDoc!['phone']}",
                     style: conHeadingsStyle.copyWith(
                         fontSize: 16, color: Color(0xFF605A5A)),
                   ),

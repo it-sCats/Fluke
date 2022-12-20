@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flukepro/screens/mainScreens/explorePage.dart';
 import 'package:flukepro/screens/mainScreens/home.dart';
 import 'package:flukepro/screens/mainScreens/notificationScreen.dart';
@@ -22,10 +23,36 @@ class _baseState extends State<base> {
     HomeScreen(),
   ];
   int? pageIndex = 2;
-
+  String? deviceToken;
   @override
   void initState() {
     super.initState();
+    requiesPremission();
+  }
+
+  requiesPremission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = NotificationSettings(
+        alert: AppleNotificationSetting.enabled,
+        announcement: AppleNotificationSetting.disabled,
+        badge: AppleNotificationSetting.enabled,
+        carPlay: AppleNotificationSetting.disabled,
+        criticalAlert: AppleNotificationSetting.disabled,
+        sound: AppleNotificationSetting.enabled,
+        authorizationStatus: AuthorizationStatus.authorized,
+        lockScreen: AppleNotificationSetting.enabled,
+        notificationCenter: AppleNotificationSetting.disabled,
+        showPreviews: AppleShowPreviewSetting.never,
+        timeSensitive: AppleNotificationSetting.disabled);
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('authorized');
+    }
+  }
+
+  getToken() async {
+    await FirebaseMessaging.instance
+        .getToken()
+        .then((value) => deviceToken = value);
   }
 
   @override
