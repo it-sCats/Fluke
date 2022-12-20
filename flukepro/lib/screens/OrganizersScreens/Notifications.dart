@@ -16,7 +16,6 @@ class _notifactionState extends State<notifaction> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Column(
-        //alla
         children: [
           Padding(
             padding: const EdgeInsets.all(30),
