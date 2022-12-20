@@ -10,12 +10,13 @@ import 'package:url_launcher/url_launcher.dart';
 import 'cons.dart';
 import 'customWidgets.dart';
 
-final _firestore = FirebaseFirestore.instance;
-final _auth = FirebaseAuth.instance;
-final _Auth = FirebaseAuth.instance;
+final _firestore = FirebaseFirestore.instance; //كائن من الداتابيز 1
+final _Auth = FirebaseAuth.instance; //كائن من الفاير بيز ايث2
 
 bool isLoading = false;
 int? userType;
+User? user;
+Map<String, dynamic>? userInfoDoc;
 
 class eventDisplay extends StatefulWidget {
   String id;
@@ -64,18 +65,18 @@ class eventDisplay extends StatefulWidget {
 
 class _eventDisplayState extends State<eventDisplay>
     with TickerProviderStateMixin {
-  @override
+  @override // هذه انطلاقة الشاشة 3
   void initState() {
     super.initState();
     getUsertype();
   }
 
   getUsertype() async {
-    User? user = await _Auth.currentUser;
+    user = await _Auth.currentUser;
 
     final userInfo = await _firestore.collection('users').doc(user!.uid).get();
 
-    final userInfoDoc = userInfo.data();
+    userInfoDoc = userInfo.data();
     userType = userInfoDoc!['userType'];
   }
 
@@ -407,33 +408,17 @@ class _eventDisplayState extends State<eventDisplay>
                                     fontSize: 18),
                               ),
                             ),
-                            onTap: () async {},
+                            onTap: () async {
+                              showModalBottomSheet(
+                                isScrollControlled: true,
+                                elevation: 100,
+                                context: context,
+                                builder: (context) => ParticiEventPrev(),
+                              );
+                              ;
+                            },
                           )
                         : Container(),
-                    InkWell(
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: conBlue.withOpacity(.5), width: 2),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Text(
-                          ' التسجيل كمشارك',
-                          style: conTxtFeildHint.copyWith(
-                              color: conBlue.withOpacity(.7), fontSize: 18),
-                        ),
-                      ),
-                      onTap: () async {
-                        showModalBottomSheet(
-                          isScrollControlled: true,
-                          elevation: 100,
-                          context: context,
-                          builder: (context) => ParticiEventPrev(),
-                        );
-                        ;
-                      },
-                    ),
                     halfCTA(
                         txt: ' التسجيل كزائر',
                         onTap: () async {
@@ -503,7 +488,12 @@ class _ParticiEventPrevState extends State<ParticiEventPrev> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    "Teck-W :شركة",
+                    "${userInfoDoc!['name']} ",
+                    style: conHeadingsStyle.copyWith(
+                        fontSize: 16, color: Color(0xFF605A5A)),
+                  ),
+                  Text(
+                    " :شركة",
                     style: conHeadingsStyle.copyWith(
                         fontSize: 16, color: Color(0xFF605A5A)),
                   ),
@@ -516,7 +506,12 @@ class _ParticiEventPrevState extends State<ParticiEventPrev> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    "المجال: التقنية",
+                    "${userInfoDoc!['interests']}",
+                    style: conHeadingsStyle.copyWith(
+                        fontSize: 16, color: Color(0xFF605A5A)),
+                  ),
+                  Text(
+                    " :المجال",
                     style: conHeadingsStyle.copyWith(
                         fontSize: 16, color: Color(0xFF605A5A)),
                   ),
@@ -529,11 +524,17 @@ class _ParticiEventPrevState extends State<ParticiEventPrev> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    "رقم الهاتف: 9876543-092",
+                    "${userInfoDoc!['interests']}",
+                    style: conHeadingsStyle.copyWith(
+                        fontSize: 16, color: Color(0xFF605A5A)),
+                  ),
+                  Text(
+                    " :رقم الهاتف",
                     style: conHeadingsStyle.copyWith(
                         fontSize: 16, color: Color(0xFF605A5A)),
                   ),
                 ],
+                // ${userInfoDoc!['name']}
               ),
             ),
             Padding(
@@ -542,7 +543,7 @@ class _ParticiEventPrevState extends State<ParticiEventPrev> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    "alla@Gmail.com :الإيميل",
+                    "${user!.email}:الإيميل",
                     style: conHeadingsStyle.copyWith(
                         fontSize: 16, color: Color(0xFF605A5A)),
                   ),
