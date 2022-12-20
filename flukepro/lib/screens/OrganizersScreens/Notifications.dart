@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../components/cons.dart';
 import '../../components/customWidgets.dart';
 
@@ -15,7 +16,6 @@ class _notifactionState extends State<notifaction> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Column(
-        //alla
         children: [
           Padding(
             padding: const EdgeInsets.all(30),
@@ -68,20 +68,20 @@ class _OrganizerNotifiState extends State<OrganizerNotifi> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "معرض التقنية ",
-                  style: conHeadingsStyle.copyWith(fontSize: 18),
+                  "شركة Tech-W تريد المشاركة في المؤتمر السنوي\n للتقنية الذي تنظمه كراعي ذهبي",
+                  style: conHeadingsStyle.copyWith(fontSize: 15),
                   textAlign: TextAlign.right,
                 ),
-                Padding(
-                  padding: isVisible
-                      ? const EdgeInsets.only(bottom: 0)
-                      : EdgeInsets.only(bottom: 10),
-                  child: Text(
-                    "سيقام معرض التقنية  بتاريخ 14-11-2022",
-                    style: conHeadingsStyle.copyWith(fontSize: 15),
-                    textAlign: TextAlign.right,
-                  ),
-                ), //this row is for the event name pic and title
+                // Padding(
+                //   padding: isVisible
+                //       ? const EdgeInsets.only(bottom: 0)
+                //       : EdgeInsets.only(bottom: 10),
+                //   child: Text(
+                //     "سيقام معرض التقنية  بتاريخ 14-11-2022",
+                //     style: conHeadingsStyle.copyWith(fontSize: 15),
+                //     textAlign: TextAlign.right,
+                //   ),
+                // ), //this row is for the event name pic and title
                 Visibility(
                   visible: isVisible,
                   child: Row(
@@ -94,7 +94,7 @@ class _OrganizerNotifiState extends State<OrganizerNotifi> {
                       ),
                       SizedBox(width: 30),
                       CTAshowEvent(
-                        txt: "عرض حدث",
+                        txt: "عرض الطلب",
                         isFullwidth: false,
                         onTap: () {},
                       ),
