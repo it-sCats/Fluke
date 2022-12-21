@@ -244,7 +244,8 @@ class _loginScreenState extends State<loginScreen> {
                       );
                       try {
                         final result = await Authentication().login(
-                            _emailCon.text.toString(), password.toString());
+                            _emailCon.text.trim().toString(),
+                            password.toString());
                         result.when(
                             (error) => setState(() {
                                   errorMessage = AuthExceptionHandler

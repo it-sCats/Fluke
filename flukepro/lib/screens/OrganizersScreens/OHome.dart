@@ -3,8 +3,10 @@ import 'package:flukepro/components/customWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/creatingEventsForm.dart';
+import '../../utils/SigningProvider.dart';
 import 'Notifications.dart';
 import 'ODashboard.dart';
 import 'Oevents.dart';
@@ -13,6 +15,8 @@ import 'package:intl/intl.dart' as intl;
 
 //الصفحة هذه هي أساس لوحة التحكم متاع المنظم
 final _auth = FirebaseAuth.instance;
+//كائن من الفاير بيز ايث2
+
 bool showCreating = false;
 
 //صفحة الهوم متاع المنظم
@@ -54,6 +58,9 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    print('++++++++++++++');
+    Provider.of<siggning>(context, listen: false).getCurrentUsertype();
+
     _controller = AnimationController(vsync: this, duration: duration);
     _scaleAnimation = Tween<double>(
       begin: 1,

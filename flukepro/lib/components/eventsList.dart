@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flukepro/components/eventDisplay.dart';
 import 'package:flukepro/components/events.dart';
+import 'package:flukepro/utils/SigningProvider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class eventList extends StatelessWidget {
   Future<dynamic> EventQuery;
@@ -73,26 +75,26 @@ class eventList extends StatelessWidget {
                             eventVisibilty: eventData['eventVisibility']),
                         onTap: () {
                           showModalBottomSheet(
-                            isScrollControlled: true,
-                            elevation: 100,
-                            context: context,
-                            builder: (context) => eventDisplay(
-                                justDisplay: false,
-                                id: eventData['id'],
-                                title: eventData['title'],
-                                description: eventData['description'],
-                                starterDate: eventData['starterDate'],
-                                location: eventData['location'],
-                                image: eventData['image'],
-                                endDate: eventData['endDate'],
-                                starterTime: eventData['starterTime'],
-                                endTime: eventData['endTime'],
-                                creationDate: eventData['creationDate'],
-                                city: eventData['eventCity'],
-                                acceptsParticapants:
-                                    eventData['acceptsParticapants'],
-                                eventVisibilty: eventData['eventVisibility']),
-                          );
+                              isScrollControlled: true,
+                              elevation: 100,
+                              context: context,
+                              builder: (context) => eventDisplay(
+                                  justDisplay: false,
+                                  id: eventData['id'],
+                                  title: eventData['title'],
+                                  description: eventData['description'],
+                                  starterDate: eventData['starterDate'],
+                                  location: eventData['location'],
+                                  image: eventData['image'],
+                                  endDate: eventData['endDate'],
+                                  starterTime: eventData['starterTime'],
+                                  endTime: eventData['endTime'],
+                                  creationDate: eventData['creationDate'],
+                                  city: eventData['eventCity'],
+                                  acceptsParticapants:
+                                      eventData['acceptsParticapants'],
+                                  eventVisibilty:
+                                      eventData['eventVisibility']));
                         },
                       ),
                     );
