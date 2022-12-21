@@ -14,6 +14,8 @@ final _auth = FirebaseAuth.instance;
 final _firestore = FirebaseFirestore.instance;
 String? userId;
 Map<String, dynamic>? userInfo;
+int? userType;
+Map<String, dynamic>? userInfoDoc;
 
 class profile extends StatefulWidget {
   @override
@@ -24,14 +26,15 @@ class _profileState extends State<profile> {
   @override
   void initState() {
     super.initState();
-    userId = _auth.currentUser!.uid;
     getUser();
+    userId = _auth.currentUser!.uid;
   }
 
   getUser() async {
     final user =
         await _firestore.collection('users').doc(_auth.currentUser!.uid).get();
     userInfo = user.data();
+    userType = userInfoDoc!['userType'];
   }
 
   @override
@@ -135,7 +138,7 @@ class _profileState extends State<profile> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      "عائشة عبد السلام المقلش ",
+                      "لاتلاتنت",
                       style: conHeadingsStyle.copyWith(
                           color: Color(0xFFffffff), fontSize: 15),
                     ),
