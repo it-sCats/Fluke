@@ -8,12 +8,12 @@ class ExploreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: SingleChildScrollView(
-            child: Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          TextFormField(
+        child: Container(
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: Padding(
+          padding: const EdgeInsets.all(25.0),
+          child: TextFormField(
             textAlign: TextAlign.right,
             decoration: InputDecoration(
               hintText: "...ابحث عن أحداث",
@@ -31,8 +31,8 @@ class ExploreScreen extends StatelessWidget {
               ),
             ),
           ),
-        ],
+        ),
       ),
-    )));
+    ));
   }
 }

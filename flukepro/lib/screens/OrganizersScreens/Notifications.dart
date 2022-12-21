@@ -68,7 +68,7 @@ class _OrganizerNotifiState extends State<OrganizerNotifi> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "شركة Tech-W تريد المشاركة في المؤتمر السنوي\n للتقنية الذي تنظمه كراعي ذهبي",
+                  "المشاركة في المؤتمر السنوي للتقنيةteck-W تريد  ",
                   style: conHeadingsStyle.copyWith(fontSize: 15),
                   textAlign: TextAlign.right,
                 ),

@@ -61,7 +61,8 @@ class _profileState extends State<profile> {
                     size: 30,
                   )),
               Padding(
-                padding: const EdgeInsets.all(25.0),
+                padding:
+                    const EdgeInsets.only(top: 25.0, right: 25.0, left: 25.0),
                 child: Row(
                   // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -70,13 +71,13 @@ class _profileState extends State<profile> {
                       child: Column(
                         children: [
                           Text(
-                            "أحداثك",
+                            "5",
                             style: conHeadingsStyle.copyWith(
                                 color: Color(0xFFffffff), fontSize: 20),
                           ),
                           SizedBox(height: 20),
                           Text(
-                            " 5",
+                            "أحداثك",
                             style: conHeadingsStyle.copyWith(
                                 color: Color(0xFFffffff).withOpacity(0.50),
                                 fontSize: 20),
@@ -85,7 +86,7 @@ class _profileState extends State<profile> {
                       ),
                     ),
                     SizedBox(
-                      width: 40,
+                      width: 25,
                     ),
                     Expanded(
                       flex: 1,
@@ -93,21 +94,60 @@ class _profileState extends State<profile> {
                         children: [
                           Text(
                             // _auth.currentUser!.displayName.toString(),
-                            "الاسم",
+                            "5",
                             textAlign: TextAlign.center,
                             style: conHeadingsStyle.copyWith(
                                 color: Color(0xFFffffff), fontSize: 20),
                           ),
                           SizedBox(height: 20),
                           Text(
-                            "حساب زائر",
+                            " أحداث مهتم بها",
                             style: conHeadingsStyle.copyWith(
                                 color: Color(0xFFffffff).withOpacity(0.50),
-                                fontSize: 20),
+                                fontSize: 15),
                           ),
                         ],
                       ),
                     ),
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: CircleAvatar(
+                              //Avatar
+                              backgroundColor: Color(0xff).withOpacity(0),
+                              radius: 50,
+                              backgroundImage: NetworkImage(
+                                  'https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=45&dpr=2&s=none'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 45.0, top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      "عائشة عبد السلام المقلش ",
+                      style: conHeadingsStyle.copyWith(
+                          color: Color(0xFFffffff), fontSize: 15),
+                    ),
+                    Text(
+                      "حساب زائر",
+                      style: conHeadingsStyle.copyWith(
+                          color: Color(0xFFffffff).withOpacity(0.50),
+                          fontSize: 15),
+                    ),
+                    SizedBox(
+                      height: 25,
+                    )
                   ],
                 ),
               ),
