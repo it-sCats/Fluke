@@ -1,12 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flukepro/screens/mainScreens/explorePage.dart';
 import 'package:flukepro/screens/mainScreens/home.dart';
 import 'package:flukepro/screens/mainScreens/notificationScreen.dart';
 import 'package:flukepro/screens/mainScreens/profile.dart';
+import 'package:flukepro/utils/SigningProvider.dart';
 import 'package:flutter/material.dart';
-import 'components/bottomNav.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'components/cons.dart';
+
+final _auth = FirebaseAuth.instance;
+User? user = _auth.currentUser;
 
 class base extends StatefulWidget {
   @override
@@ -27,6 +32,9 @@ class _baseState extends State<base> {
   @override
   void initState() {
     super.initState();
+    Provider.of<siggning>(context, listen: false)
+        .getCurrentUsertype(); //  هذه تتغير بحسب البيانات اللي نبيها
+    print('-----------${siggning().userType}');
     requiesPremission();
   }
 

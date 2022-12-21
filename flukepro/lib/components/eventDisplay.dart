@@ -3,19 +3,23 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flukepro/components/QrCodeWidget.dart';
+import 'package:flukepro/components/participantEventRegisterForm.dart';
 import 'package:flukepro/components/visitorEventprev.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+import 'package:provider/provider.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 import '../screens/mainScreens/userInfoScreen.dart';
+import '../utils/SigningProvider.dart';
+import '../utils/SigningProvider.dart';
 import 'cons.dart';
 import 'customWidgets.dart';
 
-final _firestore = FirebaseFirestore.instance; //كائن من الداتابيز 1
-final _Auth = FirebaseAuth.instance; //كائن من الفاير بيز ايث2
-
+final _firestore = FirebaseFirestore.instance;
+//كائن من الداتابيز 1
+final _auth = FirebaseAuth.instance;
+final user = _auth!.currentUser;
 bool isLoading = false;
-int? userType;
 
 Map<String, dynamic>? userInfoDoc;
 
@@ -67,29 +71,13 @@ class eventDisplay extends StatefulWidget {
 class _eventDisplayState extends State<eventDisplay>
     with TickerProviderStateMixin {
   @override // هذه انطلاقة الشاشة 3
+
   void initState() {
     super.initState();
-    getUsertype();
-    print('$userType' + '---------------------');
-  }
-
-  getUsertype() async {
-    final user = await _Auth.currentUser;
-
-    final userInfo = await _firestore.collection('users').doc(user!.uid).get();
-
-    userInfoDoc = userInfo.data();
-    userType = userInfoDoc!['userType'];
+    Provider.of<siggning>(context, listen: false).getUserInfoDoc();
   }
 
   registerVisitor(eventID, context, title) async {
-    final user = await _Auth.currentUser;
-
-    final userInfo = await _firestore.collection('users').doc(user!.uid).get();
-
-    final userInfoDoc = userInfo.data();
-    userType = userInfoDoc!['userType'];
-
     final vistors = _firestore //checks if user aleadry registered
         .collection('events')
         .doc(eventID.toString().trim())
@@ -139,9 +127,17 @@ class _eventDisplayState extends State<eventDisplay>
   }
 
   @override
+  void setState(VoidCallback fn) {
+    // TODO: implement setState
+    super.setState(fn);
+  }
+
+  @override
   Widget build(BuildContext context) {
     TabController _tabCont = TabController(length: 2, vsync: this);
-    return (SingleChildScrollView(
+    Provider.of<siggning>(context, listen: false).getCurrentUsertype();
+    final userType = Provider.of<siggning>(context, listen: false).userType;
+    return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -415,7 +411,8 @@ class _eventDisplayState extends State<eventDisplay>
                                 isScrollControlled: true,
                                 elevation: 100,
                                 context: context,
-                                builder: (context) => ParticiEventPrev(),
+                                builder: (context) =>
+                                    ParticiEventPrev(widget.id),
                               );
                             },
                           )
@@ -430,7 +427,7 @@ class _eventDisplayState extends State<eventDisplay>
                 )
         ],
       ),
-    ));
+    );
   }
 }
 
@@ -452,211 +449,5 @@ class EventInfo extends StatelessWidget {
         child: Column(
       children: [],
     ));
-  }
-}
-
-class ParticiEventPrev extends StatefulWidget {
-  const ParticiEventPrev({super.key});
-
-  @override
-  State<ParticiEventPrev> createState() => _ParticiEventPrevState();
-}
-
-class _ParticiEventPrevState extends State<ParticiEventPrev> {
-  var participantType = [
-    'راعي ذهبي',
-    'راعي فضي ',
-    'راعي بلاتينيوم',
-    'زائر',
-    'عارض',
-  ];
-  TextEditingController _participantTypeCont = TextEditingController();
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Text(
-              "نموذج المشاركة",
-              style: conHeadingsStyle,
-              textAlign: TextAlign.center,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0, bottom: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    "${userInfoDoc!['name']} ",
-                    style: conHeadingsStyle.copyWith(
-                        fontSize: 16, color: Color(0xFF605A5A)),
-                  ),
-                  Text(
-                    " :شركة",
-                    style: conHeadingsStyle.copyWith(
-                        fontSize: 16, color: Color(0xFF605A5A)),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0, bottom: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    "${userInfoDoc!['interests']}",
-                    style: conHeadingsStyle.copyWith(
-                        fontSize: 16, color: Color(0xFF605A5A)),
-                  ),
-                  Text(
-                    " :المجال",
-                    style: conHeadingsStyle.copyWith(
-                        fontSize: 16, color: Color(0xFF605A5A)),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0, bottom: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    "${userInfoDoc!['phone']}",
-                    style: conHeadingsStyle.copyWith(
-                        fontSize: 16, color: Color(0xFF605A5A)),
-                  ),
-                  Text(
-                    " :رقم الهاتف",
-                    style: conHeadingsStyle.copyWith(
-                        fontSize: 16, color: Color(0xFF605A5A)),
-                  ),
-                ],
-                // ${userInfoDoc!['name']}
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0, bottom: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    "${user!.email}:الإيميل",
-                    style: conHeadingsStyle.copyWith(
-                        fontSize: 16, color: Color(0xFF605A5A)),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0, bottom: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    ":إختر نوع المشاركة",
-                    style: conHeadingsStyle.copyWith(
-                        fontSize: 16, color: Color(0xFF000000)),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 10),
-              child: Directionality(
-                textDirection: TextDirection.rtl,
-                child: DropdownButtonFormField(
-                  decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                      hintText: 'نوع المشاركة',
-                      hintStyle: conTxtFeildHint,
-                      filled: true,
-                      fillColor: Color(0xffF1F1F1),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(10))),
-                  style: conTxtFeildHint.copyWith(color: conBlack),
-                  items: participantType.map((String items) {
-                    return DropdownMenuItem(
-                      value: items,
-                      child: Text(
-                          items), //درنا تحويل من ليستا عادية لليستا يقبلها الدروب داون
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    _participantTypeCont.text = value.toString();
-                  },
-                ),
-              ),
-            ),
-            CTA(
-                txt: "تقديم الطلب",
-                isFullwidth: true,
-                onTap: () {
-                  showDialog(
-                      //save to drafts dialog
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text(
-                            '!تم تقديم طلبك',
-                            textAlign: TextAlign.center,
-                            style: conHeadingsStyle.copyWith(fontSize: 15),
-                          ),
-                          content: Text(
-                            'سيصلك اشعار فور قبول الطلب',
-                            textAlign: TextAlign.center,
-                            style: conHeadingsStyle.copyWith(
-                                fontSize: 14, fontWeight: FontWeight.normal),
-                          ),
-                          actions: [
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                              decoration: BoxDecoration(
-                                  color: conORange,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: InkWell(
-                                  onTap: () {
-                                    Navigator.pushNamed(context, 'OHome');
-                                  },
-                                  child: Text(
-                                    'حسناً',
-                                    textAlign: TextAlign.center,
-                                    style: conHeadingsStyle.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold),
-                                  )),
-                            ),
-                          ],
-                          buttonPadding: EdgeInsets.all(20),
-                          actionsAlignment: MainAxisAlignment.spaceAround,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 100),
-                        );
-                      });
-                }),
-            Padding(
-              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "يمكنك تعديل بياناتك من خلال صفحتك الشخصية",
-                    style: conHeadingsStyle.copyWith(
-                        fontSize: 10, color: Color(0xFF605A5A)),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
