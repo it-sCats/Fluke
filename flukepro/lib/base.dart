@@ -5,6 +5,7 @@ import 'package:flukepro/screens/mainScreens/home.dart';
 import 'package:flukepro/screens/mainScreens/notificationScreen.dart';
 import 'package:flukepro/screens/mainScreens/profile.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
+import 'package:flukepro/utils/notificationProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,6 +37,7 @@ class _baseState extends State<base> {
         .getCurrentUsertype(); //  هذه تتغير بحسب البيانات اللي نبيها
     print('-----------${siggning().userType}');
     requiesPremission();
+    getToken();
   }
 
   requiesPremission() async {
@@ -61,6 +63,9 @@ class _baseState extends State<base> {
     await FirebaseMessaging.instance
         .getToken()
         .then((value) => deviceToken = value);
+    print('$deviceToken--------');
+    siggning().saveToken(deviceToken);
+    notificationPRovider().initInfo();
   }
 
   @override

@@ -111,7 +111,65 @@ class settingScreen extends StatelessWidget {
                               color: conRed),
                         ),
                         onTap: () async {
-                          await Authentication().deleteUser();
+                          showDialog(
+                              //save to drafts dialog
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text(
+                                    'هل أنت متأكد من رغبتك في حذف الحساب؟ ',
+                                    textAlign: TextAlign.center,
+                                    style:
+                                        conHeadingsStyle.copyWith(fontSize: 15),
+                                  ),
+                                  content: Text(
+                                    'هذه الخطوة نهائية لا يمكن التارجع عنها وستحتاج لإعادة التسجيل مرة أخرى في حالة رغبتك في الدخول مرة أخرى',
+                                    textAlign: TextAlign.center,
+                                    style: conHeadingsStyle.copyWith(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                  actions: [
+                                    InkWell(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text(
+                                          ' إالغاء الحذف',
+                                          textAlign: TextAlign.center,
+                                          style: conHeadingsStyle.copyWith(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal),
+                                        )),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 10),
+                                      decoration: BoxDecoration(
+                                          color: conRed,
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      child: InkWell(
+                                          onTap: () async {
+                                            await Authentication().deleteUser();
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text(
+                                            'حدف الحساب',
+                                            textAlign: TextAlign.center,
+                                            style: conHeadingsStyle.copyWith(
+                                                color: Colors.white,
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.bold),
+                                          )),
+                                    ),
+                                  ],
+                                  buttonPadding: EdgeInsets.all(20),
+                                  actionsAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 100),
+                                );
+                              });
                         },
                       ),
                     ],
