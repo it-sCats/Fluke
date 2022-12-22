@@ -43,10 +43,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider( providers: [
-
-      ChangeNotifierProvider(create: (context) => siggning())//كيف حطيت البروفايدر وماخدمتاش
-    ],
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+            create: (context) => siggning()) //كيف حطيت البروفايدر وماخدمتاش
+      ],
       child: MaterialApp(
         builder: (context, child) => ResponsiveWrapper.builder(child,
             maxWidth: 3000,

@@ -310,6 +310,32 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
                             borderSide: BorderSide(width: 1, color: conBlack),
                             borderRadius: BorderRadius.circular(25)))),
               ),
+              SizedBox(
+                width: 290,
+                height: 70,
+                child: TextFormField(
+                    style: TextStyle(
+                        fontSize: 15, fontFamily: 'Cairo', color: conBlack),
+                    onChanged: (value) {
+                      name = value;
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'الرجاء إدخال البيانات المطلوبة';
+                      }
+                      return null;
+                    },
+                    textAlign: TextAlign.right,
+                    decoration: InputDecoration(
+                        hintText: 'أدخل مجالك',
+                        errorStyle: TextStyle(
+                            fontFamily: 'Cairo', fontSize: 12, color: conRed),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 25),
+                        hintStyle: conTxtFeildHint,
+                        enabledBorder: roundedTxtFeild,
+                        errorBorder: errorBorder,
+                        focusedBorder: roundedPasswordFeild)),
+              ),
               Visibility(
                 visible: LogInError,
                 child: Text(
