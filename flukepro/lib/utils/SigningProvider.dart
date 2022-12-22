@@ -123,6 +123,14 @@ class siggning extends ChangeNotifier {
     }
   }
 
+  saveToken(token) async {
+    await _firestore
+        .collection('userToken')
+        .doc(loggedUser!.uid)
+        .set({'token': token});
+    notifyListeners();
+  }
+
   void setUsername(var value) {
     userName = value;
 

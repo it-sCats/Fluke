@@ -136,7 +136,7 @@ class _userInfoScreenState extends State<userInfoScreen> {
                             () {}, () async {
                           DateTime? pickedDate = await showDatePicker(
                               context: context,
-                              initialDate: DateTime.now(),
+                              initialDate: DateTime(2010),
                               firstDate: DateTime(
                                   1910), //DateTime.now() - not to allow to choose before today.
                               lastDate: DateTime(2010));
@@ -196,29 +196,37 @@ class _userInfoScreenState extends State<userInfoScreen> {
                                       _gendercon.text == null &&
                                       _Phonecon.text == null &&
                                       _Emailcon.text == null) {}
-                                  print(userInfo['name']);
 
-                                  _firestore
-                                      .collection('users')
-                                      .doc(user!.uid)
-                                      .set({
-                                    'email': _Emailcon.text == ''
-                                        ? userInfo['email']
-                                        : _Emailcon
-                                            .text, //ي حال لم تتغير قيمة الايميل ابقى على القيمة السابقة وفي حال تغير نعطي القيمة الجديدة
-                                    'name': _gendercon.text == ''
-                                        ? userInfo['name']
-                                        : _gendercon.text,
-                                    'phone': _Phonecon.text,
-                                    'birthDate': _birthDatecon.text
-                                  }).then((value) {
-                                    Navigator.pushNamed(context, '/home');
-                                  }, onError: (error) {
+                                  print(userInfo['name']);
+                                  if (_Phonecon.text.length < 10) {
                                     setState(() {
-                                      ErrorMessage = error.toString();
+                                      ErrorMessage =
+                                          'رقم الهاتف لا يجب أن يقل عن 10 خانات';
                                       isErrored = !isErrored;
                                     });
-                                  });
+                                  } else {
+                                    _firestore
+                                        .collection('users')
+                                        .doc(user!.uid)
+                                        .set({
+                                      'email': _Emailcon.text == ''
+                                          ? userInfo['email']
+                                          : _Emailcon
+                                              .text, //ي حال لم تتغير قيمة الايميل ابقى على القيمة السابقة وفي حال تغير نعطي القيمة الجديدة
+                                      'name': _gendercon.text == ''
+                                          ? userInfo['name']
+                                          : _gendercon.text,
+                                      'phone': _Phonecon.text,
+                                      'birthDate': _birthDatecon.text
+                                    }).then((value) {
+                                      Navigator.pop(context);
+                                    }, onError: (error) {
+                                      setState(() {
+                                        ErrorMessage = error.toString();
+                                        isErrored = !isErrored;
+                                      });
+                                    });
+                                  }
                                 },
                               ),
                             ),
