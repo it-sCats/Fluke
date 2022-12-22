@@ -215,13 +215,13 @@ class _eventDisplayState extends State<eventDisplay>
                               Text(
                                 widget.starterTime <= 12
                                     ? widget.starterTime.toString() + 'صباحاً-'
-                                    : 'مساءاً-',
+                                    : 'مساءً-',
                                 style: conOnboardingText.copyWith(fontSize: 14),
                               ),
                               Text(
                                 widget.endTime <= 12
                                     ? widget.endTime.toString() + 'صباحاً'
-                                    : 'مساءاً',
+                                    : 'مساءً',
                                 style: conOnboardingText.copyWith(fontSize: 14),
                               )
                             ],
