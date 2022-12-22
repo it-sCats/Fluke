@@ -202,9 +202,8 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                               TargetPlatform
                                   .iOS && //شرط يتحكم بإغلاق السايد مينو عند الضغط على الخيار هذا منها
                           !isCollapsed
-                  ? _controller!.reverse()
-                  : _controller!.forward();
-              isCollapsed = !isCollapsed;
+                  ? {_controller!.reverse(), isCollapsed = !isCollapsed}
+                  : null;
             });
           }, '/Odash', context),
           menuNavs(Icons.event, 'أحداثك', () {
@@ -213,9 +212,8 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
               defaultTargetPlatform == TargetPlatform.android ||
                       defaultTargetPlatform == TargetPlatform.iOS &&
                           !isCollapsed
-                  ? _controller!.reverse()
-                  : _controller!.forward();
-              isCollapsed = !isCollapsed;
+                  ? {_controller!.reverse(), isCollapsed = !isCollapsed}
+                  : null;
             });
           }, '/Oevent', context),
           menuNavs(Icons.notifications, 'إشعارات ', () {
@@ -224,9 +222,8 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
               defaultTargetPlatform == TargetPlatform.android ||
                       defaultTargetPlatform == TargetPlatform.iOS &&
                           !isCollapsed
-                  ? _controller!.reverse()
-                  : _controller!.forward();
-              isCollapsed = !isCollapsed;
+                  ? {_controller!.reverse(), isCollapsed = !isCollapsed}
+                  : null;
             });
           }, '/Onotification', context),
           SizedBox(
