@@ -147,7 +147,8 @@ class _MyAppState extends State<MyApp> {
             ],
             background: Container(color: Color(0xFFF5F5F5))),
 
-        home: recdirectRole(),
+        home: Ohome(),
+
         debugShowCheckedModeBanner:
             false, //to remove debugging banner at the top of the screen
 //todo جيبي الهاندل متاع النوتيفيكسشن للماين بحيث يفتحله طول وابعتي الارقيومنت الي يفتح صفحة الفونتيفيكشن لما نفتحو النوتيفيكيشن
