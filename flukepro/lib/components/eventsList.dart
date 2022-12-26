@@ -79,6 +79,7 @@ class eventList extends StatelessWidget {
                               elevation: 100,
                               context: context,
                               builder: (context) => eventDisplay(
+                                  wholePage: false,
                                   justDisplay: false,
                                   id: eventData['id'],
                                   title: eventData['title'],

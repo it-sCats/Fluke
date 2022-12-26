@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flukepro/components/cons.dart';
 import 'package:flukepro/errorsHandling/AuthExceptionHandler.dart';
 import 'package:flutter/material.dart';
@@ -400,7 +401,8 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
                               "phone": phoneNum.toString()
                             }) // create documentID with userID
                                 ;
-                            print(user.displayName);
+                            await FirebaseMessaging.instance
+                                .subscribeToTopic('visitors');
                             Navigator.pushNamed(
                               context,
                               '/interests',
@@ -417,6 +419,8 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
                               "userType": 2,
                               "phone": phoneNum.toString()
                             });
+                            await FirebaseMessaging.instance
+                                .subscribeToTopic('participants');
                             Navigator.pushNamed(
                               context,
                               '/interests',

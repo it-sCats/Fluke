@@ -15,57 +15,35 @@ final _auth = FirebaseAuth.instance;
 User? user = _auth.currentUser;
 
 class base extends StatefulWidget {
+  base({this.onNotificationTap});
+  final int? onNotificationTap;
   @override
   State<base> createState() => _baseState();
 }
 
 class _baseState extends State<base> {
   SharedPreferences? _selectedPage;
-  int currentIndexOfNav = 2;
+  int? currentIndexOfNav =
+      base().onNotificationTap == null ? 3 : base().onNotificationTap;
+  int? pageIndex =
+      base().onNotificationTap == null ? 3 : base().onNotificationTap;
   static List<Widget> _pages = [
     profile(),
     notifiScreen(),
     ExploreScreen(),
     HomeScreen(),
   ];
-  int? pageIndex = 2;
-  String? deviceToken;
+
   @override
   void initState() {
     super.initState();
-    Provider.of<siggning>(context, listen: false)
-        .getCurrentUsertype(); //  هذه تتغير بحسب البيانات اللي نبيها
+    user != null
+        ? Provider.of<siggning>(context, listen: false).getCurrentUsertype()
+        : null; //  هذه تتغير بحسب البيانات اللي نبيها
     print('-----------${siggning().userType}');
-    requiesPremission();
-    getToken();
-  }
-
-  requiesPremission() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-    NotificationSettings settings = NotificationSettings(
-        alert: AppleNotificationSetting.enabled,
-        announcement: AppleNotificationSetting.disabled,
-        badge: AppleNotificationSetting.enabled,
-        carPlay: AppleNotificationSetting.disabled,
-        criticalAlert: AppleNotificationSetting.disabled,
-        sound: AppleNotificationSetting.enabled,
-        authorizationStatus: AuthorizationStatus.authorized,
-        lockScreen: AppleNotificationSetting.enabled,
-        notificationCenter: AppleNotificationSetting.disabled,
-        showPreviews: AppleShowPreviewSetting.never,
-        timeSensitive: AppleNotificationSetting.disabled);
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('authorized');
-    }
-  }
-
-  getToken() async {
-    await FirebaseMessaging.instance
-        .getToken()
-        .then((value) => deviceToken = value);
-    print('$deviceToken--------');
-    siggning().saveToken(deviceToken);
-    notificationPRovider().initInfo();
+    notificationPRovider().initInfo(context);
+    print(widget.onNotificationTap);
+    print('the base argument');
   }
 
   @override
@@ -77,7 +55,9 @@ class _baseState extends State<base> {
           //as type: BottomNavigationBarType.fixed,
           backgroundColor: Color(0xFFfcfcfc),
           selectedItemColor: conBlue,
-          currentIndex: currentIndexOfNav,
+          currentIndex: widget.onNotificationTap == null
+              ? currentIndexOfNav!
+              : widget.onNotificationTap!,
           unselectedItemColor: Color(0xffd3c8c7),
           showSelectedLabels: true,
           showUnselectedLabels: false,

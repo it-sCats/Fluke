@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 
 import '../../components/creatingEventsForm.dart';
 import '../../utils/SigningProvider.dart';
+import '../../utils/notificationProvider.dart';
+import '../mainScreens/profile.dart';
 import 'Notifications.dart';
 import 'ODashboard.dart';
 import 'Oevents.dart';
@@ -32,9 +34,9 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
     //بدل ما يتم توجيه المستخدم لصفحات مختلفة, بالطريقة هذه حيكون عندي ويدجيتس يتم التغيير بيناتهم عن طريق النافيقيشن سايد
     //هنا نتحكمو بالويدجيتس الي حينعرضو
     Odashboard(), //لوحة التحكم
-    Oevents(), //الاحداث التي نظمها المنظم
+    profile(), //الاحداث التي نظمها المنظم
     notifaction(), //الاشعارات
-    Oprofile() //الملف الشخصي متاعه
+    //الملف الشخصي متاعه
   ];
   int? pageIndex = 0; //متغير نغيرو بيه الويدجيتس
   //controls the visibility of creating agenda and crating events button
@@ -123,7 +125,10 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                 ),
                 child: AddEventButton(
                   txt: "إنشاء أجندة",
-                  onTap: () {},
+                  onTap: () {
+                    // sendPushNotification('hiiiiat', '2022/20/20',
+                    //     'fpv_W3wRTby1ygGBWbtd-b:APA91bGaCgC4Cmrgco4IMVZ7BpEnkRQQIRmOBuhjxe4eQmKx0B0_LCsqF-z-HVOVFFZczstN-vaW4t7uGbAVIhH1zABvzsDnP-zuqKmJkAYzJkUwFpqSf3XfQsbFJzNSYRuw_OfLcJcJ');
+                  },
                 ),
               ),
             ),
@@ -173,7 +178,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                             //         .split('@')
                             //         .first
                             //     :
-                            'You',
+                            siggning().loggedUser!.email.toString(),
                             style: conHeadingsStyle.copyWith(
                                 fontSize: 16, color: Colors.white)),
                         SizedBox(width: 10),
@@ -217,7 +222,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                   : _controller!.forward();
               isCollapsed = !isCollapsed;
             });
-          }, '/Oevent', context),
+          }, '0', context),
           menuNavs(Icons.notifications, 'إشعارات ', () {
             setState(() {
               pageIndex = 2;

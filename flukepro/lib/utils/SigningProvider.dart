@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -7,19 +8,21 @@ import 'package:flutter/material.dart';
 import '../components/cons.dart';
 
 final auth = FirebaseAuth.instance;
+
 final _firestore = FirebaseFirestore.instance;
 
 class siggning extends ChangeNotifier {
   String? email;
   String? userName;
   String? password;
-  int? userType;
+
   Map<String, dynamic>? userInfoDocument;
   final eventRef = _firestore.collection('events');
 
   final authCredential =
       AuthCredential(providerId: 'google.com', signInMethod: 'Google');
-  late User? loggedUser = auth.currentUser;
+  User? loggedUser = auth.currentUser;
+  int? userType;
   addJoinRequest(
       eventId, userId, name, field, phone, email, joinType, context) {
     final prevRequest = eventRef
@@ -123,12 +126,29 @@ class siggning extends ChangeNotifier {
     }
   }
 
-  saveToken(token) async {
-    await _firestore
-        .collection('userToken')
-        .doc(loggedUser!.uid)
-        .set({'token': token});
+  saveTokenToDatabase(token) async {
+    loggedUser != null
+        ? await FirebaseFirestore.instance
+            .collection('users')
+            .doc(loggedUser!.uid)
+            .update({
+            'tokens': FieldValue.arrayUnion([
+              token
+            ]), //It is important to remember a user can have many tokens (from multiple devices, or token refreshes), therefore we use FieldValue.arrayUnion to store new tokens. When a message is sent via an admin SDK, invalid/expired tokens will throw an error allowing you to then remove them from the database.
+          })
+        : null;
     notifyListeners();
+  }
+
+  Future<void> setupToken() async {
+    // Get the token each time the application loads
+    String? token = await FirebaseMessaging.instance.getToken();
+
+    // Save the initial token to the database
+    await saveTokenToDatabase(token!);
+
+    // Any time the token refreshes, store this in the database too.
+    FirebaseMessaging.instance.onTokenRefresh.listen(saveTokenToDatabase);
   }
 
   void setUsername(var value) {
@@ -148,16 +168,15 @@ class siggning extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getCurrentUsertype() async {
-    final userInfo =
+  Future<int> getCurrentUsertype() async {
+    DocumentSnapshot<Map<String, dynamic>> userInfo =
         await _firestore.collection('users').doc(loggedUser!.uid).get();
 
     final userInfoDoc = userInfo.data();
     userType = userInfoDoc!['userType'];
-    notifyListeners();
 
-    print('from provider $userType');
-    // return userType;
+    notifyListeners();
+    return userInfoDoc!['userType'];
   }
 
   void getUserInfoDoc() async {

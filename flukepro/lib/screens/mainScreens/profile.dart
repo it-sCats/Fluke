@@ -1,17 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flukepro/components/cons.dart';
-import 'package:flukepro/screens/mainScreens/userInfoScreen.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import '../../components/QrCodeWidget.dart';
 import '../../components/visitorEventprev.dart';
 import '../../utils/fireStoreQueries.dart';
 
 final _auth = FirebaseAuth.instance;
-final _firestore = FirebaseFirestore.instance;
+
 String? userId;
 Map<String, dynamic>? userInfo;
 int? userType;
@@ -26,15 +24,8 @@ class _profileState extends State<profile> {
   @override
   void initState() {
     super.initState();
-    getUser();
-    userId = _auth.currentUser!.uid;
-  }
 
-  getUser() async {
-    final user =
-        await _firestore.collection('users').doc(_auth.currentUser!.uid).get();
-    userInfo = user.data();
-    userType = userInfoDoc!['userType'];
+    userId = _auth.currentUser!.uid;
   }
 
   @override

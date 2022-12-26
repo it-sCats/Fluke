@@ -319,7 +319,7 @@ class CTAshowEvent extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 5),
         width: isFullwidth ? 290 : 120,
         height: 40,
-        margin: EdgeInsets.symmetric(vertical: size.height * 0.02),
+        margin: EdgeInsets.symmetric(vertical: 0),
         child: Text(
           txt,
           textAlign: TextAlign.center,
@@ -345,24 +345,23 @@ class CTAsdelEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return InkWell(
-      onTap: () => onTap(),
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 5),
-        width: isFullwidth ? 290 : 120,
-        height: 40,
-        margin: EdgeInsets.symmetric(vertical: size.height * 0.02),
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 5),
+      width: isFullwidth ? 290 : 120,
+      height: 40,
+      child: InkWell(
+        onTap: () => onTap,
         child: Text(
           txt,
           textAlign: TextAlign.center,
           style: conCTATxt.copyWith(fontSize: 13, color: Color(0xff676767)),
         ),
-        decoration: BoxDecoration(
-          border: Border.all(width: 1, color: Colors.black.withOpacity(.1)),
-          color: Color(0xffffffff),
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
-          ),
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(width: 1, color: Colors.black.withOpacity(.1)),
+        color: Color(0xffffffff),
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
         ),
       ),
     );

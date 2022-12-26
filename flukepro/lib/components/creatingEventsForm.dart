@@ -1,16 +1,22 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flukepro/components/customWidgets.dart';
+import 'package:flukepro/utils/SigningProvider.dart';
+import 'package:flukepro/utils/notificationProvider.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:provider/provider.dart';
 import 'cons.dart';
+import 'package:http/http.dart' as http;
 
 final _firestore = FirebaseFirestore.instance;
+final List<String> tokenText = [];
 
 class creatingEvent extends StatefulWidget {
   @override
@@ -29,11 +35,16 @@ class _creatingEventState extends State<creatingEvent> {
     'إجتماع',
   ];
   var fields = [
-    'تقنية وتكنولوجيا',
-    'زراعة',
-    'دعاية وإعلام',
-    'قانون وسياسة ',
-    'علوم وأحياء',
+    'المجال الطبي',
+    'برمجة',
+    'مالية',
+    'قانون',
+    'مجال التقنية',
+    'أعمال حرة',
+    'أخرى',
+    'محاسبة',
+    'كتابة محتوى',
+    'تصميم جرافيكي'
   ];
   var cities = [
     'طرابلس',
@@ -777,9 +788,40 @@ class _creatingEventState extends State<creatingEvent> {
                                     'targetedAudiance':
                                         FieldValue.arrayUnion(targetedAudience),
                                     'eventVisibility': true,
+                                    'creatorID': Provider.of<siggning>(context,
+                                            listen: false)
+                                        .loggedUser!
+                                        .uid,
                                     'creationDate': Timestamp.now()
                                   });
+                                  sendPushNotification(
+                                      starterDate.toDate().toString(),
+                                      _eventNameCont.text,
+                                      _eventFieldCont,
+                                      event!.id,
+                                      siggning().loggedUser!.uid);
 
+                                  // if (sendNotifications) {
+                                  //   final users = await FirebaseFirestore
+                                  //       .instance
+                                  //       .collection('users')
+                                  //       .where('userType', isEqualTo: 0)
+                                  //       .get();
+                                  //   final usersDoc = users.docs;
+                                  //
+                                  //   final snaplistOfTokens =
+                                  //       await FirebaseFirestore
+                                  //           .instance
+                                  //           .collection('userToken')
+                                  //           .where(FieldPath.documentId,
+                                  //               arrayContains: usersDoc)
+                                  //           .get();
+                                  //   final TokensDoc = snaplistOfTokens.docs;
+                                  //   TokensDoc.forEach((element) {
+                                  //     tokenText.add(element['token']);
+                                  //   });
+                                  //   sendPushNotification(tokenText, "send from creating event", "I work");
+                                  // }
                                   if (event == null) {
                                     isLoading = false;
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -822,5 +864,34 @@ class _creatingEventState extends State<creatingEvent> {
         ),
       ),
     );
+  }
+}
+
+sendPushNotification(
+    String body, String title, field, eventId, createrId) async {
+  try {
+    await http
+        .post(
+            Uri.parse(
+                'https://fcm.googleapis.com/v1/projects/fluke-db/messages:send'),
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+              'Authorization':
+                  'Bearer ya29.a0AX9GBdW9Fn_gpAbQCK6awse93FwGrfWsxMnOs4O6B-PlcbIN3b9rzLAT0JV0LMQqePVmw8_lwTr0FY8msBZyl6u6S-ElnaHKQ8O-P5l4_1v-PEUCfvF6XX75317fr8IeLkTuFXCiaxt1q0TATxWoExn3o0xdaCgYKARMSARESFQHUCsbCt4HshZIfek_yhQsExsqfqg0163'
+            },
+            body: jsonEncode(<String, dynamic>{
+              "message": {
+                "topic": field,
+                "notification": {"title": title, "body": body},
+                "data": {
+                  "click_action": "FLUTTER_NOTIFICATION_CLICK",
+                  "creatorID": createrId,
+                  "eventId": eventId
+                }
+              }
+            }))
+        .whenComplete(() => debugPrint('done Should send'));
+  } catch (e) {
+    print('erorr in pushing notifi:$e');
   }
 }

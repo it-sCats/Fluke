@@ -24,6 +24,7 @@ bool isLoading = false;
 Map<String, dynamic>? userInfoDoc;
 
 class eventDisplay extends StatefulWidget {
+  bool wholePage;
   String id;
   String title;
   String? image;
@@ -44,6 +45,7 @@ class eventDisplay extends StatefulWidget {
   bool justDisplay;
 
   eventDisplay({
+    required this.wholePage,
     required this.justDisplay,
     required this.id,
     required this.title,
@@ -132,10 +134,11 @@ class _eventDisplayState extends State<eventDisplay>
     super.setState(fn);
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget bodyOfEvent() {
     TabController _tabCont = TabController(length: 2, vsync: this);
-    Provider.of<siggning>(context, listen: false).getCurrentUsertype();
+    user != null
+        ? Provider.of<siggning>(context, listen: false).getCurrentUsertype()
+        : null;
     final userType = Provider.of<siggning>(context, listen: false).userType;
     return SingleChildScrollView(
       child: Column(
@@ -428,6 +431,20 @@ class _eventDisplayState extends State<eventDisplay>
         ],
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    TabController _tabCont = TabController(length: 2, vsync: this);
+    user != null
+        ? Provider.of<siggning>(context, listen: false).getCurrentUsertype()
+        : null;
+    final userType = Provider.of<siggning>(context, listen: false).userType;
+    return widget.wholePage
+        ? Scaffold(
+            body: bodyOfEvent(),
+          )
+        : bodyOfEvent();
   }
 }
 

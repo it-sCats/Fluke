@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flukepro/screens/OrganizersScreens/Notifications.dart';
 import 'package:flukepro/screens/OrganizersScreens/ODashboard.dart';
@@ -6,6 +8,7 @@ import 'package:flukepro/screens/OrganizersScreens/Oprofile.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
 import 'package:flukepro/utils/fireStoreQueries.dart';
 import 'package:flukepro/utils/notificationProvider.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:flukepro/screens/OrganizersScreens/OHome.dart';
@@ -29,10 +32,61 @@ import 'base.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print('handling message ${message.messageId}');
+final user = FirebaseAuth.instance.currentUser;
+final _firestore = FirebaseFirestore.instance;
+
+// getuserinMAin() async {
+//   final userInfo = await _firestore.collection('users').doc(user!.uid).get();
+//
+//   final userInfoDoc = userInfo.data();
+//   mainUserType = userInfoDoc!['userType'];
+//   print('the user type inside functoin');
+//   print(userInfoDoc!['userType']);
+// }
+
+Future<void> firebaseMessagingBackgroundHandler(
+  RemoteMessage message,
+) async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
+      //this settings for handling the notifications when the app is in the foreground
+      message.notification!.body.toString(),
+      htmlFormatBigText: true,
+      contentTitle: message.notification!.title.toString(),
+      htmlFormatContentTitle: true);
+  AndroidNotificationDetails androidNotificationDetails =
+      AndroidNotificationDetails(
+          'high_importance_channel', 'high_importance_channel',
+          importance: Importance.high,
+          styleInformation: bigTextStyleInformation,
+          priority: Priority.max,
+          playSound: false);
+  NotificationDetails notificationDetails = NotificationDetails(
+      android: androidNotificationDetails, iOS: DarwinNotificationDetails());
+  var flutterLocalNotificationsPlugin;
+  await flutterLocalNotificationsPlugin.show(0, message.notification!.title,
+      message.notification!.body, notificationDetails,
+      payload: message.data['body']);
+  if (message != null) {
+    navigatorKey?.currentState!.push(MaterialPageRoute(
+      builder: (context) => base(
+        onNotificationTap: 1,
+      ),
+    ));
+  }
 }
 
+handlingBackground(message) {
+  navigatorKey?.currentState!.push(MaterialPageRoute(
+    builder: (context) => base(
+      onNotificationTap: 1,
+    ),
+  ));
+}
+
+GlobalKey<NavigatorState>? navigatorKey;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -40,14 +94,38 @@ void main() async {
   );
   await FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessaging.onBackgroundMessage(
-    _firebaseMessagingBackgroundHandler,
+    firebaseMessagingBackgroundHandler,
   );
+  // await FirebaseMessaging.instance.getInitialMessage();
+  notificationPRovider().requiesPremission();
+  notificationPRovider().getToken();
+
+  // setUpBackgroundInteraction();
+  navigatorKey = GlobalKey(debugLabel: "base");
   await getOngoing();
   runApp(MyApp());
   // runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    user != null ? siggning().setupToken() : null;
+    user != null ? siggning().getCurrentUsertype() : null;
+    // getuserinMAin();
+    print('from main');
+    print(siggning().userType);
+    //
+    // notificationPRovider().initInfo(context);
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -57,6 +135,7 @@ class MyApp extends StatelessWidget {
             create: (context) => siggning()) //كيف حطيت البروفايدر وماخدمتاش
       ],
       child: MaterialApp(
+        navigatorKey: navigatorKey,
         builder: (context, child) => ResponsiveWrapper.builder(child,
             maxWidth: 3000,
             minWidth: 1000,
@@ -68,10 +147,10 @@ class MyApp extends StatelessWidget {
             ],
             background: Container(color: Color(0xFFF5F5F5))),
 
-        home: loginScreen(),
+        home: recdirectRole(),
         debugShowCheckedModeBanner:
             false, //to remove debugging banner at the top of the screen
-
+//todo جيبي الهاندل متاع النوتيفيكسشن للماين بحيث يفتحله طول وابعتي الارقيومنت الي يفتح صفحة الفونتيفيكشن لما نفتحو النوتيفيكيشن
         routes: {
           '/log': ((context) => loginScreen()),
           VisitorRegistration.routeName: (context) => VisitorRegistration(),

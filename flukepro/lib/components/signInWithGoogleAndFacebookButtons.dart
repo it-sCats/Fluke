@@ -104,11 +104,7 @@ class _GoogleAndFacebookButtonsState extends State<GoogleAndFacebookButtons> {
                     arguments: {2},
                   );
                 } else {
-                  final snap =
-                      await _firestore.collection('users').doc(user!.uid).get();
-                  snap['userType'] == 1
-                      ? Navigator.pushNamed(context, 'OHome')
-                      : Navigator.pushNamed(context, 'base');
+                  Navigator.pushNamed(context, '/redirect');
                 }
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(

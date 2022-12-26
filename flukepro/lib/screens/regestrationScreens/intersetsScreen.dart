@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flukepro/components/cons.dart';
 import 'package:flukepro/components/customWidgets.dart';
 import 'package:flutter/material.dart';
@@ -99,7 +100,10 @@ class _interestsSelectionState extends State<interestsSelection> {
                                   .collection('users')
                                   .doc(userId)
                                   .update({'interests': selectedinterestes});
-
+                              selectedinterestes.forEach((element) {
+                                FirebaseMessaging.instance
+                                    .subscribeToTopic(element);
+                              });
                               Navigator.pushNamed(context, '/redirect');
                             }
                             // Navigator.pushNamed(context, '/home');

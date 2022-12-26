@@ -116,6 +116,7 @@ class QrwidgetProfile extends StatelessWidget {
                   elevation: 100,
                   context: context,
                   builder: (context) => eventDisplay(
+                      wholePage: false,
                       justDisplay: true,
                       id: eventInfo!['id'],
                       title: eventInfo['title'],
