@@ -29,6 +29,8 @@ import 'base.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import 'screens/mainScreens/AdminScreens/ahome.dart';
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('handling message ${message.messageId}');
 }
@@ -68,7 +70,7 @@ class MyApp extends StatelessWidget {
             ],
             background: Container(color: Color(0xFFF5F5F5))),
 
-        home: Ohome(),
+        home: Ahome(),
         debugShowCheckedModeBanner:
             false, //to remove debugging banner at the top of the screen
 

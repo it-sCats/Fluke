@@ -73,184 +73,198 @@ class _AhomeState extends State<Ahome> with SingleTickerProviderStateMixin {
     screenWidth = size.width;
     ScreenHeigth = size.height;
     return Scaffold(
-      backgroundColor: conORange,
-      resizeToAvoidBottomInset: false,
-      body: Row(
-        children: [
-          Expanded(flex: 1, child: Container(child: menu(context))),
-          SizedBox(width: 100),
-          Expanded(flex: 2, child: Container(child: Dashboard(context))),
-        ],
-      ),
-    );
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        resizeToAvoidBottomInset: false,
+        body: Container(
+          child: Row(
+            children: [
+              menu(context),
+              Dashboard(context),
+            ],
+          ),
+        ));
   }
 
   Widget menu(context) {
     return SafeArea(
-        child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          flex: 1,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+        child: Container(
+      width: 250,
+      decoration: BoxDecoration(
+        // color: Color(0xffB2C6E4),
+        color: conBlue.withOpacity(.70),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 1,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CircleAvatar(
-                    backgroundColor: Color(0xff).withOpacity(0),
-                    radius: 30,
-                    child: Image.asset(
-                      'images/avatar.png',
-                      fit: BoxFit.contain,
-                    ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Color(0xff).withOpacity(0),
+                        radius: 30,
+                        child: Image.asset(
+                          'images/fluke horizontal-13-modified.png',
+                          fit: BoxFit.contain,
+                        ),
+                      )
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          // _auth.currentUser != null
+                          //     ? _auth.currentUser!.email
+                          //         .toString()
+                          //         .split('@')
+                          //         .first
+                          //     :
+                          'Fluke admin pannel',
+                          style: conHeadingsStyle.copyWith(
+                              fontSize: 16, color: Colors.white)),
+                      Text('You',
+                          style: conHeadingsStyle.copyWith(
+                              fontSize: 10, color: Colors.white)),
+                    ],
                   )
                 ],
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('You',
-                      style: conHeadingsStyle.copyWith(
-                          fontSize: 16, color: Colors.white)),
-                  Text(
-                      // _auth.currentUser != null
-                      //     ? _auth.currentUser!.email
-                      //         .toString()
-                      //         .split('@')
-                      //         .first
-                      //     :
-                      'alla.abdussalam.almgalsh@gmail.com',
-                      style: conHeadingsStyle.copyWith(
-                          fontSize: 10, color: Colors.white)),
-                ],
-              )
-            ],
-          ), //part1
-        ),
-        Expanded(
-          flex: 1,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              menuNavs(Icons.dashboard, ' لوحة التحكم', () {
-                setState(() {
-                  pageIndex = 0; //تغير الإندكس الي يتحكم بالويدجيت المعروضة
-                  defaultTargetPlatform == TargetPlatform.android ||
-                          defaultTargetPlatform ==
-                                  TargetPlatform
-                                      .iOS && //شرط يتحكم بإغلاق السايد مينو عند الضغط على الخيار هذا منها
-                              !isCollapsed
-                      ? {_controller!.reverse(), isCollapsed = !isCollapsed}
-                      : null;
-                });
-              }, '/Odash', context),
-              menuNavs(Icons.event, 'أحداثك', () {
-                setState(() {
-                  pageIndex = 1;
-                  defaultTargetPlatform == TargetPlatform.android ||
-                          defaultTargetPlatform == TargetPlatform.iOS &&
-                              !isCollapsed
-                      ? {_controller!.reverse(), isCollapsed = !isCollapsed}
-                      : null;
-                });
-              }, '/Oevent', context),
-              menuNavs(Icons.notifications, 'إشعارات ', () {
-                setState(() {
-                  pageIndex = 2;
-                  defaultTargetPlatform == TargetPlatform.android ||
-                          defaultTargetPlatform == TargetPlatform.iOS &&
-                              !isCollapsed
-                      ? {_controller!.reverse(), isCollapsed = !isCollapsed}
-                      : null;
-                });
-              }, '/Onotification', context),
-            ],
+            ), //part1
           ),
-        ),
-        Expanded(
+          Expanded(
             flex: 1,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                IconButton(
-                    icon: Icon(Icons.settings),
-                    color: Colors.white,
-                    onPressed: () {}),
-                Text(
-                  '|',
-                  style: conOnboardingText,
-                ),
-                IconButton(
-                    icon: Icon(Icons.logout_rounded),
-                    color: Colors.white,
-                    onPressed: () {
-                      // _auth.signOut();
-                      // Navigator.pushNamed(context, '/log');
-                      showDialog(
-                        //save to drafts dialog
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text(
-                              'هل أنت متأكد من تسجيل الخروج؟ ',
-                              textAlign: TextAlign.center,
-                              style: conHeadingsStyle.copyWith(fontSize: 15),
-                            ),
-                            content: Text(
-                              'بياناتك ستكون محفوظة وستجدها عند تسجل الدخول مرة أخرى',
-                              textAlign: TextAlign.center,
-                              style: conHeadingsStyle.copyWith(
-                                  fontSize: 14, fontWeight: FontWeight.normal),
-                            ),
-                            actions: [
-                              InkWell(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(
-                                    ' الرجوع',
-                                    textAlign: TextAlign.center,
-                                    style: conHeadingsStyle.copyWith(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal),
-                                  )),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 10),
-                                decoration: BoxDecoration(
-                                    color: conRed,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: InkWell(
-                                  onTap: () async {
-                                    _auth.signOut();
-                                    Navigator.pushNamed(context, '/log');
-                                  },
-                                  child: Text(
-                                    'تسجيل الخروج ',
-                                    textAlign: TextAlign.center,
-                                    style: conHeadingsStyle.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold),
+                menuNavs(Icons.dashboard, ' لوحة التحكم', () {
+                  setState(() {
+                    pageIndex = 0; //تغير الإندكس الي يتحكم بالويدجيت المعروضة
+                    defaultTargetPlatform == TargetPlatform.android ||
+                            defaultTargetPlatform ==
+                                    TargetPlatform
+                                        .iOS && //شرط يتحكم بإغلاق السايد مينو عند الضغط على الخيار هذا منها
+                                !isCollapsed
+                        ? {_controller!.reverse(), isCollapsed = !isCollapsed}
+                        : null;
+                  });
+                }, '/Odash', context),
+                SizedBox(height: 30),
+                menuNavs(Icons.event, 'أحداثك', () {
+                  setState(() {
+                    pageIndex = 1;
+                    defaultTargetPlatform == TargetPlatform.android ||
+                            defaultTargetPlatform == TargetPlatform.iOS &&
+                                !isCollapsed
+                        ? {_controller!.reverse(), isCollapsed = !isCollapsed}
+                        : null;
+                  });
+                }, '/Oevent', context),
+                SizedBox(height: 30),
+                menuNavs(Icons.notifications, 'إشعارات ', () {
+                  setState(() {
+                    pageIndex = 2;
+                    defaultTargetPlatform == TargetPlatform.android ||
+                            defaultTargetPlatform == TargetPlatform.iOS &&
+                                !isCollapsed
+                        ? {_controller!.reverse(), isCollapsed = !isCollapsed}
+                        : null;
+                  });
+                }, '/Onotification', context),
+              ],
+            ),
+          ),
+          Expanded(
+              flex: 1,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                      icon: Icon(Icons.settings),
+                      color: Colors.white,
+                      onPressed: () {}),
+                  Text(
+                    '|',
+                    style: conOnboardingText,
+                  ),
+                  IconButton(
+                      icon: Icon(Icons.logout_rounded),
+                      color: Color.fromARGB(255, 194, 8, 8),
+                      onPressed: () {
+                        // _auth.signOut();
+                        // Navigator.pushNamed(context, '/log');
+                        showDialog(
+                          //save to drafts dialog
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text(
+                                'هل أنت متأكد من تسجيل الخروج؟ ',
+                                textAlign: TextAlign.center,
+                                style: conHeadingsStyle.copyWith(fontSize: 15),
+                              ),
+                              content: Text(
+                                'بياناتك ستكون محفوظة وستجدها عند تسجل الدخول مرة أخرى',
+                                textAlign: TextAlign.center,
+                                style: conHeadingsStyle.copyWith(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                              actions: [
+                                InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      ' الرجوع',
+                                      textAlign: TextAlign.center,
+                                      style: conHeadingsStyle.copyWith(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.normal),
+                                    )),
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  decoration: BoxDecoration(
+                                      color: conRed,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: InkWell(
+                                    onTap: () async {
+                                      _auth.signOut();
+                                      Navigator.pushNamed(context, '/log');
+                                    },
+                                    child: Text(
+                                      'تسجيل الخروج ',
+                                      textAlign: TextAlign.center,
+                                      style: conHeadingsStyle.copyWith(
+                                          color: Colors.white,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                            buttonPadding: EdgeInsets.all(20),
-                            actionsAlignment: MainAxisAlignment.spaceAround,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 100),
-                          );
-                        },
-                      );
-                    })
-              ],
-            ))
-      ],
+                              ],
+                              buttonPadding: EdgeInsets.all(20),
+                              actionsAlignment: MainAxisAlignment.spaceAround,
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 100),
+                            );
+                          },
+                        );
+                      })
+                ],
+              ))
+        ],
+      ),
     ));
   }
 
@@ -258,8 +272,7 @@ class _AhomeState extends State<Ahome> with SingleTickerProviderStateMixin {
       String currentPath, BuildContext context) {
     //ويدجيت خاصة بعناصر المينو
     return Padding(
-      padding: EdgeInsets.only(
-          left: MediaQuery.of(context).size.width * .07, top: 30),
+      padding: EdgeInsets.only(left: 30),
       child: InkWell(
           onTap: () => callback(),
           child: Row(
@@ -351,67 +364,6 @@ class _AhomeState extends State<Ahome> with SingleTickerProviderStateMixin {
                 ),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class AddEventButton extends StatefulWidget {
-  //
-  AddEventButton({
-    required this.txt,
-    required this.onTap,
-  });
-  final String txt;
-  Function onTap;
-
-  @override
-  State<AddEventButton> createState() => _AddEventButtonState();
-}
-
-class _AddEventButtonState extends State<AddEventButton> {
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: Container(
-        width: defaultTargetPlatform == TargetPlatform.android ||
-                defaultTargetPlatform == TargetPlatform.iOS
-            ? 140
-            : 150,
-        height: defaultTargetPlatform == TargetPlatform.android ||
-                defaultTargetPlatform == TargetPlatform.iOS
-            ? 50
-            : 40,
-        padding: EdgeInsets.symmetric(vertical: 7),
-        margin: EdgeInsets.symmetric(
-            vertical: defaultTargetPlatform == TargetPlatform.android ||
-                    defaultTargetPlatform == TargetPlatform.iOS
-                ? size.height * 0.0700
-                : size.height * 0.090,
-            horizontal: defaultTargetPlatform == TargetPlatform.android ||
-                    defaultTargetPlatform == TargetPlatform.iOS
-                ? size.height * 0.0900
-                : size.width * 0.080),
-        child: InkWell(
-          onTap: () => widget.onTap(),
-          child: Text(
-            widget.txt,
-            textAlign: TextAlign.center,
-            style:
-                conCTATxt.copyWith(fontSize: 15, fontWeight: FontWeight.w500),
-          ),
-        ),
-        decoration: BoxDecoration(
-          color: conORange,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(0),
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
           ),
         ),
       ),
