@@ -1,3 +1,4 @@
+import 'package:flukepro/components/cons.dart';
 import 'package:flukepro/utils/fireStoreQueries.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class Adashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(right: 25.0),
+      color: conRed,
       child: GridView.count(
         //حيعطينا التقسيمة للشاشة
         physics: NeverScrollableScrollPhysics(),

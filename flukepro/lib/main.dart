@@ -3,6 +3,7 @@ import 'package:flukepro/screens/OrganizersScreens/Notifications.dart';
 import 'package:flukepro/screens/OrganizersScreens/ODashboard.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oevents.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oprofile.dart';
+import 'package:flukepro/screens/mainScreens/AdminScreens/aDashboard.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
 import 'package:flukepro/utils/fireStoreQueries.dart';
 import 'package:flukepro/utils/notificationProvider.dart';
@@ -96,9 +97,11 @@ class MyApp extends StatelessWidget {
           //routes of Organizers Screens
           'OHome': ((context) => Ohome()),
           '/Odash': ((context) => Odashboard()),
+          '/Adash': ((context) => Adashboard()),
           '/Oevent': ((context) => Oevents()),
           '/Onotification': ((context) => notifaction()),
           '/Oprofile': ((context) => Oprofile())
+          //routes of Admin Screens
         }, //routes are to ease the navigation btween pages
         //we give every page a name then when we want to navigate we just call that name
       ),

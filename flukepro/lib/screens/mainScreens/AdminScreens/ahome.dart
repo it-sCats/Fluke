@@ -149,24 +149,24 @@ class _AhomeState extends State<Ahome> with SingleTickerProviderStateMixin {
                 menuNavs(Icons.dashboard, ' لوحة التحكم', () {
                   setState(() {
                     pageIndex = 0; //تغير الإندكس الي يتحكم بالويدجيت المعروضة
-                    defaultTargetPlatform == TargetPlatform.android ||
-                            defaultTargetPlatform ==
-                                    TargetPlatform
-                                        .iOS && //شرط يتحكم بإغلاق السايد مينو عند الضغط على الخيار هذا منها
-                                !isCollapsed
-                        ? {_controller!.reverse(), isCollapsed = !isCollapsed}
-                        : null;
+                    // defaultTargetPlatform == TargetPlatform.android ||
+                    //         defaultTargetPlatform ==
+                    //                 TargetPlatform
+                    //                     .iOS && //شرط يتحكم بإغلاق السايد مينو عند الضغط على الخيار هذا منها
+                    //             !isCollapsed
+                    //     ? {_controller!.reverse(), isCollapsed = !isCollapsed}
+                    //     : null;
                   });
-                }, '/Odash', context),
+                }, '/Adash', context),
                 SizedBox(height: 30),
                 menuNavs(Icons.event, 'أحداثك', () {
                   setState(() {
                     pageIndex = 1;
-                    defaultTargetPlatform == TargetPlatform.android ||
-                            defaultTargetPlatform == TargetPlatform.iOS &&
-                                !isCollapsed
-                        ? {_controller!.reverse(), isCollapsed = !isCollapsed}
-                        : null;
+                    // defaultTargetPlatform == TargetPlatform.android ||
+                    //         defaultTargetPlatform == TargetPlatform.iOS &&
+                    //             !isCollapsed
+                    //     ? {_controller!.reverse(), isCollapsed = !isCollapsed}
+                    //     : null;
                   });
                 }, '/Oevent', context),
                 SizedBox(height: 30),
