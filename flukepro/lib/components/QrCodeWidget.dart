@@ -28,7 +28,13 @@ class Qrwidget extends StatelessWidget {
             ),
             SizedBox(
               height: 30,
-            )
+            ),
+            CTA(
+                txt: 'حسناً',
+                isFullwidth: false,
+                onTap: () {
+                  Navigator.pop(context);
+                })
           ],
         ),
       ),

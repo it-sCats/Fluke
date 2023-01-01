@@ -1,5 +1,6 @@
 import 'package:flukepro/components/cons.dart';
 import 'package:flukepro/components/customWidgets.dart';
+import 'package:flukepro/screens/mainScreens/notificationScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -34,8 +35,8 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
     //بدل ما يتم توجيه المستخدم لصفحات مختلفة, بالطريقة هذه حيكون عندي ويدجيتس يتم التغيير بيناتهم عن طريق النافيقيشن سايد
     //هنا نتحكمو بالويدجيتس الي حينعرضو
     Odashboard(), //لوحة التحكم
-    profile(), //الاحداث التي نظمها المنظم
-    notifaction(), //الاشعارات
+    Oprofile(), //الاحداث التي نظمها المنظم
+    notifiScreen(), //الاشعارات
     //الملف الشخصي متاعه
   ];
   int? pageIndex = 0; //متغير نغيرو بيه الويدجيتس
@@ -62,6 +63,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
     super.initState();
     print('++++++++++++++');
     Provider.of<siggning>(context, listen: false).getCurrentUsertype();
+    // Provider.of<siggning>(context, listen: false).getUserInfoDoc();
 
     _controller = AnimationController(vsync: this, duration: duration);
     _scaleAnimation = Tween<double>(
@@ -178,9 +180,12 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                             //         .split('@')
                             //         .first
                             //     :
-                            siggning().loggedUser!.email.toString(),
+                            Provider.of<siggning>(context, listen: false)
+                                .loggedUser!
+                                .email
+                                .toString(),
                             style: conHeadingsStyle.copyWith(
-                                fontSize: 16, color: Colors.white)),
+                                fontSize: 14, color: Colors.white)),
                         SizedBox(width: 10),
                       ],
                     ),
@@ -220,7 +225,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                   ? {_controller!.reverse(), isCollapsed = !isCollapsed}
                   : null;
             });
-          }, '0', context),
+          }, '/Oprofile', context),
           menuNavs(Icons.notifications, 'إشعارات ', () {
             setState(() {
               pageIndex = 2;
@@ -244,7 +249,9 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                 IconButton(
                     icon: Icon(Icons.settings),
                     color: Colors.white,
-                    onPressed: () {}),
+                    onPressed: () {
+                      Navigator.pushNamed(context, 'settings');
+                    }),
                 Text(
                   '|',
                   style: conOnboardingText,
@@ -309,8 +316,8 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                   defaultTargetPlatform ==
                       TargetPlatform
                           .iOS //شرط يتحكم بكمية إزاحة الداش بورد الجانبية على المينيو لما تنفتح
-              ? 0.1 * screenWidth!
-              : 0.2 * screenWidth!,
+              ? 0.3 * screenWidth!
+              : 0.25 * screenWidth!,
       right: isCollapsed
           ? 0
           : !isCollapsed && defaultTargetPlatform == TargetPlatform.android ||

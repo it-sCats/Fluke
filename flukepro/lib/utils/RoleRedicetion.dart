@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,6 +32,8 @@ class _recdirectRoleState extends State<recdirectRole> {
   void _checkRole() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
+      Provider.of<siggning>(context, listen: false).getUserInfoDoc();
+
       int userT = await Provider.of<siggning>(context, listen: false)
           .getCurrentUsertype();
       print('from role redirection');
@@ -41,8 +44,9 @@ class _recdirectRoleState extends State<recdirectRole> {
               ? NavigateNext('base')
               : userT == 1
                   ? {
-                      await FirebaseMessaging.instance
-                          .subscribeToTopic('Organizers'),
+                      if (!kIsWeb)
+                        await FirebaseMessaging.instance
+                            .subscribeToTopic('Organizers'),
                       NavigateNext('OHome')
                     }
                   : NavigateNext('/log');

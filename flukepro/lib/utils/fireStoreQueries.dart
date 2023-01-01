@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart%20';
 import 'package:intl/intl.dart' as intl;
+import 'package:provider/provider.dart';
+
+import 'SigningProvider.dart';
 
 final _firestore = FirebaseFirestore.instance;
 // this function checks if uniqueName already exists
@@ -27,7 +30,7 @@ getMarker() async {
   return snapshot.docs.map((doc) => doc.data());
 }
 
-getOngoing() async {
+getOngoing() {
   // Timestamp now = Timestamp.now();
   //
   // QuerySnapshot Starter = await _firestore
@@ -55,36 +58,56 @@ getOngoing() async {
   // });
   // print(list.docs.length);
   // return list.docs;
-  QuerySnapshot ongoing = await _firestore.collection('events').get()
-    ..docs.where((event) {
-      DateTime start =
-          DateTime.fromMicrosecondsSinceEpoch(event['starterDate']);
-      DateTime end = DateTime.fromMicrosecondsSinceEpoch(event['endDate']);
-      print(start);
-      print(end);
-      return event['starterDate'].isBefore(DateTime.now()) &&
-              event['endDate'].isBefore(DateTime.now())
-          // ||
-          // end.compareTo(DateTime.now()) == 0 ||
-          // start.compareTo(DateTime.now()) == 0
-          ;
-    });
-  return ongoing.docs;
+  var events = _firestore.collection('events').snapshots()
+      //     .listen((event) {
+      //   for (var doc in event.docs) {
+      //     DateTime start =
+      //         DateTime.fromMicrosecondsSinceEpoch(doc.data()['starterDate']);
+      //     DateTime end = DateTime.fromMicrosecondsSinceEpoch(doc.data()['endDate']);
+      //     print(start);
+      //     print(end);
+      //     if (start.isBefore(DateTime.now()) && end.isAfter(DateTime.now()))
+      //       events.add(doc);
+      //     return doc;
+      //   }
+      //   // ||
+      //   // end.compareTo(DateTime.now()) == 0 ||
+      //   // start.compareTo(DateTime.now()) == 0
+      //   ;
+      // }
+      //)
+      ;
+  return events;
 }
 
-getAllEvents() async {
-  QuerySnapshot AllEvents = await _firestore.collection('events').get();
+getUserReegiteredEvents(String userId) {
+  final AllEvents = _firestore
+      .collection('users')
+      .doc(userId)
+      .collection('tickets')
+      .snapshots();
 
+  return AllEvents;
+}
+
+getOrganizersEvent(context) async {
+  print(Provider.of<siggning>(context, listen: false).loggedUser!.uid.trim());
+  QuerySnapshot AllEvents = await FirebaseFirestore.instance
+      .collection('events')
+      .where('creatorID',
+          isEqualTo: Provider.of<siggning>(context, listen: false)
+              .loggedUser!
+              .uid
+              .trim())
+      .get();
   return AllEvents.docs;
 }
 
-getUserReegiteredEvents(String userId) async {
-  DocumentSnapshot AllEvents = await _firestore
+Future<int?> gettingNumberOfEventVisitors(eventId) async {
+  var snapshot = await _firestore
       .collection('events')
-      .doc()
+      .doc(eventId)
       .collection('visitors')
-      .doc(userId.trim().toString())
       .get();
-
-  return AllEvents.data();
+  return await snapshot.docs?.length;
 }

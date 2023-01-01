@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../../components/cons.dart';
@@ -8,14 +9,14 @@ class VisitorFeedSection extends StatelessWidget {
   VisitorFeedSection(this.txt,
       this.eventToDisplay); //كونستركتور ياخذ عنوان يتعرض فوق القسم, وياخذ دالة تجيب حاجة من الداتابيز
   final String txt;
-  Future<dynamic> eventToDisplay;
+  Stream<QuerySnapshot<dynamic>> eventToDisplay;
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Padding(
-          padding: EdgeInsets.only(right: 35.0, top: 10),
+          padding: EdgeInsets.only(right: 10.0, top: 10),
           child: Text(
             txt,
             textAlign: TextAlign.right,
@@ -27,8 +28,8 @@ class VisitorFeedSection extends StatelessWidget {
           height: 20,
         ),
         Expanded(
-            child: VisitorVerticalEventList(
-                eventToDisplay)), //حطيتها في اكسباندد باش مااتديرش ايرور وتاخذ قداش تحتاج مساحة
+            child: eventList(eventToDisplay, true, false,
+                true)), //حطيتها في اكسباندد باش مااتديرش ايرور وتاخذ قداش تحتاج مساحة
       ],
     );
   }

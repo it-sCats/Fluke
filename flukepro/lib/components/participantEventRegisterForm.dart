@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flukepro/components/creatingEventsForm.dart';
 import 'package:flukepro/components/customWidgets.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../screens/mainScreens/userInfoScreen.dart';
+import '../utils/notificationProvider.dart';
 import 'cons.dart';
 import 'eventDisplay.dart';
 
@@ -15,7 +18,10 @@ final _particiTypeFormKey = GlobalKey<FormState>();
 
 class ParticiEventPrev extends StatefulWidget {
   String eventId;
-  ParticiEventPrev(this.eventId);
+  String eventTitle;
+  String creatorId;
+
+  ParticiEventPrev(this.eventId, this.eventTitle, this.creatorId);
   @override
   State<ParticiEventPrev> createState() => _ParticiEventPrevState();
 }
@@ -165,7 +171,7 @@ class _ParticiEventPrevState extends State<ParticiEventPrev> {
                   onTap: () {
                     if (_particiTypeFormKey.currentState!.validate()) {
                       siggning().addJoinRequest(
-                          widget.eventId,
+                          widget.eventTitle,
                           user!.uid,
                           Provider.of<siggning>(context, listen: false)
                               .userInfoDocument!['name'],
@@ -176,6 +182,14 @@ class _ParticiEventPrevState extends State<ParticiEventPrev> {
                           user!.email,
                           _participantTypeCont.text,
                           context);
+                      sendPushToOrgnaizerNotification(
+                          '',
+                          'شركة ${Provider.of<siggning>(context, listen: false).userInfoDocument!['name']}ترغب بالمشاركة في ${widget.eventTitle} الذي تنظمه كـ${_participantTypeCont.text}',
+                          Provider.of<siggning>(context, listen: false)
+                              .userInfoDocument!['field'],
+                          widget.eventId,
+                          widget.creatorId);
+                      //todo fix the notification by grouping the devices
                     }
                     // showDialog(
                     //     //save to drafts dialog

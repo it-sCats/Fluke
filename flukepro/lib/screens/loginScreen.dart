@@ -3,10 +3,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flukepro/components/cons.dart';
 import 'package:flukepro/components/signInWithGoogleAndFacebookButtons.dart';
 import 'package:flukepro/utils/notificationProvider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../components/customWidgets.dart';
 import '../errorsHandling/AuthExceptionHandler.dart';
+import '../utils/SigningProvider.dart';
 import '../utils/authentication.dart';
 
 class loginScreen extends StatefulWidget {
@@ -264,6 +267,9 @@ class _loginScreenState extends State<loginScreen> {
                                   LogInError = !LogInError;
                                   isLoading = false;
                                 }), (success) async {
+                          Provider.of<siggning>(context, listen: false)
+                                  .loggedUser ==
+                              success.uid;
                           Navigator.pushNamed(context,
                               '/redirect'); //here we redirect the user based on his role
 
@@ -302,34 +308,36 @@ class _loginScreenState extends State<loginScreen> {
                     }
                   },
                 ),
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.ideographic,
-                  children: [
-                    InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/UserType');
-                        },
-                        child: Text(
-                          'سجل كـجهة منظمة أو\n زائر أو مشارك ',
-                          textAlign: TextAlign.center,
-                          style: conTxtLink,
-                        )),
-                    InkWell(
-                        child: Text(
-                      'ليس لديك حساب؟ ',
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        color: conBlack,
-                        fontFamily: 'Cairo',
-                        fontSize: 12,
+              !kIsWeb
+                  ? Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.ideographic,
+                        children: [
+                          InkWell(
+                              onTap: () {
+                                Navigator.pushNamed(context, '/UserType');
+                              },
+                              child: Text(
+                                'سجل كـجهة منظمة أو\n زائر أو مشارك ',
+                                textAlign: TextAlign.center,
+                                style: conTxtLink,
+                              )),
+                          InkWell(
+                              child: Text(
+                            'ليس لديك حساب؟ ',
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              color: conBlack,
+                              fontFamily: 'Cairo',
+                              fontSize: 12,
+                            ),
+                          )),
+                        ],
                       ),
-                    )),
-                  ],
-                ),
-              )
+                    )
+                  : Container()
             ],
           ),
         ),

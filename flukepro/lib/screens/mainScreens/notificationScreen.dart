@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../components/cons.dart';
 import '../../components/customWidgets.dart';
-import '../../components/eventDisplay.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import '../../utils/SigningProvider.dart';
 
 class notifiScreen extends StatefulWidget {
@@ -46,6 +46,7 @@ class _notifiScreenState extends State<notifiScreen> {
             ),
           ),
           Expanded(
+            flex: 3,
             child: Container(
               child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
@@ -54,12 +55,30 @@ class _notifiScreenState extends State<notifiScreen> {
                       .collection('notification')
                       .snapshots(),
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                       return Center(
                         child: Padding(
-                          padding: EdgeInsets.only(
-                              top: MediaQuery.of(context).size.height / 5),
-                          child: Image.asset('images/Hands Phone.png'),
+                          padding: EdgeInsets.only(bottom: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                  flex: 20,
+                                  child: Image.asset('images/Hands Phone.png')),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Expanded(
+                                  flex: 20,
+                                  child: Text(
+                                    'لا يوجد أي إشعارات حتى الآن',
+                                    style: conHeadingsStyle.copyWith(
+                                        fontSize: 17,
+                                        color: conBlack.withOpacity(.7)),
+                                  ))
+                            ],
+                          ),
                         ), //في حال لايوجد ديكومنتس يتم عرض هذه الصورة
                       );
                     } else {
@@ -70,9 +89,10 @@ class _notifiScreenState extends State<notifiScreen> {
                         final notifiTitle = notifi['title'];
                         final notifibody = notifi['date'];
                         final notifiCreation = notifi['creationDate'];
+                        final image = notifi['image'];
 
                         notificatinat.add(notificationa(
-                            notifiTitle, notifibody, notifiCreation));
+                            notifiTitle, notifibody, notifiCreation, image));
                       }
                       return ListView(
                         padding: EdgeInsets.symmetric(vertical: 20),
@@ -91,8 +111,9 @@ class _notifiScreenState extends State<notifiScreen> {
 class notificationa extends StatefulWidget {
   String title;
   String body;
+  String image;
   Timestamp timeOfsend;
-  notificationa(this.title, this.body, this.timeOfsend);
+  notificationa(this.title, this.body, this.timeOfsend, this.image);
 
   @override
   State<notificationa> createState() => _notificationaState();
@@ -104,7 +125,7 @@ class _notificationaState extends State<notificationa> {
     return InkWell(
         child: Container(
           height: 170,
-          padding: EdgeInsets.symmetric(vertical: 5),
+          padding: EdgeInsets.symmetric(vertical: 30),
           // height: 150,
           decoration: BoxDecoration(
             border: Border(
@@ -123,10 +144,16 @@ class _notificationaState extends State<notificationa> {
                     style: conHeadingsStyle.copyWith(fontSize: 18),
                     textAlign: TextAlign.right,
                   ),
+                  Text(
+                    widget.body.toString(),
+                    style: conHeadingsStyle.copyWith(
+                        fontSize: 15, fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.right,
+                  ),
                   //this row is for the event name pic and title
                   //this row is for the heddin btns
                   Text(
-                    ' منذ   ${DateTime.now().difference(DateTime.fromMicrosecondsSinceEpoch(widget.timeOfsend.microsecondsSinceEpoch)).inMinutes} دقيقة',
+                    '    ${timeago.format(DateTime.fromMicrosecondsSinceEpoch(widget.timeOfsend.microsecondsSinceEpoch))} ',
                     style: conLittelTxt12.copyWith(
                         color: Color(0xff676767), fontSize: 10),
                   ) //this row for date
@@ -138,8 +165,7 @@ class _notificationaState extends State<notificationa> {
                   //Avatar
                   backgroundColor: Color(0xff).withOpacity(0),
                   radius: 50,
-                  backgroundImage: NetworkImage(
-                      'https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=45&dpr=2&s=none'),
+                  backgroundImage: NetworkImage(widget.image),
                 ),
               )
             ],

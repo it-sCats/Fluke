@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flukepro/base.dart';
 import 'package:flukepro/components/cons.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -165,5 +168,39 @@ class notificationPRovider extends ChangeNotifier {
         // ));
       }
     });
+  }
+}
+
+sendPushToOrgnaizerNotification(
+    String body, String title, field, eventId, createrId) async {
+  final user = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(createrId.toString().trim())
+      .get();
+  final userTokens = user.data()!['tokens'];
+  try {
+    await http
+        .post(
+            Uri.parse(
+                'https://fcm.googleapis.com/v1/projects/fluke-db/messages:send'),
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+              'Authorization':
+                  'Bearer ya29.a0AX9GBdU_ub1UGVF--NSUn4IYcMMCoSIa5UyUzD16rUKEA0JEjNK8M0Pcy9y66d46DKZYlMC7l3WrneBcRKETTSSfznalW1S9MWeapIo4eDMSuFZI9ZoBGk4EliTYvidSryARuNTb89ag7S7vFLaNZzTEfGvPaCgYKAVUSARESFQHUCsbC8lP2ulDxxSjqSC-plwF2gg0163'
+            },
+            body: jsonEncode(<String, dynamic>{
+              "message": {
+                "token": userTokens,
+                "notification": {"title": title, "body": body},
+                "data": {
+                  "click_action": "FLUTTER_NOTIFICATION_CLICK",
+                  "creatorID": createrId,
+                  "eventId": eventId
+                }
+              }
+            }))
+        .whenComplete(() => debugPrint('done Should send'));
+  } catch (e) {
+    print('erorr in pushing notifi:$e');
   }
 }

@@ -29,6 +29,7 @@ import 'package:flukepro/utils/RoleRedicetion.dart';
 import 'package:flutter/material.dart';
 import 'package:flukepro/OrganizersRequests/OraginzersRequest.dart';
 import 'base.dart';
+import 'components/eventEdit.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -120,8 +121,7 @@ class _MyAppState extends State<MyApp> {
     user != null ? siggning().setupToken() : null;
     user != null ? siggning().getCurrentUsertype() : null;
     // getuserinMAin();
-    print('from main');
-    print(siggning().userType);
+
     //
     // notificationPRovider().initInfo(context);
   }
@@ -147,7 +147,7 @@ class _MyAppState extends State<MyApp> {
             ],
             background: Container(color: Color(0xFFF5F5F5))),
 
-        home: Ohome(),
+        home: recdirectRole(),
 
         debugShowCheckedModeBanner:
             false, //to remove debugging banner at the top of the screen
@@ -176,7 +176,8 @@ class _MyAppState extends State<MyApp> {
           '/Odash': ((context) => Odashboard()),
           '/Oevent': ((context) => Oevents()),
           '/Onotification': ((context) => notifaction()),
-          '/Oprofile': ((context) => Oprofile())
+          '/Oprofile': ((context) => Oprofile()),
+          'editEvent': ((context) => editEvent())
         }, //routes are to ease the navigation btween pages
         //we give every page a name then when we want to navigate we just call that name
       ),

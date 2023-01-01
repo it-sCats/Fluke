@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flukepro/components/QrCodeWidget.dart';
+import 'package:flukepro/components/eventEdit.dart';
 import 'package:flukepro/components/participantEventRegisterForm.dart';
 import 'package:flukepro/components/visitorEventprev.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +21,7 @@ final _firestore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
 final user = _auth!.currentUser;
 bool isLoading = false;
-
-Map<String, dynamic>? userInfoDoc;
+String? creatorName;
 
 class eventDisplay extends StatefulWidget {
   bool wholePage;
@@ -40,31 +40,38 @@ class eventDisplay extends StatefulWidget {
   String? location;
   String? city;
   bool acceptsParticapants;
-  List<String>? targetedAudiance;
   bool eventVisibilty;
   bool justDisplay;
+  int? visitorsNum;
+  String creatorID;
 
-  eventDisplay({
-    required this.wholePage,
-    required this.justDisplay,
-    required this.id,
-    required this.title,
-    required this.description,
-    this.image,
-    this.eventType,
-    required this.starterDate,
-    required this.endDate,
-    required this.starterTime,
-    required this.endTime,
-    this.field,
-    required this.creationDate,
-    this.location,
-    this.city,
-    required this.acceptsParticapants,
-    required this.eventVisibilty,
-    this.room,
-    this.targetedAudiance,
-  });
+  eventDisplay(
+      {required this.wholePage,
+      required this.justDisplay,
+      required this.id,
+      required this.title,
+      required this.description,
+      this.image,
+      this.eventType,
+      required this.starterDate,
+      required this.endDate,
+      required this.starterTime,
+      required this.endTime,
+      this.field,
+      required this.creationDate,
+      this.location,
+      this.city,
+      required this.acceptsParticapants,
+      required this.eventVisibilty,
+      this.room,
+      this.visitorsNum,
+      required this.creatorID});
+  getORganizerInfo() async {
+    DocumentSnapshot<Map<String, dynamic>> creator =
+        await _firestore.collection('users').doc(creatorID.trim()).get();
+
+    creatorName = creator.get('name');
+  }
 
   @override
   State<eventDisplay> createState() => _eventDisplayState();
@@ -73,51 +80,61 @@ class eventDisplay extends StatefulWidget {
 class _eventDisplayState extends State<eventDisplay>
     with TickerProviderStateMixin {
   @override // هذه انطلاقة الشاشة 3
-
   void initState() {
     super.initState();
+    // visi();
+    widget.getORganizerInfo();
     Provider.of<siggning>(context, listen: false).getUserInfoDoc();
-  }
+  } //todo جيبي الاحداث متاع المنظم
 
   registerVisitor(eventID, context, title) async {
-    final vistors = _firestore //checks if user aleadry registered
-        .collection('events')
-        .doc(eventID.toString().trim())
-        .collection('visitors')
+    //visitor registration function
+    Map<String, dynamic>? userInfoDoc;
+    userInfoDoc =
+        Provider.of<siggning>(context, listen: false).userInfoDocument;
+    final vistors = await _firestore //checks if user aleadry registered
+        .collection('users')
         .doc(user!.uid)
+        .collection('tickets')
+        .doc(eventID)
         .get();
-    if (vistors == null) {
+
+    if (!vistors.exists) {
       //in case no documents were returned which means user is not registered then register user
-      final vistors0 = _firestore
-          .collection('events')
-          .doc(eventID.toString().trim())
-          .collection('visitors')
-          .doc(user!.uid)
+      _firestore
+          .collection('users')
+          .doc(user!.uid.trim())
+          .collection('tickets')
+          .doc(eventID.trim())
           .set({
-        'email': user!.email,
-        'phone': userInfoDoc!['phone'],
-        'name': userInfoDoc!['name']
-      }).whenComplete(() {
-        setState(() {
-          isLoading = true;
-        });
-        showModalBottomSheet(
-          isScrollControlled: true,
-          elevation: 100,
-          context: context,
-          builder: (context) => Qrwidget(
-            userInfoDoc!['name'],
-            userInfoDoc!['phone'],
-            title,
-          ),
-        ).whenComplete(() {
-          setState(() {
-            isLoading = false;
+            'eventTitle': title,
+            'email': user!.email,
+            'phone': userInfoDoc!['phone'],
+            'name': userInfoDoc!['name']
+          })
+          .then((value) => showModalBottomSheet(
+                //تعرض كيو آر بعد تسجيل الزائر
+                isScrollControlled: true,
+                elevation: 100,
+                context: context,
+                builder: (context) => Qrwidget(
+                  userInfoDoc!['name'],
+                  userInfoDoc!['phone'],
+                  title,
+                ),
+              ).whenComplete(() {
+                setState(() {
+                  isLoading = false;
+                });
+              }))
+          .whenComplete(() {
+            setState(() {
+              isLoading = true;
+            });
           });
-        });
-      });
     } else {
       showModalBottomSheet(
+        //تعرض كيو آر في حالل كان مشجل مسبقاً
         isScrollControlled: true,
         elevation: 100,
         context: context,
@@ -132,186 +149,345 @@ class _eventDisplayState extends State<eventDisplay>
   void setState(VoidCallback fn) {
     // TODO: implement setState
     super.setState(fn);
+    widget.getORganizerInfo();
   }
 
   Widget bodyOfEvent() {
+    widget.getORganizerInfo();
+
     TabController _tabCont = TabController(length: 2, vsync: this);
-    user != null
-        ? Provider.of<siggning>(context, listen: false).getCurrentUsertype()
-        : null;
+    if (user != null)
+      Provider.of<siggning>(context, listen: false).getCurrentUsertype();
     final userType = Provider.of<siggning>(context, listen: false).userType;
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              SizedBox(
-                width: double.infinity,
-                height: 400,
-                child: widget.image == null
-                    ? Image.asset('images/emptyIamge.jpg')
-                    : Image.file(File(widget.image!)),
-              ),
-              Container(
-                height: 400,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.black12.withOpacity(.4),
-                        Colors.black12.withOpacity(.9),
-                      ]),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 260),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+    return DefaultTabController(
+        //this layout guarantees that the scroll works properly
+        length: 2,
+        child: NestedScrollView(
+          headerSliverBuilder: ((context, innerBoxIsScrolled) {
+            return [
+              SliverList(
+                  delegate: SliverChildListDelegate([
+                Stack(
+                  //the top part of the Screen above the tabs
                   children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 40),
-                      child: Text(
-                        //place this in Column
-                        widget.title, textAlign: TextAlign.right,
-                        style: conOnboardingText.copyWith(fontSize: 30),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 400,
+                      child: widget.image == null
+                          ? Image.asset('images/emptyIamge.jpg')
+                          : Image.network(
+                              widget.image!,
+                              fit: BoxFit.fill,
+                            ),
+                    ),
+                    Container(
+                      height: 400,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.black12.withOpacity(.4),
+                              Colors.black12.withOpacity(.9),
+                            ]),
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
+                    Container(
+                      margin: EdgeInsets.only(top: 260),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 40),
+                            child: Text(
+                              //place this in Column
+                              widget.eventType.toString(),
+                              textAlign: TextAlign.right,
+                              style: conOnboardingText.copyWith(fontSize: 15),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 40),
+                            child: Text(
+                              //place this in Column
+                              widget.title, textAlign: TextAlign.right,
+                              style: conOnboardingText.copyWith(fontSize: 30),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Directionality(
+                                textDirection: TextDirection.rtl,
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.location_on,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      widget.city.toString(),
+                                      style: conOnboardingText.copyWith(
+                                          fontSize: 15, color: Colors.white),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Directionality(
+                                textDirection: TextDirection.rtl,
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.watch_later_outlined,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      widget.starterTime! <= 12
+                                          ? '${widget.starterTime} صباحاً- '
+                                          : '${widget.starterTime}مساءً- ',
+                                      style: conOnboardingText.copyWith(
+                                          fontSize: 14),
+                                    ),
+                                    Text(
+                                      widget.endTime! <= 12
+                                          ? ' ${widget.endTime.toString()} صباحاً '
+                                          : ' ${widget.endTime.toString()} مساءً ',
+                                      style: conOnboardingText.copyWith(
+                                          fontSize: 14),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Directionality(
+                                textDirection: TextDirection.rtl,
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.calendar_month_rounded,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      DateTime.fromMicrosecondsSinceEpoch(widget
+                                              .starterDate
+                                              .microsecondsSinceEpoch)
+                                          .toString()
+                                          .split(' ')
+                                          .first,
+                                      style: conOnboardingText,
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.location_on,
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 50, horizontal: 30),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                // Navigator.pop(context);
+                              },
+                              icon: Icon(
+                                Icons.arrow_back,
+                                size: 40,
                                 color: Colors.white,
-                                size: 20,
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                widget.city.toString(),
-                                style: conOnboardingText.copyWith(
-                                    fontSize: 15, color: Colors.white),
-                              )
-                            ],
-                          ),
-                        ),
-                        Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.watch_later_outlined,
-                                color: Colors.white,
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                widget.starterTime <= 12
-                                    ? widget.starterTime.toString() + 'صباحاً-'
-                                    : 'مساءً-',
-                                style: conOnboardingText.copyWith(fontSize: 14),
-                              ),
-                              Text(
-                                widget.endTime <= 12
-                                    ? widget.endTime.toString() + 'صباحاً'
-                                    : 'مساءً',
-                                style: conOnboardingText.copyWith(fontSize: 14),
-                              )
-                            ],
-                          ),
-                        ),
-                        Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.calendar_month_rounded,
-                                color: Colors.white,
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                DateTime.fromMicrosecondsSinceEpoch(widget
-                                        .starterDate.microsecondsSinceEpoch)
-                                    .toString()
-                                    .split(' ')
-                                    .first,
-                                style: conOnboardingText,
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    )
+                              )),
+                          Provider.of<siggning>(context, listen: false)
+                                      .loggedUser!
+                                      .uid ==
+                                  widget
+                                      .creatorID //هذا الشرط يعني بإظهار أزرار الحذف والتعديل في حال كان عارض الحدث هو المنشء
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    IconButton(
+                                      padding: EdgeInsets.only(
+                                          top: 50, bottom: 20, right: 30),
+                                      icon: Icon(
+                                        Icons.edit,
+                                        color: Colors.white,
+                                        size: 30,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  editEvent(eventId: widget.id),
+                                            ));
+                                      },
+                                    ),
+                                    IconButton(
+                                      //هنا يتم حذف الحدث بعد أخد التاكيد من اليوزر
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 30),
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: Colors.white,
+                                        size: 30,
+                                      ),
+                                      onPressed: () async {
+                                        showDialog(
+                                            //save to drafts dialog
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                title: Text(
+                                                  'هل أنت متأكد من رغبتك في حذف هذا الحدث؟ ',
+                                                  textAlign: TextAlign.center,
+                                                  style: conHeadingsStyle
+                                                      .copyWith(fontSize: 15),
+                                                ),
+                                                content: Text(
+                                                  'هذه الخطوة نهائية لا يمكن التارجع عنها',
+                                                  textAlign: TextAlign.center,
+                                                  style:
+                                                      conHeadingsStyle.copyWith(
+                                                          fontSize: 14,
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                ),
+                                                actions: [
+                                                  InkWell(
+                                                      onTap: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text(
+                                                        ' إالغاء الحذف',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: conHeadingsStyle
+                                                            .copyWith(
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal),
+                                                      )),
+                                                  Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 20,
+                                                            vertical: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: conRed,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                    child: InkWell(
+                                                        onTap: () async {
+                                                          await FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'events')
+                                                              .doc(widget.id
+                                                                  .trim())
+                                                              .delete()
+                                                              .whenComplete(
+                                                                //بعد إنهاء عملية الحدث يقوم بإعادة التوجيه للصفحة الرئيسية
+                                                                () => Navigator
+                                                                    .pushNamed(
+                                                                        context,
+                                                                        'OHome'),
+                                                              );
+                                                        },
+                                                        child: Text(
+                                                          'حدف الحدث',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: conHeadingsStyle
+                                                              .copyWith(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 17,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                        )),
+                                                  ),
+                                                ],
+                                                buttonPadding:
+                                                    EdgeInsets.all(20),
+                                                actionsAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                contentPadding:
+                                                    EdgeInsets.symmetric(
+                                                        vertical: 10,
+                                                        horizontal: 100),
+                                              );
+                                            });
+                                      },
+                                    ),
+                                  ],
+                                )
+                              : Container()
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: IconButton(
-                    padding: EdgeInsets.symmetric(vertical: 50, horizontal: 30),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      // Navigator.pop(context);
-                    },
-                    icon: Icon(
-                      Icons.arrow_back,
-                      size: 40,
-                      color: Colors.white,
-                    )),
-              ),
-            ],
-          ),
-          Container(
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Container(
-                    child: TabBar(
-                  unselectedLabelStyle: conLittelTxt12.copyWith(fontSize: 15),
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                  labelStyle: conLittelTxt12,
-                  indicator: BoxDecoration(
-                      border:
-                          Border(bottom: BorderSide(width: 3, color: conBlue))),
-                  controller: _tabCont,
-                  tabs: [
-                    Tab(
-                      child: Text(
-                        'معلومات الحدث',
-                        style: conLittelTxt12.copyWith(fontSize: 15),
-                      ),
+              ]))
+            ];
+          }),
+          body: Column(
+            //the bottom part of the screen
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TabBar(
+                unselectedLabelStyle: conLittelTxt12.copyWith(fontSize: 15),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                labelStyle: conLittelTxt12,
+                indicator: BoxDecoration(
+                    border:
+                        Border(bottom: BorderSide(width: 3, color: conBlue))),
+                controller: _tabCont,
+                tabs: [
+                  Tab(
+                    child: Text(
+                      'معلومات الحدث',
+                      style: conLittelTxt12.copyWith(fontSize: 15),
                     ),
-                    Tab(
-                      child: Text(
-                        'الأجندة',
-                        style: conLittelTxt12.copyWith(fontSize: 15),
-                      ),
+                  ),
+                  Tab(
+                    child: Text(
+                      'الأجندة',
+                      style: conLittelTxt12.copyWith(fontSize: 15),
                     ),
-                  ],
-                )),
-                Container(
-                  width: double.maxFinite,
-                  height: 450,
-                  child: Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: TabBarView(controller: _tabCont, children: [
-                      Container(
-                        width: double.maxFinite,
+                  ),
+                ],
+              ),
+              Expanded(
+                flex: 6,
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: TabBarView(controller: _tabCont, children: [
+                    Container(
                         padding: EdgeInsets.symmetric(
-                            vertical: 30.0, horizontal: 20),
+                          horizontal: 20,
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -321,24 +497,83 @@ class _eventDisplayState extends State<eventDisplay>
                             Row(
                               children: [
                                 Icon(
-                                  Icons.people_alt_rounded,
-                                  color: conBlack.withOpacity(.5),
+                                  Icons.calendar_month_rounded,
+                                  color: conORange.withOpacity(.8),
                                 ),
                                 SizedBox(
                                   width: 5,
                                 ),
-                                Text('150', //visitors number
-                                    style: conHeadingsStyle.copyWith(
-                                        fontSize: 18,
-                                        color: conBlack,
-                                        fontWeight: FontWeight.w400)),
-                                Text('  شخص سيزور هذا الحدث',
-                                    style: conHeadingsStyle.copyWith(
-                                        fontSize: 13,
-                                        color: conBlack.withOpacity(.7),
-                                        fontWeight: FontWeight.w400))
+                                Text(
+                                    ' ${DateTime.fromMicrosecondsSinceEpoch(widget.endDate.microsecondsSinceEpoch).toString().split(' ').first.split('-').last}/'),
+                                Directionality(
+                                  textDirection: TextDirection.ltr,
+                                  child: Text(
+                                      ' ${DateTime.fromMicrosecondsSinceEpoch(widget.starterDate.microsecondsSinceEpoch).toString().split(' ').first}'),
+                                ),
                               ],
                             ),
+                            widget.field != null
+                                ? Container(
+                                    padding: EdgeInsets.only(top: 5),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.work,
+                                          color: conORange.withOpacity(.8),
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(widget.field.toString(),
+                                            style: conHeadingsStyle.copyWith(
+                                                fontSize: 16,
+                                                color: conBlack,
+                                                fontWeight: FontWeight.w400),
+                                            overflow: TextOverflow.visible),
+                                      ],
+                                    ),
+                                  )
+                                : Container(),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.account_circle,
+                                  color: conORange.withOpacity(.8),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(creatorName != null
+                                    ? creatorName.toString()
+                                    : '')
+                              ],
+                            ),
+                            // Row(
+                            //   children: [
+                            //     Icon(
+                            //       Icons.people_alt_rounded,
+                            //       color: conBlack.withOpacity(.5),
+                            //     ),
+                            //     SizedBox(
+                            //       width: 5,
+                            //     ),
+                            //     Text(
+                            //         widget.visitorsNum
+                            //             .toString(), //visitors number
+                            //         style: conHeadingsStyle.copyWith(
+                            //             fontSize: 18,
+                            //             color: conBlack,
+                            //             fontWeight: FontWeight.w400)),
+                            //     Text('  شخص سيزور هذا الحدث',
+                            //         style: conHeadingsStyle.copyWith(
+                            //             fontSize: 13,
+                            //             color: conBlack.withOpacity(.7),
+                            //             fontWeight: FontWeight.w400))
+                            //   ],
+                            // ),
                             SizedBox(
                               height: 25,
                             ),
@@ -347,90 +582,141 @@ class _eventDisplayState extends State<eventDisplay>
                               style: conHeadingsStyle.copyWith(
                                   fontSize: 18,
                                   color: conBlack.withOpacity(.8),
-                                  fontWeight: FontWeight.w400),
+                                  fontWeight: FontWeight.w500),
                             ),
-                            Text(widget.description,
-                                style: conHeadingsStyle.copyWith(
-                                    fontSize: 16,
-                                    color: conBlack.withOpacity(.6),
-                                    fontWeight: FontWeight.w400)),
+                            Expanded(
+                              flex: 3,
+                              child: Text(widget.description,
+                                  style: conHeadingsStyle.copyWith(
+                                      fontSize: 16,
+                                      color: conBlack.withOpacity(.6),
+                                      fontWeight: FontWeight.w400)),
+                            ),
                             SizedBox(
                               height: 20,
                             ),
-                            widget.location!.isNotEmpty
-                                ? Text(
-                                    'موقع الحدث على الخرائط:',
-                                    style: conHeadingsStyle.copyWith(
-                                        fontSize: 18,
-                                        color: conBlack.withOpacity(.8),
-                                        fontWeight: FontWeight.w400),
-                                  )
-                                : Container(),
-                            GestureDetector(
-                              onTap: () async {
-                                await launchUrl(
-                                    Uri.parse(widget.location.toString()));
-                              },
-                              child: Text(widget.location.toString(),
-                                  style: conHeadingsStyle.copyWith(
-                                      fontSize: 16,
-                                      decoration: TextDecoration.underline,
-                                      color: conBlue.withOpacity(.6),
-                                      fontWeight: FontWeight.w400)),
-                            )
-                          ],
-                        ),
-                      ),
-                      eventTimeline(),
-                    ]),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          widget.justDisplay
-              ? Container()
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    userType == 2
-                        ? InkWell(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: conBlue.withOpacity(.5), width: 2),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Text(
-                                ' التسجيل كمشارك',
-                                style: conTxtFeildHint.copyWith(
-                                    color: conBlue.withOpacity(.7),
-                                    fontSize: 18),
+                            Container(
+                              padding: EdgeInsets.only(bottom: 10),
+                              // margin: const EdgeInsets.only(left: 5, right: 15),
+                              child: new Divider(
+                                color: conBlack.withOpacity(.6),
+                                height: 4,
                               ),
                             ),
-                            onTap: () async {
-                              showModalBottomSheet(
-                                isScrollControlled: true,
-                                elevation: 100,
-                                context: context,
-                                builder: (context) =>
-                                    ParticiEventPrev(widget.id),
-                              );
-                            },
-                          )
-                        : Container(),
-                    halfCTA(
-                        txt: ' التسجيل كزائر',
-                        onTap: () async {
-                          await registerVisitor(
-                              widget.id, context, widget.title);
-                        }),
-                  ],
-                )
-        ],
-      ),
-    );
+                            widget.location!.isNotEmpty
+                                ? Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'موقع الحدث على الخرائط:',
+                                          style: conHeadingsStyle.copyWith(
+                                              fontSize: 18,
+                                              color: conBlack.withOpacity(.8),
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () async {
+                                              await launchUrl(Uri.parse(
+                                                  widget.location.toString()));
+                                            },
+                                            child: Text(
+                                                widget.location.toString(),
+                                                style:
+                                                    conHeadingsStyle.copyWith(
+                                                        fontSize: 16,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline,
+                                                        color: conBlue
+                                                            .withOpacity(.6),
+                                                        fontWeight:
+                                                            FontWeight.w400)),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                : Container(),
+
+                            widget.justDisplay ||
+                                    widget.creatorID ==
+                                        Provider.of<siggning>(context,
+                                                listen: false)
+                                            .loggedUser!
+                                            .uid
+                                ? Container()
+                                : Expanded(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        // userType == 2 &&
+                                        //         widget.acceptsParticapants
+                                        //     ?
+                                        InkWell(
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10),
+                                            width: 200,
+                                            height: 60,
+                                            margin: EdgeInsets.symmetric(
+                                                vertical: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.02),
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color:
+                                                        conBlue.withOpacity(.5),
+                                                    width: 2),
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: Text(
+                                              ' التسجيل كمشارك',
+                                              textAlign: TextAlign.center,
+                                              style: conTxtFeildHint.copyWith(
+                                                  color:
+                                                      conBlue.withOpacity(.7),
+                                                  fontSize: 18),
+                                            ),
+                                          ),
+                                          onTap: () async {
+                                            showModalBottomSheet(
+                                              isScrollControlled: true,
+                                              elevation: 100,
+                                              context: context,
+                                              builder: (context) =>
+                                                  ParticiEventPrev(
+                                                      widget.id,
+                                                      widget.title,
+                                                      widget.creatorID),
+                                            );
+                                          },
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        halfCTA(
+                                            txt: ' التسجيل كزائر',
+                                            onTap: () async {
+                                              await registerVisitor(widget.id,
+                                                  context, widget.title);
+                                            }),
+                                      ],
+                                    ),
+                                  )
+                          ],
+                        )),
+                    eventTimeline(),
+                  ]),
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 
   @override
@@ -439,7 +725,7 @@ class _eventDisplayState extends State<eventDisplay>
     user != null
         ? Provider.of<siggning>(context, listen: false).getCurrentUsertype()
         : null;
-    final userType = Provider.of<siggning>(context, listen: false).userType;
+
     return widget.wholePage
         ? Scaffold(
             body: bodyOfEvent(),

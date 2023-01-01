@@ -26,6 +26,19 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
   String? phoneNum;
   String? email;
   String? password;
+  var fields = [
+    'المجال الطبي',
+    'برمجة',
+    'مالية',
+    'قانون',
+    'مجال التقنية',
+    'أعمال حرة',
+    'أخرى',
+    'محاسبة',
+    'كتابة محتوى',
+    'تصميم جرافيكي'
+  ];
+  TextEditingController _eventFieldCont = TextEditingController();
 
   late String _password;
 
@@ -314,28 +327,45 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
               SizedBox(
                 width: 290,
                 height: 70,
-                child: TextFormField(
-                    style: TextStyle(
-                        fontSize: 15, fontFamily: 'Cairo', color: conBlack),
-                    onChanged: (value) {
-                      name = value;
-                    },
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: DropdownButtonFormField(
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'الرجاء إدخال البيانات المطلوبة';
+                      if (value == null) {
+                        return 'يجب تحديد مجال الحدث لإشعار المستهدفين';
                       }
                       return null;
                     },
-                    textAlign: TextAlign.right,
                     decoration: InputDecoration(
-                        hintText: 'أدخل مجالك',
+                        labelStyle: conTxtFeildHint,
+                        hintText: 'مجال عملك',
+                        focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 2, color: conRed),
+                            borderRadius: BorderRadius.circular(25)),
                         errorStyle: TextStyle(
                             fontFamily: 'Cairo', fontSize: 12, color: conRed),
                         contentPadding: EdgeInsets.symmetric(horizontal: 25),
                         hintStyle: conTxtFeildHint,
                         enabledBorder: roundedTxtFeild,
-                        errorBorder: errorBorder,
-                        focusedBorder: roundedPasswordFeild)),
+                        errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 2, color: conRed),
+                            borderRadius: BorderRadius.circular(25)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: conBlack),
+                            borderRadius: BorderRadius.circular(25))),
+                    style: conTxtFeildHint.copyWith(color: conBlack),
+                    items: fields.map((String items) {
+                      return DropdownMenuItem(
+                        value: items,
+                        child: Text(
+                            items), //درنا تحويل من ليستا عادية لليستا يقبلها الدروب داون
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      _eventFieldCont.text = value.toString();
+                    },
+                  ),
+                ),
               ),
               Visibility(
                 visible: LogInError,

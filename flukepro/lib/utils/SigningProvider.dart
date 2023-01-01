@@ -179,12 +179,23 @@ class siggning extends ChangeNotifier {
     return userInfoDoc!['userType'];
   }
 
-  void getUserInfoDoc() async {
+  Future<Map<String, dynamic>?> getUserInfoDoc() async {
     final userInfo =
         await _firestore.collection('users').doc(auth.currentUser!.uid).get();
 
     userInfoDocument = userInfo.data();
-    print('user Document from provider $userInfoDocument');
     notifyListeners();
+    return userInfo.data();
+  }
+
+  //firebase
+  getAllEvents() {
+    Stream<QuerySnapshot> AllEvents = _firestore
+        .collection('events')
+        .orderBy('creationDate', descending: true)
+        .where('eventVisibility', isEqualTo: true)
+        .snapshots();
+    notifyListeners();
+    return AllEvents;
   }
 }

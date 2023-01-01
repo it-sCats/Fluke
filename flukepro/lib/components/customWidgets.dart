@@ -49,7 +49,7 @@ class halfCTA extends StatelessWidget {
       onTap: () => onTap(),
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 15),
-        width: 230,
+        width: 200,
         height: 60,
         margin: EdgeInsets.symmetric(vertical: size.height * 0.02),
         child: Text(

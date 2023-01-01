@@ -5,10 +5,15 @@ import 'package:flukepro/components/eventDisplay.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import '../utils/fireStoreQueries.dart';
 import 'QrCodeWidget.dart';
 import 'creatingEventsForm.dart';
 
+int? visitorsNum;
 final _firebase = FirebaseFirestore.instance;
+waitingFunction(eventId) async {
+  visitorsNum = await gettingNumberOfEventVisitors(eventId);
+}
 
 class visitorEventPrev extends StatelessWidget {
   visitorEventPrev(this.id, this.title, this.name, this.phone, this.Qr);
@@ -111,6 +116,7 @@ class QrwidgetProfile extends StatelessWidget {
                     .get();
                 final eventInfo = event.data();
                 print(eventInfo!.length);
+                waitingFunction(eventInfo['id']);
                 showModalBottomSheet(
                   isScrollControlled: true,
                   elevation: 100,
@@ -130,7 +136,9 @@ class QrwidgetProfile extends StatelessWidget {
                       creationDate: eventInfo!['creationDate'],
                       city: eventInfo!['eventCity'],
                       acceptsParticapants: eventInfo!['acceptsParticapants'],
-                      eventVisibilty: eventInfo!['eventVisibility']),
+                      eventVisibilty: eventInfo!['eventVisibility'],
+                      visitorsNum: visitorsNum,
+                      creatorID: eventInfo['creatorID']),
                 );
               },
             )

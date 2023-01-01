@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flukepro/components/customWidgets.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
-import 'package:flukepro/utils/notificationProvider.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'cons.dart';
 import 'package:http/http.dart' as http;
 
+final _firebaseStorage = FirebaseStorage.instance.ref();
 final _firestore = FirebaseFirestore.instance;
 final List<String> tokenText = [];
 
@@ -274,6 +275,12 @@ class _creatingEventState extends State<creatingEvent> {
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 10),
                       child: TextFormField(
+                        validator: (value) {
+                          if (value == null || _eventNameCont.text == '') {
+                            return 'يجب كتابة اسم الحدث';
+                          }
+                          return null;
+                        },
                         controller: _eventNameCont,
                         textDirection: TextDirection.rtl,
                         textAlign: TextAlign.right,
@@ -282,6 +289,7 @@ class _creatingEventState extends State<creatingEvent> {
                                 horizontal: 20, vertical: 20),
                             hintText: 'إسم الحدث',
                             hintStyle: conTxtFeildHint,
+                            errorStyle: conErorTxtStyle,
                             filled: true,
                             fillColor: Color(0xffF1F1F1),
                             border: OutlineInputBorder(
@@ -294,6 +302,12 @@ class _creatingEventState extends State<creatingEvent> {
                       child: Directionality(
                         textDirection: TextDirection.rtl,
                         child: DropdownButtonFormField(
+                          validator: (value) {
+                            if (value == null) {
+                              return 'يجب تحديد نوع الحدث';
+                            }
+                            return null;
+                          },
                           decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 20),
@@ -301,6 +315,7 @@ class _creatingEventState extends State<creatingEvent> {
                               hintStyle: conTxtFeildHint,
                               filled: true,
                               fillColor: Color(0xffF1F1F1),
+                              errorStyle: conErorTxtStyle,
                               border: OutlineInputBorder(
                                   borderSide: BorderSide.none,
                                   borderRadius: BorderRadius.circular(10))),
@@ -379,6 +394,7 @@ class _creatingEventState extends State<creatingEvent> {
                                       horizontal: 20, vertical: 20),
                                   hintText: 'إلى',
                                   hintStyle: conTxtFeildHint,
+                                  errorStyle: conErorTxtStyle,
                                   filled: true,
                                   fillColor: Color(0xffF1F1F1),
                                   border: OutlineInputBorder(
@@ -398,6 +414,16 @@ class _creatingEventState extends State<creatingEvent> {
                               margin: EdgeInsets.symmetric(vertical: 10),
                               child: InkWell(
                                 child: TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'الرجاء إدخال تاريخ الحدث';
+                                    } else if (starterDate.compareTo(endDate) >=
+                                        0) {
+                                      return 'تأ:د من صحة تاريخ النهاية';
+                                    }
+
+                                    return null;
+                                  },
                                   controller: starterDateCont,
                                   onTap: () async {
                                     DateTime? pickedDate = await showDatePicker(
@@ -433,6 +459,7 @@ class _creatingEventState extends State<creatingEvent> {
                                       hintStyle: conTxtFeildHint,
                                       filled: true,
                                       fillColor: Color(0xffF1F1F1),
+                                      errorStyle: conErorTxtStyle,
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide.none,
                                           borderRadius:
@@ -459,6 +486,12 @@ class _creatingEventState extends State<creatingEvent> {
                           child: Container(
                             margin: EdgeInsets.symmetric(vertical: 10),
                             child: TextFormField(
+                              validator: (value) {
+                                if (value == null) {
+                                  return ' أدخل وقت انتهاء الحدث';
+                                }
+                                return null;
+                              },
                               controller: endTime,
                               onTap: () async {
                                 TimeOfDay? pickedTime = await showTimePicker(
@@ -500,6 +533,12 @@ class _creatingEventState extends State<creatingEvent> {
                               margin: EdgeInsets.symmetric(vertical: 10),
                               child: InkWell(
                                 child: TextFormField(
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return ' أدخل وقت بداية الحدث';
+                                    }
+                                    return null;
+                                  },
                                   controller: starterTime,
                                   onTap: () async {
                                     TimeOfDay? pickedTime =
@@ -541,6 +580,12 @@ class _creatingEventState extends State<creatingEvent> {
                       child: Directionality(
                         textDirection: TextDirection.rtl,
                         child: DropdownButtonFormField(
+                          validator: (value) {
+                            if (value == null) {
+                              return 'يجب إختيار مدينة';
+                            }
+                            return null;
+                          },
                           decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 20),
@@ -588,11 +633,18 @@ class _creatingEventState extends State<creatingEvent> {
                       child: Directionality(
                         textDirection: TextDirection.rtl,
                         child: DropdownButtonFormField(
+                          validator: (value) {
+                            if (sendNotifications && value == null) {
+                              return 'يجب تحديد مجال الحدث لإشعار المستهدفين';
+                            }
+                            return null;
+                          },
                           decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 20),
                               hintText: 'المجال',
                               hintStyle: conTxtFeildHint,
+                              errorStyle: conErorTxtStyle,
                               filled: true,
                               fillColor: Color(0xffF1F1F1),
                               border: OutlineInputBorder(
@@ -615,6 +667,13 @@ class _creatingEventState extends State<creatingEvent> {
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 10),
                       child: TextFormField(
+                        validator: (value) {
+                          if (value == null) {
+                            return 'يجب إرفاق وصف عن الحدث';
+                            return 'يجب إرفاق وصف عن الحدث';
+                          }
+                          return null;
+                        },
                         controller: _eventDescriptionCont,
                         maxLines: 10,
                         maxLength: 3000,
@@ -627,6 +686,7 @@ class _creatingEventState extends State<creatingEvent> {
                                 'وصف عن الحدث\n ما الهدف منه وماهي الانشطة التي سيحويها\n ..وما المشاكل التي سيعالجها',
                             hintStyle: conTxtFeildHint,
                             filled: true,
+                            errorStyle: conErorTxtStyle,
                             fillColor: Color(0xffF1F1F1),
                             border: OutlineInputBorder(
                                 borderSide: BorderSide.none,
@@ -709,28 +769,6 @@ class _creatingEventState extends State<creatingEvent> {
                             )),
                       ],
                     ),
-                    Visibility(
-                        visible: sendNotifications,
-                        child: Container(
-                          margin: EdgeInsets.symmetric(vertical: 10),
-                          child: TextFormField(
-                            textDirection: TextDirection.rtl,
-                            controller: _targetedAudienceCont,
-                            maxLines: 3,
-                            textAlign: TextAlign.right,
-                            decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 20),
-                                hintText:
-                                    'مجال الفئة المستهدفة, إفصل بين كل كلمة تعبر\n عن مجالات الفئة المستهدفة بفاصلة ',
-                                hintStyle: conTxtFeildHint,
-                                filled: true,
-                                fillColor: Color(0xffF1F1F1),
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(10))),
-                          ),
-                        )),
                     SizedBox(
                       height: 20,
                     ),
@@ -743,7 +781,108 @@ class _creatingEventState extends State<creatingEvent> {
                             style: conTxtFeildHint.copyWith(
                                 color: Colors.blueGrey, fontSize: 18),
                           ),
-                          onTap: () {},
+                          onTap: () async {
+                            if (_eventFormKey.currentState!.validate()) {
+                              setState(() {
+                                isLoading = !isLoading;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                  'جاري تحميل الحدث..',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: 'Cairo',
+                                  ),
+                                )),
+                              );
+
+                              try {
+                                _controllers.forEach((element) {
+                                  _controllersText.add(element.text);
+                                });
+
+                                //     .snapshotEvents
+                                //     .listen((taskSnapshot) {
+                                //   switch (taskSnapshot.state) {
+                                //     case TaskState.running:
+                                //       isLoading = true;
+                                //       // ...
+                                //       break;
+                                //
+                                //     case TaskState.success:
+                                //       isLoading = false;
+                                //       // ...
+                                //       break;
+                                //
+                                //     case TaskState.error:
+                                //
+                                //       // ...
+                                //       break;
+                                //   }
+                                // });
+                                var snapshot = await _firebaseStorage
+                                    .child(imagePath!)
+                                    .putFile(image!);
+
+                                final event = await eventRef.add({
+                                  'image': await snapshot!.ref.getDownloadURL(),
+                                  'title': _eventNameCont.text,
+                                  'description': _eventDescriptionCont.text,
+                                  'eventType': _eventTypeCont.text,
+                                  'starterDate': starterDate,
+                                  'endDate': endDate,
+                                  'starterTime': int.parse(starterTime.text),
+                                  'endTime': int.parse(endTime.text),
+                                  'eventCity': _eventCityCont.text,
+                                  'location': _eventLocationCont.text,
+                                  'field': _eventFieldCont.text,
+                                  'rooms':
+                                      FieldValue.arrayUnion(_controllersText),
+                                  'acceptsParticapants': acceptsParticipants,
+                                  'sendNotification': sendNotifications,
+                                  'eventVisibility': true,
+                                  'creatorID': Provider.of<siggning>(context,
+                                          listen: false)
+                                      .loggedUser!
+                                      .uid,
+                                  'creationDate': Timestamp.now(),
+                                  'isPublic': false
+                                });
+
+                                if (event == null) {
+                                  isLoading = false;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                      'حصل خطأ ما, لم يتم نشر حدثك, أعد المحاولة ..',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontFamily: 'Cairo',
+                                      ),
+                                    )),
+                                  );
+                                } else {
+                                  await eventRef
+                                      .doc(event.id)
+                                      .update({'id': event.id});
+
+                                  isLoading = false;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                      'تم حفظ الحدث بنجاح..',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontFamily: 'Cairo',
+                                      ),
+                                    )),
+                                  );
+                                  Navigator.pushNamed(context, 'OHome');
+                                }
+                              } on FirebaseAuthException catch (e) {}
+                            }
+                          },
                         ),
                         halfCTA(
                             txt: 'نشر الحدث',
@@ -769,8 +908,16 @@ class _creatingEventState extends State<creatingEvent> {
                                   });
                                   final targetedAudience =
                                       _targetedAudienceCont.text.split(',');
+
+                                  //Upload to Firebase
+
+                                  var snapshot = await _firebaseStorage
+                                      .child(imagePath!)
+                                      .putFile(image!);
+
                                   final event = await eventRef.add({
-                                    'image': imagePath,
+                                    'image':
+                                        await snapshot!.ref.getDownloadURL(),
                                     'title': _eventNameCont.text,
                                     'description': _eventDescriptionCont.text,
                                     'eventType': _eventTypeCont.text,
@@ -792,14 +939,16 @@ class _creatingEventState extends State<creatingEvent> {
                                             listen: false)
                                         .loggedUser!
                                         .uid,
-                                    'creationDate': Timestamp.now()
+                                    'creationDate': Timestamp.now(),
                                   });
-                                  sendPushNotification(
-                                      starterDate.toDate().toString(),
-                                      _eventNameCont.text,
-                                      _eventFieldCont,
-                                      event!.id,
-                                      siggning().loggedUser!.uid);
+                                  sendNotifications
+                                      ? sendPushTopicNotification(
+                                          starterDate.toDate().toString(),
+                                          _eventNameCont.text,
+                                          _eventFieldCont,
+                                          event!.id,
+                                          siggning().loggedUser!.uid)
+                                      : null;
 
                                   // if (sendNotifications) {
                                   //   final users = await FirebaseFirestore
@@ -867,7 +1016,7 @@ class _creatingEventState extends State<creatingEvent> {
   }
 }
 
-sendPushNotification(
+sendPushTopicNotification(
     String body, String title, field, eventId, createrId) async {
   try {
     await http
@@ -895,3 +1044,5 @@ sendPushNotification(
     print('erorr in pushing notifi:$e');
   }
 }
+
+//Select Image}

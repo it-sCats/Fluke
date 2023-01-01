@@ -57,6 +57,8 @@ dependencies:
   provider: ^6.0.5
   flutter_local_notifications: ^13.0.0
   firebase_analytics: ^10.0.8
+  firebase_storage: ^11.0.10
+  timeago: ^3.3.0
 
 
 

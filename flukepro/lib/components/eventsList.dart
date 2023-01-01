@@ -6,73 +6,98 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class eventList extends StatelessWidget {
-  Future<dynamic> EventQuery;
+import '../utils/fireStoreQueries.dart';
+
+int? visitorsNum;
+
+class eventList extends StatefulWidget {
+  bool isVisitorVertical;
+  bool isOngoing;
+  bool isUpcoming;
+  Stream<QuerySnapshot<Object?>> EventQuery;
 
   eventList(
-    this.EventQuery,
-  );
+      this.EventQuery, this.isVisitorVertical, this.isOngoing, this.isUpcoming);
 
   @override
+  State<eventList> createState() => _eventListState();
+}
+
+class _eventListState extends State<eventList> {
+  List _events = [];
+  waitingFunction(eventId) async {
+    visitorsNum = await gettingNumberOfEventVisitors(eventId);
+  }
+
+  eventsStream() async {}
+  @override
   Widget build(BuildContext context) {
+    List<Widget> eventWidget = [];
     return Container(
       width: double.infinity,
-      child: FutureBuilder(
+      child: StreamBuilder<QuerySnapshot>(
 
           //باش نبنو الداتا الي بنجيبوها من قاعدة البيانات نحتاجو نحطوها في الفيوتشر بيلدر
-          future: EventQuery,
+          stream: widget.EventQuery,
           builder: (context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               //في حال لم يتم الاتصال يتم إظهار علامة تحميل
               return CircularProgressIndicator();
             } else {
-              if (!snapshot.hasData || snapshot.data.length == 0) {
+              if (!snapshot.hasData) {
                 return Center(
                   child: Image.asset(
                       'images/Hands Phone.png'), //في حال لايوجد ديكومنتس يتم عرض هذه الصورة
                 );
                 //في حال إحتوت السنابشوت على بيانات سيتم بناءها بإستخدام ليست فيو
               } else {
-                return ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  reverse: defaultTargetPlatform == TargetPlatform.android ||
-                          defaultTargetPlatform ==
-                              TargetPlatform
-                                  .iOS //خاصية يحتاجها الموبايل ليعرض الليستة بشكل صحيح
+                final events = snapshot.data!.docs;
 
-                      ? true
-                      : false,
-                  scrollDirection:
-                      defaultTargetPlatform == TargetPlatform.android ||
-                              defaultTargetPlatform ==
-                                  TargetPlatform
-                                      .iOS //حتى يتم التمرير بالجنب في الموبايل
-
-                          ? Axis.horizontal
-                          : Axis.vertical,
-                  itemBuilder: (context, index) {
-                    var eventData = snapshot.data![index];
-
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                for (var eventa in events) {
+                  Timestamp strat = eventa['starterDate'];
+                  Timestamp end = eventa['endDate'];
+                  // print(DateTime.fromMicrosecondsSinceEpoch(
+                  //     strat.microsecondsSinceEpoch));
+                  // print(DateTime.fromMicrosecondsSinceEpoch(
+                  //     end.microsecondsSinceEpoch)); //testing
+                  if (widget.isOngoing
+                      ? ((DateTime.fromMicrosecondsSinceEpoch(
+                                      strat.microsecondsSinceEpoch)
+                                  .isBefore(DateTime.now()) ||
+                              DateTime.fromMicrosecondsSinceEpoch(
+                                      strat.microsecondsSinceEpoch)
+                                  .isAtSameMomentAs(DateTime.now())) &&
+                          (DateTime.fromMicrosecondsSinceEpoch(
+                                      end.microsecondsSinceEpoch)
+                                  .isAfter(DateTime.now()) ||
+                              DateTime.fromMicrosecondsSinceEpoch(
+                                      end.microsecondsSinceEpoch)
+                                  .isAtSameMomentAs(DateTime.now())))
+                      : DateTime.fromMicrosecondsSinceEpoch(strat.microsecondsSinceEpoch)
+                          .isAfter(DateTime.now())) {
+                    eventWidget.add(Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 5.0,
+                          vertical: widget.isVisitorVertical ? 15 : 15),
                       child: GestureDetector(
                         child: eventHorizCard(
-                            //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
-                            title: eventData['title'],
-                            image: eventData['image'],
-                            description: eventData['description'],
-                            field: eventData['field'],
-                            location: eventData['location'],
-                            city: eventData['eventCity'],
-                            starterDate: eventData['starterDate'],
-                            endDate: eventData['endDate'],
-                            starterTime: eventData['starterTime'],
-                            endTime: eventData['endTime'],
-                            eventType: eventData['eventType'],
-                            creationDate: eventData['creationDate'],
-                            acceptsParticapants:
-                                eventData['acceptsParticapants'],
-                            eventVisibilty: eventData['eventVisibility']),
+                          //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
+                          title: eventa['title'],
+                          image: eventa['image'],
+                          description: eventa['description'],
+                          field: eventa['field'],
+                          location: eventa['location'],
+                          city: eventa['eventCity'],
+                          starterDate: eventa['starterDate'],
+                          endDate: eventa['endDate'],
+                          starterTime: eventa['starterTime'].toString(),
+                          endTime: eventa['endTime'].toString(),
+                          eventType: eventa['eventType'],
+                          creationDate: eventa['creationDate'],
+                          acceptsParticapants: eventa['acceptsParticapants'],
+                          eventVisibilty: eventa['eventVisibility'],
+                          visitorsNum: visitorsNum,
+                        ),
                         onTap: () {
                           showModalBottomSheet(
                               isScrollControlled: true,
@@ -81,26 +106,60 @@ class eventList extends StatelessWidget {
                               builder: (context) => eventDisplay(
                                   wholePage: false,
                                   justDisplay: false,
-                                  id: eventData['id'],
-                                  title: eventData['title'],
-                                  description: eventData['description'],
-                                  starterDate: eventData['starterDate'],
-                                  location: eventData['location'],
-                                  image: eventData['image'],
-                                  endDate: eventData['endDate'],
-                                  starterTime: eventData['starterTime'],
-                                  endTime: eventData['endTime'],
-                                  creationDate: eventData['creationDate'],
-                                  city: eventData['eventCity'],
+                                  id: eventa['id'],
+                                  title: eventa['title'],
+                                  description: eventa['description'],
+                                  starterDate: eventa['starterDate'],
+                                  location: eventa['location'],
+                                  image: eventa['image'],
+                                  endDate: eventa['endDate'],
+                                  starterTime: eventa['starterTime'],
+                                  eventType: eventa['eventType'],
+                                  endTime: eventa['endTime'],
+                                  field: eventa['field'],
+                                  creationDate: eventa['creationDate'],
+                                  city: eventa['eventCity'],
                                   acceptsParticapants:
-                                      eventData['acceptsParticapants'],
-                                  eventVisibilty:
-                                      eventData['eventVisibility']));
+                                      eventa['acceptsParticapants'],
+                                  eventVisibilty: eventa['eventVisibility'],
+                                  visitorsNum: visitorsNum,
+                                  creatorID: eventa['creatorID']));
                         },
                       ),
-                    );
-                  },
-                  itemCount: snapshot.data?.length,
+                    ));
+                  }
+                }
+                return ListView(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  physics: BouncingScrollPhysics(),
+                  reverse: widget.isVisitorVertical
+                      ? false
+                      : defaultTargetPlatform == TargetPlatform.android ||
+                              defaultTargetPlatform ==
+                                  TargetPlatform
+                                      .iOS //خاصية يحتاجها الموبايل ليعرض الليستة بشكل صحيح
+
+                          ? true
+                          : false,
+                  scrollDirection: widget.isVisitorVertical
+                      ? Axis.vertical
+                      : defaultTargetPlatform == TargetPlatform.android ||
+                              defaultTargetPlatform ==
+                                  TargetPlatform
+                                      .iOS //حتى يتم التمرير بالجنب في الموبايل
+
+                          ? Axis.horizontal
+                          : Axis.vertical,
+                  children: (eventWidget.isEmpty)
+                      ? [
+                          Center(
+                            child: Image.asset(
+                                'images/Hands Phone.png'), //في حال لايوجد ديكومنتس يتم عرض هذه الصورة
+                          )
+                        ]
+                      :
+                      //في حال إحتوت السنابشوت على بيانات سيتم بناءها بإستخدام ليست فيو
+                      eventWidget,
                 );
               }
             }
@@ -109,66 +168,66 @@ class eventList extends StatelessWidget {
   }
 }
 
-class VisitorVerticalEventList extends StatelessWidget {
-  Future<dynamic> EventQuery;
-
-  VisitorVerticalEventList(
-    this.EventQuery,
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 30),
-      height: double.infinity,
-      child: FutureBuilder(
-
-          //باش نبنو الداتا الي بنجيبوها من قاعدة البيانات نحتاجو نحطوها في الفيوتشر بيلدر
-          future: EventQuery,
-          builder: (context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              //في حال لم يتم الاتصال يتم إظهار علامة تحميل
-              return Container(
-                  width: 100, height: 100, child: CircularProgressIndicator());
-            } else {
-              if (!snapshot.hasData || snapshot.data.length == 0) {
-                return Center(
-                  child: Image.asset(
-                      'images/Hands Phone.png'), //في حال لايوجد ديكومنتس يتم عرض هذه الصورة
-                );
-                //في حال إحتوت السنابشوت على بيانات سيتم بناءها بإستخدام ليست فيو
-              } else {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) {
-                    var eventData = snapshot.data![index];
-
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 18.0),
-                      child: eventVertiCard(
-                          //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
-                          title: eventData['title'],
-                          image: eventData['image'],
-                          description: eventData['description'],
-                          field: eventData['field'],
-                          location: eventData['location'],
-                          city: eventData['eventCity'],
-                          starterDate: eventData['starterDate'],
-                          endDate: eventData['endDate'],
-                          starterTime: eventData['starterTime'],
-                          endTime: eventData['endTime'],
-                          eventType: eventData['eventType'],
-                          creationDate: eventData['creationDate'],
-                          acceptsParticapants: eventData['acceptsParticapants'],
-                          eventVisibilty: eventData['eventVisibility']),
-                    );
-                  },
-                  itemCount: snapshot.data?.length,
-                );
-              }
-            }
-          }),
-    );
-  }
-}
+// class VisitorVerticalEventList extends StatelessWidget {
+//   Future<dynamic> EventQuery;
+//
+//   VisitorVerticalEventList(
+//     this.EventQuery,
+//   );
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       padding: EdgeInsets.symmetric(horizontal: 30),
+//       height: double.infinity,
+//       child: FutureBuilder(
+//
+//           //باش نبنو الداتا الي بنجيبوها من قاعدة البيانات نحتاجو نحطوها في الفيوتشر بيلدر
+//           future: EventQuery,
+//           builder: (context, AsyncSnapshot snapshot) {
+//             if (snapshot.connectionState == ConnectionState.waiting) {
+//               //في حال لم يتم الاتصال يتم إظهار علامة تحميل
+//               return Container(
+//                   width: 100, height: 100, child: CircularProgressIndicator());
+//             } else {
+//               if (!snapshot.hasData || snapshot.data.length == 0) {
+//                 return Center(
+//                   child: Image.asset(
+//                       'images/Hands Phone.png'), //في حال لايوجد ديكومنتس يتم عرض هذه الصورة
+//                 );
+//                 //في حال إحتوت السنابشوت على بيانات سيتم بناءها بإستخدام ليست فيو
+//               } else {
+//                 return ListView.builder(
+//                   shrinkWrap: true,
+//                   scrollDirection: Axis.vertical,
+//                   itemBuilder: (context, index) {
+//                     var eventData = snapshot.data![index];
+//
+//                     return Padding(
+//                       padding: const EdgeInsets.only(bottom: 18.0),
+//                       child: eventVertiCard(
+//                           //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
+//                           title: eventData['title'],
+//                           image: eventData['image'],
+//                           description: eventData['description'],
+//                           field: eventData['field'],
+//                           location: eventData['location'],
+//                           city: eventData['eventCity'],
+//                           starterDate: eventData['starterDate'],
+//                           endDate: eventData['endDate'],
+//                           starterTime: eventData['starterTime'],
+//                           endTime: eventData['endTime'],
+//                           eventType: eventData['eventType'],
+//                           creationDate: eventData['creationDate'],
+//                           acceptsParticapants: eventData['acceptsParticapants'],
+//                           eventVisibilty: eventData['eventVisibility']),
+//                     );
+//                   },
+//                   itemCount: snapshot.data?.length,
+//                 );
+//               }
+//             }
+//           }),
+//     );
+//   }
+// }

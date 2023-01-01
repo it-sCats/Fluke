@@ -3,15 +3,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flukepro/components/cons.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../components/visitorEventprev.dart';
+import '../../utils/SigningProvider.dart';
 import '../../utils/fireStoreQueries.dart';
 
 final _auth = FirebaseAuth.instance;
 
 String? userId;
-Map<String, dynamic>? userInfo;
+
 int? userType;
 Map<String, dynamic>? userInfoDoc;
 
@@ -30,6 +32,7 @@ class _profileState extends State<profile> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> tiketsWidget = [];
     return SafeArea(
       child: SingleChildScrollView(
         // reverse: true,
@@ -129,7 +132,8 @@ class _profileState extends State<profile> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      "لاتلاتنت",
+                      Provider.of<siggning>(context, listen: false)
+                          .userInfoDocument!['name'],
                       style: conHeadingsStyle.copyWith(
                           color: Color(0xFFffffff), fontSize: 15),
                     ),
@@ -157,42 +161,57 @@ class _profileState extends State<profile> {
                       topRight: Radius.circular(40.0),
                     ),
                   ),
-                  child: FutureBuilder(
+                  child: StreamBuilder<QuerySnapshot>(
 
                       //باش نبنو الداتا الي بنجيبوها من قاعدة البيانات نحتاجو نحطوها في الفيوتشر بيلدر
-                      future: getUserReegiteredEvents(userId.toString()),
+                      stream: getUserReegiteredEvents(userId.toString()),
                       builder: (context, AsyncSnapshot snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           //في حال لم يتم الاتصال يتم إظهار علامة تحميل
                           return CircularProgressIndicator();
                         } else {
-                          if (!snapshot.hasData || snapshot.data.length == 0) {
+                          if (!snapshot.hasData || snapshot.data == null) {
                             return Center(
-                              child: Image.asset(
-                                  'images/Hands Phone.png'), //في حال لايوجد ديكومنتس يتم عرض هذه الصورة
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset('images/Hands Phone.png'),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    'عند تسجيلك في أي حدث ستظهر تذاكر دخولك هنا',
+                                    style: conHeadingsStyle.copyWith(
+                                        fontSize: 14,
+                                        color: conBlack.withOpacity(.7)),
+                                  )
+                                ],
+                              ), //في حال لايوجد ديكومنتس يتم عرض هذه الصورة
                             );
                             //في حال إحتوت السنابشوت على بيانات سيتم بناءها بإستخدام ليست فيو
                           } else {
-                            return ListView.builder(
+                            final tickets = snapshot.data!.docs;
+
+                            for (var ticket in tickets) {
+                              tiketsWidget.add(visitorEventPrev(
+                                  //هنا نجيب في كل دكيومنت ونعرض البيانات الي فيه ككارد عليها كيو آر
+                                  ticket.id, //event id
+                                  ticket['eventTitle'],
+                                  ticket['name'],
+                                  ticket['phone'],
+                                  QrImage(
+                                      padding: EdgeInsets.all(1),
+                                      size: 60,
+                                      data: '${Provider.of<siggning>(context, listen: false).userInfoDocument!['name']},\n' +
+                                          '${Provider.of<siggning>(context, listen: false).userInfoDocument!['phone']}\n' +
+                                          '${ticket!['eventTitle']}\n')));
+                            }
+                            return ListView(
                               physics: BouncingScrollPhysics(),
                               reverse: false,
-                              itemBuilder: (context, index) {
-                                var eventData = snapshot.data![index];
-
-                                return visitorEventPrev(
-                                    eventData['id'],
-                                    eventData['title'],
-                                    userInfo!['name'],
-                                    userInfo!['phone'],
-                                    QrImage(
-                                        padding: EdgeInsets.all(1),
-                                        size: 60,
-                                        data: '${userInfo!['name']},\n' +
-                                            '${userInfo!['phone']}\n' +
-                                            '${eventData!['title']}\n'));
-                              },
-                              itemCount: snapshot.data?.length,
+                              children: tiketsWidget,
                             );
                           }
                         }

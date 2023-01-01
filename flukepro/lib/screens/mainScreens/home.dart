@@ -6,8 +6,10 @@ import 'package:flukepro/screens/OrganizersScreens/Sections/ongoingEvents.dart';
 import 'package:flukepro/utils/fireStoreQueries.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 import '../../OrganizersRequests/requestsList.dart';
 import '../../components/bottomNav.dart';
+import '../../utils/SigningProvider.dart';
 import '../../utils/authentication.dart';
 import '../OrganizersScreens/Sections/VisitorFeedSection.dart';
 
@@ -79,8 +81,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisSpacing: 20,
                 mainAxisSpacing: 30,
                 children: [
-                  dashboardSection('الأحداث الأكثر تداولا ', getAllEvents()),
-                  VisitorFeedSection('أحداث تهمك', getAllEvents()),
+                  dashboardSection(
+                      'الأحداث الأكثر تداولا ', siggning().getAllEvents()),
+                  VisitorFeedSection('أحداث تهمك', siggning().getAllEvents()),
                 ],
               )),
             ],

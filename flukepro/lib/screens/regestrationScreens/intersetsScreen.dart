@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flukepro/components/cons.dart';
 import 'package:flukepro/components/customWidgets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class interestsSelection extends StatefulWidget {
@@ -100,10 +101,51 @@ class _interestsSelectionState extends State<interestsSelection> {
                                   .collection('users')
                                   .doc(userId)
                                   .update({'interests': selectedinterestes});
-                              selectedinterestes.forEach((element) {
-                                FirebaseMessaging.instance
-                                    .subscribeToTopic(element);
-                              });
+                              if (!kIsWeb) {
+                                selectedinterestes.forEach((element) {
+                                  element == 'المجال الطبي'
+                                      ? FirebaseMessaging.instance
+                                          .subscribeToTopic('medical')
+                                      : element == 'برمجة'
+                                          ? FirebaseMessaging.instance
+                                              .subscribeToTopic('coding')
+                                          : element == 'مالية'
+                                              ? FirebaseMessaging.instance
+                                                  .subscribeToTopic('finance')
+                                              : element == 'قانون'
+                                                  ? FirebaseMessaging.instance
+                                                      .subscribeToTopic('low')
+                                                  : element == 'مجال التقنية'
+                                                      ? FirebaseMessaging
+                                                          .instance
+                                                          .subscribeToTopic(
+                                                              'tech')
+                                                      : element == 'أعمال حرة'
+                                                          ? FirebaseMessaging
+                                                              .instance
+                                                              .subscribeToTopic(
+                                                                  'freelance')
+                                                          : element == 'أخرى'
+                                                              ? FirebaseMessaging
+                                                                  .instance
+                                                                  .subscribeToTopic(
+                                                                      'others')
+                                                              : element ==
+                                                                      'محاسبة'
+                                                                  ? FirebaseMessaging
+                                                                      .instance
+                                                                      .subscribeToTopic(
+                                                                          'accountant')
+                                                                  : element ==
+                                                                          'كتابة محتوى'
+                                                                      ? FirebaseMessaging
+                                                                          .instance
+                                                                          .subscribeToTopic('content')
+                                                                      : element == 'تصميم جرافيكي'
+                                                                          ? FirebaseMessaging.instance.subscribeToTopic('graphic design')
+                                                                          : null;
+                                });
+                              }
                               Navigator.pushNamed(context, '/redirect');
                             }
                             // Navigator.pushNamed(context, '/home');
