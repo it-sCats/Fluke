@@ -1,4 +1,5 @@
 import 'package:flukepro/components/cons.dart';
+import 'package:flukepro/utils/SigningProvider.dart';
 import 'package:flukepro/utils/fireStoreQueries.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class Adashboard extends StatelessWidget {
             ? 1
             : 2, //في حال إستخدام الديسكتوب يتم عرض 2 أحداث فس الصف الواحد
         children: [
-          dashboardSection('الأحداث الحالية ', getAllEvents()),
+          dashboardSection('الأحداث الحالية ', siggning().getAllEvents()),
           VisitorFeedSection('أحداث قادمة ', getOngoing()),
         ],
       ),
