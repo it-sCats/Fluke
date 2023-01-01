@@ -5,6 +5,7 @@ import 'package:flukepro/screens/OrganizersScreens/Notifications.dart';
 import 'package:flukepro/screens/OrganizersScreens/ODashboard.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oevents.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oprofile.dart';
+import 'package:flukepro/screens/mainScreens/AdminScreens/aDashboard.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
 import 'package:flukepro/utils/fireStoreQueries.dart';
 import 'package:flukepro/utils/notificationProvider.dart';
@@ -32,9 +33,11 @@ import 'base.dart';
 import 'components/eventEdit.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'screens/mainScreens/AdminScreens/ahome.dart';
 
 final user = FirebaseAuth.instance.currentUser;
 final _firestore = FirebaseFirestore.instance;
+GlobalKey<NavigatorState>? navigatorKey;
 
 // getuserinMAin() async {
 //   final userInfo = await _firestore.collection('users').doc(user!.uid).get();
@@ -79,15 +82,14 @@ Future<void> firebaseMessagingBackgroundHandler(
   }
 }
 
-handlingBackground(message) {
-  navigatorKey?.currentState!.push(MaterialPageRoute(
-    builder: (context) => base(
-      onNotificationTap: 1,
-    ),
-  ));
-}
+// handlingBackground(message) {
+//   navigatorKey?.currentState!.push(MaterialPageRoute(
+//     builder: (context) => base(
+//       onNotificationTap: 1,
+//     ),
+//   ));
+// }
 
-GlobalKey<NavigatorState>? navigatorKey;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -174,10 +176,14 @@ class _MyAppState extends State<MyApp> {
           //routes of Organizers Screens
           'OHome': ((context) => Ohome()),
           '/Odash': ((context) => Odashboard()),
+          '/Adash': ((context) => Adashboard()),
           '/Oevent': ((context) => Oevents()),
           '/Onotification': ((context) => notifaction()),
           '/Oprofile': ((context) => Oprofile()),
-          'editEvent': ((context) => editEvent())
+          'editEvent': ((context) => editEvent()),
+
+          '/Oprofile': ((context) => Oprofile())
+          //routes of Admin Screens
         }, //routes are to ease the navigation btween pages
         //we give every page a name then when we want to navigate we just call that name
       ),
