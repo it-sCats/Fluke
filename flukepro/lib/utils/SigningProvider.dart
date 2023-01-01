@@ -172,16 +172,16 @@ class siggning extends ChangeNotifier {
     DocumentSnapshot<Map<String, dynamic>> userInfo =
         await _firestore.collection('users').doc(loggedUser!.uid).get();
 
-    final userInfoDoc = userInfo.data();
+    Map<String, dynamic>? userInfoDoc = userInfo.data();
     userType = userInfoDoc!['userType'];
 
     notifyListeners();
     return userInfoDoc!['userType'];
   }
 
-  Future<Map<String, dynamic>?> getUserInfoDoc() async {
-    final userInfo =
-        await _firestore.collection('users').doc(auth.currentUser!.uid).get();
+  Future<Map<String, dynamic>?> getUserInfoDoc(userID) async {
+    DocumentSnapshot<Map<String, dynamic>> userInfo =
+        await _firestore.collection('users').doc(userID).get();
 
     userInfoDocument = userInfo.data();
     notifyListeners();
