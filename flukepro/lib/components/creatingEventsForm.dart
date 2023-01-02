@@ -150,60 +150,61 @@ class _creatingEventState extends State<creatingEvent> {
             IconButton(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
                 onPressed: () {
-                  showDialog(
-                      //save to drafts dialog
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text(
-                            'هل ترغب في حفظ المعلومات التي أدخلتها؟ ',
-                            textAlign: TextAlign.center,
-                            style: conHeadingsStyle.copyWith(fontSize: 15),
-                          ),
-                          content: Text(
-                            'يمكنك حفظ المعلومات المدخلة والعودة لها في وقت لاحق',
-                            textAlign: TextAlign.center,
-                            style: conHeadingsStyle.copyWith(
-                                fontSize: 14, fontWeight: FontWeight.normal),
-                          ),
-                          actions: [
-                            InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(context, 'OHome');
-                                },
-                                child: Text(
-                                  'تجاهل التغيرات',
-                                  textAlign: TextAlign.center,
-                                  style: conHeadingsStyle.copyWith(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.normal),
-                                )),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                              decoration: BoxDecoration(
-                                  color: conORange,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: InkWell(
+                  if (_eventNameCont.text == '' && _eventTypeCont.text == '')
+                    showDialog(
+                        //save to drafts dialog
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text(
+                              'هل ترغب في حفظ المعلومات التي أدخلتها؟ ',
+                              textAlign: TextAlign.center,
+                              style: conHeadingsStyle.copyWith(fontSize: 15),
+                            ),
+                            content: Text(
+                              'يمكنك حفظ المعلومات المدخلة والعودة لها في وقت لاحق',
+                              textAlign: TextAlign.center,
+                              style: conHeadingsStyle.copyWith(
+                                  fontSize: 14, fontWeight: FontWeight.normal),
+                            ),
+                            actions: [
+                              InkWell(
                                   onTap: () {
-                                    Navigator.pop(context);
+                                    Navigator.pushNamed(context, 'OHome');
                                   },
                                   child: Text(
-                                    'حفظ الحدث',
+                                    'تجاهل التغيرات',
                                     textAlign: TextAlign.center,
                                     style: conHeadingsStyle.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal),
                                   )),
-                            ),
-                          ],
-                          buttonPadding: EdgeInsets.all(20),
-                          actionsAlignment: MainAxisAlignment.spaceAround,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 100),
-                        );
-                      });
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                                decoration: BoxDecoration(
+                                    color: conORange,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      'حفظ الحدث',
+                                      textAlign: TextAlign.center,
+                                      style: conHeadingsStyle.copyWith(
+                                          color: Colors.white,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                              ),
+                            ],
+                            buttonPadding: EdgeInsets.all(20),
+                            actionsAlignment: MainAxisAlignment.spaceAround,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 100),
+                          );
+                        });
                   // Navigator.pop(context);
                 },
                 icon: Icon(

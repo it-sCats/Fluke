@@ -90,6 +90,15 @@ getUserReegiteredEvents(String userId) {
   return AllEvents;
 }
 
+getCreatorEvent(userID) {
+  final AllEvents = _firestore
+      .collection('events')
+      .where('creatorId', isEqualTo: userID)
+      .snapshots();
+
+  return AllEvents;
+}
+
 getOrganizersEvent(context) async {
   print(Provider.of<siggning>(context, listen: false).loggedUser!.uid.trim());
   QuerySnapshot AllEvents = await FirebaseFirestore.instance
@@ -101,6 +110,19 @@ getOrganizersEvent(context) async {
               .trim())
       .get();
   return AllEvents.docs;
+}
+
+getOrganizersEventSnapshot(context) {
+  print(Provider.of<siggning>(context, listen: false).loggedUser!.uid.trim());
+  Stream<QuerySnapshot> AllEvents = FirebaseFirestore.instance
+      .collection('events')
+      .where('creatorID',
+          isEqualTo: Provider.of<siggning>(context, listen: false)
+              .loggedUser!
+              .uid
+              .trim())
+      .snapshots();
+  return AllEvents;
 }
 
 Future<int?> gettingNumberOfEventVisitors(eventId) async {

@@ -68,6 +68,38 @@ class halfCTA extends StatelessWidget {
   }
 }
 
+class lessEdgeCTA extends StatelessWidget {
+  lessEdgeCTA({required this.txt, required this.onTap});
+  final String txt;
+
+  Function onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return InkWell(
+      onTap: () => onTap(),
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 15),
+        width: 320,
+        height: 65,
+        margin: EdgeInsets.symmetric(vertical: size.height * 0.02),
+        child: Text(
+          txt,
+          textAlign: TextAlign.center,
+          style: conCTATxt.copyWith(fontSize: 17),
+        ),
+        decoration: BoxDecoration(
+          color: conORange,
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class AgendaTextButton extends StatelessWidget {
   bool visibale = false;
   AgendaTextButton(
