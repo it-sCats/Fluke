@@ -6,8 +6,10 @@ import 'package:flukepro/screens/OrganizersScreens/ODashboard.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oevents.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oprofile.dart';
 import 'package:flukepro/screens/OrganizersScreens/Sections/timeTable.dart';
+import 'package:flukepro/screens/OrganizersScreens/Sections/timeTableScreen.dart';
 import 'package:flukepro/screens/mainScreens/AdminScreens/aDashboard.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
+import 'package:flukepro/utils/eventProvider.dart';
 import 'package:flukepro/utils/fireStoreQueries.dart';
 import 'package:flukepro/utils/notificationProvider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -134,8 +136,13 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => siggning()),
         ChangeNotifierProvider(
-            create: (context) => siggning()) //كيف حطيت البروفايدر وماخدمتاش
+          create: (context) => notificationPRovider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => eventInfoHolder(),
+        ) //كيف حطيت البروفايدر وماخدمتاش
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,

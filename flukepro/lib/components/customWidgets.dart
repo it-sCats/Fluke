@@ -69,9 +69,9 @@ class halfCTA extends StatelessWidget {
 }
 
 class lessEdgeCTA extends StatelessWidget {
-  lessEdgeCTA({required this.txt, required this.onTap});
+  lessEdgeCTA({required this.txt, required this.onTap, this.width});
   final String txt;
-
+  double? width;
   Function onTap;
 
   @override
@@ -81,13 +81,13 @@ class lessEdgeCTA extends StatelessWidget {
       onTap: () => onTap(),
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 15),
-        width: 320,
+        width: width != null ? width : 320,
         height: 65,
         margin: EdgeInsets.symmetric(vertical: size.height * 0.02),
         child: Text(
           txt,
           textAlign: TextAlign.center,
-          style: conCTATxt.copyWith(fontSize: 17),
+          style: conCTATxt.copyWith(fontSize: 16),
         ),
         decoration: BoxDecoration(
           color: conORange,

@@ -9,7 +9,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/creatingEventsForm.dart';
+import '../../components/session.dart';
 import '../../utils/SigningProvider.dart';
+import '../../utils/eventProvider.dart';
 import '../../utils/fireStoreQueries.dart';
 import '../../utils/notificationProvider.dart';
 import '../mainScreens/profile.dart';
@@ -22,11 +24,15 @@ import 'package:intl/intl.dart' as intl;
 //الصفحة هذه هي أساس لوحة التحكم متاع المنظم
 final _auth = FirebaseAuth.instance;
 TextEditingController _eventTypeCont = TextEditingController();
+final _eventChooseFormKey = GlobalKey<FormState>();
+Session? session;
 //
 //كائن من الفاير بيز ايث2
 
 bool showCreating = false;
 String? eventId;
+Timestamp? starterDate;
+Timestamp? endDate;
 
 //صفحة الهوم متاع المنظم
 class Ohome extends StatefulWidget {
@@ -141,99 +147,126 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                         context: context,
                         builder: (context) => Padding(
                               padding: const EdgeInsets.only(top: 30.0),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'إختر الحدث الذي تريد إنشاء\n أجندة له',
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        conHeadingsStyle.copyWith(fontSize: 20),
-                                  ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 80),
-                                    child: Directionality(
-                                      textDirection: TextDirection.rtl,
-                                      child: StreamBuilder<QuerySnapshot>(
-                                          stream: getOrganizersEventSnapshot(
-                                              context),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.waiting) {
-                                              return CircularProgressIndicator();
-                                            } else {
-                                              var events = snapshot.data!.docs;
-                                              return DropdownButtonFormField(
-                                                validator: (value) {
-                                                  if (value == null) {
-                                                    return 'يجب تحديد حدث';
-                                                  }
-                                                  return null;
-                                                },
-                                                decoration: InputDecoration(
-                                                    contentPadding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 20,
-                                                            vertical: 20),
-                                                    hintText: 'أحداثك',
-                                                    hintStyle: conTxtFeildHint,
-                                                    filled: true,
-                                                    fillColor:
-                                                        Color(0xffF1F1F1),
-                                                    errorStyle: conErorTxtStyle,
-                                                    border: OutlineInputBorder(
-                                                        borderSide:
-                                                            BorderSide.none,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10))),
-                                                style: conTxtFeildHint.copyWith(
-                                                    color: conBlack),
-                                                items: snapshot.data!.docs.map(
-                                                    (DocumentSnapshot items) {
-                                                  eventId = items['id'];
-                                                  return DropdownMenuItem(
-                                                    value: [
-                                                      items['title'],
-                                                      items['id']
-                                                    ],
-                                                    child: Text(items[
-                                                        'title']), //درنا تحويل من ليستا عادية لليستا يقبلها الدروب داون
-                                                  );
-                                                }).toList(),
-                                                onChanged: (dynamic value) {
-                                                  _eventTypeCont.text = value[0]
-                                                      .toString(); //the event name
-
-                                                  eventId =
-                                                      value[1]; //the event id
-                                                  print(value[0]);
-                                                  print(value[1]);
-                                                },
-                                              );
-                                            }
-                                          }),
+                              child: Form(
+                                key: _eventChooseFormKey,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'إختر الحدث الذي تريد إنشاء\n أجندة له',
+                                      textAlign: TextAlign.center,
+                                      style: conHeadingsStyle.copyWith(
+                                          fontSize: 20),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  lessEdgeCTA(
-                                      txt: 'إنشاء جدولة الحدث',
-                                      onTap: () {
-                                        Navigator.pushNamed(
-                                            //send event Id and name to the time table screen
-                                            context,
-                                            'timeTable',
-                                            arguments: {
-                                              'enevtId': eventId,
-                                              'evevntTitle': _eventTypeCont.text
-                                            });
-                                      })
-                                ],
+                                    SizedBox(
+                                      height: 30,
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 80),
+                                      child: Directionality(
+                                        textDirection: TextDirection.rtl,
+                                        child: StreamBuilder<QuerySnapshot>(
+                                            stream: getOrganizersEventSnapshot(
+                                                context),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return CircularProgressIndicator();
+                                              } else {
+                                                var events =
+                                                    snapshot.data!.docs;
+                                                return DropdownButtonFormField(
+                                                  validator: (value) {
+                                                    if (value == null) {
+                                                      return 'يجب تحديد حدث';
+                                                    }
+                                                    return null;
+                                                  },
+                                                  decoration: InputDecoration(
+                                                      contentPadding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 20,
+                                                              vertical: 20),
+                                                      hintText: 'أحداثك',
+                                                      hintStyle:
+                                                          conTxtFeildHint,
+                                                      filled: true,
+                                                      fillColor:
+                                                          Color(0xffF1F1F1),
+                                                      errorStyle:
+                                                          conErorTxtStyle,
+                                                      border:
+                                                          OutlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide
+                                                                      .none,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10))),
+                                                  style:
+                                                      conTxtFeildHint.copyWith(
+                                                          color: conBlack),
+                                                  items: snapshot.data!.docs
+                                                      .map((DocumentSnapshot
+                                                          items) {
+                                                    eventId = items['id'];
+                                                    return DropdownMenuItem(
+                                                      value: [
+                                                        items['title'],
+                                                        items['id'],
+                                                        items['starterDate'],
+                                                        items['endDate'],
+                                                      ],
+                                                      child: Text(items[
+                                                          'title']), //درنا تحويل من ليستا عادية لليستا يقبلها الدروب داون
+                                                    );
+                                                  }).toList(),
+                                                  onChanged: (dynamic value) {
+                                                    _eventTypeCont.text = value[
+                                                            0]
+                                                        .toString(); //the event name
+
+                                                    eventId = value[1];
+                                                    //the event id
+                                                    starterDate = value[2];
+                                                    endDate = value[3];
+                                                    print(value[0]);
+                                                    print(value[1]);
+                                                    print(value[2]);
+                                                  },
+                                                );
+                                              }
+                                            }),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    lessEdgeCTA(
+                                        txt: 'إنشاء أجندة الحدث',
+                                        onTap: () {
+                                          // Provider.of<eventInfoHolder>(context,
+                                          //         listen: false)
+                                          //     .getEventInfoForTimetable(
+                                          //         eventId, context);
+                                          if (_eventChooseFormKey.currentState!
+                                              .validate()) {
+                                            if (_eventTypeCont.text != '') {
+                                              Navigator.pushNamed(
+                                                  //send event Id and name to the time table screen
+                                                  context,
+                                                  'timeTable',
+                                                  arguments: [
+                                                    starterDate,
+                                                    endDate,
+                                                    eventId
+                                                  ]);
+                                            }
+                                          }
+                                        })
+                                  ],
+                                ),
                               ),
                             ));
                   },

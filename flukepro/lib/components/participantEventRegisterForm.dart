@@ -188,7 +188,8 @@ class _ParticiEventPrevState extends State<ParticiEventPrev> {
                           Provider.of<siggning>(context, listen: false)
                               .userInfoDocument!['field'],
                           widget.eventId,
-                          widget.creatorId);
+                          widget
+                              .creatorId); //here we modifiy for request send request ID
                       //todo fix the notification by grouping the devices
                     }
                     // showDialog(

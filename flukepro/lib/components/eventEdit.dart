@@ -237,9 +237,11 @@ class _editEventState extends State<editEvent> {
                         SizedBox(
                           width: double.infinity,
                           height: 400,
-                          child: image == null
-                              ? Image.asset(emptyImage)
-                              : Image.file(image!),
+                          child: eventData['image'] != null
+                              ? Image.network(eventData['image'])
+                              : image == null
+                                  ? Image.asset(emptyImage)
+                                  : Image.file(image!),
                         ),
                         Align(
                           alignment: Alignment.bottomRight,

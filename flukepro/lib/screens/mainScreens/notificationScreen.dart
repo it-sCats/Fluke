@@ -52,7 +52,7 @@ class _notifiScreenState extends State<notifiScreen> {
                   stream: FirebaseFirestore.instance
                       .collection('users')
                       .doc(siggning().loggedUser!.uid)
-                      .collection('notification')
+                      .collection('notifiction')
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
@@ -136,38 +136,54 @@ class _notificationaState extends State<notificationa> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    widget.title.toString(),
-                    style: conHeadingsStyle.copyWith(fontSize: 18),
-                    textAlign: TextAlign.right,
-                  ),
-                  Text(
-                    widget.body.toString(),
-                    style: conHeadingsStyle.copyWith(
-                        fontSize: 15, fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.right,
-                  ),
-                  //this row is for the event name pic and title
-                  //this row is for the heddin btns
-                  Text(
-                    '    ${timeago.format(DateTime.fromMicrosecondsSinceEpoch(widget.timeOfsend.microsecondsSinceEpoch))} ',
-                    style: conLittelTxt12.copyWith(
-                        color: Color(0xff676767), fontSize: 10),
-                  ) //this row for date
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: CircleAvatar(
-                  //Avatar
-                  backgroundColor: Color(0xff).withOpacity(0),
-                  radius: 50,
-                  backgroundImage: NetworkImage(widget.image),
+              Expanded(
+                flex: 5,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Wrap(children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            widget.title.toString(),
+                            style: conHeadingsStyle.copyWith(fontSize: 14),
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                      ]),
+                    ),
+                    Expanded(
+                      child: Text(
+                        widget.body.toString(),
+                        style: conHeadingsStyle.copyWith(
+                            fontSize: 14, fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                    //this row is for the event name pic and title
+                    //this row is for the heddin btns
+                    Expanded(
+                      child: Text(
+                        '    ${timeago.format(DateTime.fromMicrosecondsSinceEpoch(widget.timeOfsend.microsecondsSinceEpoch))} ',
+                        style: conLittelTxt12.copyWith(
+                            color: Color(0xff676767), fontSize: 10),
+                      ),
+                    ) //this row for date
+                  ],
                 ),
-              )
+              ),
+              Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: CircleAvatar(
+                      //Avatar
+                      backgroundColor: Color(0xff).withOpacity(0),
+                      radius: 50,
+                      backgroundImage: NetworkImage(widget.image),
+                    ),
+                  ))
             ],
           ),
         ),
