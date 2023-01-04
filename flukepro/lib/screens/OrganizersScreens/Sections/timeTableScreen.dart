@@ -16,6 +16,7 @@ TextEditingController _eventsessionCont = TextEditingController();
 TextEditingController _sessionSpeakerCont = TextEditingController();
 TextEditingController _txtTimeController = TextEditingController();
 TextEditingController _eventsessionDay = TextEditingController();
+TextEditingController _sessionRoomCon = TextEditingController();
 TextEditingController eventDayCon = TextEditingController();
 TextEditingController endTimeCon = TextEditingController();
 TextEditingController starterTimeCon = TextEditingController();
@@ -35,6 +36,7 @@ final _sessionFormKey = GlobalKey<FormState>();
 //   getEventInfoForTimetable(eventID);
 // }
 List<Tab> daysTabs = [];
+bool isLoading = false;
 
 class timeTable extends StatefulWidget {
   const timeTable({Key? key}) : super(key: key);
@@ -86,6 +88,7 @@ class _timeTableState extends State<timeTable> with TickerProviderStateMixin {
     //   eventDays++;
     // });
     return Scaffold(
+      backgroundColor: Colors.white70,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,16 +160,20 @@ class _timeTableState extends State<timeTable> with TickerProviderStateMixin {
                 SfCalendar(
                   //the ui doesnt update when adding event
                   todayHighlightColor: conORange,
-                  showNavigationArrow: true,
+                  showNavigationArrow: true, headerHeight: 100,
+                  headerStyle:
+                      CalendarHeaderStyle(backgroundColor: Colors.white70),
                   appointmentTextStyle: conLittelTxt12,
+                  backgroundColor: conBlue.withOpacity(.16),
                   allowAppointmentResize: true,
                   appointmentBuilder: (context, calendarAppointmentDetails) {
                     Session session =
                         calendarAppointmentDetails.appointments.first;
                     return Container(
+                      margin: EdgeInsets.all(2),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
-                          color: conBlue.withOpacity(.6),
+                          color: Colors.white,
                           boxShadow: [
                             BoxShadow(
                                 color: conBlack.withOpacity(.1), blurRadius: 7),
@@ -178,19 +185,26 @@ class _timeTableState extends State<timeTable> with TickerProviderStateMixin {
                             child: Text(
                               session.sessionName,
                               style: conLittelTxt12.copyWith(
-                                  fontWeight: FontWeight.w500),
+                                  fontSize: 12, fontWeight: FontWeight.w500),
                             ),
                           ),
                           Expanded(
                               child: Text(
                             session.speakerName,
                             style: conLittelTxt12.copyWith(
-                                fontSize: 11, color: conBlack.withOpacity(.8)),
-                          ))
+                                fontSize: 10, color: conBlack.withOpacity(.8)),
+                          )),
+                          // Expanded(
+                          //     child: Text(
+                          //   session.room,
+                          //   style: conLittelTxt12.copyWith(
+                          //       fontSize: 10, color: conBlack.withOpacity(.8)),
+                          // ))
                         ],
                       ),
                     );
                   },
+                  resourceViewSettings: ResourceViewSettings(),
                   monthViewSettings: MonthViewSettings(
                       appointmentDisplayMode:
                           MonthAppointmentDisplayMode.appointment,
@@ -198,7 +212,7 @@ class _timeTableState extends State<timeTable> with TickerProviderStateMixin {
                       showAgenda: true,
                       agendaItemHeight: 200),
                   dataSource: sessionDataSource(
-                      Provider.of<eventInfoHolder>(context, listen: false)
+                      Provider.of<eventInfoHolder>(context, listen: true)
                           .sessios),
                   view: CalendarView.timelineDay,
                   scheduleViewSettings: ScheduleViewSettings(
@@ -242,15 +256,16 @@ class _timeTableState extends State<timeTable> with TickerProviderStateMixin {
                     child: FloatingActionButton(
                       onPressed: () {
                         showModalBottomSheet(
-
-                            //تعرض كيو آر بعد تسجيل الزائر
                             elevation: 50,
                             isScrollControlled: true,
                             context: context,
                             builder: (context) => sessionEditing(args: args));
                       },
-                      child: Icon(Icons.add),
-                      backgroundColor: conORange,
+                      child: Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
+                      backgroundColor: conBlue,
                     ),
                   ),
                 )
@@ -418,6 +433,25 @@ class _sessionEditingState extends State<sessionEditing> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    fromDate = DateTime.fromMicrosecondsSinceEpoch(
+        widget.args[0].microsecondsSinceEpoch);
+    toDate = DateTime.fromMicrosecondsSinceEpoch(
+            widget.args[0].microsecondsSinceEpoch)
+        .add(Duration(hours: 2));
+    sessionDay = DateTime.fromMicrosecondsSinceEpoch(
+        widget.args[0].microsecondsSinceEpoch);
+    _eventsessionCont.clear();
+    eventDayCon.clear();
+    endTimeCon.clear();
+    _sessionSpeakerCont.clear();
+    _sessionRoomCon.clear();
+    starterTimeCon.clear();
+  }
+
+  @override
   Widget build(BuildContext context) {
     List days = List.generate(
         DateTime.fromMicrosecondsSinceEpoch(
@@ -450,7 +484,9 @@ class _sessionEditingState extends State<sessionEditing> {
                       ),
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                      onPressed: () {}),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
                 ),
               ),
               SizedBox(
@@ -781,7 +817,7 @@ class _sessionEditingState extends State<sessionEditing> {
                       );
                     }).toList(),
                     onChanged: (value) {
-                      _eventsessionDay.text = value.toString();
+                      _sessionRoomCon.text = value.toString();
                     },
                   ),
                 ),
@@ -817,28 +853,45 @@ class _sessionEditingState extends State<sessionEditing> {
                   SizedBox(
                     width: 10,
                   ),
-                  lessEdgeCTA(
-                      width: 180,
-                      txt: 'إضافة الجلسة',
-                      onTap: () {
-                        if (_sessionFormKey.currentState!.validate()) {
-                          setState(() {
-                            final session = Session(
-                                _eventsessionCont.text,
-                                _sessionSpeakerCont.text,
-                                fromDate,
-                                toDate,
-                                conBlue.withOpacity(.5));
-                            final provider = Provider.of<eventInfoHolder>(
-                                context,
-                                listen: false);
-                            print(session.speakerName);
-                            print(provider.sessios.length);
-                            provider.addSession(session);
-                          });
-                          Navigator.pop(context);
-                        }
-                      }),
+                  isLoading
+                      ? CircularProgressIndicator()
+                      : lessEdgeCTA(
+                          width: 180,
+                          txt: 'إضافة الجلسة',
+                          onTap: () {
+                            isLoading = true;
+                            if (_sessionFormKey.currentState!.validate()) {
+                              setState(() {
+                                final session = Session(
+                                    _eventsessionCont.text,
+                                    _sessionSpeakerCont.text,
+                                    _sessionRoomCon.text,
+                                    fromDate,
+                                    toDate,
+                                    conBlue.withOpacity(.5));
+                                final provider = Provider.of<eventInfoHolder>(
+                                    context,
+                                    listen: false);
+                                print(session.speakerName);
+                                print(provider.sessios.length);
+                                Provider.of<eventInfoHolder>(context,
+                                        listen: false)
+                                    .addSession(session);
+                              });
+                              isLoading = false;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                  'تمت إضافة الجلسة بنجاح',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: 'Cairo',
+                                  ),
+                                )),
+                              );
+                              Navigator.pop(context);
+                            }
+                          }),
                 ],
               ),
             ],

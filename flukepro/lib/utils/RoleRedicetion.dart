@@ -27,7 +27,8 @@ class _recdirectRoleState extends State<recdirectRole> {
     super.initState();
 
     print('initiating redirict');
-
+    siggning().loggedUser;
+    Provider.of<siggning>(context, listen: false).getCurrentUsertype();
     _checkRole(); //الدالة الي اتدير تشك على الرول الخاص بالمستخدم يتم إستعدعاءها خلال عملية انشاء الصفحة بحيث يتم إعادة التوجيه مباشرة
   }
 
