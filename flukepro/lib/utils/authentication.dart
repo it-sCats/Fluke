@@ -128,7 +128,7 @@ class Authentication {
   // }
   Future<Result> login(String email, String password) async {
     try {
-      final userCredintals = await _auth.signInWithEmailAndPassword(
+      UserCredential? userCredintals = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       if (userCredintals != null) {
         return Success(userCredintals.user);

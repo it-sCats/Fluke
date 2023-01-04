@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flukepro/components/cons.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../utils/authentication.dart';
 
@@ -90,7 +92,10 @@ class settingScreen extends StatelessWidget {
                               fontSize: 14, fontWeight: FontWeight.normal),
                         ),
                         onTap: () async {
-                          await Authentication.signOut(context: context);
+                          await FirebaseAuth.instance.signOut();
+                          await GoogleSignIn().signOut();
+                          Navigator.pushNamed(context, '/log');
+                          // await Authentication.signOut(context: context);
                         },
                       ),
                       Container(

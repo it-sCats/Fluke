@@ -12,6 +12,8 @@ import '../screens/OrganizersScreens/OHome.dart';
 import '../screens/loginScreen.dart';
 import 'SigningProvider.dart';
 
+final _firestore = FirebaseFirestore.instance;
+
 //الصفحة هذه لإعادة توجيه المستخدم حسب صلاحياته
 class recdirectRole extends StatefulWidget {
   @override
@@ -30,12 +32,17 @@ class _recdirectRoleState extends State<recdirectRole> {
   }
 
   void _checkRole() async {
-    final user = FirebaseAuth.instance.currentUser;
+    User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      Provider.of<siggning>(context, listen: false).getUserInfoDoc();
+      Provider.of<siggning>(context, listen: false).getUserInfoDoc(user.uid);
+      //
+      // int userT = await Provider.of<siggning>(context, listen: false)
+      //     .getCurrentUsertype();
+      DocumentSnapshot<Map<String, dynamic>> userInfo =
+          await _firestore.collection('users').doc(user!.uid).get();
 
-      int userT = await Provider.of<siggning>(context, listen: false)
-          .getCurrentUsertype();
+      Map<String, dynamic>? userInfoDoc = userInfo.data();
+      int userT = userInfoDoc!['userType'];
       print('from role redirection');
       print(userT);
       user == null

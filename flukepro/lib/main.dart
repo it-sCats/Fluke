@@ -5,6 +5,7 @@ import 'package:flukepro/screens/OrganizersScreens/Notifications.dart';
 import 'package:flukepro/screens/OrganizersScreens/ODashboard.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oevents.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oprofile.dart';
+import 'package:flukepro/screens/OrganizersScreens/Sections/timeTable.dart';
 import 'package:flukepro/screens/mainScreens/AdminScreens/aDashboard.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
 import 'package:flukepro/utils/fireStoreQueries.dart';
@@ -181,6 +182,7 @@ class _MyAppState extends State<MyApp> {
           '/Onotification': ((context) => notifaction()),
           '/Oprofile': ((context) => Oprofile()),
           'editEvent': ((context) => editEvent()),
+          'timeTable': ((context) => timeTable()),
 
           '/Oprofile': ((context) => Oprofile())
           //routes of Admin Screens

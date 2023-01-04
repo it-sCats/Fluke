@@ -270,6 +270,11 @@ class _loginScreenState extends State<loginScreen> {
                           Provider.of<siggning>(context, listen: false)
                                   .loggedUser ==
                               success.uid;
+                          Provider.of<siggning>(context, listen: false)
+                              .getUserInfoDoc(success.uid);
+                          Provider.of<siggning>(context, listen: false)
+                              .getCurrentUsertype();
+
                           Navigator.pushNamed(context,
                               '/redirect'); //here we redirect the user based on his role
 

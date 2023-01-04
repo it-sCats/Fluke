@@ -84,7 +84,8 @@ class _eventDisplayState extends State<eventDisplay>
     super.initState();
     // visi();
     widget.getORganizerInfo();
-    Provider.of<siggning>(context, listen: false).getUserInfoDoc();
+    Provider.of<siggning>(context, listen: false)
+        .getUserInfoDoc(FirebaseAuth.instance.currentUser!.uid);
   } //todo جيبي الاحداث متاع المنظم
 
   registerVisitor(eventID, context, title) async {

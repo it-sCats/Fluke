@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flukepro/components/eventDisplay.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,8 @@ class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Provider.of<siggning>(context, listen: false).getUserInfoDoc();
+    Provider.of<siggning>(context, listen: false)
+        .getUserInfoDoc(FirebaseAuth.instance.currentUser!.uid);
   }
 
   @override
@@ -36,7 +38,8 @@ class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<siggning>(context, listen: false).getUserInfoDoc();
+    Provider.of<siggning>(context, listen: false)
+        .getUserInfoDoc(FirebaseAuth.instance.currentUser!.uid);
 
     TabController _tabCont = TabController(length: 2, vsync: this);
     return SafeArea(
