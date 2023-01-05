@@ -56,7 +56,7 @@ class _notifiScreenState extends State<notifiScreen> {
                   stream: FirebaseFirestore.instance
                       .collection('users')
                       .doc(siggning().loggedUser!.uid)
-                      .collection('notifiction')
+                      .collection('notification')
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {

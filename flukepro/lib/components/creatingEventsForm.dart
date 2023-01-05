@@ -819,16 +819,20 @@ class _creatingEventState extends State<creatingEvent> {
                                       //       break;
                                       //   }
                                       // });
-
-                                      var snapshot = await _firebaseStorage
-                                          .child(imagePath != null
-                                              ? imagePath!
-                                              : emptyImage!)
-                                          .putFile(image!);
+                                      var snapshot;
+                                      if (imagePath != null) {
+                                        snapshot = await _firebaseStorage
+                                            .child(imagePath != null
+                                                ? imagePath!
+                                                : emptyImage!)
+                                            .putFile(image!);
+                                      }
 
                                       final event = await eventRef.add({
-                                        'image': await snapshot!.ref
-                                            .getDownloadURL(),
+                                        'image': snapshot != null
+                                            ? await snapshot!.ref
+                                                .getDownloadURL()
+                                            : 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRUfeaAiEDueSvrn2Cogv-RQ8LzvBMcDLtl6A9Sv3O8Ngh8rwV8',
                                         'title': _eventNameCont.text,
                                         'description':
                                             _eventDescriptionCont.text,
@@ -921,16 +925,17 @@ class _creatingEventState extends State<creatingEvent> {
                                           _targetedAudienceCont.text.split(',');
                                       isLoading = true;
                                       //Upload to Firebase
-
-                                      var snapshot = await _firebaseStorage
-                                          .child(imagePath != null
-                                              ? imagePath!
-                                              : emptyImage!)
-                                          .putFile(image!);
-
+                                      var snapshot;
+                                      if (imagePath != null) {
+                                        snapshot = await _firebaseStorage
+                                            .child(imagePath!)
+                                            .putFile(image!);
+                                      }
                                       final event = await eventRef.add({
-                                        'image': await snapshot!.ref
-                                            .getDownloadURL(),
+                                        'image': snapshot != null
+                                            ? await snapshot!.ref
+                                                .getDownloadURL()
+                                            : 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRUfeaAiEDueSvrn2Cogv-RQ8LzvBMcDLtl6A9Sv3O8Ngh8rwV8',
                                         'title': _eventNameCont.text,
                                         'description':
                                             _eventDescriptionCont.text,

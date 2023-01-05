@@ -1,17 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flukepro/components/customWidgets.dart';
+import 'package:flukepro/screens/OrganizersScreens/OHome.dart';
 import 'package:flukepro/utils/eventProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'dart:math' as math;
-import 'package:intl/intl.dart' as intl;
 import 'package:provider/provider.dart';
-
+import 'package:intl/intl.dart' as intl;
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import '../../../components/cons.dart';
 import '../../../components/session.dart';
 import '../../../components/sessionDataSource.dart';
 
+sessionDataSource? sessiondatasource;
 TextEditingController _eventsessionCont = TextEditingController();
 TextEditingController _sessionSpeakerCont = TextEditingController();
 TextEditingController _txtTimeController = TextEditingController();
@@ -21,7 +23,7 @@ TextEditingController eventDayCon = TextEditingController();
 TextEditingController endTimeCon = TextEditingController();
 TextEditingController starterTimeCon = TextEditingController();
 
-final _sessionFormKey = GlobalKey<FormState>();
+final _sessionFormKey = GlobalKey<FormFieldState>();
 
 // Future<Map<String, dynamic>?> getEventInfoForTimetable(eventID, context) async {
 //   final eventdoc =
@@ -48,9 +50,38 @@ class timeTable extends StatefulWidget {
 class _timeTableState extends State<timeTable> with TickerProviderStateMixin {
   @override
   void initState() {
+    // getDataFromFireStore().then((results) {
+    //   SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+    //     setState(() {});
+    //   });
+    // });
     // TODO: implement initState
     super.initState();
   }
+
+  List ssison = [];
+
+  // getDataFromFireStore() async {
+  //   Stream<QueryDocumentSnapshot<Map<String, dynamic>>> snapShotsValue =
+  //        FirebaseFirestore.instance
+  //           .collection('events')
+  //           .doc(eventId)
+  //           .collection('agenda')
+  //           .snapshots();
+  //   return snapShotsValue;
+  // List list = snapShotsValue.data.map((e) {
+  //   Session(
+  //       e.data()['sessionName'],
+  //       e.data()['speakerName'],
+  //       e.data()['room'],
+  //       e.data()['fromTime'],
+  //       e.data()['toTime'],
+  //       Colors.white70);
+  // }).toList();
+  //
+  // setState(() {
+  //   events = sessionDataSource(list as List<Session>);
+  // });
 
   @override
   void dispose() {
@@ -62,8 +93,6 @@ class _timeTableState extends State<timeTable> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as List;
-    final session =
-        Provider.of<eventInfoHolder>(context, listen: false).sessios;
 
     // List days = List.filled(
     //     DateTime.fromMicrosecondsSinceEpoch(args[1].microsecondsSinceEpoch)
@@ -96,60 +125,7 @@ class _timeTableState extends State<timeTable> with TickerProviderStateMixin {
             IconButton(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                 onPressed: () {
-                  showDialog(
-                      //save to drafts dialog
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text(
-                            'هل ترغب في حفظ المعلومات التي أدخلتها؟ ',
-                            textAlign: TextAlign.center,
-                            style: conHeadingsStyle.copyWith(fontSize: 15),
-                          ),
-                          content: Text(
-                            'يمكنك حفظ المعلومات المدخلة والعودة لها في وقت لاحق',
-                            textAlign: TextAlign.center,
-                            style: conHeadingsStyle.copyWith(
-                                fontSize: 14, fontWeight: FontWeight.normal),
-                          ),
-                          actions: [
-                            InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(context, 'OHome');
-                                },
-                                child: Text(
-                                  'تجاهل التغيرات',
-                                  textAlign: TextAlign.center,
-                                  style: conHeadingsStyle.copyWith(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.normal),
-                                )),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                              decoration: BoxDecoration(
-                                  color: conORange,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: InkWell(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(
-                                    'حفظ الحدث',
-                                    textAlign: TextAlign.center,
-                                    style: conHeadingsStyle.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold),
-                                  )),
-                            ),
-                          ],
-                          buttonPadding: EdgeInsets.all(20),
-                          actionsAlignment: MainAxisAlignment.spaceAround,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 100),
-                        );
-                      });
+                  Navigator.pop(context);
                 },
                 icon: Icon(
                   Icons.arrow_back,
@@ -157,97 +133,141 @@ class _timeTableState extends State<timeTable> with TickerProviderStateMixin {
                 )),
             Expanded(
               child: Stack(children: [
-                SfCalendar(
-                  //the ui doesnt update when adding event
-                  todayHighlightColor: conORange,
-                  showNavigationArrow: true, headerHeight: 100,
-                  headerStyle:
-                      CalendarHeaderStyle(backgroundColor: Colors.white70),
-                  appointmentTextStyle: conLittelTxt12,
-                  backgroundColor: conBlue.withOpacity(.16),
-                  allowAppointmentResize: true,
-                  appointmentBuilder: (context, calendarAppointmentDetails) {
-                    Session session =
-                        calendarAppointmentDetails.appointments.first;
-                    return Container(
-                      margin: EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                color: conBlack.withOpacity(.1), blurRadius: 7),
-                          ]),
-                      width: calendarAppointmentDetails.bounds.width,
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              session.sessionName,
-                              style: conLittelTxt12.copyWith(
-                                  fontSize: 12, fontWeight: FontWeight.w500),
+                StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('events')
+                        .doc(args[2])
+                        .collection('agenda')
+                        .orderBy('creationDate', descending: false)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else {
+                        List<Session> sessionat = [];
+
+                        final sessions = snapshot.data!.docs;
+                        for (QueryDocumentSnapshot session in sessions) {
+                          Timestamp start = session['fromTime'];
+                          Timestamp end = session['toTime'];
+                          DateTime FromDate =
+                              DateTime.fromMicrosecondsSinceEpoch(
+                                  start.microsecondsSinceEpoch);
+                          DateTime toDate = DateTime.fromMicrosecondsSinceEpoch(
+                              end.microsecondsSinceEpoch);
+                          sessionat.add(Session(
+                              session['sessionName'],
+                              session['speakerName'],
+                              session['room'],
+                              FromDate,
+                              toDate,
+                              Colors.white70));
+                          sessiondatasource = sessionDataSource(sessionat);
+                        } //needs testing
+
+                        //this takes the list of session to sessionDataSource
+
+                      }
+                      return SfCalendar(
+                        //the ui doesnt update when adding event
+                        todayHighlightColor: conORange,
+                        showNavigationArrow: true, headerHeight: 100,
+                        headerStyle: CalendarHeaderStyle(
+                            backgroundColor: Colors.white70),
+                        appointmentTextStyle: conLittelTxt12,
+                        backgroundColor: conBlue.withOpacity(.16),
+                        allowAppointmentResize: true,
+
+                        appointmentBuilder:
+                            (context, calendarAppointmentDetails) {
+                          Session session =
+                              calendarAppointmentDetails.appointments.first;
+                          return GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              margin: EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: conBlack.withOpacity(.1),
+                                        blurRadius: 7),
+                                  ]),
+                              width: calendarAppointmentDetails.bounds.width,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      session.sessionName,
+                                      style: conLittelTxt12.copyWith(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                  Expanded(
+                                      child: Text(
+                                    session.speakerName,
+                                    style: conLittelTxt12.copyWith(
+                                        fontSize: 10,
+                                        color: conBlack.withOpacity(.8)),
+                                  )),
+                                  // Expanded(
+                                  //     child: Text(
+                                  //   session.room,
+                                  //   style: conLittelTxt12.copyWith(
+                                  //       fontSize: 10, color: conBlack.withOpacity(.8)),
+                                  // ))
+                                ],
+                              ),
                             ),
-                          ),
-                          Expanded(
-                              child: Text(
-                            session.speakerName,
-                            style: conLittelTxt12.copyWith(
-                                fontSize: 10, color: conBlack.withOpacity(.8)),
-                          )),
-                          // Expanded(
-                          //     child: Text(
-                          //   session.room,
-                          //   style: conLittelTxt12.copyWith(
-                          //       fontSize: 10, color: conBlack.withOpacity(.8)),
-                          // ))
-                        ],
-                      ),
-                    );
-                  },
-                  resourceViewSettings: ResourceViewSettings(),
-                  monthViewSettings: MonthViewSettings(
-                      appointmentDisplayMode:
-                          MonthAppointmentDisplayMode.appointment,
-                      appointmentDisplayCount: 100,
-                      showAgenda: true,
-                      agendaItemHeight: 200),
-                  dataSource: sessionDataSource(
-                      Provider.of<eventInfoHolder>(context, listen: true)
-                          .sessios),
-                  view: CalendarView.timelineDay,
-                  scheduleViewSettings: ScheduleViewSettings(
-                      dayHeaderSettings: DayHeaderSettings(width: 100)),
-                  maxDate: DateTime.fromMicrosecondsSinceEpoch(
-                          args[1].microsecondsSinceEpoch)
-                      .add(Duration(days: 1)),
-                  minDate: DateTime.fromMicrosecondsSinceEpoch(
-                      args[0].microsecondsSinceEpoch),
-                  firstDayOfWeek: DateTime.fromMicrosecondsSinceEpoch(
-                                  args[1].microsecondsSinceEpoch)
-                              .difference(DateTime.fromMicrosecondsSinceEpoch(
-                                  args[0].microsecondsSinceEpoch))
-                              .inDays <
-                          1
-                      ? 1
-                      : DateTime.fromMicrosecondsSinceEpoch(args[1].microsecondsSinceEpoch)
-                                  .difference(
-                                      DateTime.fromMicrosecondsSinceEpoch(
-                                          args[0].microsecondsSinceEpoch))
-                                  .inDays >
-                              7
-                          ? 7
-                          : DateTime.fromMicrosecondsSinceEpoch(
-                                  args[1].microsecondsSinceEpoch)
-                              .difference(DateTime.fromMicrosecondsSinceEpoch(
-                                  args[0].microsecondsSinceEpoch))
-                              .inDays,
-                  initialDisplayDate: DateTime.fromMicrosecondsSinceEpoch(
-                          args[0].microsecondsSinceEpoch)
-                      .add(Duration(hours: 2)),
-                  initialSelectedDate: DateTime.fromMicrosecondsSinceEpoch(
-                          args[0].microsecondsSinceEpoch)
-                      .add(Duration(hours: 4)),
-                ),
+                          );
+                        },
+                        resourceViewSettings: ResourceViewSettings(),
+                        monthViewSettings: MonthViewSettings(
+                            appointmentDisplayMode:
+                                MonthAppointmentDisplayMode.appointment,
+                            appointmentDisplayCount: 100,
+                            showAgenda: true,
+                            agendaItemHeight: 200),
+                        dataSource: sessiondatasource,
+                        view: CalendarView.timelineDay,
+                        scheduleViewSettings: ScheduleViewSettings(
+                            dayHeaderSettings: DayHeaderSettings(width: 100)),
+                        maxDate: DateTime.fromMicrosecondsSinceEpoch(
+                                args[1].microsecondsSinceEpoch)
+                            .add(Duration(days: 1)),
+                        minDate: DateTime.fromMicrosecondsSinceEpoch(
+                            args[0].microsecondsSinceEpoch),
+                        firstDayOfWeek: DateTime.fromMicrosecondsSinceEpoch(
+                                        args[1].microsecondsSinceEpoch)
+                                    .difference(
+                                        DateTime.fromMicrosecondsSinceEpoch(
+                                            args[0].microsecondsSinceEpoch))
+                                    .inDays <
+                                1
+                            ? 1
+                            : DateTime.fromMicrosecondsSinceEpoch(
+                                            args[1].microsecondsSinceEpoch)
+                                        .difference(
+                                            DateTime.fromMicrosecondsSinceEpoch(
+                                                args[0].microsecondsSinceEpoch))
+                                        .inDays >
+                                    7
+                                ? 7
+                                : DateTime.fromMicrosecondsSinceEpoch(
+                                        args[1].microsecondsSinceEpoch)
+                                    .difference(DateTime.fromMicrosecondsSinceEpoch(args[0].microsecondsSinceEpoch))
+                                    .inDays,
+                        initialDisplayDate: DateTime.fromMicrosecondsSinceEpoch(
+                                args[0].microsecondsSinceEpoch)
+                            .add(Duration(hours: 2)),
+                        initialSelectedDate:
+                            DateTime.fromMicrosecondsSinceEpoch(
+                                    args[0].microsecondsSinceEpoch)
+                                .add(Duration(hours: 4)),
+                      );
+                    }),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: Padding(
@@ -829,11 +849,14 @@ class _sessionEditingState extends State<sessionEditing> {
                     width: 180,
                     height: 65,
                     child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
                       child: Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: 14, horizontal: 45.0),
                         child: Text(
-                          'إلغاء التغيرات',
+                          'إلغاء الجلسة',
                           style: conTxtFeildHint.copyWith(
                               color: Colors.blueGrey,
                               fontSize: 14,
@@ -862,35 +885,51 @@ class _sessionEditingState extends State<sessionEditing> {
                             isLoading = true;
                             if (_sessionFormKey.currentState!.validate()) {
                               setState(() {
-                                final session = Session(
-                                    _eventsessionCont.text,
-                                    _sessionSpeakerCont.text,
-                                    _sessionRoomCon.text,
-                                    fromDate,
-                                    toDate,
-                                    conBlue.withOpacity(.5));
-                                final provider = Provider.of<eventInfoHolder>(
-                                    context,
-                                    listen: false);
-                                print(session.speakerName);
-                                print(provider.sessios.length);
-                                Provider.of<eventInfoHolder>(context,
-                                        listen: false)
-                                    .addSession(session);
+                                FirebaseFirestore.instance
+                                    .collection('events')
+                                    .doc(widget.args[2]!.trim())
+                                    .collection('agenda')
+                                    .add({
+                                  'sessionName': _eventsessionCont.text,
+                                  'speakerName': _sessionSpeakerCont.text,
+                                  'room': _sessionRoomCon.text,
+                                  'fromTime': fromDate,
+                                  'toTime': toDate,
+                                  'eventId': widget.args[2],
+                                  'creationDate': DateTime.now()
+                                }).whenComplete(() => {isLoading = false});
+                                // final session = Session(
+                                //     '',
+                                //     _eventsessionCont.text,
+                                //     _sessionSpeakerCont.text,
+                                //     _sessionRoomCon.text,
+                                //     fromDate,
+                                //     toDate,
+                                //     conBlue.withOpacity(.5));
+                                // final provider = Provider.of<eventInfoHolder>(
+                                //     context,
+                                //     listen: false);
+                                // print(session.speakerName);
+                                // print(provider.sessios.length);
+                                // Provider.of<eventInfoHolder>(context,
+                                //         listen: false)
+                                //     .addSession(session);
+                                isLoading = false;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                    'تمت إضافة الجلسة بنجاح',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontFamily: 'Cairo',
+                                    ),
+                                  )),
+                                );
+                                Navigator.pop(context);
                               });
-                              isLoading = false;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                  'تمت إضافة الجلسة بنجاح',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'Cairo',
-                                  ),
-                                )),
-                              );
-                              Navigator.pop(context);
+                              print('$eventId==========');
                             }
+                            isLoading = false;
                           }),
                 ],
               ),

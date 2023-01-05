@@ -838,6 +838,7 @@ class _editEventState extends State<editEvent> {
                                           _controllersText.add(element.text);
                                         });
                                         var url;
+
                                         if (imagePath != null) {
                                           var imageSnap = await _firebaseStorage
                                               .child(imagePath!)
