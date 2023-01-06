@@ -65,7 +65,7 @@ class _recdirectRoleState extends State<recdirectRole> {
   void NavigateNext(String RouteName) {
     print('navigating>>>>');
     //دالة الانتقال
-    Timer(Duration(milliseconds: 200), () {
+    Timer(Duration(milliseconds: 20), () {
       //بعد مدة 500 ملي ثانية يتم الانتقال للصفحة المطلوبة
       Navigator.pushNamed(context, RouteName);
     });

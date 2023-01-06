@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flukepro/components/customWidgets.dart';
 import 'package:flukepro/screens/OrganizersScreens/OHome.dart';
+import 'package:flukepro/screens/OrganizersScreens/Sections/timeLine.dart';
 import 'package:flukepro/utils/eventProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -23,7 +24,7 @@ TextEditingController eventDayCon = TextEditingController();
 TextEditingController endTimeCon = TextEditingController();
 TextEditingController starterTimeCon = TextEditingController();
 
-final _sessionFormKey = GlobalKey<FormFieldState>();
+final _sessionFormKey = GlobalKey<FormState>();
 
 // Future<Map<String, dynamic>?> getEventInfoForTimetable(eventID, context) async {
 //   final eventdoc =
@@ -133,141 +134,7 @@ class _timeTableState extends State<timeTable> with TickerProviderStateMixin {
                 )),
             Expanded(
               child: Stack(children: [
-                StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('events')
-                        .doc(args[2])
-                        .collection('agenda')
-                        .orderBy('creationDate', descending: false)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
-                      } else {
-                        List<Session> sessionat = [];
-
-                        final sessions = snapshot.data!.docs;
-                        for (QueryDocumentSnapshot session in sessions) {
-                          Timestamp start = session['fromTime'];
-                          Timestamp end = session['toTime'];
-                          DateTime FromDate =
-                              DateTime.fromMicrosecondsSinceEpoch(
-                                  start.microsecondsSinceEpoch);
-                          DateTime toDate = DateTime.fromMicrosecondsSinceEpoch(
-                              end.microsecondsSinceEpoch);
-                          sessionat.add(Session(
-                              session['sessionName'],
-                              session['speakerName'],
-                              session['room'],
-                              FromDate,
-                              toDate,
-                              Colors.white70));
-                          sessiondatasource = sessionDataSource(sessionat);
-                        } //needs testing
-
-                        //this takes the list of session to sessionDataSource
-
-                      }
-                      return SfCalendar(
-                        //the ui doesnt update when adding event
-                        todayHighlightColor: conORange,
-                        showNavigationArrow: true, headerHeight: 100,
-                        headerStyle: CalendarHeaderStyle(
-                            backgroundColor: Colors.white70),
-                        appointmentTextStyle: conLittelTxt12,
-                        backgroundColor: conBlue.withOpacity(.16),
-                        allowAppointmentResize: true,
-
-                        appointmentBuilder:
-                            (context, calendarAppointmentDetails) {
-                          Session session =
-                              calendarAppointmentDetails.appointments.first;
-                          return GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              margin: EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: conBlack.withOpacity(.1),
-                                        blurRadius: 7),
-                                  ]),
-                              width: calendarAppointmentDetails.bounds.width,
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      session.sessionName,
-                                      style: conLittelTxt12.copyWith(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                  Expanded(
-                                      child: Text(
-                                    session.speakerName,
-                                    style: conLittelTxt12.copyWith(
-                                        fontSize: 10,
-                                        color: conBlack.withOpacity(.8)),
-                                  )),
-                                  // Expanded(
-                                  //     child: Text(
-                                  //   session.room,
-                                  //   style: conLittelTxt12.copyWith(
-                                  //       fontSize: 10, color: conBlack.withOpacity(.8)),
-                                  // ))
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                        resourceViewSettings: ResourceViewSettings(),
-                        monthViewSettings: MonthViewSettings(
-                            appointmentDisplayMode:
-                                MonthAppointmentDisplayMode.appointment,
-                            appointmentDisplayCount: 100,
-                            showAgenda: true,
-                            agendaItemHeight: 200),
-                        dataSource: sessiondatasource,
-                        view: CalendarView.timelineDay,
-                        scheduleViewSettings: ScheduleViewSettings(
-                            dayHeaderSettings: DayHeaderSettings(width: 100)),
-                        maxDate: DateTime.fromMicrosecondsSinceEpoch(
-                                args[1].microsecondsSinceEpoch)
-                            .add(Duration(days: 1)),
-                        minDate: DateTime.fromMicrosecondsSinceEpoch(
-                            args[0].microsecondsSinceEpoch),
-                        firstDayOfWeek: DateTime.fromMicrosecondsSinceEpoch(
-                                        args[1].microsecondsSinceEpoch)
-                                    .difference(
-                                        DateTime.fromMicrosecondsSinceEpoch(
-                                            args[0].microsecondsSinceEpoch))
-                                    .inDays <
-                                1
-                            ? 1
-                            : DateTime.fromMicrosecondsSinceEpoch(
-                                            args[1].microsecondsSinceEpoch)
-                                        .difference(
-                                            DateTime.fromMicrosecondsSinceEpoch(
-                                                args[0].microsecondsSinceEpoch))
-                                        .inDays >
-                                    7
-                                ? 7
-                                : DateTime.fromMicrosecondsSinceEpoch(
-                                        args[1].microsecondsSinceEpoch)
-                                    .difference(DateTime.fromMicrosecondsSinceEpoch(args[0].microsecondsSinceEpoch))
-                                    .inDays,
-                        initialDisplayDate: DateTime.fromMicrosecondsSinceEpoch(
-                                args[0].microsecondsSinceEpoch)
-                            .add(Duration(hours: 2)),
-                        initialSelectedDate:
-                            DateTime.fromMicrosecondsSinceEpoch(
-                                    args[0].microsecondsSinceEpoch)
-                                .add(Duration(hours: 4)),
-                      );
-                    }),
+                eventTimeline(args[2], args[0], args[1]),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: Padding(
@@ -898,6 +765,7 @@ class _sessionEditingState extends State<sessionEditing> {
                                   'eventId': widget.args[2],
                                   'creationDate': DateTime.now()
                                 }).whenComplete(() => {isLoading = false});
+                                isLoading = false;
                                 // final session = Session(
                                 //     '',
                                 //     _eventsessionCont.text,
@@ -928,8 +796,9 @@ class _sessionEditingState extends State<sessionEditing> {
                                 Navigator.pop(context);
                               });
                               print('$eventId==========');
+                            } else {
+                              isLoading = false;
                             }
-                            isLoading = false;
                           }),
                 ],
               ),
