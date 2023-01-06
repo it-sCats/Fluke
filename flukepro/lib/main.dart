@@ -124,7 +124,9 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement initState
     super.initState();
     user != null ? siggning().setupToken() : null;
-    user != null ? siggning().getCurrentUsertype() : null;
+    user != null
+        ? siggning().getCurrentUsertype(siggning().loggedUser!.uid)
+        : null;
     // getuserinMAin();
 
     //

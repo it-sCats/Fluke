@@ -165,7 +165,8 @@ class _eventDisplayState extends State<eventDisplay>
 
     TabController _tabCont = TabController(length: 2, vsync: this);
     if (user != null)
-      Provider.of<siggning>(context, listen: false).getCurrentUsertype();
+      Provider.of<siggning>(context, listen: false).getCurrentUsertype(
+          Provider.of<siggning>(context, listen: false).loggedUser!.uid);
     final userType = Provider.of<siggning>(context, listen: false).userType;
     return DefaultTabController(
         //this layout guarantees that the scroll works properly
@@ -746,7 +747,8 @@ class _eventDisplayState extends State<eventDisplay>
   Widget build(BuildContext context) {
     TabController _tabCont = TabController(length: 2, vsync: this);
     user != null
-        ? Provider.of<siggning>(context, listen: false).getCurrentUsertype()
+        ? Provider.of<siggning>(context, listen: false).getCurrentUsertype(
+            Provider.of<siggning>(context, listen: false).loggedUser!.uid)
         : null;
 
     return widget.wholePage

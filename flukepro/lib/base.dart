@@ -38,7 +38,8 @@ class _baseState extends State<base> {
   void initState() {
     super.initState();
     user != null
-        ? Provider.of<siggning>(context, listen: false).getCurrentUsertype()
+        ? Provider.of<siggning>(context, listen: false).getCurrentUsertype(
+            Provider.of<siggning>(context, listen: false).loggedUser!.uid)
         : null; //  هذه تتغير بحسب البيانات اللي نبيها
     print('-----------${siggning().userType}');
     notificationPRovider().initInfo(context);

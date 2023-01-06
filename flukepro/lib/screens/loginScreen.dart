@@ -267,13 +267,11 @@ class _loginScreenState extends State<loginScreen> {
                                   LogInError = !LogInError;
                                   isLoading = false;
                                 }), (success) async {
-                          Provider.of<siggning>(context, listen: false)
-                                  .loggedUser ==
-                              success.uid;
-                          Provider.of<siggning>(context, listen: false)
-                              .getUserInfoDoc(success.uid);
-                          Provider.of<siggning>(context, listen: false)
-                              .getCurrentUsertype();
+                          siggning provider =
+                              Provider.of<siggning>(context, listen: false);
+                          provider.setLoggedInuser(success);
+                          provider.getUserInfoDoc(success.uid);
+                          provider.getCurrentUsertype(provider.loggedUser!.uid);
 
                           Navigator.pushNamed(context,
                               '/redirect'); //here we redirect the user based on his role
@@ -327,7 +325,7 @@ class _loginScreenState extends State<loginScreen> {
                               child: Text(
                                 'سجل كـجهة منظمة أو\n زائر أو مشارك ',
                                 textAlign: TextAlign.center,
-                                style: conTxtLink,
+                                style: conTxtLink.copyWith(fontSize: 14),
                               )),
                           InkWell(
                               child: Text(
@@ -336,7 +334,7 @@ class _loginScreenState extends State<loginScreen> {
                             style: TextStyle(
                               color: conBlack,
                               fontFamily: 'Cairo',
-                              fontSize: 12,
+                              fontSize: 14,
                             ),
                           )),
                         ],

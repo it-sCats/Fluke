@@ -20,7 +20,7 @@ TextStyle conHeadingsStyle = TextStyle(
 TextStyle conTxtLink = TextStyle(
     color: conBlack,
     fontFamily: 'Cairo',
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: FontWeight.w500,
     decoration: TextDecoration.underline);
 //CTA is call to action

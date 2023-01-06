@@ -52,7 +52,8 @@ class _AhomeState extends State<Ahome> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     print('++++++++++++++');
-    Provider.of<siggning>(context, listen: false).getCurrentUsertype();
+    Provider.of<siggning>(context, listen: false).getCurrentUsertype(
+        Provider.of<siggning>(context, listen: false).loggedUser!.uid);
 
     _controller = AnimationController(vsync: this, duration: duration);
     _scaleAnimation = Tween<double>(

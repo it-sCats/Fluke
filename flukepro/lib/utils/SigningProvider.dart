@@ -17,12 +17,16 @@ class siggning extends ChangeNotifier {
   String? password;
 
   Map<String, dynamic>? userInfoDocument;
+  setUserInfoDoc(userInfoData) => this.userInfoDocument = userInfoData;
   final eventRef = _firestore.collection('events');
 
   final authCredential =
       AuthCredential(providerId: 'google.com', signInMethod: 'Google');
   User? loggedUser = auth.currentUser;
   int? userType;
+  setUserType(userType) => this.userType = userType;
+  getLoggedInuser() => loggedUser;
+  setLoggedInuser(user) => this.loggedUser = user;
   addJoinRequest(
       {eventId, userId, name, field, phone, email, joinType, context}) {
     final prevRequest = eventRef
@@ -166,15 +170,14 @@ class siggning extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<int> getCurrentUsertype() async {
+  getCurrentUsertype(userID) async {
     DocumentSnapshot<Map<String, dynamic>> userInfo =
-        await _firestore.collection('users').doc(loggedUser!.uid).get();
+        await _firestore.collection('users').doc(userID).get();
 
     Map<String, dynamic>? userInfoDoc = userInfo.data();
-    userType = userInfoDoc!['userType'];
+    this.setUserType(userInfoDoc!['userType']);
 
     notifyListeners();
-    return userInfoDoc!['userType'];
   }
 
   Future<Map<String, dynamic>?> getUserInfoDoc(userID) async {
@@ -182,6 +185,7 @@ class siggning extends ChangeNotifier {
         await _firestore.collection('users').doc(userID).get();
 
     userInfoDocument = userInfo.data();
+    setUserInfoDoc(userInfo.data());
     notifyListeners();
     return userInfo.data();
   }

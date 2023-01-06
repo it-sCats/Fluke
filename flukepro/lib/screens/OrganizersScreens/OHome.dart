@@ -74,7 +74,8 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     print('++++++++++++++');
-    Provider.of<siggning>(context, listen: false).getCurrentUsertype();
+    Provider.of<siggning>(context, listen: false).getCurrentUsertype(
+        Provider.of<siggning>(context, listen: false).loggedUser!.uid);
     // Provider.of<siggning>(context, listen: false).getUserInfoDoc();
 
     _controller = AnimationController(vsync: this, duration: duration);
@@ -92,6 +93,9 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<siggning>(context, listen: false).getCurrentUsertype(
+        Provider.of<siggning>(context, listen: false).loggedUser!.uid);
+
     Size size = MediaQuery.of(context).size;
     screenWidth = size.width;
     ScreenHeigth = size.height;
