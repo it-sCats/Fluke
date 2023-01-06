@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../components/cons.dart';
 import '../../components/customWidgets.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import '../../components/participantEventRegisterForm.dart';
 import '../../utils/SigningProvider.dart';
 
 class notifiScreen extends StatefulWidget {
@@ -38,7 +39,10 @@ class _notifiScreenState extends State<notifiScreen> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Padding(
-            padding: const EdgeInsets.all(30),
+            padding: EdgeInsets.symmetric(
+              vertical: 10,
+              horizontal: 20,
+            ),
             child: Text(
               "إشعارات",
               style: conHeadingsStyle,
@@ -52,7 +56,7 @@ class _notifiScreenState extends State<notifiScreen> {
                   stream: FirebaseFirestore.instance
                       .collection('users')
                       .doc(siggning().loggedUser!.uid)
-                      .collection('notifiction')
+                      .collection('notification')
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
@@ -95,7 +99,7 @@ class _notifiScreenState extends State<notifiScreen> {
                             notifiTitle, notifibody, notifiCreation, image));
                       }
                       return ListView(
-                        padding: EdgeInsets.symmetric(vertical: 20),
+                        padding: EdgeInsets.symmetric(vertical: 5),
                         children: notificatinat,
                       );
                     }
@@ -124,53 +128,47 @@ class _notificationaState extends State<notificationa> {
   Widget build(BuildContext context) {
     return InkWell(
         child: Container(
-          height: 170,
-          padding: EdgeInsets.symmetric(vertical: 30),
+          height: 140,
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           // height: 150,
           decoration: BoxDecoration(
             border: Border(
                 bottom: BorderSide(color: conBlack.withOpacity(.1), width: 2)),
             // color: Color(0xffB2C6E4),
-            color: Color(0xffffffff),
+            color: Colors.white,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Expanded(
                 flex: 5,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: Wrap(children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            widget.title.toString(),
-                            style: conHeadingsStyle.copyWith(fontSize: 14),
-                            textAlign: TextAlign.right,
-                          ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Wrap(children: [
+                        Text(
+                          widget.title.toString(),
+                          style: conHeadingsStyle.copyWith(fontSize: 14),
+                          textAlign: TextAlign.right,
                         ),
                       ]),
-                    ),
-                    Expanded(
-                      child: Text(
+                      Text(
                         widget.body.toString(),
                         style: conHeadingsStyle.copyWith(
                             fontSize: 14, fontWeight: FontWeight.w500),
                         textAlign: TextAlign.right,
                       ),
-                    ),
-                    //this row is for the event name pic and title
-                    //this row is for the heddin btns
-                    Expanded(
-                      child: Text(
+                      //this row is for the event name pic and title
+                      //this row is for the heddin btns
+                      Text(
                         '    ${timeago.format(DateTime.fromMicrosecondsSinceEpoch(widget.timeOfsend.microsecondsSinceEpoch))} ',
                         style: conLittelTxt12.copyWith(
                             color: Color(0xff676767), fontSize: 10),
-                      ),
-                    ) //this row for date
-                  ],
+                      ) //this row for date
+                    ],
+                  ),
                 ),
               ),
               Expanded(
@@ -188,6 +186,14 @@ class _notificationaState extends State<notificationa> {
           ),
         ),
         onTap: () {
+          showModalBottomSheet(
+            //todo remove this to display the request so oganizer can accept or decline
+            isScrollControlled: true,
+            elevation: 100,
+            context: context,
+            builder: (context) => ParticiEventPrev('tk83YobqsIcgxWsmWQxE',
+                'يوم التقنية', 'lkwskc9EvZVkkKn3Gg5jNiOGzPp2'),
+          );
           // showModalBottomSheet(
           //     isScrollControlled: true,
           //     elevation: 100,

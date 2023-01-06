@@ -27,7 +27,8 @@ class _recdirectRoleState extends State<recdirectRole> {
     super.initState();
 
     print('initiating redirict');
-
+    siggning().loggedUser;
+    Provider.of<siggning>(context, listen: false).getCurrentUsertype();
     _checkRole(); //الدالة الي اتدير تشك على الرول الخاص بالمستخدم يتم إستعدعاءها خلال عملية انشاء الصفحة بحيث يتم إعادة التوجيه مباشرة
   }
 
@@ -64,7 +65,7 @@ class _recdirectRoleState extends State<recdirectRole> {
   void NavigateNext(String RouteName) {
     print('navigating>>>>');
     //دالة الانتقال
-    Timer(Duration(milliseconds: 200), () {
+    Timer(Duration(milliseconds: 20), () {
       //بعد مدة 500 ملي ثانية يتم الانتقال للصفحة المطلوبة
       Navigator.pushNamed(context, RouteName);
     });

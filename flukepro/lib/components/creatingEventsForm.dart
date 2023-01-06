@@ -136,7 +136,7 @@ class _creatingEventState extends State<creatingEvent> {
   bool sendNotifications = false;
   File? image;
   String? imagePath;
-  String emptyImage = 'images/emptyIamge.jpg';
+  String? emptyImage = 'images/emptyIamge.jpg';
 
   @override
   Widget build(BuildContext context) {
@@ -217,7 +217,7 @@ class _creatingEventState extends State<creatingEvent> {
                   width: double.infinity,
                   height: 400,
                   child: image == null
-                      ? Image.asset(emptyImage)
+                      ? Image.asset(emptyImage!)
                       : Image.file(image!),
                 ),
                 Align(
@@ -354,9 +354,8 @@ class _creatingEventState extends State<creatingEvent> {
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'الرجاء إدخال تاريخ الحدث';
-                                } else if (starterDate.compareTo(endDate) >=
-                                    0) {
-                                  return 'تأ:د من صحة تاريخ النهاية';
+                                } else if (starterDate.compareTo(endDate) > 0) {
+                                  return 'تأكد من صحة تاريخ النهاية';
                                 }
 
                                 return null;
@@ -418,11 +417,7 @@ class _creatingEventState extends State<creatingEvent> {
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'الرجاء إدخال تاريخ الحدث';
-                                    } else if (starterDate.compareTo(endDate) >=
-                                        0) {
-                                      return 'تأ:د من صحة تاريخ النهاية';
                                     }
-
                                     return null;
                                   },
                                   controller: starterDateCont,
@@ -776,234 +771,265 @@ class _creatingEventState extends State<creatingEvent> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        InkWell(
-                          child: Text(
-                            'حفظ كمسودة',
-                            style: conTxtFeildHint.copyWith(
-                                color: Colors.blueGrey, fontSize: 18),
-                          ),
-                          onTap: () async {
-                            if (_eventFormKey.currentState!.validate()) {
-                              setState(() {
-                                isLoading = !isLoading;
-                              });
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                  'جاري تحميل الحدث..',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'Cairo',
-                                  ),
-                                )),
-                              );
-
-                              try {
-                                _controllers.forEach((element) {
-                                  _controllersText.add(element.text);
-                                });
-
-                                //     .snapshotEvents
-                                //     .listen((taskSnapshot) {
-                                //   switch (taskSnapshot.state) {
-                                //     case TaskState.running:
-                                //       isLoading = true;
-                                //       // ...
-                                //       break;
-                                //
-                                //     case TaskState.success:
-                                //       isLoading = false;
-                                //       // ...
-                                //       break;
-                                //
-                                //     case TaskState.error:
-                                //
-                                //       // ...
-                                //       break;
-                                //   }
-                                // });
-                                var snapshot = await _firebaseStorage
-                                    .child(imagePath!)
-                                    .putFile(image!);
-
-                                final event = await eventRef.add({
-                                  'image': await snapshot!.ref.getDownloadURL(),
-                                  'title': _eventNameCont.text,
-                                  'description': _eventDescriptionCont.text,
-                                  'eventType': _eventTypeCont.text,
-                                  'starterDate': starterDate,
-                                  'endDate': endDate,
-                                  'starterTime': int.parse(starterTime.text),
-                                  'endTime': int.parse(endTime.text),
-                                  'eventCity': _eventCityCont.text,
-                                  'location': _eventLocationCont.text,
-                                  'field': _eventFieldCont.text,
-                                  'rooms':
-                                      FieldValue.arrayUnion(_controllersText),
-                                  'acceptsParticapants': acceptsParticipants,
-                                  'sendNotification': sendNotifications,
-                                  'eventVisibility': true,
-                                  'creatorID': Provider.of<siggning>(context,
-                                          listen: false)
-                                      .loggedUser!
-                                      .uid,
-                                  'creationDate': Timestamp.now(),
-                                  'isPublic': false
-                                });
-
-                                if (event == null) {
-                                  isLoading = false;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                      'حصل خطأ ما, لم يتم نشر حدثك, أعد المحاولة ..',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontFamily: 'Cairo',
-                                      ),
-                                    )),
-                                  );
-                                } else {
-                                  await eventRef
-                                      .doc(event.id)
-                                      .update({'id': event.id});
-
-                                  isLoading = false;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                      'تم حفظ الحدث بنجاح..',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontFamily: 'Cairo',
-                                      ),
-                                    )),
-                                  );
-                                  Navigator.pushNamed(context, 'OHome');
-                                }
-                              } on FirebaseAuthException catch (e) {}
-                            }
-                          },
-                        ),
-                        halfCTA(
-                            txt: 'نشر الحدث',
-                            onTap: () async {
-                              if (_eventFormKey.currentState!.validate()) {
-                                setState(() {
-                                  isLoading = !isLoading;
-                                });
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text(
-                                    'جاري تحميل الحدث..',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontFamily: 'Cairo',
-                                    ),
-                                  )),
-                                );
-
-                                try {
-                                  _controllers.forEach((element) {
-                                    _controllersText.add(element.text);
-                                  });
-                                  final targetedAudience =
-                                      _targetedAudienceCont.text.split(',');
-
-                                  //Upload to Firebase
-
-                                  var snapshot = await _firebaseStorage
-                                      .child(imagePath!)
-                                      .putFile(image!);
-
-                                  final event = await eventRef.add({
-                                    'image':
-                                        await snapshot!.ref.getDownloadURL(),
-                                    'title': _eventNameCont.text,
-                                    'description': _eventDescriptionCont.text,
-                                    'eventType': _eventTypeCont.text,
-                                    'starterDate': starterDate,
-                                    'endDate': endDate,
-                                    'starterTime': int.parse(starterTime.text),
-                                    'endTime': int.parse(endTime.text),
-                                    'eventCity': _eventCityCont.text,
-                                    'location': _eventLocationCont.text,
-                                    'field': _eventFieldCont.text,
-                                    'rooms':
-                                        FieldValue.arrayUnion(_controllersText),
-                                    'acceptsParticapants': acceptsParticipants,
-                                    'sendNotification': sendNotifications,
-                                    'targetedAudiance':
-                                        FieldValue.arrayUnion(targetedAudience),
-                                    'eventVisibility': true,
-                                    'creatorID': Provider.of<siggning>(context,
-                                            listen: false)
-                                        .loggedUser!
-                                        .uid,
-                                    'creationDate': Timestamp.now(),
-                                  });
-                                  sendNotifications
-                                      ? sendPushTopicNotification(
-                                          starterDate.toDate().toString(),
-                                          _eventNameCont.text,
-                                          _eventFieldCont,
-                                          event!.id,
-                                          siggning().loggedUser!.uid)
-                                      : null;
-
-                                  // if (sendNotifications) {
-                                  //   final users = await FirebaseFirestore
-                                  //       .instance
-                                  //       .collection('users')
-                                  //       .where('userType', isEqualTo: 0)
-                                  //       .get();
-                                  //   final usersDoc = users.docs;
-                                  //
-                                  //   final snaplistOfTokens =
-                                  //       await FirebaseFirestore
-                                  //           .instance
-                                  //           .collection('userToken')
-                                  //           .where(FieldPath.documentId,
-                                  //               arrayContains: usersDoc)
-                                  //           .get();
-                                  //   final TokensDoc = snaplistOfTokens.docs;
-                                  //   TokensDoc.forEach((element) {
-                                  //     tokenText.add(element['token']);
-                                  //   });
-                                  //   sendPushNotification(tokenText, "send from creating event", "I work");
-                                  // }
-                                  if (event == null) {
-                                    isLoading = false;
+                        isLoading
+                            ? CircularProgressIndicator()
+                            : InkWell(
+                                child: Text(
+                                  'حفظ كمسودة',
+                                  style: conTxtFeildHint.copyWith(
+                                      color: Colors.blueGrey, fontSize: 18),
+                                ),
+                                onTap: () async {
+                                  if (_eventFormKey.currentState!.validate()) {
+                                    setState(() {
+                                      isLoading = !isLoading;
+                                    });
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content: Text(
-                                        'حصل خطأ ما, لم يتم نشر حدثك, أعد المحاولة ..',
+                                        'جاري تحميل الحدث..',
                                         style: TextStyle(
                                           fontSize: 12,
                                           fontFamily: 'Cairo',
                                         ),
                                       )),
                                     );
-                                  } else {
-                                    await eventRef
-                                        .doc(event.id)
-                                        .update({'id': event.id});
-                                    isLoading = false;
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                        'تم تحميل الحدث بنجاح..',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontFamily: 'Cairo',
-                                        ),
-                                      )),
-                                    );
-                                    Navigator.pushNamed(context, 'OHome');
+
+                                    try {
+                                      _controllers.forEach((element) {
+                                        _controllersText.add(element.text);
+                                      });
+
+                                      //     .snapshotEvents
+                                      //     .listen((taskSnapshot) {
+                                      //   switch (taskSnapshot.state) {
+                                      //     case TaskState.running:
+                                      //       isLoading = true;
+                                      //       // ...
+                                      //       break;
+                                      //
+                                      //     case TaskState.success:
+                                      //       isLoading = false;
+                                      //       // ...
+                                      //       break;
+                                      //
+                                      //     case TaskState.error:
+                                      //
+                                      //       // ...
+                                      //       break;
+                                      //   }
+                                      // });
+                                      var snapshot;
+                                      if (imagePath != null) {
+                                        snapshot = await _firebaseStorage
+                                            .child(imagePath != null
+                                                ? imagePath!
+                                                : emptyImage!)
+                                            .putFile(image!);
+                                      }
+
+                                      final event = await eventRef.add({
+                                        'image': snapshot != null
+                                            ? await snapshot!.ref
+                                                .getDownloadURL()
+                                            : 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRUfeaAiEDueSvrn2Cogv-RQ8LzvBMcDLtl6A9Sv3O8Ngh8rwV8',
+                                        'title': _eventNameCont.text,
+                                        'description':
+                                            _eventDescriptionCont.text,
+                                        'eventType': _eventTypeCont.text,
+                                        'starterDate': starterDate,
+                                        'endDate': endDate,
+                                        'starterTime':
+                                            int.parse(starterTime.text),
+                                        'endTime': int.parse(endTime.text),
+                                        'eventCity': _eventCityCont.text,
+                                        'location': _eventLocationCont.text,
+                                        'field': _eventFieldCont.text,
+                                        'rooms': FieldValue.arrayUnion(
+                                            _controllersText),
+                                        'acceptsParticapants':
+                                            acceptsParticipants,
+                                        'sendNotification': sendNotifications,
+                                        'eventVisibility': true,
+                                        'creatorID': Provider.of<siggning>(
+                                                context,
+                                                listen: false)
+                                            .loggedUser!
+                                            .uid,
+                                        'creationDate': Timestamp.now(),
+                                        'isPublic': false
+                                      }).then((value) async {
+                                        await eventRef
+                                            .doc(value.id)
+                                            .update({'id': value.id});
+
+                                        isLoading = false;
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                            'تم حفظ الحدث بنجاح..',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontFamily: 'Cairo',
+                                            ),
+                                          )),
+                                        );
+                                        Navigator.pushNamed(context, 'OHome');
+                                      }).onError((error, stackTrace) {
+                                        isLoading = false;
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                            'حصل خطأ ما, لم يتم نشر حدثك, أعد المحاولة ..',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontFamily: 'Cairo',
+                                            ),
+                                          )),
+                                        );
+                                      });
+
+                                      if (event == null) {
+                                      } else {}
+                                    } on FirebaseAuthException catch (e) {}
                                   }
-                                } on FirebaseAuthException catch (e) {}
-                              }
-                            }),
+                                },
+                              ),
+                        isLoading
+                            ? CircularProgressIndicator()
+                            : halfCTA(
+                                txt: 'نشر الحدث',
+                                onTap: () async {
+                                  if (_eventFormKey.currentState!.validate()) {
+                                    setState(() {
+                                      isLoading = !isLoading;
+                                    });
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                        'جاري تحميل الحدث..',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontFamily: 'Cairo',
+                                        ),
+                                      )),
+                                    );
+
+                                    try {
+                                      _controllers.forEach((element) {
+                                        _controllersText.add(element.text);
+                                      });
+                                      final targetedAudience =
+                                          _targetedAudienceCont.text.split(',');
+                                      isLoading = true;
+                                      //Upload to Firebase
+                                      var snapshot;
+                                      if (imagePath != null) {
+                                        snapshot = await _firebaseStorage
+                                            .child(imagePath!)
+                                            .putFile(image!);
+                                      }
+                                      final event = await eventRef.add({
+                                        'image': snapshot != null
+                                            ? await snapshot!.ref
+                                                .getDownloadURL()
+                                            : 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRUfeaAiEDueSvrn2Cogv-RQ8LzvBMcDLtl6A9Sv3O8Ngh8rwV8',
+                                        'title': _eventNameCont.text,
+                                        'description':
+                                            _eventDescriptionCont.text,
+                                        'eventType': _eventTypeCont.text,
+                                        'starterDate': starterDate,
+                                        'endDate': endDate,
+                                        'starterTime':
+                                            int.parse(starterTime.text),
+                                        'endTime': int.parse(endTime.text),
+                                        'eventCity': _eventCityCont.text,
+                                        'location': _eventLocationCont.text,
+                                        'field': _eventFieldCont.text,
+                                        'rooms': FieldValue.arrayUnion(
+                                            _controllersText),
+                                        'acceptsParticapants':
+                                            acceptsParticipants,
+                                        'sendNotification': sendNotifications,
+                                        'targetedAudiance':
+                                            FieldValue.arrayUnion(
+                                                targetedAudience),
+                                        'eventVisibility': true,
+                                        'creatorID': Provider.of<siggning>(
+                                                context,
+                                                listen: false)
+                                            .loggedUser!
+                                            .uid,
+                                        'creationDate': Timestamp.now(),
+                                      }).then((value) async {
+                                        isLoading = false;
+                                        await eventRef
+                                            .doc(value.id)
+                                            .update({'id': value.id});
+                                        isLoading = false;
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                            'تم تحميل الحدث بنجاح..',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontFamily: 'Cairo',
+                                            ),
+                                          )),
+                                        );
+                                        Navigator.pushNamed(context, 'OHome');
+                                        sendNotifications
+                                            ? sendPushTopicNotification(
+                                                starterDate.toDate().toString(),
+                                                _eventNameCont.text,
+                                                _eventFieldCont,
+                                                value!.id,
+                                                siggning().loggedUser!.uid)
+                                            : null;
+                                      }).onError((error, stackTrace) {
+                                        isLoading = false;
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                            'حصل خطأ ما, لم يتم نشر حدثك, أعد المحاولة ..',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontFamily: 'Cairo',
+                                            ),
+                                          )),
+                                        );
+                                      });
+
+                                      // if (sendNotifications) {
+                                      //   final users = await FirebaseFirestore
+                                      //       .instance
+                                      //       .collection('users')
+                                      //       .where('userType', isEqualTo: 0)
+                                      //       .get();
+                                      //   final usersDoc = users.docs;
+                                      //
+                                      //   final snaplistOfTokens =
+                                      //       await FirebaseFirestore
+                                      //           .instance
+                                      //           .collection('userToken')
+                                      //           .where(FieldPath.documentId,
+                                      //               arrayContains: usersDoc)
+                                      //           .get();
+                                      //   final TokensDoc = snaplistOfTokens.docs;
+                                      //   TokensDoc.forEach((element) {
+                                      //     tokenText.add(element['token']);
+                                      //   });
+                                      //   sendPushNotification(tokenText, "send from creating event", "I work");
+                                      // }
+                                      if (event == null) {
+                                      } else {}
+                                    } on FirebaseAuthException catch (e) {}
+                                  }
+                                }),
                       ],
                     )
                   ],

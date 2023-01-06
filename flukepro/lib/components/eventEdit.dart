@@ -31,7 +31,7 @@ class editEvent extends StatefulWidget {
 
 class _editEventState extends State<editEvent> {
   final eventRef = _firestore.collection('events');
-  final _eventFormKey = GlobalKey<FormState>();
+  final _eventEditKey = GlobalKey<FormState>();
   bool isLoading = false;
   var eventTypes = [
     'ورشة عمل',
@@ -237,11 +237,11 @@ class _editEventState extends State<editEvent> {
                         SizedBox(
                           width: double.infinity,
                           height: 400,
-                          child: eventData['image'] != null
-                              ? Image.network(eventData['image'])
-                              : image == null
-                                  ? Image.asset(emptyImage)
-                                  : Image.file(image!),
+                          child: imagePath != null
+                              ? Image.file(image!)
+                              : eventData['image'] != null
+                                  ? Image.network(eventData['image'])
+                                  : Image.asset(emptyImage),
                         ),
                         Align(
                           alignment: Alignment.bottomRight,
@@ -283,7 +283,7 @@ class _editEventState extends State<editEvent> {
                       margin: EdgeInsets.all(20),
                       color: Colors.white,
                       child: Form(
-                        key: _eventFormKey,
+                        key: _eventEditKey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
@@ -626,6 +626,10 @@ class _editEventState extends State<editEvent> {
                             Container(
                               margin: EdgeInsets.symmetric(vertical: 10),
                               child: TextFormField(
+                                validator: (value) {
+                                  if (!Uri.parse(_eventLocationCont!.text)
+                                      .isAbsolute) return 'رابط غير صالح';
+                                },
                                 controller: _eventLocationCont,
                                 textDirection: TextDirection.rtl,
                                 textAlign: TextAlign.right,
@@ -812,7 +816,7 @@ class _editEventState extends State<editEvent> {
                                         color: Colors.blueGrey, fontSize: 18),
                                   ),
                                   onTap: () async {
-                                    if (_eventFormKey.currentState!
+                                    if (_eventEditKey.currentState!
                                         .validate()) {
                                       setState(() {
                                         isLoading = !isLoading;
@@ -834,6 +838,7 @@ class _editEventState extends State<editEvent> {
                                           _controllersText.add(element.text);
                                         });
                                         var url;
+
                                         if (imagePath != null) {
                                           var imageSnap = await _firebaseStorage
                                               .child(imagePath!)
@@ -956,7 +961,7 @@ class _editEventState extends State<editEvent> {
                                 halfCTA(
                                     txt: 'نشر التغييرات',
                                     onTap: () async {
-                                      if (_eventFormKey.currentState!
+                                      if (_eventEditKey.currentState!
                                           .validate()) {
                                         setState(() {
                                           isLoading = !isLoading;
@@ -980,13 +985,16 @@ class _editEventState extends State<editEvent> {
                                           final targetedAudience =
                                               _targetedAudienceCont!.text
                                                   .split(',');
-                                          var snapshot = await _firebaseStorage
-                                              .child(imagePath!)
-                                              .putFile(image!);
+                                          var snapshot;
+                                          if (imagePath != null) {
+                                            snapshot = await _firebaseStorage
+                                                .child(imagePath!)
+                                                .putFile(image!);
+                                          }
                                           await eventRef
                                               .doc(widget.eventId!.trim())
                                               .update({
-                                            'image': imagePath == ''
+                                            'image': imagePath == null
                                                 ? eventData['image']
                                                 : await snapshot!.ref
                                                     .getDownloadURL(),

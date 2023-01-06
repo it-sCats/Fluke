@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,17 +6,23 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flukepro/components/QrCodeWidget.dart';
 import 'package:flukepro/components/eventEdit.dart';
 import 'package:flukepro/components/participantEventRegisterForm.dart';
+import 'package:flukepro/components/session.dart';
+import 'package:flukepro/components/sessionDataSource.dart';
 import 'package:flukepro/components/visitorEventprev.dart';
+import 'package:flukepro/screens/OrganizersScreens/OHome.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:url_launcher/url_launcher.dart';
+import '../screens/OrganizersScreens/Sections/timeLine.dart';
 import '../screens/mainScreens/userInfoScreen.dart';
 import '../utils/SigningProvider.dart';
 import '../utils/SigningProvider.dart';
 import 'cons.dart';
 import 'customWidgets.dart';
 
+sessionDataSource? sessiondatasource;
 final _firestore = FirebaseFirestore.instance;
 //كائن من الداتابيز 1
 final _auth = FirebaseAuth.instance;
@@ -484,235 +491,250 @@ class _eventDisplayState extends State<eventDisplay>
                 flex: 6,
                 child: Directionality(
                   textDirection: TextDirection.rtl,
-                  child: TabBarView(controller: _tabCont, children: [
-                    Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 20,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 5,
+                  child: TabBarView(
+                      controller: _tabCont,
+                      physics: NeverScrollableScrollPhysics(),
+                      children: [
+                        Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 20,
                             ),
-                            Row(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Icon(
-                                  Icons.calendar_month_rounded,
-                                  color: conORange.withOpacity(.8),
-                                ),
                                 SizedBox(
-                                  width: 5,
+                                  height: 5,
                                 ),
-                                Text(
-                                    ' ${DateTime.fromMicrosecondsSinceEpoch(widget.endDate.microsecondsSinceEpoch).toString().split(' ').first.split('-').last}/'),
-                                Directionality(
-                                  textDirection: TextDirection.ltr,
-                                  child: Text(
-                                      ' ${DateTime.fromMicrosecondsSinceEpoch(widget.starterDate.microsecondsSinceEpoch).toString().split(' ').first}'),
-                                ),
-                              ],
-                            ),
-                            widget.field != null
-                                ? Container(
-                                    padding: EdgeInsets.only(top: 5),
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.work,
-                                          color: conORange.withOpacity(.8),
-                                        ),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        Text(widget.field.toString(),
-                                            style: conHeadingsStyle.copyWith(
-                                                fontSize: 16,
-                                                color: conBlack,
-                                                fontWeight: FontWeight.w400),
-                                            overflow: TextOverflow.visible),
-                                      ],
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.calendar_month_rounded,
+                                      color: conORange.withOpacity(.8),
                                     ),
-                                  )
-                                : Container(),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.account_circle,
-                                  color: conORange.withOpacity(.8),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                        ' ${DateTime.fromMicrosecondsSinceEpoch(widget.endDate.microsecondsSinceEpoch).toString().split(' ').first.split('-').last}/'),
+                                    Directionality(
+                                      textDirection: TextDirection.ltr,
+                                      child: Text(
+                                          ' ${DateTime.fromMicrosecondsSinceEpoch(widget.starterDate.microsecondsSinceEpoch).toString().split(' ').first}'),
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Text(creatorName != null
-                                    ? creatorName.toString()
-                                    : '')
-                              ],
-                            ),
-                            // Row(
-                            //   children: [
-                            //     Icon(
-                            //       Icons.people_alt_rounded,
-                            //       color: conBlack.withOpacity(.5),
-                            //     ),
-                            //     SizedBox(
-                            //       width: 5,
-                            //     ),
-                            //     Text(
-                            //         widget.visitorsNum
-                            //             .toString(), //visitors number
-                            //         style: conHeadingsStyle.copyWith(
-                            //             fontSize: 18,
-                            //             color: conBlack,
-                            //             fontWeight: FontWeight.w400)),
-                            //     Text('  شخص سيزور هذا الحدث',
-                            //         style: conHeadingsStyle.copyWith(
-                            //             fontSize: 13,
-                            //             color: conBlack.withOpacity(.7),
-                            //             fontWeight: FontWeight.w400))
-                            //   ],
-                            // ),
-                            SizedBox(
-                              height: 25,
-                            ),
-                            Text(
-                              'عن الحدث:',
-                              style: conHeadingsStyle.copyWith(
-                                  fontSize: 18,
-                                  color: conBlack.withOpacity(.8),
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: Text(widget.description,
-                                  style: conHeadingsStyle.copyWith(
-                                      fontSize: 16,
-                                      color: conBlack.withOpacity(.6),
-                                      fontWeight: FontWeight.w400)),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(bottom: 10),
-                              // margin: const EdgeInsets.only(left: 5, right: 15),
-                              child: new Divider(
-                                color: conBlack.withOpacity(.6),
-                                height: 4,
-                              ),
-                            ),
-                            widget.location!.isNotEmpty
-                                ? Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'موقع الحدث على الخرائط:',
-                                          style: conHeadingsStyle.copyWith(
-                                              fontSize: 18,
-                                              color: conBlack.withOpacity(.8),
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                        Expanded(
-                                          child: GestureDetector(
-                                            onTap: () async {
-                                              await launchUrl(Uri.parse(
-                                                  widget.location.toString()));
-                                            },
-                                            child: Text(
-                                                widget.location.toString(),
+                                widget.field != null
+                                    ? Container(
+                                        padding: EdgeInsets.only(top: 5),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.work,
+                                              color: conORange.withOpacity(.8),
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(widget.field.toString(),
                                                 style:
                                                     conHeadingsStyle.copyWith(
                                                         fontSize: 16,
-                                                        decoration:
-                                                            TextDecoration
-                                                                .underline,
-                                                        color: conBlue
-                                                            .withOpacity(.6),
+                                                        color: conBlack,
                                                         fontWeight:
-                                                            FontWeight.w400)),
-                                          ),
-                                        )
-                                      ],
+                                                            FontWeight.w400),
+                                                overflow: TextOverflow.visible),
+                                          ],
+                                        ),
+                                      )
+                                    : Container(),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.account_circle,
+                                      color: conORange.withOpacity(.8),
                                     ),
-                                  )
-                                : Container(),
-
-                            widget.justDisplay ||
-                                    widget.creatorID ==
-                                        Provider.of<siggning>(context,
-                                                listen: false)
-                                            .loggedUser!
-                                            .uid
-                                ? Container()
-                                : Expanded(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        // userType == 2 &&
-                                        //         widget.acceptsParticapants
-                                        //     ?
-                                        InkWell(
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 10),
-                                            width: 200,
-                                            height: 60,
-                                            margin: EdgeInsets.symmetric(
-                                                vertical: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.02),
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color:
-                                                        conBlue.withOpacity(.5),
-                                                    width: 2),
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            child: Text(
-                                              ' التسجيل كمشارك',
-                                              textAlign: TextAlign.center,
-                                              style: conTxtFeildHint.copyWith(
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(creatorName != null
+                                        ? creatorName.toString()
+                                        : '')
+                                  ],
+                                ),
+                                // Row(
+                                //   children: [
+                                //     Icon(
+                                //       Icons.people_alt_rounded,
+                                //       color: conBlack.withOpacity(.5),
+                                //     ),
+                                //     SizedBox(
+                                //       width: 5,
+                                //     ),
+                                //     Text(
+                                //         widget.visitorsNum
+                                //             .toString(), //visitors number
+                                //         style: conHeadingsStyle.copyWith(
+                                //             fontSize: 18,
+                                //             color: conBlack,
+                                //             fontWeight: FontWeight.w400)),
+                                //     Text('  شخص سيزور هذا الحدث',
+                                //         style: conHeadingsStyle.copyWith(
+                                //             fontSize: 13,
+                                //             color: conBlack.withOpacity(.7),
+                                //             fontWeight: FontWeight.w400))
+                                //   ],
+                                // ),
+                                SizedBox(
+                                  height: 25,
+                                ),
+                                Text(
+                                  'عن الحدث:',
+                                  style: conHeadingsStyle.copyWith(
+                                      fontSize: 18,
+                                      color: conBlack.withOpacity(.8),
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: Text(widget.description,
+                                      style: conHeadingsStyle.copyWith(
+                                          fontSize: 16,
+                                          color: conBlack.withOpacity(.6),
+                                          fontWeight: FontWeight.w400)),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(bottom: 10),
+                                  // margin: const EdgeInsets.only(left: 5, right: 15),
+                                  child: new Divider(
+                                    color: conBlack.withOpacity(.6),
+                                    height: 4,
+                                  ),
+                                ),
+                                widget.location!.isNotEmpty
+                                    ? Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'موقع الحدث على الخرائط:',
+                                              style: conHeadingsStyle.copyWith(
+                                                  fontSize: 18,
                                                   color:
-                                                      conBlue.withOpacity(.7),
-                                                  fontSize: 18),
+                                                      conBlack.withOpacity(.8),
+                                                  fontWeight: FontWeight.w400),
                                             ),
-                                          ),
-                                          onTap: () async {
-                                            showModalBottomSheet(
-                                              isScrollControlled: true,
-                                              elevation: 100,
-                                              context: context,
-                                              builder: (context) =>
-                                                  ParticiEventPrev(
+                                            Expanded(
+                                              child: GestureDetector(
+                                                onTap: () async {
+                                                  await launchUrl(Uri.parse(
+                                                      widget.location
+                                                          .toString()));
+                                                },
+                                                child: Text(
+                                                    widget.location.toString(),
+                                                    style: conHeadingsStyle
+                                                        .copyWith(
+                                                            fontSize: 16,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .underline,
+                                                            color: conBlue
+                                                                .withOpacity(
+                                                                    .6),
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400)),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    : Container(),
+
+                                widget.justDisplay ||
+                                        widget.creatorID ==
+                                            Provider.of<siggning>(context,
+                                                    listen: false)
+                                                .loggedUser!
+                                                .uid
+                                    ? Container()
+                                    : Expanded(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            // userType == 2 &&
+                                            //         widget.acceptsParticapants
+                                            //     ?
+                                            InkWell(
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 10),
+                                                width: 200,
+                                                height: 60,
+                                                margin: EdgeInsets.symmetric(
+                                                    vertical:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.02),
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: conBlue
+                                                            .withOpacity(.5),
+                                                        width: 2),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: Text(
+                                                  ' التسجيل كمشارك',
+                                                  textAlign: TextAlign.center,
+                                                  style:
+                                                      conTxtFeildHint.copyWith(
+                                                          color: conBlue
+                                                              .withOpacity(.7),
+                                                          fontSize: 18),
+                                                ),
+                                              ),
+                                              onTap: () async {
+                                                showModalBottomSheet(
+                                                  isScrollControlled: true,
+                                                  elevation: 100,
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      ParticiEventPrev(
+                                                          widget.id,
+                                                          widget.title,
+                                                          widget.creatorID),
+                                                );
+                                              },
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            halfCTA(
+                                                txt: ' التسجيل كزائر',
+                                                onTap: () async {
+                                                  await registerVisitor(
                                                       widget.id,
-                                                      widget.title,
-                                                      widget.creatorID),
-                                            );
-                                          },
+                                                      context,
+                                                      widget.title);
+                                                }),
+                                          ],
                                         ),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        halfCTA(
-                                            txt: ' التسجيل كزائر',
-                                            onTap: () async {
-                                              await registerVisitor(widget.id,
-                                                  context, widget.title);
-                                            }),
-                                      ],
-                                    ),
-                                  )
-                          ],
-                        )),
-                    eventTimeline(),
-                  ]),
+                                      )
+                              ],
+                            )),
+                        eventTimeline(
+                            widget.id, widget.starterDate, widget.endDate),
+                      ]),
                 ),
               ),
             ],
@@ -732,15 +754,6 @@ class _eventDisplayState extends State<eventDisplay>
             body: bodyOfEvent(),
           )
         : bodyOfEvent();
-  }
-}
-
-class eventTimeline extends StatelessWidget {
-  const eventTimeline({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }
 

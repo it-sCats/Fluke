@@ -115,22 +115,6 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
           ),
           Visibility(
             visible: showCreating,
-            child: AddEventButton(
-              txt: "إنشاء حدث",
-              onTap: () {
-                showModalBottomSheet(
-                  isScrollControlled: true,
-                  elevation: 100,
-                  context: context,
-                  builder: (context) => creatingEvent(),
-                );
-
-                setState(() {});
-              },
-            ),
-          ),
-          Visibility(
-            visible: showCreating,
             child: Transform.translate(
               offset: Offset(20, 0),
               child: Container(
@@ -273,7 +257,23 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                 ),
               ),
             ),
-          )
+          ),
+          Visibility(
+            visible: showCreating,
+            child: AddEventButton(
+              txt: "إنشاء حدث",
+              onTap: () {
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  elevation: 100,
+                  context: context,
+                  builder: (context) => creatingEvent(),
+                );
+
+                setState(() {});
+              },
+            ),
+          ),
         ], // جزئين رئيسيين والي هما المينيو الجانبية و"الداش بورد" مقصود بيها الصفحة البيضا الي نحطو عليها في المكونات التانية
       ),
     );
@@ -401,7 +401,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                     onPressed: () async {
                       await FirebaseAuth.instance.signOut();
                       await GoogleSignIn().signOut();
-                      Navigator.pushNamed(context, '/log');
+                      Navigator.pushNamed(context, '/redirect');
                     })
               ],
             ),
@@ -501,7 +501,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                   ),
                 ),
                 Expanded(
-                  flex: 15,
+                  flex: 20,
                   child: Container(
                       height: double.infinity,
                       child: _pages.elementAt(pageIndex!)), //يتم عرض الصفحات

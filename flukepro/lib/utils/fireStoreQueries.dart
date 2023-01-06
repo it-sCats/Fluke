@@ -108,6 +108,7 @@ getOrganizersEvent(context) async {
               .loggedUser!
               .uid
               .trim())
+      .orderBy('creationDate', descending: true)
       .get();
   return AllEvents.docs;
 }
