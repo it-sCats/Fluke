@@ -4,9 +4,11 @@ import 'package:flukepro/components/cons.dart';
 import 'package:flukepro/errorsHandling/AuthExceptionHandler.dart';
 import 'package:flutter/material.dart';
 import 'package:flukepro/utils/authentication.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../components/customWidgets.dart';
 import '../../components/signInWithGoogleAndFacebookButtons.dart';
+import '../../utils/SigningProvider.dart';
 import '../../utils/authentication.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -96,8 +98,9 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments
-        as Set; //to reach the arguments that will be passed to the constructor
+    final args = ModalRoute.of(context)!.settings.arguments as Set;
+    siggning provider = Provider.of<siggning>(context, listen: false);
+//to reach the arguments that will be passed to the constructor
     return Scaffold(
       resizeToAvoidBottomInset:
           true, //prevents keyboard from creating the error of overflowing
@@ -412,6 +415,10 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
 
                           User user = success;
                           String userID = user.uid;
+                          provider.setLoggedInuser(success);
+                          provider.getUserInfoDoc(success.uid);
+                          provider.getCurrentUsertype(provider.loggedUser!.uid);
+                          print('logged in ');
                           // final newUser = await _auth.createUserWithEmailAndPassword(
                           //     email: email.toString(),
                           //     password: password.toString()); //creating users

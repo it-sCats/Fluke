@@ -74,7 +74,7 @@ class _creatingEventState extends State<creatingEvent> {
   Widget _addTile() {
     return Container(
       decoration: BoxDecoration(
-          color: conORange,
+          color: Colors.grey,
           borderRadius: BorderRadius.all(Radius.circular(10))),
       width: 180,
       child: ListTile(
@@ -483,12 +483,14 @@ class _creatingEventState extends State<creatingEvent> {
                             margin: EdgeInsets.symmetric(vertical: 10),
                             child: TextFormField(
                               validator: (value) {
-                                if (value == null) {
+                                if (value == null || value.isEmpty) {
                                   return ' أدخل وقت انتهاء الحدث';
                                 }
                                 return null;
                               },
                               controller: endTime,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
                               onTap: () async {
                                 TimeOfDay? pickedTime = await showTimePicker(
                                   context: context,
@@ -506,6 +508,7 @@ class _creatingEventState extends State<creatingEvent> {
                               textDirection: TextDirection.rtl,
                               textAlign: TextAlign.right,
                               decoration: InputDecoration(
+                                  errorStyle: conErorTxtStyle,
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 20),
                                   hintText: 'إلى',
@@ -530,7 +533,7 @@ class _creatingEventState extends State<creatingEvent> {
                               child: InkWell(
                                 child: TextFormField(
                                   validator: (value) {
-                                    if (value == null) {
+                                    if (value == null || value.isEmpty) {
                                       return ' أدخل وقت بداية الحدث';
                                     }
                                     return null;
@@ -875,7 +878,8 @@ class _creatingEventState extends State<creatingEvent> {
                                             ),
                                           )),
                                         );
-                                        Navigator.pushNamed(context, 'OHome');
+                                        Navigator.pushReplacementNamed(
+                                            context, 'OHome');
                                       }).onError((error, stackTrace) {
                                         isLoading = false;
                                         ScaffoldMessenger.of(context)
@@ -962,6 +966,10 @@ class _creatingEventState extends State<creatingEvent> {
                                                 listen: false)
                                             .loggedUser!
                                             .uid,
+                                        'creatorName': Provider.of<siggning>(
+                                                context,
+                                                listen: false)
+                                            .userInfoDocument!['name'],
                                         'creationDate': Timestamp.now(),
                                       }).then((value) async {
                                         isLoading = false;
@@ -980,7 +988,8 @@ class _creatingEventState extends State<creatingEvent> {
                                             ),
                                           )),
                                         );
-                                        Navigator.pushNamed(context, 'OHome');
+                                        Navigator.pushReplacementNamed(
+                                            context, 'OHome');
                                         sendNotifications
                                             ? sendPushTopicNotification(
                                                 starterDate.toDate().toString(),

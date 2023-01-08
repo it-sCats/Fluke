@@ -25,107 +25,117 @@ class siggning extends ChangeNotifier {
   User? loggedUser = auth.currentUser;
   int? userType;
   setUserType(userType) => this.userType = userType;
+  getUserType() => this.userType;
   getLoggedInuser() => loggedUser;
   setLoggedInuser(user) => this.loggedUser = user;
   addJoinRequest(
-      {eventId, userId, name, field, phone, email, joinType, context}) {
+      {eventId, userId, name, field, phone, email, joinType, context}) async {
     final prevRequest = eventRef
         .doc(eventId)
         .collection('joinRequest')
         .where('userId', isEqualTo: userId)
         .where('requestStatus', isEqualTo: 'pending');
-    print('-------------$eventId');
-    eventRef.doc(eventId.toString().trim()).collection('joinRequest').add({
-      'userId': userId,
-      'eventId': eventId,
-      'field': field,
-      'email': email,
-      'joinType': joinType,
-      'requestStatus': 'pending'
-    }).whenComplete(() => showDialog(
-        //save to drafts dialog
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(
-              '!تم تقديم طلبك',
-              textAlign: TextAlign.center,
-              style: conHeadingsStyle.copyWith(fontSize: 15),
-            ),
-            content: Text(
-              'سيصلك اشعار فور قبول الطلب',
-              textAlign: TextAlign.center,
-              style: conHeadingsStyle.copyWith(
-                  fontSize: 14, fontWeight: FontWeight.normal),
-            ),
-            actions: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                decoration: BoxDecoration(
-                    color: conORange, borderRadius: BorderRadius.circular(10)),
-                child: InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, 'base');
-                    },
-                    child: Text(
-                      'حسناً',
-                      textAlign: TextAlign.center,
-                      style: conHeadingsStyle.copyWith(
-                          color: Colors.white,
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold),
-                    )),
+    if (prevRequest == null) {
+      DocumentReference<Map<String, dynamic>> joinReqId = await eventRef
+          .doc(eventId.toString().trim())
+          .collection('joinRequest')
+          .add({
+        'userId': userId,
+        'eventId': eventId,
+        'field': field,
+        'email': email,
+        'joinType': joinType,
+        'requestStatus': 'pending'
+      }).whenComplete(() => showDialog(
+              //save to drafts dialog
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text(
+                    '!تم تقديم طلبك',
+                    textAlign: TextAlign.center,
+                    style: conHeadingsStyle.copyWith(fontSize: 15),
+                  ),
+                  content: Text(
+                    'سيصلك اشعار فور قبول الطلب',
+                    textAlign: TextAlign.center,
+                    style: conHeadingsStyle.copyWith(
+                        fontSize: 14, fontWeight: FontWeight.normal),
+                  ),
+                  actions: [
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      decoration: BoxDecoration(
+                          color: conORange,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            'حسناً',
+                            textAlign: TextAlign.center,
+                            style: conHeadingsStyle.copyWith(
+                                color: Colors.white,
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold),
+                          )),
+                    ),
+                  ],
+                  buttonPadding: EdgeInsets.all(20),
+                  actionsAlignment: MainAxisAlignment.spaceAround,
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10, horizontal: 100),
+                );
+              }));
+
+      return joinReqId.id;
+    } else {
+      showDialog(
+          //save to drafts dialog
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(
+                'لقد أرسلت طلب مسبقاً!',
+                textAlign: TextAlign.center,
+                style: conHeadingsStyle.copyWith(fontSize: 15),
               ),
-            ],
-            buttonPadding: EdgeInsets.all(20),
-            actionsAlignment: MainAxisAlignment.spaceAround,
-            contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 100),
-          );
-        }));
-    // } else {
-    //   showDialog(
-    //       //save to drafts dialog
-    //       context: context,
-    //       builder: (context) {
-    //         return AlertDialog(
-    //           title: Text(
-    //             'لقد أرسلت طلب مسبقاً!',
-    //             textAlign: TextAlign.center,
-    //             style: conHeadingsStyle.copyWith(fontSize: 15),
-    //           ),
-    //           content: Text(
-    //             'سيصلك اشعار فور قبول الطلب',
-    //             textAlign: TextAlign.center,
-    //             style: conHeadingsStyle.copyWith(
-    //                 fontSize: 14, fontWeight: FontWeight.normal),
-    //           ),
-    //           actions: [
-    //             Container(
-    //               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-    //               decoration: BoxDecoration(
-    //                   color: conORange,
-    //                   borderRadius: BorderRadius.circular(10)),
-    //               child: InkWell(
-    //                   onTap: () {
-    //                     Navigator.pop(context);
-    //                   },
-    //                   child: Text(
-    //                     'حسناً',
-    //                     textAlign: TextAlign.center,
-    //                     style: conHeadingsStyle.copyWith(
-    //                         color: Colors.white,
-    //                         fontSize: 17,
-    //                         fontWeight: FontWeight.bold),
-    //                   )),
-    //             ),
-    //           ],
-    //           buttonPadding: EdgeInsets.all(20),
-    //           actionsAlignment: MainAxisAlignment.spaceAround,
-    //           contentPadding:
-    //               EdgeInsets.symmetric(vertical: 10, horizontal: 100),
-    //         );
-    //       });
-    // }
+              content: Text(
+                'سيصلك اشعار فور قبول الطلب',
+                textAlign: TextAlign.center,
+                style: conHeadingsStyle.copyWith(
+                    fontSize: 14, fontWeight: FontWeight.normal),
+              ),
+              actions: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  decoration: BoxDecoration(
+                      color: conORange,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'حسناً',
+                        textAlign: TextAlign.center,
+                        style: conHeadingsStyle.copyWith(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold),
+                      )),
+                ),
+              ],
+              buttonPadding: EdgeInsets.all(20),
+              actionsAlignment: MainAxisAlignment.spaceAround,
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 10, horizontal: 100),
+            );
+          });
+      return 0;
+    }
   }
 
   saveTokenToDatabase(token) async {
@@ -196,6 +206,28 @@ class siggning extends ChangeNotifier {
         .collection('events')
         .orderBy('creationDate', descending: true)
         .where('eventVisibility', isEqualTo: true)
+        .snapshots();
+    notifyListeners();
+    return AllEvents;
+  }
+
+  getORganizerInfo(creatorID) async {
+    DocumentSnapshot<Map<String, dynamic>> creator = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(creatorID.trim())
+        .get();
+
+    return creator.data()!['name'];
+  }
+
+  getAllOrganizersVisibleEvents(context) {
+    Stream<QuerySnapshot> AllEvents = FirebaseFirestore.instance
+        .collection('events')
+        .where('creatorID',
+            isEqualTo: Provider.of<siggning>(context).loggedUser!.uid)
+        .where('eventVisibility', isEqualTo: true)
+        .orderBy('creationDate', descending: true)
         .snapshots();
     notifyListeners();
     return AllEvents;

@@ -378,8 +378,10 @@ class _editEventState extends State<editEvent> {
                                         DateTime? pickedDate =
                                             await showDatePicker(
                                                 context: context,
-                                                initialDate:
-                                                    eventData['endDate'],
+                                                initialDate: DateTime
+                                                    .fromMicrosecondsSinceEpoch(
+                                                        eventData['endDate']
+                                                            .microsecondsSinceEpoch),
                                                 firstDate: DateTime(
                                                     2000), //DateTime.now() - not to allow to choose before today.
                                                 lastDate: DateTime(2101));
@@ -439,8 +441,11 @@ class _editEventState extends State<editEvent> {
                                             DateTime? pickedDate =
                                                 await showDatePicker(
                                                     context: context,
-                                                    initialDate: eventData[
-                                                        'starterDate'],
+                                                    initialDate: DateTime
+                                                        .fromMicrosecondsSinceEpoch(
+                                                            eventData[
+                                                                    'starterDate']
+                                                                .microsecondsSinceEpoch),
                                                     firstDate: DateTime(
                                                         2000), //DateTime.now() - not to allow to choose before today.
                                                     lastDate: DateTime(2101));
@@ -597,6 +602,9 @@ class _editEventState extends State<editEvent> {
                               child: Directionality(
                                 textDirection: TextDirection.rtl,
                                 child: DropdownButtonFormField(
+                                  validator: (value) {
+                                    value == null ? 'جب تحديد المدينة' : null;
+                                  },
                                   decoration: InputDecoration(
                                       contentPadding: EdgeInsets.symmetric(
                                           horizontal: 20, vertical: 20),
@@ -627,8 +635,9 @@ class _editEventState extends State<editEvent> {
                               margin: EdgeInsets.symmetric(vertical: 10),
                               child: TextFormField(
                                 validator: (value) {
-                                  if (!Uri.parse(_eventLocationCont!.text)
-                                      .isAbsolute) return 'رابط غير صالح';
+                                  if (value != '' &&
+                                      !Uri.parse(_eventLocationCont!.text)
+                                          .isAbsolute) return 'رابط غير صالح';
                                 },
                                 controller: _eventLocationCont,
                                 textDirection: TextDirection.rtl,
@@ -809,155 +818,179 @@ class _editEventState extends State<editEvent> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                InkWell(
-                                  child: Text(
-                                    'حفظ كمسودة',
-                                    style: conTxtFeildHint.copyWith(
-                                        color: Colors.blueGrey, fontSize: 18),
-                                  ),
-                                  onTap: () async {
-                                    if (_eventEditKey.currentState!
-                                        .validate()) {
-                                      setState(() {
-                                        isLoading = !isLoading;
-                                      });
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                          'جاري تعديل بيانات الحدث..',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontFamily: 'Cairo',
-                                          ),
-                                        )),
-                                      );
+                                isLoading
+                                    ? CircularProgressIndicator()
+                                    : InkWell(
+                                        child: Text(
+                                          'حفظ كمسودة',
+                                          style: conTxtFeildHint.copyWith(
+                                              color: Colors.blueGrey,
+                                              fontSize: 18),
+                                        ),
+                                        onTap: () async {
+                                          if (_eventEditKey.currentState!
+                                              .validate()) {
+                                            setState(() {
+                                              isLoading = !isLoading;
+                                            });
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                  content: Text(
+                                                'جاري تعديل بيانات الحدث..',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontFamily: 'Cairo',
+                                                ),
+                                              )),
+                                            );
 
-                                      try {
-                                        _controllers.forEach((element) {
-                                          _controllersText.add(element.text);
-                                        });
-                                        var url;
+                                            try {
+                                              _controllers.forEach((element) {
+                                                _controllersText
+                                                    .add(element.text);
+                                              });
+                                              var snapshot;
+                                              if (imagePath != null) {
+                                                snapshot =
+                                                    await _firebaseStorage
+                                                        .child(imagePath != null
+                                                            ? imagePath!
+                                                            : emptyImage!)
+                                                        .putFile(image!);
+                                              }
+                                              await eventRef
+                                                  .doc(widget.eventId!.trim())
+                                                  .update({
+                                                'image': imagePath == null
+                                                    ? eventData['image']
+                                                    : await snapshot!.ref
+                                                        .getDownloadURL(),
+                                                'title':
+                                                    _eventNameCont?.text == ''
+                                                        ? eventData['title']
+                                                        : _eventNameCont?.text,
+                                                'description':
+                                                    _eventDescriptionCont
+                                                                ?.text ==
+                                                            ''
+                                                        ? eventData[
+                                                            'description']
+                                                        : _eventDescriptionCont!
+                                                            .text,
+                                                'eventType':
+                                                    _eventTypeCont.text == ''
+                                                        ? eventData['eventType']
+                                                        : _eventTypeCont.text,
+                                                'starterDate': starterDateCont
+                                                            ?.text ==
+                                                        ''
+                                                    ? eventData['starterDate']
+                                                    : starterDate,
+                                                'endDate':
+                                                    endDateCont.text == ''
+                                                        ? eventData['endDate']
+                                                        : endDate,
+                                                'starterTime': starterTime
+                                                            ?.text ==
+                                                        ''
+                                                    ? eventData['starterTime']
+                                                    : int.parse(
+                                                        starterTime!.text),
+                                                'endTime': endTime?.text == ''
+                                                    ? eventData['endTime']
+                                                    : int.parse(endTime!.text),
+                                                'eventCity':
+                                                    _eventCityCont!.text,
+                                                'location': _eventLocationCont!
+                                                            .text ==
+                                                        ''
+                                                    ? eventData['location']
+                                                    : _eventLocationCont!.text,
+                                                'field':
+                                                    _eventFieldCont!.text == ''
+                                                        ? eventData['field']
+                                                        : _eventFieldCont!.text,
+                                                'rooms': _controllersText == ''
+                                                    ? eventData['rooms']
+                                                    : FieldValue.arrayUnion(
+                                                        _controllersText),
+                                                'acceptsParticapants':
+                                                    acceptsParticipants == null
+                                                        ? eventData[
+                                                            'acceptsParticapants']
+                                                        : acceptsParticipants,
+                                                'sendNotification':
+                                                    sendNotifications == null
+                                                        ? eventData[
+                                                            'sendNotification']
+                                                        : sendNotifications,
+                                                'eventVisibility': false,
+                                                'creatorID':
+                                                    Provider.of<siggning>(
+                                                            context,
+                                                            listen: false)
+                                                        .loggedUser!
+                                                        .uid,
+                                              }).then((value) async {
+                                                isLoading = false;
 
-                                        if (imagePath != null) {
-                                          var imageSnap = await _firebaseStorage
-                                              .child(imagePath!)
-                                              .putFile(image!);
-                                          url = await imageSnap!.ref
-                                              .getDownloadURL();
-                                        }
-                                        await eventRef
-                                            .doc(widget.eventId!.trim())
-                                            .update({
-                                          'image': imagePath == ''
-                                              ? eventData['image']
-                                              : url,
-                                          'title': _eventNameCont?.text == ''
-                                              ? eventData['title']
-                                              : _eventNameCont?.text,
-                                          'description':
-                                              _eventDescriptionCont?.text == ''
-                                                  ? eventData['description']
-                                                  : _eventDescriptionCont!.text,
-                                          'eventType': _eventTypeCont.text == ''
-                                              ? eventData['eventType']
-                                              : _eventTypeCont.text,
-                                          'starterDate':
-                                              starterDateCont?.text == ''
-                                                  ? eventData['starterDate']
-                                                  : starterDate,
-                                          'endDate': endDateCont.text == ''
-                                              ? eventData['endDate']
-                                              : endDate,
-                                          'starterTime': starterTime?.text == ''
-                                              ? eventData['starterTime']
-                                              : int.parse(starterTime!.text),
-                                          'endTime': endTime?.text == ''
-                                              ? eventData['endTime']
-                                              : int.parse(endTime!.text),
-                                          'eventCity': _eventCityCont!.text,
-                                          'location':
-                                              _eventLocationCont!.text == ''
-                                                  ? eventData['location']
-                                                  : _eventLocationCont!.text,
-                                          'field': _eventFieldCont!.text == ''
-                                              ? eventData['field']
-                                              : _eventFieldCont!.text,
-                                          'rooms': _controllersText == ''
-                                              ? eventData['rooms']
-                                              : FieldValue.arrayUnion(
-                                                  _controllersText),
-                                          'acceptsParticapants':
-                                              acceptsParticipants == null
-                                                  ? eventData[
-                                                      'acceptsParticapants']
-                                                  : acceptsParticipants,
-                                          'sendNotification':
-                                              sendNotifications == null
-                                                  ? eventData[
-                                                      'sendNotification']
-                                                  : sendNotifications,
-                                          'eventVisibility': false,
-                                          'creatorID': Provider.of<siggning>(
-                                                  context,
-                                                  listen: false)
-                                              .loggedUser!
-                                              .uid,
-                                        }).then((value) async {
-                                          Navigator.pushNamed(context, 'OHome');
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                                content: Text(
-                                              'تم تعديل بيانات الحدث بنجاح..',
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                fontFamily: 'Cairo',
-                                              ),
-                                            )),
-                                          ); //todo give the starter and the final date in value
-                                        }).onError((error, stackTrace) {
-                                          print(error!.toString());
-                                          isLoading = false;
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                                content: Text(
-                                              'حصل خطأ ما, لم يتم التعديل, أعد المحاولة ..',
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                fontFamily: 'Cairo',
-                                              ),
-                                            )),
-                                          );
-                                        });
+                                                Navigator.pushReplacementNamed(
+                                                    context, 'OHome');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  const SnackBar(
+                                                      content: Text(
+                                                    'تم تعديل بيانات الحدث بنجاح..',
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontFamily: 'Cairo',
+                                                    ),
+                                                  )),
+                                                ); //todo give the starter and the final date in value
+                                              }).onError((error, stackTrace) {
+                                                print(error!.toString());
+                                                isLoading = false;
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                    'حصل خطأ ما, لم يتم التعديل, أعد المحاولة ..',
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontFamily: 'Cairo',
+                                                    ),
+                                                  )),
+                                                );
+                                              });
+                                              isLoading = false;
 
-                                        // if (sendNotifications) {
-                                        //   final users = await FirebaseFirestore
-                                        //       .instance
-                                        //       .collection('users')
-                                        //       .where('userType', isEqualTo: 0)
-                                        //       .get();
-                                        //   final usersDoc = users.docs;
-                                        //
-                                        //   final snaplistOfTokens =
-                                        //       await FirebaseFirestore
-                                        //           .instance
-                                        //           .collection('userToken')
-                                        //           .where(FieldPath.documentId,
-                                        //               arrayContains: usersDoc)
-                                        //           .get();
-                                        //   final TokensDoc = snaplistOfTokens.docs;
-                                        //   TokensDoc.forEach((element) {
-                                        //     tokenText.add(element['token']);
-                                        //   });
-                                        //   sendPushNotification(tokenText, "send from creating event", "I work");
-                                        // }
+                                              // if (sendNotifications) {
+                                              //   final users = await FirebaseFirestore
+                                              //       .instance
+                                              //       .collection('users')
+                                              //       .where('userType', isEqualTo: 0)
+                                              //       .get();
+                                              //   final usersDoc = users.docs;
+                                              //
+                                              //   final snaplistOfTokens =
+                                              //       await FirebaseFirestore
+                                              //           .instance
+                                              //           .collection('userToken')
+                                              //           .where(FieldPath.documentId,
+                                              //               arrayContains: usersDoc)
+                                              //           .get();
+                                              //   final TokensDoc = snaplistOfTokens.docs;
+                                              //   TokensDoc.forEach((element) {
+                                              //     tokenText.add(element['token']);
+                                              //   });
+                                              //   sendPushNotification(tokenText, "send from creating event", "I work");
+                                              // }
 
-                                      } on FirebaseAuthException catch (e) {}
-                                    }
-                                  },
-                                ),
+                                            } on FirebaseAuthException catch (e) {}
+                                          }
+                                        },
+                                      ),
                                 halfCTA(
                                     txt: 'نشر التغييرات',
                                     onTap: () async {
@@ -1059,7 +1092,7 @@ class _editEventState extends State<editEvent> {
                                                 .loggedUser!
                                                 .uid,
                                           }).then((value) async {
-                                            Navigator.pushNamed(
+                                            Navigator.pushReplacementNamed(
                                                 context, 'OHome');
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(

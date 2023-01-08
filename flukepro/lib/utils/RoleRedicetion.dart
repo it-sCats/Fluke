@@ -28,10 +28,10 @@ class _recdirectRoleState extends State<recdirectRole> {
 
     print('initiating redirict');
 
-    _checkRole(); //الدالة الي اتدير تشك على الرول الخاص بالمستخدم يتم إستعدعاءها خلال عملية انشاء الصفحة بحيث يتم إعادة التوجيه مباشرة
+    checkRole(); //الدالة الي اتدير تشك على الرول الخاص بالمستخدم يتم إستعدعاءها خلال عملية انشاء الصفحة بحيث يتم إعادة التوجيه مباشرة
   }
 
-  void _checkRole() async {
+  void checkRole() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       Provider.of<siggning>(context, listen: false).getUserInfoDoc(user.uid);
@@ -43,8 +43,7 @@ class _recdirectRoleState extends State<recdirectRole> {
 
       Map<String, dynamic>? userInfoDoc = userInfo.data();
       int userT = userInfoDoc!['userType'];
-      print('from role redirection');
-      print(userT);
+
       user == null
           ? NavigateNext('log')
           : userT == 0 || userT == 2
@@ -66,7 +65,7 @@ class _recdirectRoleState extends State<recdirectRole> {
     //دالة الانتقال
     Timer(Duration(milliseconds: 20), () {
       //بعد مدة 500 ملي ثانية يتم الانتقال للصفحة المطلوبة
-      Navigator.pushNamed(context, RouteName);
+      Navigator.pushReplacementNamed(context, RouteName);
     });
   }
 

@@ -17,7 +17,7 @@ class dashboardSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Padding(
-          padding: EdgeInsets.only(right: 35.0, top: 10),
+          padding: EdgeInsets.only(right: 35.0, top: 0),
           child: Text(
             txt,
             textAlign: TextAlign.right,
@@ -26,9 +26,10 @@ class dashboardSection extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 20,
+          height: 25,
         ),
-        Expanded(child: eventList(eventToDisplay, false, true, false)),
+        Container(
+            height: 250, child: eventList(eventToDisplay, false, true, false)),
       ],
     );
   }

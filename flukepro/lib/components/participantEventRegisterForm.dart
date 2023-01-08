@@ -31,7 +31,6 @@ class _ParticiEventPrevState extends State<ParticiEventPrev> {
     'راعي ذهبي',
     'راعي فضي ',
     'راعي بلاتينيوم',
-    'زائر',
     'عارض',
   ];
   TextEditingController _participantTypeCont = TextEditingController();
@@ -168,9 +167,9 @@ class _ParticiEventPrevState extends State<ParticiEventPrev> {
               CTA(
                   txt: "تقديم الطلب",
                   isFullwidth: true,
-                  onTap: () {
+                  onTap: () async {
                     if (_particiTypeFormKey.currentState!.validate()) {
-                      siggning().addJoinRequest(
+                      var ref = await siggning().addJoinRequest(
                           eventId: widget.eventId,
                           userId: user!.uid,
                           name: widget.eventTitle,
@@ -181,14 +180,17 @@ class _ParticiEventPrevState extends State<ParticiEventPrev> {
                           email: user!.email,
                           joinType: _participantTypeCont.text,
                           context: context);
-                      sendPushToOrgnaizerNotification(
-                          '',
-                          'شركة ${Provider.of<siggning>(context, listen: false).userInfoDocument!['name']}ترغب بالمشاركة في ${widget.eventTitle} الذي تنظمه كـ${_participantTypeCont.text}',
-                          Provider.of<siggning>(context, listen: false)
-                              .userInfoDocument!['field'],
-                          widget.eventId,
-                          widget
-                              .creatorId); //here we modifiy for request send request ID
+                      if (ref != 0) {
+                        sendPushToOrgnaizerNotification(
+                            ' شركة ${Provider.of<siggning>(context, listen: false).userInfoDocument!['name']} ترغب بالمشاركة في ${widget.eventTitle} الذي تنظمه كـ${_participantTypeCont.text}',
+                            'طلب مشاركة',
+                            Provider.of<siggning>(context, listen: false)
+                                .userInfoDocument!['field'],
+                            widget.eventId,
+                            widget.creatorId);
+                      }
+
+                      //here we modifiy for request send request ID
                       //todo fix the notification by grouping the devices
                     }
                     // showDialog(

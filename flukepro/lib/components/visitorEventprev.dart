@@ -5,6 +5,7 @@ import 'package:flukepro/components/eventDisplay.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import '../utils/SigningProvider.dart';
 import '../utils/fireStoreQueries.dart';
 import 'QrCodeWidget.dart';
 import 'creatingEventsForm.dart';
@@ -115,6 +116,8 @@ class QrwidgetProfile extends StatelessWidget {
                     .doc(id.trim().toString())
                     .get();
                 final eventInfo = event.data();
+                var creatorNametoSend =
+                    siggning().getORganizerInfo(eventInfo!['creatorID']);
                 print(eventInfo!.length);
                 waitingFunction(eventInfo['id']);
                 showModalBottomSheet(
@@ -138,7 +141,8 @@ class QrwidgetProfile extends StatelessWidget {
                       acceptsParticapants: eventInfo!['acceptsParticapants'],
                       eventVisibilty: eventInfo!['eventVisibility'],
                       visitorsNum: visitorsNum,
-                      creatorID: eventInfo['creatorID']),
+                      creatorID: eventInfo['creatorID'],
+                      creatorName: creatorNametoSend),
                 );
               },
             )

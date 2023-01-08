@@ -30,6 +30,23 @@ getMarker() async {
   return snapshot.docs.map((doc) => doc.data());
 }
 
+Future<Map<String, dynamic>?> getTempUser(userID) async {
+  DocumentSnapshot<Map<String, dynamic>> userInfo =
+      await _firestore.collection('users').doc(userID).get();
+
+  Map<String, dynamic>? userInfoDoc = userInfo.data();
+  return userInfoDoc;
+}
+
+getInterstsBasedEvents(userId, context) {//make sure that there is the same interest in the event and the user if it didnt work filter in the app
+  var info = getTempUser(userId);
+  var interests = Provider.of<siggning>(context).userInfoDocument;
+  return FirebaseFirestore.instance
+      .collection('events')
+      .where('field', arrayContains: interests)
+      .snapshots();
+}
+
 getOngoing() {
   // Timestamp now = Timestamp.now();
   //
@@ -100,6 +117,21 @@ getCreatorEvent(userID) {
 }
 
 getOrganizersEvent(context) async {
+  print(Provider.of<siggning>(context, listen: false).loggedUser!.uid.trim());
+  QuerySnapshot AllEvents = await FirebaseFirestore.instance
+      .collection('events')
+      .where('creatorID',
+          isEqualTo: Provider.of<siggning>(context, listen: false)
+              .loggedUser!
+              .uid
+              .trim())
+      .where('eventVisibility', isEqualTo: true)
+      .orderBy('creationDate', descending: true)
+      .get();
+  return AllEvents.docs;
+}
+
+getOrganizersVisisbleEvent(context) async {
   print(Provider.of<siggning>(context, listen: false).loggedUser!.uid.trim());
   QuerySnapshot AllEvents = await FirebaseFirestore.instance
       .collection('events')
