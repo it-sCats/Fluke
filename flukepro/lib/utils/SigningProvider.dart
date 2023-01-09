@@ -26,26 +26,48 @@ class siggning extends ChangeNotifier {
   int? userType;
   setUserType(userType) => this.userType = userType;
   getUserType() => this.userType;
-  getLoggedInuser() => loggedUser;
+  getUserName(userID) async {
+    var info =
+        await FirebaseFirestore.instance.collection('users').doc(userID).get();
+    return info.data()!['name'];
+  }
+
+  getLoggedInuser() => auth.currentUser;
   setLoggedInuser(user) => this.loggedUser = user;
   addJoinRequest(
-      {eventId, userId, name, field, phone, email, joinType, context}) async {
-    final prevRequest = eventRef
+      {eventId,
+      userId,
+      userPic,
+      name,
+      field,
+      phone,
+      email,
+      joinType,
+      eventName,
+      context}) async {
+    final prevRequest = await eventRef
         .doc(eventId)
         .collection('joinRequest')
         .where('userId', isEqualTo: userId)
-        .where('requestStatus', isEqualTo: 'pending');
-    if (prevRequest == null) {
+        .where('requestStatus', isEqualTo: 'pending')
+        .get();
+    print(prevRequest.docs);
+    if (prevRequest.docs.isEmpty) {
+      //todo add participants name in the reques
       DocumentReference<Map<String, dynamic>> joinReqId = await eventRef
           .doc(eventId.toString().trim())
           .collection('joinRequest')
           .add({
         'userId': userId,
         'eventId': eventId,
+        'participantsName': name,
+        'image': userPic,
+        'eventName': eventName,
         'field': field,
         'email': email,
         'joinType': joinType,
-        'requestStatus': 'pending'
+        'requestStatus': 'pending',
+        'creationDate': DateTime.now()
       }).whenComplete(() => showDialog(
               //save to drafts dialog
               context: context,
@@ -222,6 +244,7 @@ class siggning extends ChangeNotifier {
   }
 
   getAllOrganizersVisibleEvents(context) {
+    Provider.of<siggning>(context).getLoggedInuser();
     Stream<QuerySnapshot> AllEvents = FirebaseFirestore.instance
         .collection('events')
         .where('creatorID',

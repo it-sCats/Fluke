@@ -171,15 +171,20 @@ class _ParticiEventPrevState extends State<ParticiEventPrev> {
                     if (_particiTypeFormKey.currentState!.validate()) {
                       var ref = await siggning().addJoinRequest(
                           eventId: widget.eventId,
+                          eventName: widget.eventTitle,
                           userId: user!.uid,
-                          name: widget.eventTitle,
+                          name: Provider.of<siggning>(context, listen: false)
+                              .userInfoDocument!['name'],
                           field: Provider.of<siggning>(context, listen: false)
-                              .userInfoDocument!['field'],
+                              .userInfoDocument!['interests'],
+                          userPic: Provider.of<siggning>(context, listen: false)
+                              .userInfoDocument!['profilePic'],
                           phone: Provider.of<siggning>(context, listen: false)
                               .userInfoDocument!['phone'],
                           email: user!.email,
                           joinType: _participantTypeCont.text,
                           context: context);
+
                       if (ref != 0) {
                         sendPushToOrgnaizerNotification(
                             ' شركة ${Provider.of<siggning>(context, listen: false).userInfoDocument!['name']} ترغب بالمشاركة في ${widget.eventTitle} الذي تنظمه كـ${_participantTypeCont.text}',

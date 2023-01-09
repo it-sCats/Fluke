@@ -113,8 +113,9 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 5,
             ),
             VisitorVerticalEventList(
-                getInterstsBasedEvents(
-                    Provider.of<siggning>(context).loggedUser!.uid, context),
+                siggning().getAllEvents(),
+                // getInterstsBasedEvents(
+                //     Provider.of<siggning>(context).loggedUser!.uid, context),
                 true,
                 false,
                 true),

@@ -26,6 +26,7 @@ class eventList extends StatefulWidget {
 
 class _eventListState extends State<eventList> {
   List _events = [];
+
   waitingFunction(eventId) async {
     visitorsNum = await gettingNumberOfEventVisitors(eventId);
   }
@@ -59,6 +60,13 @@ class _eventListState extends State<eventList> {
                   // print(DateTime.fromMicrosecondsSinceEpoch(
                   //     end.microsecondsSinceEpoch)); //testing
 
+                  // print((DateTime.fromMicrosecondsSinceEpoch(
+                  //             strat.microsecondsSinceEpoch)
+                  //         .isBefore(DateTime.now()) ||
+                  //     DateTime.fromMicrosecondsSinceEpoch(
+                  //             strat.microsecondsSinceEpoch)
+                  //         .isAtSameMomentAs(DateTime.now())));
+
                   if (widget.isOngoing
                       ? ((DateTime.fromMicrosecondsSinceEpoch(
                                       strat.microsecondsSinceEpoch)
@@ -74,6 +82,7 @@ class _eventListState extends State<eventList> {
                                   .isAtSameMomentAs(DateTime.now())))
                       : DateTime.fromMicrosecondsSinceEpoch(strat.microsecondsSinceEpoch)
                           .isAfter(DateTime.now())) {
+                    print(eventa['title']);
                     eventWidget.add(Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: 20.0,

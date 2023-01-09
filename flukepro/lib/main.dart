@@ -188,7 +188,7 @@ class _MyAppState extends State<MyApp> {
           '/Odash': ((context) => Odashboard()),
           '/Adash': ((context) => Adashboard()),
           '/Oevent': ((context) => Oevents()),
-          '/Onotification': ((context) => notifaction()),
+          '/Onotification': ((context) => OnotifiScreen()),
           '/Oprofile': ((context) => Oprofile()),
           'editEvent': ((context) => editEvent()),
           'timeTable': ((context) => timeTable()),

@@ -58,7 +58,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
     //هنا نتحكمو بالويدجيتس الي حينعرضو
     OdashboardImproved(), //لوحة التحكم
     Oprofile(), //الاحداث التي نظمها المنظم
-    notifiScreen(), //الاشعارات
+    OnotifiScreen(), //الاشعارات
     //الملف الشخصي متاعه
   ];
   //متغير نغيرو بيه الويدجيتس
