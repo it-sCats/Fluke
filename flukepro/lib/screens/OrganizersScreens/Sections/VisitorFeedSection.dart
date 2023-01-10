@@ -16,7 +16,7 @@ class VisitorFeedSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Padding(
-          padding: EdgeInsets.only(right: 10.0, top: 10),
+          padding: EdgeInsets.only(right: 50.0, top: 0),
           child: Text(
             txt,
             textAlign: TextAlign.right,
@@ -24,11 +24,9 @@ class VisitorFeedSection extends StatelessWidget {
                 fontWeight: FontWeight.normal, fontSize: 20),
           ),
         ),
-        SizedBox(
-          height: 20,
-        ),
+
         Expanded(
-            child: eventList(eventToDisplay, true, false,
+            child: VisitorVerticalEventList(eventToDisplay, true, false,
                 true)), //حطيتها في اكسباندد باش مااتديرش ايرور وتاخذ قداش تحتاج مساحة
       ],
     );

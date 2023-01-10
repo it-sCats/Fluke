@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flukepro/screens/regestrationScreens/intersetsScreen.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../utils/SigningProvider.dart';
 import '../utils/authentication.dart';
 import '../utils/fireStoreQueries.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -20,21 +22,24 @@ class GoogleAndFacebookButtons extends StatefulWidget {
 
 class _GoogleAndFacebookButtonsState extends State<GoogleAndFacebookButtons> {
   final _firestore = FirebaseFirestore.instance;
+
   String? _userType;
   DocumentReference? docID;
   SharedPreferences? userTypeShared;
   @override
   Widget build(BuildContext context) {
+    siggning provider = Provider.of<siggning>(context, listen: false);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         InkWell(
           onTap: () async {
             final userID = await Authentication().signInWithFacebook();
-
             if (userID != null) {
               //if Sign in is successful check the user type if he is a visitor or participant
-
+              provider.setLoggedInuser(FirebaseAuth.instance.currentUser);
+              provider.getUserInfoDoc(userID);
+              provider.getCurrentUsertype(provider.loggedUser!.uid);
               //if particepant
               //2 is for participants
               if (await isUniqueID(userID)) {
@@ -86,10 +91,13 @@ class _GoogleAndFacebookButtonsState extends State<GoogleAndFacebookButtons> {
             onTap: () async {
               User? user =
                   await Authentication.signInWithGoogle(context: context);
+
               //check if user ID already exists in the database
               if (user!.uid != null) {
                 //if Sign in is successful check the user type if he is a visitor or participant
-
+                provider.setLoggedInuser(user);
+                provider.getUserInfoDoc(user!.uid);
+                provider.getCurrentUsertype(user!.uid);
                 //if particepant
                 //2 is for participants
                 if (await isUniqueID(user!.uid)) {

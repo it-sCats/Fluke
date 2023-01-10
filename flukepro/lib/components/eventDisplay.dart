@@ -10,11 +10,13 @@ import 'package:flukepro/components/session.dart';
 import 'package:flukepro/components/sessionDataSource.dart';
 import 'package:flukepro/components/visitorEventprev.dart';
 import 'package:flukepro/screens/OrganizersScreens/OHome.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:url_launcher/url_launcher.dart';
+import '../screens/OrganizersScreens/Oprofile.dart';
 import '../screens/OrganizersScreens/Sections/timeLine.dart';
 import '../screens/mainScreens/userInfoScreen.dart';
 import '../utils/SigningProvider.dart';
@@ -51,6 +53,7 @@ class eventDisplay extends StatefulWidget {
   bool justDisplay;
   int? visitorsNum;
   String creatorID;
+  String creatorName;
 
   eventDisplay(
       {required this.wholePage,
@@ -72,7 +75,8 @@ class eventDisplay extends StatefulWidget {
       required this.eventVisibilty,
       this.room,
       this.visitorsNum,
-      required this.creatorID});
+      required this.creatorID,
+      required this.creatorName});
   getORganizerInfo() async {
     DocumentSnapshot<Map<String, dynamic>> creator =
         await _firestore.collection('users').doc(creatorID.trim()).get();
@@ -183,10 +187,13 @@ class _eventDisplayState extends State<eventDisplay>
                       width: double.infinity,
                       height: 400,
                       child: widget.image == null
-                          ? Image.asset('images/emptyIamge.jpg')
+                          ? Image.asset(
+                              'images/emptyIamge.jpg',
+                              fit: BoxFit.cover,
+                            )
                           : Image.network(
                               widget.image!,
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                             ),
                     ),
                     Container(
@@ -551,20 +558,7 @@ class _eventDisplayState extends State<eventDisplay>
                                 SizedBox(
                                   height: 5,
                                 ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.account_circle,
-                                      color: conORange.withOpacity(.8),
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(creatorName != null
-                                        ? creatorName.toString()
-                                        : '')
-                                  ],
-                                ),
+
                                 // Row(
                                 //   children: [
                                 //     Icon(
@@ -602,7 +596,7 @@ class _eventDisplayState extends State<eventDisplay>
                                   flex: 3,
                                   child: Text(widget.description,
                                       style: conHeadingsStyle.copyWith(
-                                          fontSize: 16,
+                                          fontSize: 17,
                                           color: conBlack.withOpacity(.6),
                                           fontWeight: FontWeight.w400)),
                                 ),
@@ -658,6 +652,90 @@ class _eventDisplayState extends State<eventDisplay>
                                         ),
                                       )
                                     : Container(),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(bottom: 10),
+                                  // margin: const EdgeInsets.only(left: 5, right: 15),
+                                  child: new Divider(
+                                    color: conBlack.withOpacity(.6),
+                                    height: 4,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            'منظم الحدث:',
+                                            style: conHeadingsStyle.copyWith(
+                                                fontSize: 18,
+                                                color: conBlack.withOpacity(.8),
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: InkWell(
+                                            onTap: () {
+                                              if (widget.creatorID !=
+                                                  Provider.of<siggning>(context)
+                                                      .loggedUser!
+                                                      .uid) {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            Oprofile(
+                                                              OrganizerToDisplayID:
+                                                                  widget
+                                                                      .creatorID
+                                                                      .trim(),
+                                                            )));
+                                              }
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      EdgeInsets.only(left: 10),
+                                                  child: CircleAvatar(
+                                                    //Avatar
+                                                    backgroundColor: conORange
+                                                        .withOpacity(0),
+                                                    radius: 50,
+                                                    backgroundImage: NetworkImage(
+                                                        'https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=45&dpr=2&s=none'),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Text(
+                                                  widget.creatorName,
+                                                  style:
+                                                      conHeadingsStyle.copyWith(
+                                                          fontSize: 19,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          color: conBlack),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
 
                                 widget.justDisplay ||
                                         widget.creatorID ==
@@ -671,52 +749,67 @@ class _eventDisplayState extends State<eventDisplay>
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            // userType == 2 &&
-                                            //         widget.acceptsParticapants
-                                            //     ?
-                                            InkWell(
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 10),
-                                                width: 200,
-                                                height: 60,
-                                                margin: EdgeInsets.symmetric(
-                                                    vertical:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.02),
-                                                decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: conBlue
-                                                            .withOpacity(.5),
-                                                        width: 2),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                child: Text(
-                                                  ' التسجيل كمشارك',
-                                                  textAlign: TextAlign.center,
-                                                  style:
-                                                      conTxtFeildHint.copyWith(
-                                                          color: conBlue
-                                                              .withOpacity(.7),
-                                                          fontSize: 18),
-                                                ),
-                                              ),
-                                              onTap: () async {
-                                                showModalBottomSheet(
-                                                  isScrollControlled: true,
-                                                  elevation: 100,
-                                                  context: context,
-                                                  builder: (context) =>
-                                                      ParticiEventPrev(
-                                                          widget.id,
-                                                          widget.title,
-                                                          widget.creatorID),
-                                                );
-                                              },
-                                            ),
+                                            Provider.of<siggning>(context)
+                                                            .getUserType() ==
+                                                        2 &&
+                                                    widget.acceptsParticapants
+                                                ?
+
+                                                // userType == 2 &&
+                                                //         widget.acceptsParticapants
+                                                //     ?
+
+                                                InkWell(
+                                                    child: Container(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 10),
+                                                      width: 200,
+                                                      height: 60,
+                                                      margin: EdgeInsets.symmetric(
+                                                          vertical: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              0.02),
+                                                      decoration: BoxDecoration(
+                                                          border: Border.all(
+                                                              color: conBlue
+                                                                  .withOpacity(
+                                                                      .5),
+                                                              width: 2),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10)),
+                                                      child: Text(
+                                                        ' التسجيل كمشارك',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: conTxtFeildHint
+                                                            .copyWith(
+                                                                color: conBlue
+                                                                    .withOpacity(
+                                                                        .7),
+                                                                fontSize: 18),
+                                                      ),
+                                                    ),
+                                                    onTap: () async {
+                                                      showModalBottomSheet(
+                                                        isScrollControlled:
+                                                            true,
+                                                        elevation: 100,
+                                                        context: context,
+                                                        builder: (context) =>
+                                                            ParticiEventPrev(
+                                                                widget.id,
+                                                                widget.title,
+                                                                widget
+                                                                    .creatorID),
+                                                      );
+                                                    },
+                                                  )
+                                                : Container(),
                                             SizedBox(
                                               width: 5,
                                             ),

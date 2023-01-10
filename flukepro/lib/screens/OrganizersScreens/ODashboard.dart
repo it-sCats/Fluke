@@ -11,12 +11,12 @@ class Odashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(right: 25.0),
+      padding: EdgeInsets.only(right: 10.0),
       child: GridView.count(
         //حيعطينا التقسيمة للشاشة
-        physics: NeverScrollableScrollPhysics(),
-        mainAxisSpacing: 20,
-        crossAxisSpacing: 50,
+        physics: AlwaysScrollableScrollPhysics(),
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
         crossAxisCount: defaultTargetPlatform == TargetPlatform.android ||
                 defaultTargetPlatform ==
                     TargetPlatform

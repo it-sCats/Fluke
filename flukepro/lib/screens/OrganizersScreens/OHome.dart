@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flukepro/components/cons.dart';
 import 'package:flukepro/components/customWidgets.dart';
+import 'package:flukepro/screens/OrganizersScreens/OdashoardImproved.dart';
 import 'package:flukepro/screens/mainScreens/notificationScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,6 +27,15 @@ final _auth = FirebaseAuth.instance;
 TextEditingController _eventTypeCont = TextEditingController();
 final _eventChooseFormKey = GlobalKey<FormState>();
 Session? session;
+int? pageIndex = 0;
+bool isCollapsed = defaultTargetPlatform == TargetPlatform.windows ||
+        defaultTargetPlatform ==
+            TargetPlatform
+                .macOS //هنا الشرط حيتحكم بإن النافيقيشن سايد بار يقعد مفتوح في حال كنا فاتحينه علة ويندوز ولا ماك
+    ? false
+    : true;
+AnimationController? controller;
+
 //
 //كائن من الفاير بيز ايث2
 
@@ -46,22 +56,15 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
   static List<Widget> _pages = [
     //بدل ما يتم توجيه المستخدم لصفحات مختلفة, بالطريقة هذه حيكون عندي ويدجيتس يتم التغيير بيناتهم عن طريق النافيقيشن سايد
     //هنا نتحكمو بالويدجيتس الي حينعرضو
-    Odashboard(), //لوحة التحكم
+    OdashboardImproved(), //لوحة التحكم
     Oprofile(), //الاحداث التي نظمها المنظم
     notifiScreen(), //الاشعارات
     //الملف الشخصي متاعه
   ];
-  int? pageIndex = 0; //متغير نغيرو بيه الويدجيتس
+  //متغير نغيرو بيه الويدجيتس
   //controls the visibility of creating agenda and crating events button
-  bool isCollapsed = defaultTargetPlatform == TargetPlatform.windows ||
-          defaultTargetPlatform ==
-              TargetPlatform
-                  .macOS //هنا الشرط حيتحكم بإن النافيقيشن سايد بار يقعد مفتوح في حال كنا فاتحينه علة ويندوز ولا ماك
-      ? false
-      : true;
   double? screenWidth, ScreenHeigth;
   final Duration duration = const Duration(milliseconds: 300);
-  AnimationController? _controller;
   Animation<double>? _scaleAnimation;
   // void showCreation() {
   //   setState(() {
@@ -78,16 +81,16 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
         Provider.of<siggning>(context, listen: false).loggedUser!.uid);
     // Provider.of<siggning>(context, listen: false).getUserInfoDoc();
 
-    _controller = AnimationController(vsync: this, duration: duration);
+    controller = AnimationController(vsync: this, duration: duration);
     _scaleAnimation = Tween<double>(
       begin: 1,
       end: 0.8,
-    ).animate(_controller!);
+    ).animate(controller!);
   }
 
   @override
   void dispose() {
-    _controller!.dispose();
+    controller!.dispose();
     super.dispose();
   }
 
@@ -355,7 +358,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                               TargetPlatform
                                   .iOS && //شرط يتحكم بإغلاق السايد مينو عند الضغط على الخيار هذا منها
                           !isCollapsed
-                  ? {_controller!.reverse(), isCollapsed = !isCollapsed}
+                  ? {controller!.reverse(), isCollapsed = !isCollapsed}
                   : null;
             });
           }, '/Odash', context),
@@ -365,7 +368,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
               defaultTargetPlatform == TargetPlatform.android ||
                       defaultTargetPlatform == TargetPlatform.iOS &&
                           !isCollapsed
-                  ? {_controller!.reverse(), isCollapsed = !isCollapsed}
+                  ? {controller!.reverse(), isCollapsed = !isCollapsed}
                   : null;
             });
           }, '/Oprofile', context),
@@ -375,7 +378,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
               defaultTargetPlatform == TargetPlatform.android ||
                       defaultTargetPlatform == TargetPlatform.iOS &&
                           !isCollapsed
-                  ? {_controller!.reverse(), isCollapsed = !isCollapsed}
+                  ? {controller!.reverse(), isCollapsed = !isCollapsed}
                   : null;
             });
           }, '/Onotification', context),
@@ -494,8 +497,8 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                               onPressed: () {
                                 setState(() {
                                   isCollapsed
-                                      ? _controller!.forward()
-                                      : _controller!.reverse();
+                                      ? controller!.forward()
+                                      : controller!.reverse();
                                   isCollapsed = !isCollapsed;
                                 });
                               },

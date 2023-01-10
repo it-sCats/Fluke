@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flukepro/components/cons.dart';
@@ -34,6 +37,7 @@ class _loginScreenState extends State<loginScreen> {
   @override
   void initState() {
     // TODO: implement initState
+
     super.initState();
   }
 
@@ -42,6 +46,7 @@ class _loginScreenState extends State<loginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    siggning provider = Provider.of<siggning>(context, listen: false);
     return Scaffold(
       resizeToAvoidBottomInset:
           false, //prevents keyboard from creating the error of overflowing
@@ -267,12 +272,10 @@ class _loginScreenState extends State<loginScreen> {
                                   LogInError = !LogInError;
                                   isLoading = false;
                                 }), (success) async {
-                          siggning provider =
-                              Provider.of<siggning>(context, listen: false);
                           provider.setLoggedInuser(success);
                           provider.getUserInfoDoc(success.uid);
                           provider.getCurrentUsertype(provider.loggedUser!.uid);
-
+                          print('logged in ');
                           Navigator.pushNamed(context,
                               '/redirect'); //here we redirect the user based on his role
 
