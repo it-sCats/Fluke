@@ -243,6 +243,7 @@ class _VisitorVerticalEventListState extends State<VisitorVerticalEventList> {
                   //     strat.microsecondsSinceEpoch));
                   // print(DateTime.fromMicrosecondsSinceEpoch(
                   //     end.microsecondsSinceEpoch)); //testing
+
                   if (widget.isOngoing
                       ? ((DateTime.fromMicrosecondsSinceEpoch(
                                       strat.microsecondsSinceEpoch)
@@ -256,8 +257,11 @@ class _VisitorVerticalEventListState extends State<VisitorVerticalEventList> {
                               DateTime.fromMicrosecondsSinceEpoch(
                                       end.microsecondsSinceEpoch)
                                   .isAtSameMomentAs(DateTime.now())))
-                      : DateTime.fromMicrosecondsSinceEpoch(strat.microsecondsSinceEpoch)
-                          .isAfter(DateTime.now())) {
+                      : widget.isUpcoming
+                          ? DateTime.fromMicrosecondsSinceEpoch(
+                                  strat.microsecondsSinceEpoch)
+                              .isAfter(DateTime.now())
+                          : true) {
                     eventWidget.add(Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
@@ -306,7 +310,8 @@ class _VisitorVerticalEventListState extends State<VisitorVerticalEventList> {
                                     eventVisibilty: eventa['eventVisibility'],
                                     visitorsNum: visitorsNum,
                                     creatorID: eventa['creatorID'],
-                                    creatorName: eventa['creatorName'],
+                                    creatorName:
+                                        eventa['creatorName'], //يوم المرأة
                                   ));
                         },
                       ),

@@ -58,6 +58,7 @@ class siggning extends ChangeNotifier {
           .doc(eventId.toString().trim())
           .collection('joinRequest')
           .add({
+        'reqID': FieldPath.documentId,
         'userId': userId,
         'eventId': eventId,
         'participantsName': name,
@@ -229,6 +230,18 @@ class siggning extends ChangeNotifier {
         .orderBy('creationDate', descending: true)
         .where('eventVisibility', isEqualTo: true)
         .snapshots();
+    notifyListeners();
+    return AllEvents;
+  }
+
+  fieldBased(List intersts) {
+    //fetches Events based on the intersests of the user
+    Stream<QuerySnapshot> AllEvents = _firestore
+        .collection('events')
+        .orderBy('creationDate', descending: true)
+        .where('field', whereIn: intersts)
+        .snapshots();
+
     notifyListeners();
     return AllEvents;
   }

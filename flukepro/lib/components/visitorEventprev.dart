@@ -35,48 +35,48 @@ class visitorEventPrev extends StatelessWidget {
           Radius.circular(20),
         ),
       ),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: InkWell(
+      child: InkWell(
+        onTap: () {
+          showModalBottomSheet(
+            isScrollControlled: true,
+            elevation: 100,
+            context: context,
+            builder: (context) => QrwidgetProfile(
+              id,
+              name,
+              phone,
+              title,
+            ),
+          );
+        },
+        child: Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
                     child: Qr,
-                    onTap: () {
-                      showModalBottomSheet(
-                        isScrollControlled: true,
-                        elevation: 100,
-                        context: context,
-                        builder: (context) => QrwidgetProfile(
-                          id,
-                          name,
-                          phone,
-                          title,
-                        ),
-                      );
-                    },
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Column(
-              children: [
-                Text(
-                  title,
-                  style: conHeadingsStyle.copyWith(fontSize: 15),
-                )
-              ],
+            Expanded(
+              flex: 2,
+              child: Column(
+                children: [
+                  Text(
+                    title,
+                    style: conHeadingsStyle.copyWith(fontSize: 15),
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -117,7 +117,7 @@ class QrwidgetProfile extends StatelessWidget {
                     .get();
                 final eventInfo = event.data();
                 var creatorNametoSend =
-                    siggning().getORganizerInfo(eventInfo!['creatorID']);
+                    await siggning().getORganizerInfo(eventInfo!['creatorID']);
                 print(eventInfo!.length);
                 waitingFunction(eventInfo['id']);
                 showModalBottomSheet(

@@ -328,7 +328,7 @@ class _loginScreenState extends State<loginScreen> {
                               child: Text(
                                 'سجل كـجهة منظمة أو\n زائر أو مشارك ',
                                 textAlign: TextAlign.center,
-                                style: conTxtLink.copyWith(fontSize: 14),
+                                style: conTxtLink.copyWith(fontSize: 16),
                               )),
                           InkWell(
                               child: Text(
@@ -337,7 +337,7 @@ class _loginScreenState extends State<loginScreen> {
                             style: TextStyle(
                               color: conBlack,
                               fontFamily: 'Cairo',
-                              fontSize: 14,
+                              fontSize: 16,
                             ),
                           )),
                         ],

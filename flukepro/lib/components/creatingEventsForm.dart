@@ -618,7 +618,7 @@ class _creatingEventState extends State<creatingEvent> {
                         decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 20),
-                            hintText: 'رابط مكان الحدث على قوقل مابل',
+                            hintText: 'رابط مكان الحدث على قوقل ماب',
                             hintStyle: conTxtFeildHint,
                             filled: true,
                             fillColor: Color(0xffF1F1F1),
@@ -854,6 +854,10 @@ class _creatingEventState extends State<creatingEvent> {
                                             acceptsParticipants,
                                         'sendNotification': sendNotifications,
                                         'eventVisibility': true,
+                                        'creatorName': Provider.of<siggning>(
+                                                context,
+                                                listen: false)
+                                            .userInfoDocument!['name'],
                                         'creatorID': Provider.of<siggning>(
                                                 context,
                                                 listen: false)

@@ -139,7 +139,11 @@ class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
                             //الايفينتس متاع المنظم
 
                             //باش نبنو الداتا الي بنجيبوها من قاعدة البيانات نحتاجو نحطوها في الفيوتشر بيلدر
-                            future: getOrganizersEvent(context),
+                            future: getOrganizersEvent(
+                                context,
+                                Provider.of<siggning>(context, listen: false)
+                                    .loggedUser!
+                                    .uid),
                             builder: (context, AsyncSnapshot snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -344,7 +348,8 @@ class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
                               //الايفينتس متاع المنظم
 
                               //باش نبنو الداتا الي بنجيبوها من قاعدة البيانات نحتاجو نحطوها في الفيوتشر بيلدر
-                              future: getOrganizersEvent(context),
+                              future: getOrganizersEvent(
+                                  context, widget.OrganizerToDisplayID),
                               builder: (context, AsyncSnapshot snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {

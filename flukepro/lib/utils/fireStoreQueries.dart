@@ -38,7 +38,8 @@ Future<Map<String, dynamic>?> getTempUser(userID) async {
   return userInfoDoc;
 }
 
-getInterstsBasedEvents(userId, context) {//make sure that there is the same interest in the event and the user if it didnt work filter in the app
+getInterstsBasedEvents(userId, context) {
+  //make sure that there is the same interest in the event and the user if it didnt work filter in the app
   var info = getTempUser(userId);
   var interests = Provider.of<siggning>(context).userInfoDocument;
   return FirebaseFirestore.instance
@@ -116,15 +117,11 @@ getCreatorEvent(userID) {
   return AllEvents;
 }
 
-getOrganizersEvent(context) async {
+getOrganizersEvent(context, OrganizerId) async {
   print(Provider.of<siggning>(context, listen: false).loggedUser!.uid.trim());
   QuerySnapshot AllEvents = await FirebaseFirestore.instance
       .collection('events')
-      .where('creatorID',
-          isEqualTo: Provider.of<siggning>(context, listen: false)
-              .loggedUser!
-              .uid
-              .trim())
+      .where('creatorID', isEqualTo: OrganizerId.trim())
       .where('eventVisibility', isEqualTo: true)
       .orderBy('creationDate', descending: true)
       .get();

@@ -113,12 +113,14 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 5,
             ),
             VisitorVerticalEventList(
-                siggning().getAllEvents(),
+                siggning().fieldBased(
+                    Provider.of<siggning>(context, listen: false)
+                        .userInfoDocument!['interests']),
                 // getInterstsBasedEvents(
                 //     Provider.of<siggning>(context).loggedUser!.uid, context),
                 true,
                 false,
-                true),
+                false),
           ],
         ),
       ),
