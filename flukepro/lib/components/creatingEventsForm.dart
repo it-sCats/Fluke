@@ -863,6 +863,7 @@ class _creatingEventState extends State<creatingEvent> {
                                                 listen: false)
                                             .loggedUser!
                                             .uid,
+                                        'isLiked': {},
                                         'creationDate': Timestamp.now(),
                                         'isPublic': false
                                       }).then((value) async {

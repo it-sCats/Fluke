@@ -15,6 +15,11 @@ class siggning extends ChangeNotifier {
   String? email;
   String? userName;
   String? password;
+  int? userTickets;
+  int? userLiked;
+  setUserTicketsNum(ticketNum) => this.userTickets = ticketNum;
+  setUserLikedsNum(likeNum) => this.userLiked = likeNum;
+  getUSerTicketsNum() => this.userTickets;
 
   Map<String, dynamic>? userInfoDocument;
   setUserInfoDoc(userInfoData) => this.userInfoDocument = userInfoData;
@@ -30,6 +35,31 @@ class siggning extends ChangeNotifier {
     var info =
         await FirebaseFirestore.instance.collection('users').doc(userID).get();
     return info.data()!['name'];
+  }
+
+  getUserTicketsEvents(String userId) async {
+    //get num of tickets
+    var AllEvents = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('tickets')
+        .get();
+    userTickets = AllEvents.docs.length;
+    setUserTicketsNum(AllEvents.docs.length);
+    notifyListeners();
+    return AllEvents.docs.length;
+  }
+
+  getUserLikedEvents(String userId) async {
+    //gets the num of events that they liked
+    var AllEvents = await FirebaseFirestore.instance
+        .collection('events')
+        .where('likes.${userId}', isEqualTo: true)
+        .get();
+    userLiked = AllEvents.docs.length;
+    setUserTicketsNum(AllEvents.docs.length);
+    notifyListeners();
+    return AllEvents.docs.length;
   }
 
   getLoggedInuser() => auth.currentUser;

@@ -55,6 +55,12 @@ class _eventListState extends State<eventList> {
                 for (var eventa in events) {
                   Timestamp strat = eventa['starterDate'];
                   Timestamp end = eventa['endDate'];
+                  bool isLiked = eventa['likes'][
+                              Provider.of<siggning>(context).loggedUser!.uid] !=
+                          null
+                      ? eventa['likes']
+                          [Provider.of<siggning>(context).loggedUser!.uid]
+                      : false;
                   // print(DateTime.fromMicrosecondsSinceEpoch(
                   //     strat.microsecondsSinceEpoch));
                   // print(DateTime.fromMicrosecondsSinceEpoch(
@@ -66,6 +72,7 @@ class _eventListState extends State<eventList> {
                   //     DateTime.fromMicrosecondsSinceEpoch(
                   //             strat.microsecondsSinceEpoch)
                   //         .isAtSameMomentAs(DateTime.now())));
+                  Map likes = eventa['likes'];
 
                   if (widget.isOngoing
                       ? ((DateTime.fromMicrosecondsSinceEpoch(
@@ -87,55 +94,116 @@ class _eventListState extends State<eventList> {
                       padding: EdgeInsets.symmetric(
                           horizontal: 20.0,
                           vertical: widget.isVisitorVertical ? 0 : 0),
-                      child: GestureDetector(
-                        child: eventHorizCard(
-                          //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
-                          title: eventa['title'],
-                          image: eventa['image'],
-                          description: eventa['description'],
-                          field: eventa['field'],
-                          location: eventa['location'],
-                          city: eventa['eventCity'],
-                          starterDate: eventa['starterDate'],
-                          endDate: eventa['endDate'],
-                          starterTime: eventa['starterTime'].toString(),
-                          endTime: eventa['endTime'].toString(),
-                          eventType: eventa['eventType'],
-                          creationDate: eventa['creationDate'],
-                          acceptsParticapants: eventa['acceptsParticapants'],
-                          eventVisibilty: eventa['eventVisibility'],
-                          visitorsNum: visitorsNum,
+                      child: Stack(children: [
+                        GestureDetector(
+                          child: eventHorizCard(
+                            //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
+                            title: eventa['title'],
+                            image: eventa['image'],
+                            description: eventa['description'],
+                            field: eventa['field'],
+                            id: eventa['id'],
+                            isLiked: isLiked,
+                            location: eventa['location'],
+                            city: eventa['eventCity'],
+                            starterDate: eventa['starterDate'],
+                            endDate: eventa['endDate'],
+                            starterTime: eventa['starterTime'].toString(),
+                            endTime: eventa['endTime'].toString(),
+                            eventType: eventa['eventType'],
+                            creationDate: eventa['creationDate'],
+                            acceptsParticapants: eventa['acceptsParticapants'],
+                            eventVisibilty: eventa['eventVisibility'],
+                            visitorsNum: visitorsNum,
+                          ),
+                          onTap: () {
+                            showModalBottomSheet(
+                                isScrollControlled: true,
+                                elevation: 100,
+                                context: context,
+                                builder: (context) => eventDisplay(
+                                      wholePage: false,
+                                      justDisplay: false,
+                                      id: eventa['id'],
+                                      title: eventa['title'],
+                                      description: eventa['description'],
+                                      starterDate: eventa['starterDate'],
+                                      location: eventa['location'],
+                                      image: eventa['image'],
+                                      endDate: eventa['endDate'],
+                                      starterTime: eventa['starterTime'],
+                                      eventType: eventa['eventType'],
+                                      endTime: eventa['endTime'],
+                                      field: eventa['field'],
+                                      creationDate: eventa['creationDate'],
+                                      city: eventa['eventCity'],
+                                      acceptsParticapants:
+                                          eventa['acceptsParticapants'],
+                                      eventVisibilty: eventa['eventVisibility'],
+                                      visitorsNum: visitorsNum,
+                                      creatorID: eventa['creatorID'],
+                                      creatorName: eventa['creatorName'],
+                                    ));
+                          },
                         ),
-                        onTap: () {
-                          showModalBottomSheet(
-                              isScrollControlled: true,
-                              elevation: 100,
-                              context: context,
-                              builder: (context) => eventDisplay(
-                                    wholePage: false,
-                                    justDisplay: false,
-                                    id: eventa['id'],
-                                    title: eventa['title'],
-                                    description: eventa['description'],
-                                    starterDate: eventa['starterDate'],
-                                    location: eventa['location'],
-                                    image: eventa['image'],
-                                    endDate: eventa['endDate'],
-                                    starterTime: eventa['starterTime'],
-                                    eventType: eventa['eventType'],
-                                    endTime: eventa['endTime'],
-                                    field: eventa['field'],
-                                    creationDate: eventa['creationDate'],
-                                    city: eventa['eventCity'],
-                                    acceptsParticapants:
-                                        eventa['acceptsParticapants'],
-                                    eventVisibilty: eventa['eventVisibility'],
-                                    visitorsNum: visitorsNum,
-                                    creatorID: eventa['creatorID'],
-                                    creatorName: eventa['creatorName'],
-                                  ));
-                        },
-                      ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: GestureDetector(
+                            onTap: () {
+                              bool _isLiked = eventa['likes'][
+                                      Provider.of<siggning>(context,
+                                              listen: false)
+                                          .loggedUser!
+                                          .uid] ==
+                                  true;
+                              if (_isLiked) {
+                                FirebaseFirestore.instance
+                                    .collection('events')
+                                    .doc(eventa['id'])
+                                    .update({
+                                  'likes': {
+                                    Provider.of<siggning>(context,
+                                            listen: false)
+                                        .loggedUser!
+                                        .uid: false
+                                  }
+                                });
+                                setState(() {
+                                  isLiked = false;
+                                });
+                              } else if (!_isLiked) {
+                                FirebaseFirestore.instance
+                                    .collection('events')
+                                    .doc(eventa['id'])
+                                    .update({
+                                  'likes': {
+                                    Provider.of<siggning>(context,
+                                            listen: false)
+                                        .loggedUser!
+                                        .uid: true
+                                  }
+                                });
+                                setState(() {
+                                  isLiked = true;
+                                });
+                              }
+                            },
+                            child: Container(
+                                margin: EdgeInsets.all(25),
+                                child: !isLiked
+                                    ? Icon(
+                                        Icons.favorite_border,
+                                        color: Colors.white,
+                                        size: 30,
+                                      )
+                                    : Icon(
+                                        Icons.favorite,
+                                        color: Colors.red,
+                                        size: 30,
+                                      )),
+                          ),
+                        )
+                      ]),
                     ));
                   }
                 }
@@ -239,6 +307,12 @@ class _VisitorVerticalEventListState extends State<VisitorVerticalEventList> {
                 for (var eventa in events) {
                   Timestamp strat = eventa['starterDate'];
                   Timestamp end = eventa['endDate'];
+                  bool isLiked = eventa['likes'][
+                              Provider.of<siggning>(context).loggedUser!.uid] !=
+                          null
+                      ? eventa['likes']
+                          [Provider.of<siggning>(context).loggedUser!.uid]
+                      : false;
                   // print(DateTime.fromMicrosecondsSinceEpoch(
                   //     strat.microsecondsSinceEpoch));
                   // print(DateTime.fromMicrosecondsSinceEpoch(
@@ -265,56 +339,115 @@ class _VisitorVerticalEventListState extends State<VisitorVerticalEventList> {
                     eventWidget.add(Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                      child: GestureDetector(
-                        child: rectangleEvent(
-                          //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
-                          title: eventa['title'],
-                          image: eventa['image'],
-                          description: eventa['description'],
-                          field: eventa['field'],
-                          location: eventa['location'],
-                          city: eventa['eventCity'],
-                          starterDate: eventa['starterDate'],
-                          endDate: eventa['endDate'],
-                          starterTime: eventa['starterTime'].toString(),
-                          endTime: eventa['endTime'].toString(),
-                          eventType: eventa['eventType'],
-                          creationDate: eventa['creationDate'],
-                          acceptsParticapants: eventa['acceptsParticapants'],
-                          eventVisibilty: eventa['eventVisibility'],
-                          visitorsNum: visitorsNum,
+                      child: Stack(children: [
+                        GestureDetector(
+                          child: rectangleEvent(
+                            //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
+                            title: eventa['title'],
+                            image: eventa['image'],
+                            description: eventa['description'],
+                            field: eventa['field'],
+                            location: eventa['location'],
+                            city: eventa['eventCity'],
+                            starterDate: eventa['starterDate'],
+                            endDate: eventa['endDate'],
+                            starterTime: eventa['starterTime'].toString(),
+                            endTime: eventa['endTime'].toString(),
+                            eventType: eventa['eventType'],
+                            creationDate: eventa['creationDate'],
+                            acceptsParticapants: eventa['acceptsParticapants'],
+                            eventVisibilty: eventa['eventVisibility'],
+                            visitorsNum: visitorsNum,
+                          ),
+                          onTap: () {
+                            showModalBottomSheet(
+                                isScrollControlled: true,
+                                elevation: 100,
+                                context: context,
+                                builder: (context) => eventDisplay(
+                                      wholePage: false,
+                                      justDisplay: false,
+                                      id: eventa['id'],
+                                      title: eventa['title'],
+                                      description: eventa['description'],
+                                      starterDate: eventa['starterDate'],
+                                      location: eventa['location'],
+                                      image: eventa['image'],
+                                      endDate: eventa['endDate'],
+                                      starterTime: eventa['starterTime'],
+                                      eventType: eventa['eventType'],
+                                      endTime: eventa['endTime'],
+                                      field: eventa['field'],
+                                      creationDate: eventa['creationDate'],
+                                      city: eventa['eventCity'],
+                                      acceptsParticapants:
+                                          eventa['acceptsParticapants'],
+                                      eventVisibilty: eventa['eventVisibility'],
+                                      visitorsNum: visitorsNum,
+                                      creatorID: eventa['creatorID'],
+                                      creatorName:
+                                          eventa['creatorName'], //يوم المرأة
+                                    ));
+                          },
                         ),
-                        onTap: () {
-                          showModalBottomSheet(
-                              isScrollControlled: true,
-                              elevation: 100,
-                              context: context,
-                              builder: (context) => eventDisplay(
-                                    wholePage: false,
-                                    justDisplay: false,
-                                    id: eventa['id'],
-                                    title: eventa['title'],
-                                    description: eventa['description'],
-                                    starterDate: eventa['starterDate'],
-                                    location: eventa['location'],
-                                    image: eventa['image'],
-                                    endDate: eventa['endDate'],
-                                    starterTime: eventa['starterTime'],
-                                    eventType: eventa['eventType'],
-                                    endTime: eventa['endTime'],
-                                    field: eventa['field'],
-                                    creationDate: eventa['creationDate'],
-                                    city: eventa['eventCity'],
-                                    acceptsParticapants:
-                                        eventa['acceptsParticapants'],
-                                    eventVisibilty: eventa['eventVisibility'],
-                                    visitorsNum: visitorsNum,
-                                    creatorID: eventa['creatorID'],
-                                    creatorName:
-                                        eventa['creatorName'], //يوم المرأة
-                                  ));
-                        },
-                      ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: GestureDetector(
+                            onTap: () {
+                              bool _isLiked = eventa['likes'][
+                                      Provider.of<siggning>(context,
+                                              listen: false)
+                                          .loggedUser!
+                                          .uid] ==
+                                  true;
+                              if (_isLiked) {
+                                FirebaseFirestore.instance
+                                    .collection('events')
+                                    .doc(eventa['id'])
+                                    .update({
+                                  'likes': {
+                                    Provider.of<siggning>(context,
+                                            listen: false)
+                                        .loggedUser!
+                                        .uid: false
+                                  }
+                                });
+                                setState(() {
+                                  isLiked = false;
+                                });
+                              } else if (!_isLiked) {
+                                FirebaseFirestore.instance
+                                    .collection('events')
+                                    .doc(eventa['id'])
+                                    .update({
+                                  'likes': {
+                                    Provider.of<siggning>(context,
+                                            listen: false)
+                                        .loggedUser!
+                                        .uid: true
+                                  }
+                                });
+                                setState(() {
+                                  isLiked = true;
+                                });
+                              }
+                            },
+                            child: Container(
+                                margin: EdgeInsets.all(25),
+                                child: !isLiked
+                                    ? Icon(
+                                        Icons.favorite_border,
+                                        color: Colors.white,
+                                        size: 30,
+                                      )
+                                    : Icon(
+                                        Icons.favorite,
+                                        color: Colors.red,
+                                        size: 30,
+                                      )),
+                          ),
+                        )
+                      ]),
                     ));
                   }
                 }

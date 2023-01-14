@@ -116,34 +116,68 @@ class QrwidgetProfile extends StatelessWidget {
                     .doc(id.trim().toString())
                     .get();
                 final eventInfo = event.data();
-                var creatorNametoSend =
-                    await siggning().getORganizerInfo(eventInfo!['creatorID']);
-                print(eventInfo!.length);
-                waitingFunction(eventInfo['id']);
-                showModalBottomSheet(
-                  isScrollControlled: true,
-                  elevation: 100,
-                  context: context,
-                  builder: (context) => eventDisplay(
-                      wholePage: false,
-                      justDisplay: true,
-                      id: eventInfo!['id'],
-                      title: eventInfo['title'],
-                      description: eventInfo['description'],
-                      starterDate: eventInfo['starterDate'],
-                      location: eventInfo['location'],
-                      image: eventInfo['image'],
-                      endDate: eventInfo['endDate'],
-                      starterTime: eventInfo!['starterTime'],
-                      endTime: eventInfo!['endTime'],
-                      creationDate: eventInfo!['creationDate'],
-                      city: eventInfo!['eventCity'],
-                      acceptsParticapants: eventInfo!['acceptsParticapants'],
-                      eventVisibilty: eventInfo!['eventVisibility'],
-                      visitorsNum: visitorsNum,
-                      creatorID: eventInfo['creatorID'],
-                      creatorName: creatorNametoSend),
-                );
+
+                if (eventInfo != null) {
+                  var creatorNametoSend = await siggning()
+                      .getORganizerInfo(eventInfo!['creatorID']);
+                  print('${eventInfo!.length}eventInfo');
+                  waitingFunction(eventInfo['id']);
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    elevation: 100,
+                    context: context,
+                    builder: (context) => eventDisplay(
+                        wholePage: false,
+                        justDisplay: true,
+                        id: eventInfo!['id'],
+                        title: eventInfo['title'],
+                        description: eventInfo['description'],
+                        starterDate: eventInfo['starterDate'],
+                        location: eventInfo['location'],
+                        image: eventInfo['image'],
+                        endDate: eventInfo['endDate'],
+                        eventType: eventInfo['eventType'],
+                        starterTime: eventInfo!['starterTime'],
+                        endTime: eventInfo!['endTime'],
+                        creationDate: eventInfo!['creationDate'],
+                        city: eventInfo!['eventCity'],
+                        acceptsParticapants: eventInfo!['acceptsParticapants'],
+                        eventVisibilty: eventInfo!['eventVisibility'],
+                        visitorsNum: visitorsNum,
+                        creatorID: eventInfo['creatorID'],
+                        creatorName: creatorNametoSend),
+                  );
+                } else {
+                  showDialog(
+                      //save to drafts dialog
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text(
+                            'يبدو أن هذا الحدث محدوف ',
+                            textAlign: TextAlign.center,
+                            style: conHeadingsStyle.copyWith(fontSize: 15),
+                          ),
+                          actions: [
+                            InkWell(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  ' حسناً',
+                                  textAlign: TextAlign.center,
+                                  style: conHeadingsStyle.copyWith(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal),
+                                )),
+                          ],
+                          buttonPadding: EdgeInsets.all(20),
+                          actionsAlignment: MainAxisAlignment.spaceAround,
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 100),
+                        );
+                      });
+                }
               },
             )
           ],

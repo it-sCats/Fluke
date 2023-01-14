@@ -16,6 +16,14 @@ Future<bool> isUniqueID(String userID) async {
   return query.docs.isEmpty;
 }
 
+Future<QuerySnapshot<Map<String, dynamic>>> getLikedEvents(context) async {
+  return await FirebaseFirestore.instance
+      .collection('events')
+      .where('likes.${Provider.of<siggning>(context).loggedUser!.uid}',
+          isEqualTo: true)
+      .get();
+}
+
 Future<bool> EmailExists(String email) async {
   QuerySnapshot query = await FirebaseFirestore.instance
       .collection('users')
@@ -98,7 +106,8 @@ getOngoing() {
   return events;
 }
 
-getUserReegiteredEvents(String userId) {
+Stream<QuerySnapshot<Map<String, dynamic>>> getUserReegiteredEvents(
+    String userId) {
   final AllEvents = _firestore
       .collection('users')
       .doc(userId)

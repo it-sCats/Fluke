@@ -2,16 +2,21 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flukepro/components/cons.dart';
+import 'package:flukepro/screens/OrganizersScreens/OHome.dart';
+import 'package:flukepro/utils/SigningProvider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class eventHorizCard extends StatelessWidget {
+class eventHorizCard extends StatefulWidget {
   //الكارد الي تطلع للزائر في الاحداث الاكثر تداولا
+  String id;
   String title;
   String? image;
   String? eventType;
   Timestamp starterDate;
   Timestamp endDate;
+  bool isLiked;
   String starterTime;
   String endTime;
   var field;
@@ -26,6 +31,7 @@ class eventHorizCard extends StatelessWidget {
   int? visitorsNum;
 
   eventHorizCard({
+    required this.id,
     required this.title,
     required this.description,
     this.image,
@@ -34,6 +40,7 @@ class eventHorizCard extends StatelessWidget {
     required this.endDate,
     required this.starterTime,
     required this.endTime,
+    required this.isLiked,
     this.field,
     required this.creationDate,
     this.location,
@@ -45,6 +52,11 @@ class eventHorizCard extends StatelessWidget {
     this.visitorsNum,
   });
 
+  @override
+  State<eventHorizCard> createState() => _eventHorizCardState();
+}
+
+class _eventHorizCardState extends State<eventHorizCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -66,11 +78,11 @@ class eventHorizCard extends StatelessWidget {
         child: Stack(
           fit: StackFit.passthrough,
           children: [
-            image != null
+            widget.image != null
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(25),
                     child: Image.network(
-                      image!,
+                      widget.image!,
                       fit: BoxFit.cover,
                     ))
                 : Image.asset(
@@ -102,7 +114,7 @@ class eventHorizCard extends StatelessWidget {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      title,
+                      widget.title,
                       textAlign: TextAlign.right,
                       style: conHeadingsStyle.copyWith(
                           fontSize: 17, color: Colors.white),
@@ -125,7 +137,7 @@ class eventHorizCard extends StatelessWidget {
                                   width: 5,
                                 ),
                                 Text(
-                                  city.toString(),
+                                  widget.city.toString(),
                                   style:
                                       conOnboardingText.copyWith(fontSize: 11),
                                 )
@@ -135,7 +147,11 @@ class eventHorizCard extends StatelessWidget {
                             //نحي  الاكسباندد وحطس التاريخ قبل اللوكيشن
                             flex: 3,
                             child: Text(
-                              starterDate.toDate().toString().split(' ').first,
+                              widget.starterDate
+                                  .toDate()
+                                  .toString()
+                                  .split(' ')
+                                  .first,
                               textAlign: TextAlign.right,
                               style: conHeadingsStyle.copyWith(
                                   fontSize: 12,
@@ -147,7 +163,7 @@ class eventHorizCard extends StatelessWidget {
                   )
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -515,7 +531,10 @@ class OrganizerEventPreview extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(25),
-              child: Image.network(image.toString()),
+              child: Image.network(
+                image.toString(),
+                fit: BoxFit.cover,
+              ),
             ),
             Container(
               decoration: BoxDecoration(
@@ -567,7 +586,7 @@ class OrganizerEventPreview extends StatelessWidget {
                   )
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

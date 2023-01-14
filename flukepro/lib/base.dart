@@ -4,6 +4,7 @@ import 'package:flukepro/screens/mainScreens/explorePage.dart';
 import 'package:flukepro/screens/mainScreens/home.dart';
 import 'package:flukepro/screens/mainScreens/notificationScreen.dart';
 import 'package:flukepro/screens/mainScreens/profile.dart';
+import 'package:flukepro/screens/mainScreens/visAndPartiProfile.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
 import 'package:flukepro/utils/notificationProvider.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class _baseState extends State<base> {
   int? pageIndex =
       base().onNotificationTap == null ? 3 : base().onNotificationTap;
   static List<Widget> _pages = [
-    profile(),
+    Vprofile(),
     notifiScreen(),
     ExploreScreen(),
     HomeScreen(),
@@ -42,6 +43,11 @@ class _baseState extends State<base> {
             Provider.of<siggning>(context, listen: false).loggedUser!.uid)
         : null; //  هذه تتغير بحسب البيانات اللي نبيها
     print('-----------${siggning().userType}');
+    //here we called the provider so it settes the value of the ticket and likes num before going to profile screen
+    Provider.of<siggning>(context, listen: false)
+        .getUserTicketsEvents(FirebaseAuth.instance.currentUser!.uid);
+    Provider.of<siggning>(context, listen: false)
+        .getUserLikedEvents(FirebaseAuth.instance.currentUser!.uid);
     notificationPRovider().initInfo(context);
     print(widget.onNotificationTap);
     print('the base argument');
