@@ -58,7 +58,10 @@ class _OnotifiScreenState extends State<OnotifiScreen> {
                   stream: FirebaseFirestore.instance
                       .collectionGroup('joinRequest')
                       .where('requestStatus', isEqualTo: 'pending')
-                      .orderBy('creationDate')
+                      .where('EventcreatorID',
+                          isEqualTo:
+                              Provider.of<siggning>(context).loggedUser!.uid)
+                      .orderBy('creationDate', descending: true)
                       // .where('EventcreatorID',
                       //     isEqualTo:
                       //         Provider.of<siggning>(context).loggedUser!.uid)
@@ -223,12 +226,14 @@ class _requestaState extends State<requesta> {
               Expanded(
                   flex: 1,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    padding: EdgeInsets.only(left: 10, right: 10),
                     child: CircleAvatar(
                       //Avatar
                       backgroundColor: Color(0xff).withOpacity(0),
-                      radius: 50,
-                      backgroundImage: NetworkImage(widget.image),
+                      radius: 70,
+                      backgroundImage: NetworkImage(
+                        widget.image,
+                      ),
                     ),
                   ))
             ],

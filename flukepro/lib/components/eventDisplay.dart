@@ -32,6 +32,50 @@ final user = _auth!.currentUser;
 var userType;
 bool isLoading = false;
 String? creatorName;
+registerVisitor(eventID, context, userId, title, typeOfParticipation) async {
+  //visitor registration function
+  Map<String, dynamic>? userInfoDoc;
+  userInfoDoc = Provider.of<siggning>(context, listen: false).userInfoDocument;
+  final vistors = await _firestore //checks if user aleadry registered
+      .collection('users')
+      .doc(userId)
+      .collection('tickets')
+      .doc(eventID)
+      .get();
+
+  if (!vistors.exists) {
+    //in case no documents were returned which means user is not registered then register user
+    _firestore
+        .collection('users')
+        .doc(user!.uid.trim())
+        .collection('tickets')
+        .doc(eventID.trim())
+        .set({
+      'eventTitle': title,
+      'email': user!.email,
+      'phone': userInfoDoc!['phone'],
+      'name': userInfoDoc!['name'],
+      'participationType': typeOfParticipation
+    }).then((value) => showModalBottomSheet(
+              //تعرض كيو آر بعد تسجيل الزائر
+              isScrollControlled: true,
+              elevation: 100,
+              context: context,
+              builder: (context) => Qrwidget(userInfoDoc!['name'],
+                  userInfoDoc!['phone'], title, typeOfParticipation),
+            ));
+  } else {
+    showModalBottomSheet(
+      //تعرض كيو آر في حالل كان مشجل مسبقاً
+      isScrollControlled: true,
+      elevation: 100,
+      context: context,
+      builder: (context) => Qrwidget(userInfoDoc!['name'],
+          userInfoDoc!['phone'], title, typeOfParticipation),
+    );
+    // showQr();
+  }
+}
 
 class eventDisplay extends StatefulWidget {
   bool wholePage;
@@ -100,64 +144,6 @@ class _eventDisplayState extends State<eventDisplay>
     Provider.of<siggning>(context, listen: false)
         .getUserInfoDoc(FirebaseAuth.instance.currentUser!.uid);
   } //todo جيبي الاحداث متاع المنظم
-
-  registerVisitor(eventID, context, title) async {
-    //visitor registration function
-    Map<String, dynamic>? userInfoDoc;
-    userInfoDoc =
-        Provider.of<siggning>(context, listen: false).userInfoDocument;
-    final vistors = await _firestore //checks if user aleadry registered
-        .collection('users')
-        .doc(user!.uid)
-        .collection('tickets')
-        .doc(eventID)
-        .get();
-
-    if (!vistors.exists) {
-      //in case no documents were returned which means user is not registered then register user
-      _firestore
-          .collection('users')
-          .doc(user!.uid.trim())
-          .collection('tickets')
-          .doc(eventID.trim())
-          .set({
-            'eventTitle': title,
-            'email': user!.email,
-            'phone': userInfoDoc!['phone'],
-            'name': userInfoDoc!['name']
-          })
-          .then((value) => showModalBottomSheet(
-                //تعرض كيو آر بعد تسجيل الزائر
-                isScrollControlled: true,
-                elevation: 100,
-                context: context,
-                builder: (context) => Qrwidget(
-                  userInfoDoc!['name'],
-                  userInfoDoc!['phone'],
-                  title,
-                ),
-              ).whenComplete(() {
-                setState(() {
-                  isLoading = false;
-                });
-              }))
-          .whenComplete(() {
-            setState(() {
-              isLoading = true;
-            });
-          });
-    } else {
-      showModalBottomSheet(
-        //تعرض كيو آر في حالل كان مشجل مسبقاً
-        isScrollControlled: true,
-        elevation: 100,
-        context: context,
-        builder: (context) =>
-            Qrwidget(userInfoDoc!['name'], userInfoDoc!['phone'], title),
-      );
-      // showQr();
-    }
-  }
 
   getUsertype() async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -1070,16 +1056,69 @@ class _eventDisplayState extends State<eventDisplay>
                                                   ),
                                                 ),
                                                 onTap: () async {
-                                                  showModalBottomSheet(
-                                                    isScrollControlled: true,
-                                                    elevation: 100,
-                                                    context: context,
-                                                    builder: (context) =>
-                                                        ParticiEventPrev(
-                                                            widget.id,
-                                                            widget.title,
-                                                            widget.creatorID),
-                                                  );
+                                                  if (widget.endDate.compareTo(
+                                                          Timestamp.now()) >=
+                                                      0) {
+                                                    showModalBottomSheet(
+                                                      isScrollControlled: true,
+                                                      elevation: 100,
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          ParticiEventPrev(
+                                                        widget.id,
+                                                        widget.title,
+                                                        widget.creatorID,
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    showDialog(
+                                                        //save to drafts dialog
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return AlertDialog(
+                                                            title: Text(
+                                                              'لا يمكنك التسجيل في هذا الحدث\n لانه منتهي',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: conHeadingsStyle
+                                                                  .copyWith(
+                                                                      fontSize:
+                                                                          15),
+                                                            ),
+                                                            actions: [
+                                                              InkWell(
+                                                                  onTap: () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                  child: Text(
+                                                                    ' حسناً',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: conHeadingsStyle.copyWith(
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight.normal),
+                                                                  )),
+                                                            ],
+                                                            buttonPadding:
+                                                                EdgeInsets.all(
+                                                                    20),
+                                                            actionsAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceAround,
+                                                            contentPadding:
+                                                                EdgeInsets.symmetric(
+                                                                    vertical:
+                                                                        10,
+                                                                    horizontal:
+                                                                        100),
+                                                          );
+                                                        });
+                                                  }
                                                 },
                                               ),
                                               SizedBox(
@@ -1088,10 +1127,65 @@ class _eventDisplayState extends State<eventDisplay>
                                               halfCTA(
                                                   txt: ' التسجيل كزائر',
                                                   onTap: () async {
-                                                    await registerVisitor(
-                                                        widget.id,
-                                                        context,
-                                                        widget.title);
+                                                    if (widget.endDate
+                                                            .compareTo(Timestamp
+                                                                .now()) >=
+                                                        0) {
+                                                      await registerVisitor(
+                                                          widget.id,
+                                                          context,
+                                                          user!.uid,
+                                                          widget.title,
+                                                          'زائر');
+                                                    } else {
+                                                      showDialog(
+                                                          //save to drafts dialog
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return AlertDialog(
+                                                              title: Text(
+                                                                'لا يمكنك التسجيل في هذا الحدث\n لانه منتهي',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: conHeadingsStyle
+                                                                    .copyWith(
+                                                                        fontSize:
+                                                                            15),
+                                                              ),
+                                                              actions: [
+                                                                InkWell(
+                                                                    onTap: () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                    child: Text(
+                                                                      ' حسناً',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: conHeadingsStyle.copyWith(
+                                                                          fontSize:
+                                                                              14,
+                                                                          fontWeight:
+                                                                              FontWeight.normal),
+                                                                    )),
+                                                              ],
+                                                              buttonPadding:
+                                                                  EdgeInsets
+                                                                      .all(20),
+                                                              actionsAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceAround,
+                                                              contentPadding:
+                                                                  EdgeInsets.symmetric(
+                                                                      vertical:
+                                                                          10,
+                                                                      horizontal:
+                                                                          100),
+                                                            );
+                                                          });
+                                                    }
                                                   }),
                                             ],
                                           ),
@@ -1365,10 +1459,64 @@ class _eventDisplayState extends State<eventDisplay>
                                             child: halfCTA(
                                                 txt: ' التسجيل كزائر',
                                                 onTap: () async {
-                                                  await registerVisitor(
-                                                      widget.id,
-                                                      context,
-                                                      widget.title);
+                                                  if (widget.endDate.compareTo(
+                                                          Timestamp.now()) >=
+                                                      0) {
+                                                    await registerVisitor(
+                                                        widget.id,
+                                                        context,
+                                                        user!.uid,
+                                                        widget.title,
+                                                        'زائر');
+                                                  } else {
+                                                    showDialog(
+                                                        //save to drafts dialog
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return AlertDialog(
+                                                            title: Text(
+                                                              'لا يمكنك التسجيل في هذا الحدث\n لانه منتهي',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: conHeadingsStyle
+                                                                  .copyWith(
+                                                                      fontSize:
+                                                                          15),
+                                                            ),
+                                                            actions: [
+                                                              InkWell(
+                                                                  onTap: () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                  child: Text(
+                                                                    ' حسناً',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: conHeadingsStyle.copyWith(
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight.normal),
+                                                                  )),
+                                                            ],
+                                                            buttonPadding:
+                                                                EdgeInsets.all(
+                                                                    20),
+                                                            actionsAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceAround,
+                                                            contentPadding:
+                                                                EdgeInsets.symmetric(
+                                                                    vertical:
+                                                                        10,
+                                                                    horizontal:
+                                                                        100),
+                                                          );
+                                                        });
+                                                  }
                                                 }),
                                           ),
                                         )

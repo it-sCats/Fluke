@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../../utils/notificationProvider.dart';
 import '../cons.dart';
+import '../eventDisplay.dart';
 
 final _auth = FirebaseAuth.instance;
 User? user = _auth.currentUser;
@@ -174,14 +175,69 @@ class _ParticiRequsetPrevState extends State<ParticiRequsetPrev> {
                   lessEdgeCTA(
                     txt: 'قبول الطلب',
                     width: 180,
-                    onTap: () {
+                    onTap: () async {
+                      //when request is approved first we update the status to accepted
                       FirebaseFirestore.instance
                           .collection('events')
                           .doc(widget.eventId.trim())
                           .collection('joinRequest')
                           .doc(widget.reqID.trim())
-                          .update({'requestStatus': 'accepted'}).then(
-                              (value) => Navigator.pop(context));
+                          .update({'requestStatus': 'accepted'})
+                          .then(
+                            (value) => Navigator.pop(context),
+                          )
+                          .onError((error, stackTrace) =>
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                  'حدث خطأ ما، لم تتم عملية قبول المشارك ',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: 'Cairo', fontSize: 13),
+                                )),
+                              ));
+                      Map<String, dynamic>? userInfoDoc;
+                      userInfoDoc =
+                          Provider.of<siggning>(context, listen: false)
+                              .userInfoDocument;
+                      final vistors = await FirebaseFirestore
+                          .instance //checks if user aleadry registered
+                          .collection('users')
+                          .doc(widget.participantsId.trim())
+                          .collection('tickets')
+                          .doc(widget.eventId)
+                          .get();
+
+                      if (!vistors.exists) {
+                        //in case no documents were returned which means user is not registered then register user
+                        FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(widget.participantsId.trim())
+                            .collection('tickets')
+                            .doc(widget.eventId.trim())
+                            .set({
+                          'eventTitle': widget.eventTitle,
+                          'email': user!.email,
+                          'phone': userInfoDoc!['phone'],
+                          'name': userInfoDoc!['name'],
+                          'participationType': 'مشارك'
+                        });
+                      }
+                      //secondly we send notifications to the participant
+                      participantAcceptanceNotifi(
+                          'تم الموافقة على طلبك للمشاركة في حدث',
+                          '',
+                          widget.joinType,
+                          widget.eventId,
+                          widget.participantsId);
+                      //and finally we create a ticket for the participant
+
+                      // registerVisitor(
+                      //     widget.eventId,
+                      //     context,
+                      //     widget.participantsId,
+                      //     widget.eventTitle,
+                      //     ' مشارك كـ${widget.joinType}');
                     },
                   ),
                 ],

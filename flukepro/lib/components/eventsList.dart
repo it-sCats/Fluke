@@ -146,63 +146,67 @@ class _eventListState extends State<eventList> {
                                     ));
                           },
                         ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: GestureDetector(
-                            onTap: () {
-                              bool _isLiked = eventa['likes'][
-                                      Provider.of<siggning>(context,
-                                              listen: false)
-                                          .loggedUser!
-                                          .uid] ==
-                                  true;
-                              if (_isLiked) {
-                                FirebaseFirestore.instance
-                                    .collection('events')
-                                    .doc(eventa['id'])
-                                    .update({
-                                  'likes': {
-                                    Provider.of<siggning>(context,
-                                            listen: false)
-                                        .loggedUser!
-                                        .uid: false
-                                  }
-                                });
-                                setState(() {
-                                  isLiked = false;
-                                });
-                              } else if (!_isLiked) {
-                                FirebaseFirestore.instance
-                                    .collection('events')
-                                    .doc(eventa['id'])
-                                    .update({
-                                  'likes': {
-                                    Provider.of<siggning>(context,
-                                            listen: false)
-                                        .loggedUser!
-                                        .uid: true
-                                  }
-                                });
-                                setState(() {
-                                  isLiked = true;
-                                });
-                              }
-                            },
-                            child: Container(
-                                margin: EdgeInsets.all(25),
-                                child: !isLiked
-                                    ? Icon(
-                                        Icons.favorite_border,
-                                        color: Colors.white,
-                                        size: 30,
-                                      )
-                                    : Icon(
-                                        Icons.favorite,
-                                        color: Colors.red,
-                                        size: 30,
-                                      )),
-                          ),
-                        )
+                        Provider.of<siggning>(context, listen: false)
+                                    .userInfoDocument!['userType'] !=
+                                1
+                            ? Align(
+                                alignment: Alignment.topLeft,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    bool _isLiked = eventa['likes'][
+                                            Provider.of<siggning>(context,
+                                                    listen: false)
+                                                .loggedUser!
+                                                .uid] ==
+                                        true;
+                                    if (_isLiked) {
+                                      FirebaseFirestore.instance
+                                          .collection('events')
+                                          .doc(eventa['id'])
+                                          .update({
+                                        'likes': {
+                                          Provider.of<siggning>(context,
+                                                  listen: false)
+                                              .loggedUser!
+                                              .uid: false
+                                        }
+                                      });
+                                      setState(() {
+                                        isLiked = false;
+                                      });
+                                    } else if (!_isLiked) {
+                                      FirebaseFirestore.instance
+                                          .collection('events')
+                                          .doc(eventa['id'])
+                                          .update({
+                                        'likes': {
+                                          Provider.of<siggning>(context,
+                                                  listen: false)
+                                              .loggedUser!
+                                              .uid: true
+                                        }
+                                      });
+                                      setState(() {
+                                        isLiked = true;
+                                      });
+                                    }
+                                  },
+                                  child: Container(
+                                      margin: EdgeInsets.all(25),
+                                      child: !isLiked
+                                          ? Icon(
+                                              Icons.favorite_border,
+                                              color: Colors.white,
+                                              size: 30,
+                                            )
+                                          : Icon(
+                                              Icons.favorite,
+                                              color: Colors.red,
+                                              size: 30,
+                                            )),
+                                ),
+                              )
+                            : Container()
                       ]),
                     ));
                   }
@@ -390,63 +394,67 @@ class _VisitorVerticalEventListState extends State<VisitorVerticalEventList> {
                                     ));
                           },
                         ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: GestureDetector(
-                            onTap: () {
-                              bool _isLiked = eventa['likes'][
-                                      Provider.of<siggning>(context,
-                                              listen: false)
-                                          .loggedUser!
-                                          .uid] ==
-                                  true;
-                              if (_isLiked) {
-                                FirebaseFirestore.instance
-                                    .collection('events')
-                                    .doc(eventa['id'])
-                                    .update({
-                                  'likes': {
-                                    Provider.of<siggning>(context,
-                                            listen: false)
-                                        .loggedUser!
-                                        .uid: false
-                                  }
-                                });
-                                setState(() {
-                                  isLiked = false;
-                                });
-                              } else if (!_isLiked) {
-                                FirebaseFirestore.instance
-                                    .collection('events')
-                                    .doc(eventa['id'])
-                                    .update({
-                                  'likes': {
-                                    Provider.of<siggning>(context,
-                                            listen: false)
-                                        .loggedUser!
-                                        .uid: true
-                                  }
-                                });
-                                setState(() {
-                                  isLiked = true;
-                                });
-                              }
-                            },
-                            child: Container(
-                                margin: EdgeInsets.all(25),
-                                child: !isLiked
-                                    ? Icon(
-                                        Icons.favorite_border,
-                                        color: Colors.white,
-                                        size: 30,
-                                      )
-                                    : Icon(
-                                        Icons.favorite,
-                                        color: Colors.red,
-                                        size: 30,
-                                      )),
-                          ),
-                        )
+                        Provider.of<siggning>(context, listen: false)
+                                    .userInfoDocument!['userType'] !=
+                                1
+                            ? Align(
+                                alignment: Alignment.topLeft,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    bool _isLiked = eventa['likes'][
+                                            Provider.of<siggning>(context,
+                                                    listen: false)
+                                                .loggedUser!
+                                                .uid] ==
+                                        true;
+                                    if (_isLiked) {
+                                      FirebaseFirestore.instance
+                                          .collection('events')
+                                          .doc(eventa['id'])
+                                          .update({
+                                        'likes': {
+                                          Provider.of<siggning>(context,
+                                                  listen: false)
+                                              .loggedUser!
+                                              .uid: false
+                                        }
+                                      });
+                                      setState(() {
+                                        isLiked = false;
+                                      });
+                                    } else if (!_isLiked) {
+                                      FirebaseFirestore.instance
+                                          .collection('events')
+                                          .doc(eventa['id'])
+                                          .update({
+                                        'likes': {
+                                          Provider.of<siggning>(context,
+                                                  listen: false)
+                                              .loggedUser!
+                                              .uid: true
+                                        }
+                                      });
+                                      setState(() {
+                                        isLiked = true;
+                                      });
+                                    }
+                                  },
+                                  child: Container(
+                                      margin: EdgeInsets.all(25),
+                                      child: !isLiked
+                                          ? Icon(
+                                              Icons.favorite_border,
+                                              color: Colors.white,
+                                              size: 30,
+                                            )
+                                          : Icon(
+                                              Icons.favorite,
+                                              color: Colors.red,
+                                              size: 30,
+                                            )),
+                                ),
+                              )
+                            : Container()
                       ]),
                     ));
                   }

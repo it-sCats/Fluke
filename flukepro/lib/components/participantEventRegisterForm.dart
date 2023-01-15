@@ -20,6 +20,7 @@ class ParticiEventPrev extends StatefulWidget {
   String eventId;
   String eventTitle;
   String creatorId;
+  // String? userPic;
 
   ParticiEventPrev(this.eventId, this.eventTitle, this.creatorId);
   @override
@@ -173,12 +174,13 @@ class _ParticiEventPrevState extends State<ParticiEventPrev> {
                           eventId: widget.eventId,
                           eventName: widget.eventTitle,
                           userId: user!.uid,
+                          eventCreatorId: widget.creatorId,
                           name: Provider.of<siggning>(context, listen: false)
                               .userInfoDocument!['name'],
                           field: Provider.of<siggning>(context, listen: false)
                               .userInfoDocument!['interests'],
-                          userPic: Provider.of<siggning>(context, listen: false)
-                              .userInfoDocument!['profilePic'],
+                          // userPic: Provider.of<siggning>(context, listen: false)
+                          //     .userInfoDocument!['profilePic'],
                           phone: Provider.of<siggning>(context, listen: false)
                               .userInfoDocument!['phone'],
                           email: user!.email,

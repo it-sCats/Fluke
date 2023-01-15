@@ -863,7 +863,7 @@ class _creatingEventState extends State<creatingEvent> {
                                                 listen: false)
                                             .loggedUser!
                                             .uid,
-                                        'isLiked': {},
+                                        'likes': {'': false},
                                         'creationDate': Timestamp.now(),
                                         'isPublic': false
                                       }).then((value) async {
@@ -941,6 +941,7 @@ class _creatingEventState extends State<creatingEvent> {
                                             .putFile(image!);
                                       }
                                       final event = await eventRef.add({
+                                        // 'id': FieldPath.documentId,
                                         'image': snapshot != null
                                             ? await snapshot!.ref
                                                 .getDownloadURL()
@@ -957,6 +958,7 @@ class _creatingEventState extends State<creatingEvent> {
                                         'eventCity': _eventCityCont.text,
                                         'location': _eventLocationCont.text,
                                         'field': _eventFieldCont.text,
+                                        'likes': {},
                                         'rooms': FieldValue.arrayUnion(
                                             _controllersText),
                                         'acceptsParticapants':
@@ -1017,6 +1019,11 @@ class _creatingEventState extends State<creatingEvent> {
                                           )),
                                         );
                                       });
+                                      if (event.id != null) {
+                                        await eventRef
+                                            .doc(event.id)
+                                            .update({'id': event.id});
+                                      } //todo ticket num and liked num is the same fix it
 
                                       // if (sendNotifications) {
                                       //   final users = await FirebaseFirestore
@@ -1067,7 +1074,7 @@ sendPushTopicNotification(
             headers: <String, String>{
               'Content-Type': 'application/json',
               'Authorization':
-                  'Bearer ya29.a0AX9GBdW9Fn_gpAbQCK6awse93FwGrfWsxMnOs4O6B-PlcbIN3b9rzLAT0JV0LMQqePVmw8_lwTr0FY8msBZyl6u6S-ElnaHKQ8O-P5l4_1v-PEUCfvF6XX75317fr8IeLkTuFXCiaxt1q0TATxWoExn3o0xdaCgYKARMSARESFQHUCsbCt4HshZIfek_yhQsExsqfqg0163'
+                  'Bearer ya29.a0AX9GBdV2bbEKV0CimcEvgGFyISboOll4-dCa4aBYpeJtd2ZzBubMykjED24oJtVBHFOCpeulH48FzLqwYEcGklvNH83Ixntur5-Bi69jmIY5kS33er992zrSP9bEyXDGPZW4uySPIwIizAznvuu9G8qOGJcAaCgYKARYSARESFQHUCsbCF6Nosq8ltpdmud7T1AvwRA016363'
             },
             body: jsonEncode(<String, dynamic>{
               "message": {

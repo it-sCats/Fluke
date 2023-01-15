@@ -79,6 +79,8 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
     print('++++++++++++++');
     Provider.of<siggning>(context, listen: false).getCurrentUsertype(
         Provider.of<siggning>(context, listen: false).loggedUser!.uid);
+    Provider.of<siggning>(context, listen: false).getUserInfoDoc(
+        Provider.of<siggning>(context, listen: false).loggedUser!.uid);
     // Provider.of<siggning>(context, listen: false).getUserInfoDoc();
 
     controller = AnimationController(vsync: this, duration: duration);

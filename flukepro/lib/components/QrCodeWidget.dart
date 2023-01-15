@@ -8,7 +8,8 @@ class Qrwidget extends StatelessWidget {
   String name;
   String phone;
   String eventName;
-  Qrwidget(this.name, this.phone, this.eventName);
+  String typeOfParticipation;
+  Qrwidget(this.name, this.phone, this.eventName, this.typeOfParticipation);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,9 @@ class Qrwidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             QrImage(
-                data: '$eventName\n' + '$name \n' + '$phone\n',
+                data: '$typeOfParticipation\n $eventName\n' +
+                    '$name \n' +
+                    '$phone\n',
                 padding: EdgeInsets.all(50)),
             Text(
               "أظهر هذا الرمز يوم المعرض",

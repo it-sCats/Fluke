@@ -71,6 +71,7 @@ class siggning extends ChangeNotifier {
       name,
       field,
       phone,
+      eventCreatorId,
       email,
       joinType,
       eventName,
@@ -79,70 +80,85 @@ class siggning extends ChangeNotifier {
         .doc(eventId)
         .collection('joinRequest')
         .where('userId', isEqualTo: userId)
-        .where('requestStatus', isEqualTo: 'pending')
-        .get();
+        .where('requestStatus', whereIn: ['pending', 'accepted']).get();
     print(prevRequest.docs);
     if (prevRequest.docs.isEmpty) {
       //todo add participants name in the reques
-      DocumentReference<Map<String, dynamic>> joinReqId = await eventRef
-          .doc(eventId.toString().trim())
-          .collection('joinRequest')
-          .add({
-        'reqID': FieldPath.documentId,
+      DocumentReference<Map<String, dynamic>> joinReqId =
+          await FirebaseFirestore.instance
+              .collection('events')
+              .doc(eventId.toString().trim())
+              .collection('joinRequest')
+              .add({
+        // 'reqID': FieldPath.documentId,
         'userId': userId,
         'eventId': eventId,
         'participantsName': name,
-        'image': userPic,
+        'particpantphone': phone,
+        'image': userPic == null
+            ? 'https://t3.ftcdn.net/jpg/01/18/01/98/360_F_118019822_6CKXP6rXmVhDOzbXZlLqEM2ya4HhYzSV.jpg'
+            : userPic,
         'eventName': eventName,
         'field': field,
+        'EventcreatorID': eventCreatorId,
         'email': email,
         'joinType': joinType,
         'requestStatus': 'pending',
         'creationDate': DateTime.now()
-      }).whenComplete(() => showDialog(
-              //save to drafts dialog
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text(
-                    '!تم تقديم طلبك',
-                    textAlign: TextAlign.center,
-                    style: conHeadingsStyle.copyWith(fontSize: 15),
-                  ),
-                  content: Text(
-                    'سيصلك اشعار فور قبول الطلب',
-                    textAlign: TextAlign.center,
-                    style: conHeadingsStyle.copyWith(
-                        fontSize: 14, fontWeight: FontWeight.normal),
-                  ),
-                  actions: [
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      decoration: BoxDecoration(
-                          color: conORange,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            'حسناً',
-                            textAlign: TextAlign.center,
-                            style: conHeadingsStyle.copyWith(
-                                color: Colors.white,
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold),
-                          )),
-                    ),
-                  ],
-                  buttonPadding: EdgeInsets.all(20),
-                  actionsAlignment: MainAxisAlignment.spaceAround,
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 100),
-                );
-              }));
-
+      });
+      joinReqId.id.isNotEmpty
+          ? {
+              await FirebaseFirestore.instance
+                  .collection('events')
+                  .doc(eventId.toString().trim())
+                  .collection('joinRequest')
+                  .doc(joinReqId.id)
+                  .update({'reqID': joinReqId.id}),
+              showDialog(
+                  //save to drafts dialog
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text(
+                        '!تم تقديم طلبك',
+                        textAlign: TextAlign.center,
+                        style: conHeadingsStyle.copyWith(fontSize: 15),
+                      ),
+                      content: Text(
+                        'سيصلك اشعار فور قبول الطلب',
+                        textAlign: TextAlign.center,
+                        style: conHeadingsStyle.copyWith(
+                            fontSize: 14, fontWeight: FontWeight.normal),
+                      ),
+                      actions: [
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          decoration: BoxDecoration(
+                              color: conORange,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                'حسناً',
+                                textAlign: TextAlign.center,
+                                style: conHeadingsStyle.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold),
+                              )),
+                        ),
+                      ],
+                      buttonPadding: EdgeInsets.all(20),
+                      actionsAlignment: MainAxisAlignment.spaceAround,
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 100),
+                    );
+                  })
+            }
+          : null;
       return joinReqId.id;
     } else {
       showDialog(
