@@ -57,7 +57,7 @@ class siggning extends ChangeNotifier {
         .where('likes.${userId}', isEqualTo: true)
         .get();
     userLiked = AllEvents.docs.length;
-    setUserTicketsNum(AllEvents.docs.length);
+    setUserLikedsNum(AllEvents.docs.length);
     notifyListeners();
     return AllEvents.docs.length;
   }
