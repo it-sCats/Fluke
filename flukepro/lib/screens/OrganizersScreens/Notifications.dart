@@ -251,6 +251,7 @@ class _requestaState extends State<requesta> {
                 widget.particpantEmail,
                 widget.particpantphone,
                 widget.participantsId,
+                widget.image,
                 widget
                     .eventId, //change th constructor in the upper widget to send the whole info down
                 widget.title,

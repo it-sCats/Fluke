@@ -20,6 +20,7 @@ class ParticiRequsetPrev extends StatefulWidget {
   String reqID;
   String eventId;
   String participantsName;
+  String eventImage;
   String participantsId;
   String particpantphone;
   String eventTitle;
@@ -35,6 +36,7 @@ class ParticiRequsetPrev extends StatefulWidget {
       this.particpantEmail,
       this.particpantphone,
       this.participantsId,
+      this.eventImage,
       this.eventId,
       this.eventTitle,
       this.joinType,
@@ -196,8 +198,7 @@ class _ParticiRequsetPrevState extends State<ParticiRequsetPrev> {
                                       fontFamily: 'Cairo', fontSize: 13),
                                 )),
                               ));
-                      Map<String, dynamic>? userInfoDoc;
-                      userInfoDoc =
+                      Map<String, dynamic>? userInfoDoc =
                           Provider.of<siggning>(context, listen: false)
                               .userInfoDocument;
                       final vistors = await FirebaseFirestore
@@ -219,7 +220,8 @@ class _ParticiRequsetPrevState extends State<ParticiRequsetPrev> {
                           'eventTitle': widget.eventTitle,
                           'email': user!.email,
                           'phone': userInfoDoc!['phone'],
-                          'name': userInfoDoc!['name'],
+                          'name': Provider.of<siggning>(context, listen: false)
+                              .userInfoDocument!['name'],
                           'participationType': 'مشارك'
                         });
                       }
@@ -229,6 +231,7 @@ class _ParticiRequsetPrevState extends State<ParticiRequsetPrev> {
                           '',
                           widget.joinType,
                           widget.eventId,
+                          widget.eventImage,
                           widget.participantsId);
                       //and finally we create a ticket for the participant
 

@@ -153,13 +153,16 @@ class notificationPRovider extends ChangeNotifier {
       if (message != null) {
         FirebaseFirestore.instance
             .collection('users')
-            .doc(siggning().loggedUser!.uid)
+            .doc(siggning()
+                .loggedUser!
+                .uid) //here we remove the this and add the notification when it's added
             .collection('notification')
             .doc(message!.data['eventId'])
             .set({
           'title': message!.notification!.title,
           'date': message.notification!.body,
           'creatorID': siggning().loggedUser!.uid,
+          'image': message.data['image'],
           'creationDate': Timestamp.now()
         });
         // navigatorKey?.currentState!.push(MaterialPageRoute(
@@ -206,7 +209,7 @@ sendPushToOrgnaizerNotification(
 }
 
 participantAcceptanceNotifi(
-    String body, String title, joinType, eventId, ParticipantId) async {
+    String body, String title, joinType, image, eventId, ParticipantId) async {
   final user = await FirebaseFirestore.instance
       .collection('users')
       .doc(ParticipantId.toString().trim())
@@ -227,9 +230,10 @@ participantAcceptanceNotifi(
                 "notification": {"title": title, "body": body},
                 "data": {
                   "click_action": "FLUTTER_NOTIFICATION_CLICK",
-                  "creatorID": ParticipantId,
                   "eventId": eventId,
-                  'joinType': joinType
+                  'joinType': joinType,
+                  'image': image,
+                  'reciverID': ParticipantId
                 }
               }
             }))
