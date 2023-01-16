@@ -13,6 +13,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import '../../../components/cons.dart';
 import '../../../components/session.dart';
 import '../../../components/sessionDataSource.dart';
+import '../../../utils/notificationProvider.dart';
 
 sessionDataSource? sessiondatasource;
 TextEditingController _eventsessionCont = TextEditingController();
@@ -123,15 +124,111 @@ class _timeTableState extends State<timeTable> with TickerProviderStateMixin {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            IconButton(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(
-                  Icons.arrow_back,
-                  size: 40,
-                )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.arrow_back,
+                      size: 40,
+                    )),
+                IconButton(
+                    padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+                    onPressed: () {
+                      showDialog(
+                          //save to drafts dialog
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              icon: Icon(
+                                Icons.warning,
+                                color: conRed,
+                                size: 50,
+                              ),
+                              title: Text(
+                                'سيتم حذف كل الجلسات في هذه الاجندة',
+                                textAlign: TextAlign.center,
+                                style: conHeadingsStyle.copyWith(fontSize: 15),
+                              ),
+                              actions: [
+                                InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      ' إالغاء الحذف',
+                                      textAlign: TextAlign.center,
+                                      style: conHeadingsStyle.copyWith(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.normal),
+                                    )),
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  decoration: BoxDecoration(
+                                      color: conRed,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: InkWell(
+                                      onTap: () async {
+                                        sessionDataSource? sd;
+                                        print('eventId ${args[2]}');
+                                        //todo test the delete function
+                                        await FirebaseFirestore.instance
+                                            .collection('events')
+                                            .doc(args[2].trim())
+                                            .collection('agenda')
+                                            .get()
+                                            .then((snapshot) async {
+                                          for (DocumentSnapshot ds
+                                              in snapshot.docs) {
+                                            ds.reference.delete();
+                                          }
+                                          Provider.of<notificationPRovider>(
+                                                  context,
+                                                  listen: false)
+                                              .sessiondatasource = sd;
+                                          Navigator.pop(context);
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                                content: Text(
+                                              'تم حذف الجلسات بنجاح',
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontFamily: 'Cairo',
+                                              ),
+                                            )),
+                                          );
+                                        });
+                                      },
+                                      child: Text(
+                                        'حدف',
+                                        textAlign: TextAlign.center,
+                                        style: conHeadingsStyle.copyWith(
+                                            color: Colors.white,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold),
+                                      )),
+                                ),
+                              ],
+                              buttonPadding: EdgeInsets.all(20),
+                              actionsAlignment: MainAxisAlignment.spaceAround,
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 100),
+                            );
+                          });
+                    },
+                    icon: Icon(
+                      Icons.delete,
+                      size: 40,
+                      color: conBlack.withOpacity(.8),
+                    ))
+              ],
+            ),
             Expanded(
               child: Stack(children: [
                 eventTimeline(args[2], args[0], args[1]),

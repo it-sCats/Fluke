@@ -1,25 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../../components/cons.dart';
 import '../../../components/session.dart';
 import '../../../components/sessionDataSource.dart';
+import '../../../utils/notificationProvider.dart';
 
-sessionDataSource? sessiondatasource;
-
-class eventTimeline extends StatelessWidget {
+class eventTimeline extends StatefulWidget {
   String eventID;
   Timestamp startDate;
   Timestamp endDate;
   eventTimeline(this.eventID, this.startDate, this.endDate);
 
   @override
+  State<eventTimeline> createState() => _eventTimelineState();
+}
+
+class _eventTimelineState extends State<eventTimeline> {
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('events')
-            .doc(eventID)
+            .doc(widget.eventID)
             .collection('agenda')
             .snapshots(),
         builder: (context, snapshot) {
@@ -44,7 +49,9 @@ class eventTimeline extends StatelessWidget {
                     FromDate,
                     toDate,
                     Colors.white70));
-                sessiondatasource = sessionDataSource(sessionat);
+
+                Provider.of<notificationPRovider>(context, listen: false)
+                    .sessiondatasource = sessionDataSource(sessionat);
               } //needs testing
 
             //this takes the list of session to sessionDataSource
@@ -99,10 +106,9 @@ class eventTimeline extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(10)),
                                 child: InkWell(
                                     onTap: () async {
-                                      //todo test the delete function
                                       await FirebaseFirestore.instance
                                           .collection('events')
-                                          .doc(eventID.trim())
+                                          .doc(widget.eventID.trim())
                                           .collection('agenda')
                                           .doc(session.id)
                                           .delete()
@@ -183,39 +189,40 @@ class eventTimeline extends StatelessWidget {
                   appointmentDisplayCount: 100,
                   showAgenda: true,
                   agendaItemHeight: 200),
-              dataSource: sessiondatasource,
+              dataSource:
+                  Provider.of<notificationPRovider>(context, listen: false)
+                      .sessiondatasource,
               view: CalendarView.timelineDay,
               scheduleViewSettings: ScheduleViewSettings(
                   dayHeaderSettings: DayHeaderSettings(width: 100)),
               maxDate: DateTime.fromMicrosecondsSinceEpoch(
-                      endDate.microsecondsSinceEpoch)
+                      widget.endDate.microsecondsSinceEpoch)
                   .add(Duration(days: 1)),
               minDate: DateTime.fromMicrosecondsSinceEpoch(
-                  startDate.microsecondsSinceEpoch),
+                  widget.startDate.microsecondsSinceEpoch),
               firstDayOfWeek: DateTime.fromMicrosecondsSinceEpoch(
-                              endDate.microsecondsSinceEpoch)
+                              widget.endDate.microsecondsSinceEpoch)
                           .difference(DateTime.fromMicrosecondsSinceEpoch(
-                              startDate.microsecondsSinceEpoch))
+                              widget.startDate.microsecondsSinceEpoch))
                           .inDays <
                       1
                   ? 1
-                  : DateTime.fromMicrosecondsSinceEpoch(
-                                  endDate.microsecondsSinceEpoch)
+                  : DateTime.fromMicrosecondsSinceEpoch(widget.endDate.microsecondsSinceEpoch)
                               .difference(DateTime.fromMicrosecondsSinceEpoch(
-                                  startDate.microsecondsSinceEpoch))
+                                  widget.startDate.microsecondsSinceEpoch))
                               .inDays >
                           7
                       ? 7
                       : DateTime.fromMicrosecondsSinceEpoch(
-                              endDate.microsecondsSinceEpoch)
+                              widget.endDate.microsecondsSinceEpoch)
                           .difference(DateTime.fromMicrosecondsSinceEpoch(
-                              startDate.microsecondsSinceEpoch))
+                              widget.startDate.microsecondsSinceEpoch))
                           .inDays,
               initialDisplayDate: DateTime.fromMicrosecondsSinceEpoch(
-                      startDate.microsecondsSinceEpoch)
+                      widget.startDate.microsecondsSinceEpoch)
                   .add(Duration(hours: 2)),
               initialSelectedDate: DateTime.fromMicrosecondsSinceEpoch(
-                      startDate.microsecondsSinceEpoch)
+                      widget.startDate.microsecondsSinceEpoch)
                   .add(Duration(hours: 4)),
             );
           } else
