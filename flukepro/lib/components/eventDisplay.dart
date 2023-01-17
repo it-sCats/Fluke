@@ -1522,8 +1522,8 @@ class _eventDisplayState extends State<eventDisplay>
                                         )
                                       ],
                                     )), //todo خلي الشرط هنا واعرضي زوز ويدجيت مختلفاتا للشاشة كلها
-                        eventTimeline(
-                            widget.id, widget.starterDate, widget.endDate),
+                        eventTimeline(widget.id, widget.creatorID,
+                            widget.starterDate, widget.endDate),
                       ]),
                 ),
               ),

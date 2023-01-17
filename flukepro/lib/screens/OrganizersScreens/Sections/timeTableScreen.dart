@@ -24,7 +24,7 @@ TextEditingController _sessionRoomCon = TextEditingController();
 TextEditingController eventDayCon = TextEditingController();
 TextEditingController endTimeCon = TextEditingController();
 TextEditingController starterTimeCon = TextEditingController();
-
+AssetImage? image;
 final _sessionFormKey = GlobalKey<FormState>();
 
 // Future<Map<String, dynamic>?> getEventInfoForTimetable(eventID, context) async {
@@ -175,6 +175,10 @@ class _timeTableState extends State<timeTable> with TickerProviderStateMixin {
                                   child: InkWell(
                                       onTap: () async {
                                         sessionDataSource? sd;
+                                        Provider.of<notificationPRovider>(
+                                                context,
+                                                listen: false)
+                                            .setSessionDataSource(sd);
                                         print('eventId ${args[2]}');
                                         //todo test the delete function
                                         await FirebaseFirestore.instance
@@ -187,10 +191,7 @@ class _timeTableState extends State<timeTable> with TickerProviderStateMixin {
                                               in snapshot.docs) {
                                             ds.reference.delete();
                                           }
-                                          Provider.of<notificationPRovider>(
-                                                  context,
-                                                  listen: false)
-                                              .sessiondatasource = sd;
+
                                           Navigator.pop(context);
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
@@ -231,7 +232,12 @@ class _timeTableState extends State<timeTable> with TickerProviderStateMixin {
             ),
             Expanded(
               child: Stack(children: [
-                eventTimeline(args[2], args[0], args[1]),
+                eventTimeline(
+                  args[2],
+                  args[3],
+                  args[0],
+                  args[1],
+                ),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: Padding(

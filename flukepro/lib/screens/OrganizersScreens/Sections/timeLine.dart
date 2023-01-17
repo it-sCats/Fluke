@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flukepro/utils/SigningProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -10,9 +11,10 @@ import '../../../utils/notificationProvider.dart';
 
 class eventTimeline extends StatefulWidget {
   String eventID;
+  String creatorID;
   Timestamp startDate;
   Timestamp endDate;
-  eventTimeline(this.eventID, this.startDate, this.endDate);
+  eventTimeline(this.eventID, this.creatorID, this.startDate, this.endDate);
 
   @override
   State<eventTimeline> createState() => _eventTimelineState();
@@ -50,10 +52,9 @@ class _eventTimelineState extends State<eventTimeline> {
                     toDate,
                     Colors.white70));
 
-                Provider.of<notificationPRovider>(context, listen: false)
-                    .sessiondatasource = sessionDataSource(sessionat);
-              } //needs testing
-
+                Provider.of<notificationPRovider>(context).sessiondatasource =
+                    sessionDataSource(sessionat);
+              }
             //this takes the list of session to sessionDataSource
 
             return SfCalendar(
@@ -65,87 +66,175 @@ class _eventTimelineState extends State<eventTimeline> {
               appointmentTextStyle: conLittelTxt12,
               backgroundColor: conBlue.withOpacity(.16),
               allowAppointmentResize: true,
+//todo delete still not working
 
               appointmentBuilder: (context, calendarAppointmentDetails) {
                 Session session = calendarAppointmentDetails.appointments.first;
                 return GestureDetector(
-                  onTap: () {},
-                  onLongPress: () {
-                    showDialog(
-                        //save to drafts dialog
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            icon: Icon(
-                              Icons.warning,
-                              color: conRed,
-                              size: 50,
-                            ),
-                            title: Text(
-                              'سيتم حذف الجلسة',
-                              textAlign: TextAlign.center,
-                              style: conHeadingsStyle.copyWith(fontSize: 15),
-                            ),
-                            actions: [
-                              InkWell(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(
-                                    ' إالغاء الحذف',
-                                    textAlign: TextAlign.center,
-                                    style: conHeadingsStyle.copyWith(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal),
+                  onTapDown: Provider.of<siggning>(context, listen: false)
+                              .loggedUser!
+                              .uid ==
+                          widget.creatorID
+                      ? (details) {
+                          showMenu<String>(
+                            context: context,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)
+                                    .copyWith(topRight: Radius.circular(0))),
+                            position: RelativeRect.fromLTRB(
+                              details.globalPosition.dx + 10,
+                              details.globalPosition.dy + 70,
+                              details.globalPosition.dx,
+                              details.globalPosition.dy + 10,
+                            ), //position where you want to show the menu on screen
+                            items: [
+                              PopupMenuItem(
+                                  onTap: () {},
+                                  value: 'edit',
+                                  child: Column(
+                                    children: [
+                                      Icon(
+                                        Icons.edit,
+                                        size: 20,
+                                        color: Colors.black45,
+                                      ),
+                                      Divider()
+                                    ],
                                   )),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 10),
-                                decoration: BoxDecoration(
-                                    color: conRed,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: InkWell(
-                                    onTap: () async {
-                                      await FirebaseFirestore.instance
-                                          .collection('events')
-                                          .doc(widget.eventID.trim())
-                                          .collection('agenda')
-                                          .doc(session.id)
-                                          .delete()
-                                          .whenComplete(
-                                              //بعد إنهاء عملية الحدث يقوم بإعادة التوجيه للصفحة الرئيسية
-                                              () {
-                                        Navigator.pop(context);
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                              content: Text(
-                                            'تم حذف الجلسة بنجاح',
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontFamily: 'Cairo',
-                                            ),
-                                          )),
-                                        );
-                                      });
-                                    },
-                                    child: Text(
-                                      'حدف',
-                                      textAlign: TextAlign.center,
-                                      style: conHeadingsStyle.copyWith(
-                                          color: Colors.white,
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold),
-                                    )),
-                              ),
+                              PopupMenuItem(
+                                  onTap: () async {
+                                    print(
+                                        'event id ${widget.eventID.trim()} session ID ${session.id.trim()}');
+                                    await FirebaseFirestore.instance
+                                        .collection('events')
+                                        .doc(widget.eventID.trim())
+                                        .collection('agenda')
+                                        .doc(session.id.trim())
+                                        .delete()
+                                        .whenComplete(
+                                            //بعد إنهاء عملية الحدث يقوم بإعادة التوجيه للصفحة الرئيسية
+                                            () {
+                                      sessionDataSource? sd;
+
+                                      if (sessionat.length <= 1) {
+                                        Provider.of<notificationPRovider>(
+                                                context,
+                                                listen: false)
+                                            .sessiondatasource!
+                                            .notifyListeners(
+                                                CalendarDataSourceAction.remove,
+                                                sessionat);
+                                      }
+                                      // Navigator.pop(context);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                          'تم حذف الجلسة بنجاح',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontFamily:
+                                                'Cairo', //update ui when delete K try to move everything to provider
+                                          ),
+                                        )),
+                                      );
+                                    });
+                                    Provider.of<notificationPRovider>(context,
+                                            listen: false)
+                                        .sessiondatasource;
+                                    // Future.delayed(
+                                    //     const Duration(seconds: 0),
+                                    //     () => showDialog(
+                                    //         //save to drafts dialog
+                                    //         context: context,
+                                    //         builder: (context) {
+                                    //           return AlertDialog(
+                                    //             icon: Icon(
+                                    //               Icons.warning,
+                                    //               color: conRed.withOpacity(.9),
+                                    //               size: 50,
+                                    //             ),
+                                    //             title: Text(
+                                    //               'سيتم حذف الجلسة',
+                                    //               textAlign: TextAlign.center,
+                                    //               style: conHeadingsStyle.copyWith(
+                                    //                   fontSize: 15),
+                                    //             ),
+                                    //             alignment: Alignment.center,
+                                    //             actionsOverflowAlignment:
+                                    //                 OverflowBarAlignment.center,
+                                    //             actionsOverflowButtonSpacing: 15,
+                                    //             actions: [
+                                    //               Container(
+                                    //                 padding: EdgeInsets.symmetric(
+                                    //                     horizontal: 20, vertical: 10),
+                                    //                 decoration: BoxDecoration(
+                                    //                     color: conRed.withOpacity(.9),
+                                    //                     borderRadius:
+                                    //                         BorderRadius.circular(
+                                    //                             10)),
+                                    //                 child: InkWell(
+                                    //                     onTap: () async {
+                                    //
+                                    //                     },
+                                    //                     child: Center(
+                                    //                       child: Text(
+                                    //                         'حدف',
+                                    //                         textAlign:
+                                    //                             TextAlign.center,
+                                    //                         style: conHeadingsStyle
+                                    //                             .copyWith(
+                                    //                                 color:
+                                    //                                     Colors.white,
+                                    //                                 fontSize: 17,
+                                    //                                 fontWeight:
+                                    //                                     FontWeight
+                                    //                                         .bold),
+                                    //                       ),
+                                    //                     )),
+                                    //               ),
+                                    //               InkWell(
+                                    //                   onTap: () {
+                                    //                     Navigator.pop(context);
+                                    //                   },
+                                    //                   child: Text(
+                                    //                     ' إالغاء الحذف',
+                                    //                     textAlign: TextAlign.center,
+                                    //                     style:
+                                    //                         conHeadingsStyle.copyWith(
+                                    //                             fontSize: 14,
+                                    //                             fontWeight: FontWeight
+                                    //                                 .normal),
+                                    //                   )),
+                                    //             ],
+                                    //             buttonPadding: EdgeInsets.all(20),
+                                    //             actionsAlignment:
+                                    //                 MainAxisAlignment.spaceAround,
+                                    //             contentPadding: EdgeInsets.symmetric(
+                                    //                 vertical: 10, horizontal: 100),
+                                    //           );
+                                    //         }));
+                                  },
+                                  value: 'delete',
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                        color: Colors.black45,
+                                      ),
+                                      Divider(
+                                        color: conBlack.withOpacity(.0),
+                                      )
+                                    ],
+                                  )),
                             ],
-                            buttonPadding: EdgeInsets.all(20),
-                            actionsAlignment: MainAxisAlignment.spaceAround,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 100),
+                            elevation: 3.0,
                           );
-                        });
-                  },
+                        }
+                      : null,
                   child: Container(
                     margin: EdgeInsets.all(2),
                     decoration: BoxDecoration(

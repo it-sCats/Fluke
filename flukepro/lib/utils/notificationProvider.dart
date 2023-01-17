@@ -9,14 +9,44 @@ import 'package:provider/provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../components/formsAndDisplays/participationRequest.dart';
+import '../components/session.dart';
 import '../components/sessionDataSource.dart';
 import 'SigningProvider.dart';
 
 class notificationPRovider extends ChangeNotifier {
   sessionDataSource? sessiondatasource; //for agenda
+  setSessionDataSource(sessionDAta) {
+    this.sessiondatasource = sessionDAta;
+    notifyListeners();
+  }
 
   String? deviceToken;
   GlobalKey<NavigatorState>? navigatorKey;
+  addingSessions(AsyncSnapshot snapshot, List<Session> sessionat) {
+    final sessions = snapshot.data!.docs;
+    if (snapshot.connectionState == ConnectionState.active ||
+        snapshot.connectionState == ConnectionState.done)
+      for (QueryDocumentSnapshot session in sessions) {
+        String sessionID = session.id;
+        Timestamp start = session['fromTime'];
+        Timestamp end = session['toTime'];
+        DateTime FromDate =
+            DateTime.fromMicrosecondsSinceEpoch(start.microsecondsSinceEpoch);
+        DateTime toDate =
+            DateTime.fromMicrosecondsSinceEpoch(end.microsecondsSinceEpoch);
+        sessionat.add(Session(
+            sessionID,
+            session['sessionName'],
+            session['speakerName'],
+            session['room'],
+            FromDate,
+            toDate,
+            Colors.white70));
+
+        this.sessiondatasource = sessionDataSource(sessionat);
+        notifyListeners();
+      } //needs t
+  }
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();

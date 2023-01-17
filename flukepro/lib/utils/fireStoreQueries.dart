@@ -164,6 +164,20 @@ getOrganizersEventSnapshot(context) {
   return AllEvents;
 }
 
+getOrganizersEventForAgendaSnapshot(context) {
+  print(Provider.of<siggning>(context, listen: false).loggedUser!.uid.trim());
+  Stream<QuerySnapshot> AllEvents = FirebaseFirestore.instance
+      .collection('events')
+      .where('creatorID',
+          isEqualTo: Provider.of<siggning>(context, listen: false)
+              .loggedUser!
+              .uid
+              .trim())
+      .where('endDate', isGreaterThanOrEqualTo: Timestamp.now())
+      .snapshots();
+  return AllEvents;
+}
+
 Future<int?> gettingNumberOfEventVisitors(eventId) async {
   var snapshot = await _firestore
       .collection('events')
