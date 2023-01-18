@@ -233,10 +233,11 @@ class _timeTableState extends State<timeTable> with TickerProviderStateMixin {
             Expanded(
               child: Stack(children: [
                 eventTimeline(
-                  args[2],
-                  args[3],
-                  args[0],
-                  args[1],
+                  args: args,
+                  eventID: args[2],
+                  creatorID: args[3],
+                  startDate: args[0],
+                  endDate: args[1],
                 ),
                 Align(
                   alignment: Alignment.bottomRight,

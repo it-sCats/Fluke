@@ -8,13 +8,20 @@ import '../../../components/cons.dart';
 import '../../../components/session.dart';
 import '../../../components/sessionDataSource.dart';
 import '../../../utils/notificationProvider.dart';
+import 'editSessionInfo.dart';
 
 class eventTimeline extends StatefulWidget {
   String eventID;
+  var args;
   String creatorID;
   Timestamp startDate;
   Timestamp endDate;
-  eventTimeline(this.eventID, this.creatorID, this.startDate, this.endDate);
+  eventTimeline(
+      {this.args,
+      required this.eventID,
+      required this.creatorID,
+      required this.startDate,
+      required this.endDate});
 
   @override
   State<eventTimeline> createState() => _eventTimelineState();
@@ -89,7 +96,19 @@ class _eventTimelineState extends State<eventTimeline> {
                             ), //position where you want to show the menu on screen
                             items: [
                               PopupMenuItem(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Future.delayed(
+                                        const Duration(seconds: 0),
+                                        () => showModalBottomSheet(
+                                            elevation: 50,
+                                            isScrollControlled: true,
+                                            context: context,
+                                            builder: (context) =>
+                                                sessionInfoEditing(
+                                                  args: widget.args,
+                                                  sessionid: session.id.trim(),
+                                                )));
+                                  },
                                   value: 'edit',
                                   child: Column(
                                     children: [

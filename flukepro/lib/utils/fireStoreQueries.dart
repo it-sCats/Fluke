@@ -178,6 +178,17 @@ getOrganizersEventForAgendaSnapshot(context) {
   return AllEvents;
 }
 
+Future<DocumentSnapshot<Map<String, dynamic>>> getSessionInfo(
+    sessionID, eventID) async {
+  var sessionInfo = await FirebaseFirestore.instance
+      .collection('events')
+      .doc(eventID)
+      .collection('agenda')
+      .doc(sessionID)
+      .get();
+  return sessionInfo;
+}
+
 Future<int?> gettingNumberOfEventVisitors(eventId) async {
   var snapshot = await _firestore
       .collection('events')
