@@ -8,11 +8,45 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import '../components/formsAndDisplays/participationRequest.dart';
+import '../components/session.dart';
+import '../components/sessionDataSource.dart';
 import 'SigningProvider.dart';
 
 class notificationPRovider extends ChangeNotifier {
+  sessionDataSource? sessiondatasource; //for agenda
+  setSessionDataSource(sessionDAta) {
+    this.sessiondatasource = sessionDAta;
+    notifyListeners();
+  }
+
   String? deviceToken;
   GlobalKey<NavigatorState>? navigatorKey;
+  addingSessions(AsyncSnapshot snapshot, List<Session> sessionat) {
+    final sessions = snapshot.data!.docs;
+    if (snapshot.connectionState == ConnectionState.active ||
+        snapshot.connectionState == ConnectionState.done)
+      for (QueryDocumentSnapshot session in sessions) {
+        String sessionID = session.id;
+        Timestamp start = session['fromTime'];
+        Timestamp end = session['toTime'];
+        DateTime FromDate =
+            DateTime.fromMicrosecondsSinceEpoch(start.microsecondsSinceEpoch);
+        DateTime toDate =
+            DateTime.fromMicrosecondsSinceEpoch(end.microsecondsSinceEpoch);
+        sessionat.add(Session(
+            sessionID,
+            session['sessionName'],
+            session['speakerName'],
+            session['room'],
+            FromDate,
+            toDate,
+            Colors.white70));
+
+        this.sessiondatasource = sessionDataSource(sessionat);
+        notifyListeners();
+      } //needs t
+  }
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -104,7 +138,7 @@ class notificationPRovider extends ChangeNotifier {
               importance: Importance.high,
               styleInformation: bigTextStyleInformation,
               priority: Priority.max,
-              playSound: false);
+              playSound: true);
       NotificationDetails notificationDetails = NotificationDetails(
           android: androidNotificationDetails,
           iOS: DarwinNotificationDetails());
@@ -142,7 +176,7 @@ class notificationPRovider extends ChangeNotifier {
               importance: Importance.high,
               styleInformation: bigTextStyleInformation,
               priority: Priority.max,
-              playSound: false);
+              playSound: true);
       NotificationDetails notificationDetails = NotificationDetails(
           android: androidNotificationDetails,
           iOS: DarwinNotificationDetails());
@@ -152,13 +186,16 @@ class notificationPRovider extends ChangeNotifier {
       if (message != null) {
         FirebaseFirestore.instance
             .collection('users')
-            .doc(siggning().loggedUser!.uid)
+            .doc(siggning()
+                .loggedUser!
+                .uid) //here we remove the this and add the notification when it's added
             .collection('notification')
             .doc(message!.data['eventId'])
             .set({
           'title': message!.notification!.title,
           'date': message.notification!.body,
           'creatorID': siggning().loggedUser!.uid,
+          'image': message.data['image'],
           'creationDate': Timestamp.now()
         });
         // navigatorKey?.currentState!.push(MaterialPageRoute(
@@ -185,8 +222,7 @@ sendPushToOrgnaizerNotification(
                 'https://fcm.googleapis.com/v1/projects/fluke-db/messages:send'),
             headers: <String, String>{
               'Content-Type': 'application/json',
-              'Authorization':
-                  'Bearer ya29.a0AX9GBdWrpODti7TDWt6eV0wXRnPrasf5iFE_pgsb8AA1WD9zcGZyVglUyGRzQVA5UKQWiUzt4vXh5b_ogDt0dkOTLtesZWyp0CbbxBt5Kbco7MOwhUcAoHes4mEliU_2Se8NsXJHHI8P717w12FvtvgmpvCaaCgYKAXcSARESFQHUCsbC6gTSlfxxcQLHWL9S73_EDA0163'
+              'Authorization': 'Bearer $acessToken'
             },
             body: jsonEncode(<String, dynamic>{
               "message": {
@@ -196,6 +232,41 @@ sendPushToOrgnaizerNotification(
                   "click_action": "FLUTTER_NOTIFICATION_CLICK",
                   "creatorID": createrId,
                   "eventId": eventId
+                }
+              }
+            }))
+        .whenComplete(() => debugPrint('done Should send'));
+  } catch (e) {
+    print('erorr in pushing notifi:$e');
+  }
+}
+
+participantAcceptanceNotifi(
+    String body, String title, joinType, image, eventId, ParticipantId) async {
+  final user = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(ParticipantId.toString().trim())
+      .get();
+  var userTokens = user.data()!['tokens'].last.toString();
+  try {
+    await http
+        .post(
+            Uri.parse(
+                'https://fcm.googleapis.com/v1/projects/fluke-db/messages:send'),
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $acessToken'
+            },
+            body: jsonEncode(<String, dynamic>{
+              "message": {
+                "token": userTokens,
+                "notification": {"title": title, "body": body},
+                "data": {
+                  "click_action": "FLUTTER_NOTIFICATION_CLICK",
+                  "eventId": eventId,
+                  'joinType': joinType,
+                  'image': image,
+                  'reciverID': ParticipantId
                 }
               }
             }))

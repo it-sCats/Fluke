@@ -5,7 +5,6 @@ import 'package:flukepro/screens/OrganizersScreens/Notifications.dart';
 import 'package:flukepro/screens/OrganizersScreens/ODashboard.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oevents.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oprofile.dart';
-import 'package:flukepro/screens/OrganizersScreens/Sections/timeTable.dart';
 import 'package:flukepro/screens/OrganizersScreens/Sections/timeTableScreen.dart';
 import 'package:flukepro/screens/mainScreens/AdminScreens/main_screen.dart';
 import 'package:flukepro/utils/SigningProvider.dart';

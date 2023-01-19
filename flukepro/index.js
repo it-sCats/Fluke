@@ -1,84 +1,47 @@
-// Node.js e.g via a Firebase Cloud Function
-const express=require('express');
-const functions =require('firebase-functions');
-// const app=express();
-const admin = require("firebase-admin");
+var {google} = require("googleapis");
 
-// var serviceAccount = require("flukepro/fluke-db-firebase-adminsdk-b5tjy-f1c2110dc4.json");
-admin.initializeApp();
-//   credential: admin.credential.cert(serviceAccount)
-// app.post('/sendNotificationForVisitors',(req,res)=>{
-// const notification=req.body.notification;
-// const topic=req.body.topic;
-// const message={
-// notification:notification
-// }
-// admin.messaging().sendToTopic('visitors',message).then((response)=>{console.log('Notification was sent successfully:',response);}).catch((error)=>{
-//                                                   console.log('failed to send notifi:',error);});
-// });
-
-// this function meant to send notification whenever creating new event in firebase
-exports.sendEventNotification=functions.firestore.document('events/{id}').onCreate((snapshot)=>{
-//getsthe event data
-var event=snapshot.data();
-
-//send notification to all users
-const payload ={
-
-notification:{
-title:`${event.title}`,
-body:
-`سيقام ${event.title} \n بتاريخ ${event.starterDate}`,
-clickAction:'FLUTTER_NOTIFICATION_CLICK'
- },
- data:{
- eventId:`${event.id}`,
- createrId:`${event.creater}`,
- }
-
-};
-return
-admin.messaging().sendToTopic('visitors',payload).then((response)=>{console.log('Notification was sent successfully:',response);}).catch((error)=>{
-console.log('failed to send notifi:',error);});
+// Load the service account key JSON file.
 
 
+// Define the required scopes.
+var scopes = [
+  "https://www.googleapis.com/auth/firebase.messaging",
+
+];
+var http=require('http');
+
+// Authenticate a JWT client with the service account.
+
+function getAccessToken(){
+return new Promise(function(resolve,reject){
+var key=require("./fluke-db-firebase-adminsdk-b5tjy-57d2779c68.json");
+var jwtClient = new google.auth.JWT(
+  key.client_email,
+  null,
+  key.private_key,
+  scopes
+);
+jwtClient.authorize(function(error, tokens) {
+  if (error) {
+  reject(error);
+  return;
+  } else if (tokens.access_token === null) {
+    console.log("Provided service account does not have permission to generate access tokens");
+  } else {
+//    var accessToken = tokens.access_token;
+resolve(tokens.access_token)
+    // See the "Using the access token" section below for information
+    // on how to use the access token to send authenticated requests to
+    // the Realtime Database REST API.
+  }
 });
-//async function onCreatingEvent(ownerId, userId, picture) {
-//
-//  // Get the owners details
-//  const owner = admin.firestore().collection("users").doc(ownerId).get();
-//
-//  // Get the users details
-//  const user = admin.firestore().collection("users").doc(userId).get();
-//
-//  await admin.messaging().sendToDevice(
-//    owner.tokens, // ['token_1', 'token_2', ...]
-//    {
-//      data: {
-//        owner: JSON.stringify(owner),
-//        user: JSON.stringify(user),
-//        picture: JSON.stringify(picture),
-//      },
-//    },
-//    {
-//      // Required for background/quit data-only messages on iOS
-//      contentAvailable: true,
-//      // Required for background/quit data-only messages on Android
-//      priority: "high",
-//    }
-//  );
-//}
-//
-//function sendNotificationToVisitors(eventID,title,body,eventPic){
-//const message = {
-// notification: {
-//    title:JSON.stringify(title),
-//    body: JSON.stringify(body),
-//    imageUrl:JSON.stringify(eventPic),
-//  },
-//  data: {
-//eventId:JSON.stringify(eventID)
-//
-//  },
-//  topic: "visitors",
-//};}
+}) }
+// Use the JWT client to generate an access token.
+
+var server=http.createServer(function(req,res){
+getAccessToken().then(function(access_token){
+res.end(access_token)
+});
+});server.listen(3000,function(){
+console.log('server started');
+});

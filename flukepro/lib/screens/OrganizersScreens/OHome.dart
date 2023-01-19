@@ -41,6 +41,7 @@ AnimationController? controller;
 
 bool showCreating = false;
 String? eventId;
+String? creatorId;
 Timestamp? starterDate;
 Timestamp? endDate;
 
@@ -78,6 +79,8 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
     super.initState();
     print('++++++++++++++');
     Provider.of<siggning>(context, listen: false).getCurrentUsertype(
+        Provider.of<siggning>(context, listen: false).loggedUser!.uid);
+    Provider.of<siggning>(context, listen: false).getUserInfoDoc(
         Provider.of<siggning>(context, listen: false).loggedUser!.uid);
     // Provider.of<siggning>(context, listen: false).getUserInfoDoc();
 
@@ -157,8 +160,20 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                                       child: Directionality(
                                         textDirection: TextDirection.rtl,
                                         child: StreamBuilder<QuerySnapshot>(
-                                            stream: getOrganizersEventSnapshot(
-                                                context),
+                                            stream: FirebaseFirestore.instance
+                                                .collection('events')
+                                                .where('creatorID',
+                                                    isEqualTo:
+                                                        Provider.of<siggning>(
+                                                                context,
+                                                                listen: false)
+                                                            .loggedUser!
+                                                            .uid
+                                                            .trim())
+                                                .where('endDate',
+                                                    isGreaterThanOrEqualTo:
+                                                        Timestamp.now())
+                                                .snapshots(),
                                             builder: (context, snapshot) {
                                               if (snapshot.connectionState ==
                                                   ConnectionState.waiting) {
@@ -206,6 +221,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                                                       value: [
                                                         items['title'],
                                                         items['id'],
+                                                        items['creatorID'],
                                                         items['starterDate'],
                                                         items['endDate'],
                                                       ],
@@ -217,11 +233,11 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                                                     _eventTypeCont.text = value[
                                                             0]
                                                         .toString(); //the event name
-
+                                                    creatorId = value[2];
                                                     eventId = value[1];
                                                     //the event id
-                                                    starterDate = value[2];
-                                                    endDate = value[3];
+                                                    starterDate = value[3];
+                                                    endDate = value[4];
                                                     print(value[0]);
                                                     print(value[1]);
                                                     print(value[2]);
@@ -251,7 +267,8 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                                                   arguments: [
                                                     starterDate,
                                                     endDate,
-                                                    eventId
+                                                    eventId,
+                                                    creatorId
                                                   ]);
                                             }
                                           }

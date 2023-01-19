@@ -237,7 +237,7 @@ class rectangleEvent extends StatelessWidget {
                     borderRadius: BorderRadius.circular(25),
                     child: Image.network(
                       image!,
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                     ))
                 : Image.asset(
                     'images/The Little Things Working.png',

@@ -6,6 +6,7 @@ class sessionDataSource extends CalendarDataSource {
   sessionDataSource(List<Session> appointmantss) {
     this.appointments = appointmantss;
   }
+
   Session getSession(int index) => appointments![index] as Session;
   @override
   String? getLocation(int index) => getSession(index).speakerName;

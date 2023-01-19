@@ -23,8 +23,9 @@ class updatePass extends StatefulWidget {
 
 class _updatePassState extends State<updatePass> {
   final _auth = FirebaseAuth.instance;
-  final TextEditingController _passController = TextEditingController();
+  final TextEditingController _OldpassController = TextEditingController();
 
+  final TextEditingController _reptOldController = TextEditingController();
   final TextEditingController _confirmPassController = TextEditingController();
   String? errorMessage;
   bool isErrored = false;
@@ -32,7 +33,6 @@ class _updatePassState extends State<updatePass> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Set;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SafeArea(
@@ -41,7 +41,7 @@ class _updatePassState extends State<updatePass> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
                     height: MediaQuery.of(context).size.height / 8,
@@ -49,19 +49,20 @@ class _updatePassState extends State<updatePass> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 55.0),
+                      padding: EdgeInsets.symmetric(horizontal: 60.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             'إعادة تعيين كلمة مرور',
-                            textAlign: TextAlign.right,
+                            textAlign: TextAlign.center,
                             style: conHeadingsStyle,
                           ),
                           Text(
-                            'أدخل كلمة المرور الجديدة ',
-                            textAlign: TextAlign.right,
-                            style: conOnboardingText.copyWith(color: conBlack),
+                            'يجب أن تحوي كلمة المرور على أكثر من ستة خانات، تتكون من خليط من الارقام والحروف والرموز ',
+                            textAlign: TextAlign.center,
+                            style: conOnboardingText.copyWith(
+                                color: conBlack, fontSize: 12),
                           )
                         ],
                       ),
@@ -74,17 +75,17 @@ class _updatePassState extends State<updatePass> {
                     width: 290,
                     height: 70,
                     child: TextFormField(
-                        controller: _passController,
+                        controller: _OldpassController,
                         style: TextStyle(
                             fontSize: 15, fontFamily: 'Cairo', color: conBlack),
                         onChanged: (value) {
                           setState(() {
-                            _passController.text = value;
+                            _OldpassController.text = value;
                           });
                         },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'يجب أن تدخل كلمة المرور';
+                            return ' يجب أن تدخل كلمة المرور القديمة ';
                           }
                           return null;
                         },
@@ -92,10 +93,10 @@ class _updatePassState extends State<updatePass> {
                         textAlign: TextAlign.right,
                         obscureText: true,
                         decoration: InputDecoration(
-                            hintText: 'أدخل كلمة المرور',
+                            hintText: 'أدخل كلمة المرور القديمة',
                             focusedErrorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(width: 2, color: conRed),
-                                borderRadius: BorderRadius.circular(25)),
+                                borderRadius: BorderRadius.circular(50)),
                             errorStyle: TextStyle(
                                 fontFamily: 'Cairo',
                                 fontSize: 12,
@@ -118,6 +119,62 @@ class _updatePassState extends State<updatePass> {
                     child: Column(
                       children: [
                         TextFormField(
+                            controller: _reptOldController,
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontFamily: 'Cairo',
+                                color: conBlack),
+                            onChanged: (value) {
+                              setState(() {
+                                _reptOldController.text = value;
+                              });
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return ' يجب أن تدخل كتابة كلمة المرور جديدة';
+                              }
+                              return null;
+                            },
+                            textDirection: TextDirection.rtl,
+                            textAlign: TextAlign.right,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                                hintText: 'ادخل كتابة كلمة المرور الجديدة ',
+                                focusedErrorBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(width: 2, color: conRed),
+                                    borderRadius: BorderRadius.circular(25)),
+                                errorStyle: TextStyle(
+                                    fontFamily: 'Cairo',
+                                    fontSize: 12,
+                                    color: conRed),
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 25),
+                                hintStyle: conTxtFeildHint,
+                                enabledBorder: roundedTxtFeild,
+                                errorBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(width: 2, color: conRed),
+                                    borderRadius: BorderRadius.circular(25)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(width: 1, color: conBlack),
+                                    borderRadius: BorderRadius.circular(25)))),
+                        Visibility(
+                            visible: isErrored,
+                            child: Text(
+                              errorMessage.toString(),
+                              style: conErorTxtStyle.copyWith(fontSize: 11),
+                            ))
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 290,
+                    height: 80,
+                    child: Column(
+                      children: [
+                        TextFormField(
                             controller: _confirmPassController,
                             style: TextStyle(
                                 fontSize: 15,
@@ -130,7 +187,7 @@ class _updatePassState extends State<updatePass> {
                             },
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'يجب أن تعيد كتابة كلمة المرور';
+                                return ' يجب أن تعيد كتابة كلمة المرور جديدة';
                               }
                               return null;
                             },
@@ -138,7 +195,7 @@ class _updatePassState extends State<updatePass> {
                             textAlign: TextAlign.right,
                             obscureText: true,
                             decoration: InputDecoration(
-                                hintText: 'أعد كتابة كلمة المرور ',
+                                hintText: 'أعد كتابة كلمة المرور الجديدة ',
                                 focusedErrorBorder: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(width: 2, color: conRed),
@@ -209,14 +266,12 @@ class _updatePassState extends State<updatePass> {
                               //   );
                               // }
                               //
+
                               setState(() {
                                 _isLoading = true;
                               });
-                              if (_passController.text ==
+                              if (_OldpassController.text ==
                                   _confirmPassController.text) {
-                                final result = _auth.confirmPasswordReset(
-                                    code: args.single,
-                                    newPassword: _passController.text);
                               } else {
                                 errorMessage = 'كلمة المرور غير متطابقة';
                               }
