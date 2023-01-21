@@ -199,8 +199,8 @@ class _ParticiRequsetPrevState extends State<ParticiRequsetPrev> {
                                 )),
                               ));
                       Map<String, dynamic>? userInfoDoc =
-                          Provider.of<siggning>(context, listen: false)
-                              .userInfoDocument;
+                          await Provider.of<siggning>(context, listen: false)
+                              .getUserInfoDoc(widget.participantsId);
                       final vistors = await FirebaseFirestore
                           .instance //checks if user aleadry registered
                           .collection('users')
@@ -210,6 +210,20 @@ class _ParticiRequsetPrevState extends State<ParticiRequsetPrev> {
                           .get();
 
                       if (!vistors.exists) {
+                        FirebaseFirestore.instance
+                            .collection('events')
+                            .doc(widget.eventId)
+                            .collection('participants')
+                            .add({
+                          'id': widget.participantsId.trim(),
+                          'email': userInfoDoc!['email'],
+                          'name': userInfoDoc['name'],
+                          'phone': userInfoDoc['phone'] == null
+                              ? ' '
+                              : userInfoDoc['phone'],
+                          'interests': userInfoDoc['interests'],
+                          'participationType': widget.joinType
+                        });
                         //in case no documents were returned which means user is not registered then register user
                         FirebaseFirestore.instance
                             .collection('users')
@@ -218,11 +232,24 @@ class _ParticiRequsetPrevState extends State<ParticiRequsetPrev> {
                             .doc(widget.eventId.trim())
                             .set({
                           'eventTitle': widget.eventTitle,
-                          'email': user!.email,
+                          'email': userInfoDoc['email'],
                           'phone': userInfoDoc!['phone'],
-                          'name': Provider.of<siggning>(context, listen: false)
-                              .userInfoDocument!['name'],
-                          'participationType': 'مشارك'
+                          'name': userInfoDoc!['name'],
+                          'joinType': widget.joinType,
+                          'participationType': ' مشارك\n ${widget.joinType} '
+                        });
+                        FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(widget.participantsId)
+                            .collection('notification')
+                            .doc(widget.eventId)
+                            .set({
+                          'title':
+                              ' تمت الموافقة على طلبك للمشاركة في حدث ${widget.eventTitle} ',
+                          'date': '',
+                          'image': widget.eventImage,
+                          'creatorID': siggning().loggedUser!.uid,
+                          'creationDate': Timestamp.now()
                         });
                       }
                       //secondly we send notifications to the participant
@@ -233,6 +260,7 @@ class _ParticiRequsetPrevState extends State<ParticiRequsetPrev> {
                           widget.eventId,
                           widget.eventImage,
                           widget.participantsId);
+
                       //and finally we create a ticket for the participant
 
                       // registerVisitor(
