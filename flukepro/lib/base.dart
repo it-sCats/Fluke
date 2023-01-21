@@ -24,16 +24,6 @@ class base extends StatefulWidget {
 
 class _baseState extends State<base> {
   SharedPreferences? _selectedPage;
-  int? currentIndexOfNav =
-      base().onNotificationTap == null ? 3 : base().onNotificationTap;
-  int? pageIndex =
-      base().onNotificationTap == null ? 3 : base().onNotificationTap;
-  static List<Widget> _pages = [
-    Vprofile(),
-    notifiScreen(),
-    ExploreScreen(),
-    HomeScreen(),
-  ];
 
   @override
   void initState() {
@@ -63,7 +53,8 @@ class _baseState extends State<base> {
           backgroundColor: Color(0xFFfcfcfc),
           selectedItemColor: conBlue,
           currentIndex: widget.onNotificationTap == null
-              ? currentIndexOfNav!
+              ? Provider.of<notificationPRovider>(context, listen: false)
+                  .currentIndexOfNav!
               : widget.onNotificationTap!,
           unselectedItemColor: Color(0xffd3c8c7),
           showSelectedLabels: true,
@@ -72,8 +63,8 @@ class _baseState extends State<base> {
           onTap: (value) {
             setState(() {
               print(value);
-              currentIndexOfNav = value;
-              pageIndex = value;
+              Provider.of<notificationPRovider>(context, listen: false)
+                  .updatePage(value);
             });
           },
           items: [
@@ -93,7 +84,8 @@ class _baseState extends State<base> {
         ),
       ),
       body: Center(
-        child: _pages.elementAt(pageIndex!),
+        child: Provider.of<notificationPRovider>(context, listen: false)
+            .pageToDisplay(),
       ),
     );
   }

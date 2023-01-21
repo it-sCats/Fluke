@@ -49,7 +49,7 @@ Future<Map<String, dynamic>?> getTempUser(userID) async {
 getInterstsBasedEvents(userId, context) {
   //make sure that there is the same interest in the event and the user if it didnt work filter in the app
   var info = getTempUser(userId);
-  var interests = Provider.of<siggning>(context).userInfoDocument;
+  var interests = Provider.of<siggning>(context).userInfoDocument!['interests'];
   return FirebaseFirestore.instance
       .collection('events')
       .where('field', arrayContains: interests)
@@ -106,6 +106,7 @@ getOngoing() {
   return events;
 }
 
+//تجيب التيكيتس الخاصين بيوزر معين
 Stream<QuerySnapshot<Map<String, dynamic>>> getUserReegiteredEvents(
     String userId) {
   final AllEvents = _firestore
@@ -117,6 +118,7 @@ Stream<QuerySnapshot<Map<String, dynamic>>> getUserReegiteredEvents(
   return AllEvents;
 }
 
+//تجيب الايفينتس الخاصيين بمنظم معين
 getCreatorEvent(userID) {
   final AllEvents = _firestore
       .collection('events')
@@ -124,6 +126,26 @@ getCreatorEvent(userID) {
       .snapshots();
 
   return AllEvents;
+}
+
+setSearchParam(String caseNumber) {
+  List<String> caseSearchList = [];
+  String temp = "";
+  for (int i = 0; i < caseNumber.length; i++) {
+    temp = temp + caseNumber[i];
+    caseSearchList.add(temp);
+  }
+  return caseSearchList;
+}
+
+//تجيب المشاركين في الحدث الي بنعطوه الاي دي متاعه
+Future<QuerySnapshot> getParticipantOfEvent(eventID) async {
+  QuerySnapshot parti = await _firestore
+      .collection('events')
+      .doc(eventID)
+      .collection('participants')
+      .get();
+  return parti;
 }
 
 getOrganizersEvent(context, OrganizerId) async {
