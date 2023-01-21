@@ -100,3 +100,5 @@ class conRequestDivider extends StatelessWidget {
     );
   }
 }
+
+const default_Padding = 16.0;
