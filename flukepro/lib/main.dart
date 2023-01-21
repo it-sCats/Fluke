@@ -8,7 +8,7 @@ import 'package:flukepro/screens/OrganizersScreens/ODashboard.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oevents.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oprofile.dart';
 import 'package:flukepro/screens/OrganizersScreens/Sections/timeTableScreen.dart';
-import 'package:flukepro/screens/mainScreens/AdminScreens/aDashboard.dart';
+import 'package:flukepro/screens/mainScreens/AdminScreens/main_screen.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
 import 'package:flukepro/utils/eventProvider.dart';
 import 'package:flukepro/utils/fireStoreQueries.dart';
@@ -163,7 +163,7 @@ class _MyAppState extends State<MyApp> {
             ],
             background: Container(color: Color(0xFFF5F5F5))),
 
-        home: recdirectRole(),
+        home: Ahome(),
 
         debugShowCheckedModeBanner:
             false, //to remove debugging banner at the top of the screen
@@ -190,6 +190,10 @@ class _MyAppState extends State<MyApp> {
           //routes of Organizers Screens
           'OHome': ((context) => Ohome()),
           '/Odash': ((context) => Odashboard()),
+
+
+          // '/Adash': ((context) => Adashboard()),
+
           '/Oevent': ((context) => Oevents()),
           '/Onotification': ((context) => OnotifiScreen()),
           '/Oprofile': ((context) => Oprofile()),
