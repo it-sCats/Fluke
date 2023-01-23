@@ -5,8 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flukepro/screens/OrganizersScreens/Notifications.dart';
 import 'package:flukepro/screens/OrganizersScreens/ODashboard.dart';
-import 'package:flukepro/screens/OrganizersScreens/Oevents.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oprofile.dart';
+import 'package:flukepro/screens/OrganizersScreens/OsearchScreen.dart';
 import 'package:flukepro/screens/OrganizersScreens/Sections/timeTableScreen.dart';
 import 'package:flukepro/screens/mainScreens/AdminScreens/main_screen.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
@@ -163,7 +163,7 @@ class _MyAppState extends State<MyApp> {
             ],
             background: Container(color: Color(0xFFF5F5F5))),
 
-        home: Ahome(),
+        home: recdirectRole(),
 
         debugShowCheckedModeBanner:
             false, //to remove debugging banner at the top of the screen
@@ -190,18 +190,17 @@ class _MyAppState extends State<MyApp> {
           //routes of Organizers Screens
           'OHome': ((context) => Ohome()),
           '/Odash': ((context) => Odashboard()),
-
+          '/Osearch': ((context) => OsearchScreen()),
 
           // '/Adash': ((context) => Adashboard()),
 
-          '/Oevent': ((context) => Oevents()),
           '/Onotification': ((context) => OnotifiScreen()),
           '/Oprofile': ((context) => Oprofile()),
           'editEvent': ((context) => editEvent()),
           'timeTable': ((context) => timeTable()),
 
           '/Oprofile': ((context) => Oprofile()),
-          '/Adash': ((context) => Adashboard()),
+          '/Adash': ((context) => Ahome()),
           //routes of Admin Screens
         }, //routes are to ease the navigation btween pages
         //we give every page a name then when we want to navigate we just call that name

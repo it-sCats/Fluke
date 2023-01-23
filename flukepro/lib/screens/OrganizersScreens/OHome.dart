@@ -20,7 +20,6 @@ import '../../utils/notificationProvider.dart';
 import '../mainScreens/profile.dart';
 import 'Notifications.dart';
 import 'ODashboard.dart';
-import 'Oevents.dart';
 import 'Oprofile.dart';
 import 'package:intl/intl.dart' as intl;
 
@@ -513,6 +512,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                 Expanded(
                   flex: 1,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       defaultTargetPlatform == TargetPlatform.android ||
                               defaultTargetPlatform ==
@@ -536,6 +536,17 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                               },
                             )
                           : Container(),
+                      IconButton(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 23, horizontal: 30),
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/Osearch');
+                          },
+                          icon: Icon(
+                            Icons.search,
+                            color: conBlack.withOpacity(.9),
+                            size: 40,
+                          ))
                     ],
                   ),
                 ),

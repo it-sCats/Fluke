@@ -487,98 +487,94 @@ class eventDrafts extends StatelessWidget {
             .orderBy('creationDate', descending: true)
             .snapshots(),
         builder: (context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            //في حال لم يتم الاتصال يتم إظهار علامة تحميل
-            return CircularProgressIndicator();
+          if (!snapshot.hasData || snapshot.data == null) {
+            print('${snapshot.data} the data of eventsss');
+            return Center(
+              child: Image.asset(
+                  'images/Hands Phone.png'), //في حال لايوجد ديكومنتس يتم عرض هذه الصورة
+            );
+            //في حال إحتوت السنابشوت على بيانات سيتم بناءها بإستخدام ليست فيو
           } else {
-            if (!snapshot.hasData || snapshot.data == null) {
-              print('${snapshot.data} the data of eventsss');
-              return Center(
-                child: Image.asset(
-                    'images/Hands Phone.png'), //في حال لايوجد ديكومنتس يتم عرض هذه الصورة
-              );
-              //في حال إحتوت السنابشوت على بيانات سيتم بناءها بإستخدام ليست فيو
-            } else {
-              print('${snapshot.data!.docs} the data of eventsss');
-              final events = snapshot.data!.docs;
+            print('${snapshot.data!.docs} the data of eventsss');
+            final events = snapshot.data!.docs;
 
-              List<Widget> eventWidget = [];
-              for (var eventa in events) {
-                Timestamp strat = eventa['starterDate'];
-                Timestamp end = eventa['endDate'];
-                // print(DateTime.fromMicrosecondsSinceEpoch(
-                //     strat.microsecondsSinceEpoch));
-                // print(DateTime.fromMicrosecondsSinceEpoch(
-                //     end.microsecondsSinceEpoch)); //testing
-                {
-                  eventWidget.add(Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10.0,
+            List<Widget> eventWidget = [];
+            for (var eventa in events) {
+              Timestamp strat = eventa['starterDate'];
+              Timestamp end = eventa['endDate'];
+              // print(DateTime.fromMicrosecondsSinceEpoch(
+              //     strat.microsecondsSinceEpoch));
+              // print(DateTime.fromMicrosecondsSinceEpoch(
+              //     end.microsecondsSinceEpoch)); //testing
+              {
+                eventWidget.add(Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 10.0,
+                  ),
+                  child: GestureDetector(
+                    child: OrganizerEventPreview(
+                      //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
+                      title: eventa['title'],
+                      image: eventa['image'],
+                      description: eventa['description'],
+                      field: eventa['field'],
+                      location: eventa['location'],
+                      city: eventa['eventCity'],
+                      starterDate: eventa['starterDate'],
+                      endDate: eventa['endDate'],
+                      starterTime: eventa['starterTime'],
+                      endTime: eventa['endTime'],
+                      eventType: eventa['eventType'],
+                      creationDate: eventa['creationDate'],
+                      acceptsParticapants: eventa['acceptsParticapants'],
+                      eventVisibilty: eventa['eventVisibility'],
                     ),
-                    child: GestureDetector(
-                      child: OrganizerEventPreview(
-                        //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
-                        title: eventa['title'],
-                        image: eventa['image'],
-                        description: eventa['description'],
-                        field: eventa['field'],
-                        location: eventa['location'],
-                        city: eventa['eventCity'],
-                        starterDate: eventa['starterDate'],
-                        endDate: eventa['endDate'],
-                        starterTime: eventa['starterTime'],
-                        endTime: eventa['endTime'],
-                        eventType: eventa['eventType'],
-                        creationDate: eventa['creationDate'],
-                        acceptsParticapants: eventa['acceptsParticapants'],
-                        eventVisibilty: eventa['eventVisibility'],
-                      ),
-                      onTap: () {
-                        showModalBottomSheet(
-                            isScrollControlled: true,
-                            elevation: 100,
-                            context: context,
-                            builder: (context) => eventDisplay(
-                                  wholePage: false,
-                                  justDisplay: false,
-                                  id: eventa['id'],
-                                  title: eventa['title'],
-                                  description: eventa['description'],
-                                  starterDate: eventa['starterDate'],
-                                  location: eventa['location'],
-                                  image: eventa['image'],
-                                  endDate: eventa['endDate'],
-                                  starterTime: eventa['starterTime'],
-                                  eventType: eventa['eventType'],
-                                  endTime: eventa['endTime'],
-                                  field: eventa['field'],
-                                  creationDate: eventa['creationDate'],
-                                  city: eventa['eventCity'],
-                                  acceptsParticapants:
-                                      eventa['acceptsParticapants'],
-                                  eventVisibilty: eventa['eventVisibility'],
-                                  visitorsNum: visitorsNum,
-                                  creatorID: eventa['creatorID'],
-                                  creatorName: eventa['creatorName'],
-                                ));
-                      },
-                    ),
-                  ));
-                }
+                    onTap: () {
+                      showModalBottomSheet(
+                          isScrollControlled: true,
+                          elevation: 100,
+                          context: context,
+                          builder: (context) => eventDisplay(
+                                wholePage: false,
+                                justDisplay: false,
+                                id: eventa['id'],
+                                title: eventa['title'],
+                                description: eventa['description'],
+                                starterDate: eventa['starterDate'],
+                                location: eventa['location'],
+                                image: eventa['image'],
+                                endDate: eventa['endDate'],
+                                starterTime: eventa['starterTime'],
+                                eventType: eventa['eventType'],
+                                endTime: eventa['endTime'],
+                                field: eventa['field'],
+                                creationDate: eventa['creationDate'],
+                                city: eventa['eventCity'],
+                                acceptsParticapants:
+                                    eventa['acceptsParticapants'],
+                                eventVisibilty: eventa['eventVisibility'],
+                                visitorsNum: visitorsNum,
+                                creatorID: eventa['creatorID'],
+                                creatorName: eventa['creatorName'],
+                              ));
+                    },
+                  ),
+                ));
               }
-              return GridView.custom(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                physics: BouncingScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 300,
-                    childAspectRatio: 4 / 5,
-                    crossAxisSpacing: 0,
-                    mainAxisSpacing: 5),
-                childrenDelegate: SliverChildListDelegate(eventWidget),
-              );
             }
+            return GridView.custom(
+              padding: EdgeInsets.symmetric(vertical: 05),
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 300,
+                  childAspectRatio: 4 / 5,
+                  crossAxisSpacing: 0,
+                  mainAxisSpacing: 2),
+              childrenDelegate: SliverChildListDelegate(eventWidget),
+            );
           }
+          //في حال لم يتم الاتصال يتم إظهار علامة تحميل
         });
   }
 }
