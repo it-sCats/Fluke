@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:googleapis/appengine/v1.dart';
+import 'package:googleapis/chromeuxreport/v1.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+//https://react-native-firebase-testing.firebaseio.com
 
 class LoadData extends StatelessWidget {
   const LoadData({super.key});
@@ -10,26 +14,48 @@ class LoadData extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: FutureBuilder(
-          future: getDataloadGridSource(),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            return snapshot.hasData
-                ? SfDataGrid(source: snapshot.data, columns: getColumns())
-                : Center(
-                    child: CircularProgressIndicator(
-                      strokeWidth: 3,
-                    ),
-                  );
+          body: SingleChildScrollView(
+        child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance.collection('users').snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return LinearProgressIndicator();
+            } else {
+              print(snapshot.data!.docs[1].data());
+              return DataTable(columns: [
+                DataColumn(label: Text('Name')),
+                DataColumn(label: Text('Email')),
+                DataColumn(label: Text('Votes')),
+                DataColumn(label: Text('interests')),
+              ], rows: _buildList(context, snapshot.data!.docs));
+            }
           },
         ),
-      ),
+      )),
     );
   }
 
-  Future<DataloadGridSource> getDataloadGridSource() async {
-    var dataLoadList = await generateDataloadList();
-    return DataloadGridSource(dataLoadList);
+  List<DataRow> _buildList(
+      BuildContext context, List<DocumentSnapshot> snapshot) {
+    return snapshot
+        .map((data) =>
+            _buildListItem(context, data.data() as Map<String, dynamic>))
+        .toList();
   }
+
+  DataRow _buildListItem(BuildContext context, Map<String, dynamic> data) {
+    return DataRow(cells: [
+      DataCell(Text(data['name'].toString())),
+      DataCell(Text(data['email'].toString())),
+      DataCell(Text(data['email'].toString())),
+      DataCell(Text(data['interests'].toString()))
+    ]);
+  }
+
+  // Future<DataloadGridSource> getDataloadGridSource() async {
+  //   var dataLoadList = await generateDataloadList();
+  //   return DataloadGridSource(dataLoadList);
+  // }
 
   List<GridColumn> getColumns() {
     return <GridColumn>[
@@ -52,14 +78,17 @@ class LoadData extends StatelessWidget {
     ];
   }
 
-  Future<List<Data_load>> generateDataloadList() async {
-    var response = await http
-        .get(Uri.parse('https://react-native-firebase-testing.firebaseio.com'));
-    var dacodeData = json.decode(response.body).cast<Map<String, dynamic>>();
-    List<Data_load> dataLoadList = await dacodeData
-        .map<Data_load>((json) => Data_load.fromJson(json))
-        .toList();
-    return dataLoadList;
+  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
+      generateDataloadList() async {
+    var dataLoadList =
+        await FirebaseFirestore.instance.collection('users').get();
+    // var response = await http
+    //     .get(Uri.parse('https://react-native-firebase-testing.firebaseio.com'));
+    // var dacodeData = json.decode(response.body).cast<Map<String, dynamic>>();
+    // List<Data_load> dataLoadList = await dacodeData
+    //     .map<Data_load>((json) => Data_load.fromJson(json))
+    //     .toList();
+    return dataLoadList.docs;
   }
 }
 
@@ -107,12 +136,10 @@ class Data_load {
       userName: json['name'],
     );
   }
-
   Data_load({
     required this.userId,
     required this.userName,
   });
-
   final int? userId;
   final String? userName;
 }
@@ -122,7 +149,6 @@ class Data_load {
 // userPhone: json['phone'],
 // city: json['ShipName'],
 // userbirthday: DateTime.parse(json['OrderDate']),
-
 // final DateTime? orderDate;
 // required interests,
 // required userPhone,
