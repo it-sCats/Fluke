@@ -33,11 +33,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: Column(
                       children: [
                         MyFiles(),
-                        SizedBox(height: default_Padding),
-                        // RecentFiles(),
-                        // if (Responsive.isMobile(context))
-                        //   SizedBox(height: defaultPadding),
-                        // if (Responsive.isMobile(context)) StarageDetails(),
                       ],
                     ),
                   ),

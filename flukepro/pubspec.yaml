@@ -60,6 +60,7 @@ dependencies:
   firebase_storage: ^11.0.10
   timeago: ^3.3.0
   syncfusion_flutter_calendar: ^20.4.41
+  syncfusion_flutter_datagrid: ^20.4.44
 
 
 

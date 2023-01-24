@@ -6,6 +6,7 @@ import 'package:flukepro/screens/OrganizersScreens/ODashboard.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oevents.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oprofile.dart';
 import 'package:flukepro/screens/OrganizersScreens/Sections/timeTableScreen.dart';
+import 'package:flukepro/screens/mainScreens/AdminScreens/loadData.dart';
 import 'package:flukepro/screens/mainScreens/AdminScreens/main_screen.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
 import 'package:flukepro/utils/eventProvider.dart';
@@ -159,7 +160,8 @@ class _MyAppState extends State<MyApp> {
             ],
             background: Container(color: Color(0xFFF5F5F5))),
 
-        home: Ahome(),
+        // home: Ahome(),
+        home: LoadData(),
 
         debugShowCheckedModeBanner:
             false, //to remove debugging banner at the top of the screen
