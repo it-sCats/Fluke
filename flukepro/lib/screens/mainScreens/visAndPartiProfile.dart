@@ -286,13 +286,17 @@ class _VprofileState extends State<Vprofile> with TickerProviderStateMixin {
                                   ticket.id, //event id
                                   ticket['eventTitle'],
                                   ticket['name'],
-                                  ticket['phone'],
+                                  ticket!['phone'] == null
+                                      ? ' '
+                                      : ticket!['phone'],
+                                  ticket!['participationType'],
                                   QrImage(
                                       padding: EdgeInsets.all(1),
                                       size: 60,
                                       data: '${Provider.of<siggning>(context, listen: false).userInfoDocument!['name']},\n' +
                                           '${Provider.of<siggning>(context, listen: false).userInfoDocument!['phone']}\n' +
-                                          '${ticket!['eventTitle']}\n')));
+                                          '${ticket!['eventTitle']}\n' +
+                                          '${ticket!['participationType']},\n')));
                             }
                             return ListView(
                               physics: BouncingScrollPhysics(),

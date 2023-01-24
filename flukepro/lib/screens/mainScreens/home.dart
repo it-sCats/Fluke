@@ -8,9 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import '../../OrganizersRequests/requestsList.dart';
+import '../../base.dart';
 import '../../components/bottomNav.dart';
 import '../../utils/SigningProvider.dart';
 import '../../utils/authentication.dart';
+import '../../utils/notificationProvider.dart';
 import '../OrganizersScreens/Sections/VisitorFeedSection.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -45,26 +47,23 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Container(
         child: ListView(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: TextFormField(
-                textAlign: TextAlign.right,
-                decoration: InputDecoration(
-                  hintText: "...ابحث عن أحداث",
-                  hintStyle: conTxtFeildHint,
-                  prefixIcon: new Icon(Icons.search),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    borderSide: BorderSide(
-                      color: Colors.grey,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide:
-                        BorderSide(color: Color.fromARGB(255, 155, 5, 33)),
-                  ),
-                ),
+            Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 20.0, horizontal: 50),
+                  child: Text(
+                    'الرئيسة',
+                    style: conHeadingsStyle.copyWith(
+                        color: conBlack.withOpacity(.9)),
+                  )),
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 55, right: 30),
+              child: new Divider(
+                color: conBlack.withOpacity(.1),
+                thickness: 2,
+                height: 4,
               ),
             ),
             SizedBox(

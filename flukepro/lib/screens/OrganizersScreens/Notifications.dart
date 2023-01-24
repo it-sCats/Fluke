@@ -11,6 +11,7 @@ import '../../components/formsAndDisplays/participationRequest.dart';
 import '../../components/participantEventRegisterForm.dart';
 import '../../utils/SigningProvider.dart';
 
+//لنوتيفيكيشن سكرين متاع المنظم
 class OnotifiScreen extends StatefulWidget {
   @override
   State<OnotifiScreen> createState() => _OnotifiScreenState();
@@ -104,6 +105,7 @@ class _OnotifiScreenState extends State<OnotifiScreen> {
                         final notifibody = notifi['joinType'];
                         final notifiCreation = notifi['creationDate'];
                         final image = notifi['image'];
+                        final userPic = notifi['userPic'];
 
                         notificatinat.add(requesta(
                             notifi['reqID'],
@@ -111,12 +113,15 @@ class _OnotifiScreenState extends State<OnotifiScreen> {
                             eventTitle,
                             participantsName,
                             notifi['email'],
-                            notifi['particpantphone'],
+                            notifi['particpantphone'] == null
+                                ? ' '
+                                : notifi['particpantphone'],
                             notifi['userId'],
                             notifi['EventcreatorID'],
                             notifibody,
                             notifiCreation,
                             image,
+                            userPic,
                             notifi['joinType'],
                             notifi['field']));
                       }
@@ -147,6 +152,7 @@ class requesta extends StatefulWidget {
   String creatorId;
   String body;
   String image;
+  String userPic;
   String joinType;
   List<dynamic> field;
 
@@ -164,6 +170,7 @@ class requesta extends StatefulWidget {
       this.body,
       this.timeOfsend,
       this.image,
+      this.userPic,
       this.joinType,
       this.field);
 
@@ -232,7 +239,7 @@ class _requestaState extends State<requesta> {
                       backgroundColor: Color(0xff).withOpacity(0),
                       radius: 70,
                       backgroundImage: NetworkImage(
-                        widget.image,
+                        widget.userPic,
                       ),
                     ),
                   ))

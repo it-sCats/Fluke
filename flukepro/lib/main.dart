@@ -1,16 +1,19 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flukepro/screens/OrganizersScreens/Notifications.dart';
 import 'package:flukepro/screens/OrganizersScreens/ODashboard.dart';
-import 'package:flukepro/screens/OrganizersScreens/Oevents.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oprofile.dart';
+import 'package:flukepro/screens/OrganizersScreens/OsearchScreen.dart';
 import 'package:flukepro/screens/OrganizersScreens/Sections/timeTableScreen.dart';
 import 'package:flukepro/screens/mainScreens/AdminScreens/loadData.dart';
 import 'package:flukepro/screens/mainScreens/AdminScreens/main_screen.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
 import 'package:flukepro/utils/eventProvider.dart';
 import 'package:flukepro/utils/fireStoreQueries.dart';
+import 'package:flukepro/utils/getAccessToken.dart';
 import 'package:flukepro/utils/notificationProvider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
@@ -95,7 +98,7 @@ Future<void> firebaseMessagingBackgroundHandler(
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  // getAccessToken();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -105,11 +108,11 @@ void main() async {
   );
   // await FirebaseMessaging.instance.getInitialMessage();
   notificationPRovider().requiesPremission();
-  notificationPRovider().getToken();
 
   // setUpBackgroundInteraction();
   navigatorKey = GlobalKey(debugLabel: "base");
   await getOngoing();
+
   runApp(MyApp());
   // runApp(MyApp());
 }
@@ -124,6 +127,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     user != null ? siggning().setupToken() : null;
     user != null
         ? siggning().getCurrentUsertype(siggning().loggedUser!.uid)
@@ -177,7 +181,7 @@ class _MyAppState extends State<MyApp> {
           '3': ((context) => HomeScreen()),
           '4': ((context) => ExploreScreen()),
           '1': ((context) => notifiScreen()),
-          '0': ((context) => profile()),
+          // '0': ((context) => profile()),
           'settings': ((context) => settingScreen()),
           '/updatepass': ((context) => updatePass()),
           '/reset': (context) => resetPass(),
@@ -188,14 +192,17 @@ class _MyAppState extends State<MyApp> {
           //routes of Organizers Screens
           'OHome': ((context) => Ohome()),
           '/Odash': ((context) => Odashboard()),
+          '/Osearch': ((context) => OsearchScreen()),
+
           // '/Adash': ((context) => Adashboard()),
-          '/Oevent': ((context) => Oevents()),
+
           '/Onotification': ((context) => OnotifiScreen()),
           '/Oprofile': ((context) => Oprofile()),
           'editEvent': ((context) => editEvent()),
           'timeTable': ((context) => timeTable()),
 
-          '/Oprofile': ((context) => Oprofile())
+          '/Oprofile': ((context) => Oprofile()),
+          '/Adash': ((context) => Ahome()),
           //routes of Admin Screens
         }, //routes are to ease the navigation btween pages
         //we give every page a name then when we want to navigate we just call that name

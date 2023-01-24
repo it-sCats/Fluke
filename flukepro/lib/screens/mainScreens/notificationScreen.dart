@@ -91,7 +91,8 @@ class _notifiScreenState extends State<notifiScreen> {
                       List<notificationa> notificatinat = [];
                       for (QueryDocumentSnapshot notifi in notifications) {
                         final notifiTitle = notifi['title'];
-                        final notifibody = notifi['date'];
+                        final notifibody =
+                            notifi['date'].toString().split(' ').first;
                         final notifiCreation = notifi['creationDate'];
                         final image = notifi['image'];
 
@@ -186,14 +187,6 @@ class _notificationaState extends State<notificationa> {
           ),
         ),
         onTap: () {
-          showModalBottomSheet(
-            //todo remove this to display the request so oganizer can accept or decline
-            isScrollControlled: true,
-            elevation: 100,
-            context: context,
-            builder: (context) => ParticiEventPrev('tk83YobqsIcgxWsmWQxE',
-                'يوم التقنية', 'lkwskc9EvZVkkKn3Gg5jNiOGzPp2'),
-          );
           // showModalBottomSheet(
           //     isScrollControlled: true,
           //     elevation: 100,

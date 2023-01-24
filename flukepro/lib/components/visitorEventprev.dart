@@ -17,11 +17,13 @@ waitingFunction(eventId) async {
 }
 
 class visitorEventPrev extends StatelessWidget {
-  visitorEventPrev(this.id, this.title, this.name, this.phone, this.Qr);
+  visitorEventPrev(this.id, this.title, this.name, this.participationType,
+      this.phone, this.Qr);
 
   String id;
   String title;
   String name;
+  String participationType;
   String phone;
   Widget Qr;
   @override
@@ -41,12 +43,8 @@ class visitorEventPrev extends StatelessWidget {
             isScrollControlled: true,
             elevation: 100,
             context: context,
-            builder: (context) => QrwidgetProfile(
-              id,
-              name,
-              phone,
-              title,
-            ),
+            builder: (context) =>
+                QrwidgetProfile(id, name, phone, title, participationType),
           );
         },
         child: Row(
@@ -83,12 +81,14 @@ class visitorEventPrev extends StatelessWidget {
 }
 
 class QrwidgetProfile extends StatelessWidget {
-  QrwidgetProfile(this.id, this.name, this.phone, this.eventName);
+  QrwidgetProfile(
+      this.id, this.name, this.phone, this.eventName, this.participationType);
 
   String id;
   String name;
   String phone;
   String eventName;
+  String participationType;
   getEvent() {}
 
   @override
@@ -101,7 +101,10 @@ class QrwidgetProfile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             QrImage(
-                data: '$eventName\n' + '$name \n' + '$phone\n',
+                data: '$eventName\n' +
+                    '$name \n' +
+                    '$phone\n' +
+                    '$participationType\n',
                 padding: EdgeInsets.all(50)),
             Text(
               "أظهر هذا الرمز يوم المعرض",

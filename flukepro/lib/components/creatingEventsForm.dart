@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:provider/provider.dart';
+import '../utils/fireStoreQueries.dart';
 import 'cons.dart';
 import 'package:http/http.dart' as http;
 
@@ -925,7 +926,7 @@ class _creatingEventState extends State<creatingEvent> {
                                         ),
                                       )),
                                     );
-
+//publish event
                                     try {
                                       _controllers.forEach((element) {
                                         _controllersText.add(element.text);
@@ -978,6 +979,10 @@ class _creatingEventState extends State<creatingEvent> {
                                                 listen: false)
                                             .userInfoDocument!['name'],
                                         'creationDate': Timestamp.now(),
+                                        'eventSearchCases':
+                                            setSearchParam(_eventNameCont.text),
+                                        'fieldSearchCases':
+                                            setSearchParam(_eventFieldCont.text)
                                       }).then((value) async {
                                         isLoading = false;
                                         await eventRef
@@ -998,12 +1003,58 @@ class _creatingEventState extends State<creatingEvent> {
                                         Navigator.pushReplacementNamed(
                                             context, 'OHome');
                                         sendNotifications
-                                            ? sendPushTopicNotification(
-                                                starterDate.toDate().toString(),
-                                                _eventNameCont.text,
-                                                _eventFieldCont,
-                                                value!.id,
-                                                siggning().loggedUser!.uid)
+                                            ? {
+                                                sendPushTopicNotification(
+                                                    starterDate
+                                                        .toDate()
+                                                        .toString(),
+                                                    _eventNameCont.text,
+                                                    _eventFieldCont,
+                                                    value!.id,
+                                                    siggning().loggedUser!.uid),
+                                                {
+                                                  FirebaseFirestore.instance
+                                                      .collection('users')
+                                                      .where('interests',
+                                                          arrayContains:
+                                                              _eventFieldCont
+                                                                  .text)
+                                                      .get()
+                                                      .then((doccc) =>
+                                                          doccc.docs.forEach(
+                                                              (element) {
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'users')
+                                                                .doc(element.id)
+                                                                .collection(
+                                                                    'notification')
+                                                                .doc(value!.id)
+                                                                .set({
+                                                              'title':
+                                                                  _eventNameCont
+                                                                      .text,
+                                                              'date': starterDate
+                                                                  .toDate()
+                                                                  .toString(),
+                                                              'image': snapshot !=
+                                                                      null
+                                                                  ? snapshot!
+                                                                      .ref
+                                                                      .getDownloadURL()
+                                                                  : 'https://firebasestorage.googleapis.com/v0/b/fluke-db.appspot.com/o/data%2Fuser%2F0%2Fcom.example.flukepro%2Fcache%2Fphoto_2023-01-18_22-14-11.jpg?alt=media&token=5d0b48ba-77f0-4557-9cce-72524c5f4bb9',
+                                                              'creatorID':
+                                                                  siggning()
+                                                                      .loggedUser!
+                                                                      .uid,
+                                                              'creationDate':
+                                                                  Timestamp
+                                                                      .now()
+                                                            });
+                                                          }))
+                                                }
+                                              }
                                             : null;
                                       }).onError((error, stackTrace) {
                                         isLoading = false;

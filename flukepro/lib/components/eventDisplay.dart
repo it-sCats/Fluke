@@ -23,6 +23,7 @@ import '../utils/SigningProvider.dart';
 import '../utils/SigningProvider.dart';
 import 'cons.dart';
 import 'customWidgets.dart';
+import 'formsAndDisplays/displayEventParticipants.dart';
 
 sessionDataSource? sessiondatasource;
 final _firestore = FirebaseFirestore.instance;
@@ -35,7 +36,10 @@ String? creatorName;
 registerVisitor(eventID, context, userId, title, typeOfParticipation) async {
   //visitor registration function
   Map<String, dynamic>? userInfoDoc;
-  userInfoDoc = Provider.of<siggning>(context, listen: false).userInfoDocument;
+  Provider.of<siggning>(context, listen: false)
+      .setLoggedInuser(_auth.currentUser);
+  Provider.of<siggning>(context, listen: false).getUserInfoDoc(
+      Provider.of<siggning>(context, listen: false).loggedUser!.uid);
   final vistors = await _firestore //checks if user aleadry registered
       .collection('users')
       .doc(userId)
@@ -44,6 +48,20 @@ registerVisitor(eventID, context, userId, title, typeOfParticipation) async {
       .get();
 
   if (!vistors.exists) {
+    _firestore.collection('events').doc(eventID).collection('visitors').add({
+      'id': userId,
+      'email': user!.email,
+      'name': Provider.of<siggning>(context, listen: false)
+          .userInfoDocument!['name'],
+      'phone': Provider.of<siggning>(context, listen: false)
+                  .userInfoDocument!['phone'] ==
+              null
+          ? ' '
+          : Provider.of<siggning>(context, listen: false)
+              .userInfoDocument!['phone'],
+      'interests': Provider.of<siggning>(context, listen: false)
+          .userInfoDocument!['interests']
+    });
     //in case no documents were returned which means user is not registered then register user
     _firestore
         .collection('users')
@@ -53,16 +71,31 @@ registerVisitor(eventID, context, userId, title, typeOfParticipation) async {
         .set({
       'eventTitle': title,
       'email': user!.email,
-      'phone': userInfoDoc!['phone'],
-      'name': userInfoDoc!['name'],
+      'phone': Provider.of<siggning>(context, listen: false)
+                  .userInfoDocument!['phone'] ==
+              null
+          ? ' '
+          : Provider.of<siggning>(context, listen: false)
+              .userInfoDocument!['phone'],
+      'name': Provider.of<siggning>(context, listen: false)
+          .userInfoDocument!['name'],
       'participationType': typeOfParticipation
     }).then((value) => showModalBottomSheet(
               //تعرض كيو آر بعد تسجيل الزائر
               isScrollControlled: true,
               elevation: 100,
               context: context,
-              builder: (context) => Qrwidget(userInfoDoc!['name'],
-                  userInfoDoc!['phone'], title, typeOfParticipation),
+              builder: (context) => Qrwidget(
+                  Provider.of<siggning>(context, listen: false)
+                      .userInfoDocument!['name'],
+                  Provider.of<siggning>(context, listen: false)
+                              .userInfoDocument!['phone'] ==
+                          null
+                      ? ' '
+                      : Provider.of<siggning>(context, listen: false)
+                          .userInfoDocument!['phone'],
+                  title,
+                  typeOfParticipation),
             ));
   } else {
     showModalBottomSheet(
@@ -70,8 +103,13 @@ registerVisitor(eventID, context, userId, title, typeOfParticipation) async {
       isScrollControlled: true,
       elevation: 100,
       context: context,
-      builder: (context) => Qrwidget(userInfoDoc!['name'],
-          userInfoDoc!['phone'], title, typeOfParticipation),
+      builder: (context) => Qrwidget(
+          Provider.of<siggning>(context, listen: false)
+              .userInfoDocument!['name'],
+          Provider.of<siggning>(context, listen: false)
+              .userInfoDocument!['phone'],
+          title,
+          typeOfParticipation),
     );
     // showQr();
   }
@@ -172,7 +210,7 @@ class _eventDisplayState extends State<eventDisplay>
 
     return DefaultTabController(
         //this layout guarantees that the scroll works properly
-        length: 2,
+        length: kIsWeb ? 4 : 3,
         child: NestedScrollView(
           headerSliverBuilder: ((context, innerBoxIsScrolled) {
             return [
@@ -490,6 +528,19 @@ class _eventDisplayState extends State<eventDisplay>
                       style: conLittelTxt12.copyWith(fontSize: 15),
                     ),
                   ),
+                  Tab(
+                    child: Text(
+                      'المشاركين',
+                      style: conLittelTxt12.copyWith(fontSize: 15),
+                    ),
+                  ),
+                  if (kIsWeb)
+                    Tab(
+                      child: Text(
+                        'الزوار',
+                        style: conLittelTxt12.copyWith(fontSize: 15),
+                      ),
+                    )
                 ],
               ),
               Expanded(
@@ -499,7 +550,8 @@ class _eventDisplayState extends State<eventDisplay>
                   child: TabBarView(
                       physics: NeverScrollableScrollPhysics(),
                       children: [
-                        widget.justDisplay ||
+                        widget
+                                    .justDisplay || //عرض الحدث بالنسبة للمنظم متاع الحدث
                                 widget.creatorID ==
                                     Provider.of<siggning>(context,
                                             listen: false)
@@ -755,6 +807,8 @@ class _eventDisplayState extends State<eventDisplay>
                                     ),
                                   ],
                                 ))
+                            //---------------------------------------------------------------------
+                            //عرض الحدث بالنسبة لمشاركين في حال كان الحدث يقبل مشاركين
                             : Provider.of<siggning>(context).getUserType() ==
                                         2 &&
                                     widget.acceptsParticapants
@@ -1065,10 +1119,11 @@ class _eventDisplayState extends State<eventDisplay>
                                                       context: context,
                                                       builder: (context) =>
                                                           ParticiEventPrev(
-                                                        widget.id,
-                                                        widget.title,
-                                                        widget.creatorID,
-                                                      ),
+                                                              widget.id,
+                                                              widget.title,
+                                                              widget.creatorID,
+                                                              widget.image
+                                                                  .toString()),
                                                     );
                                                   } else {
                                                     showDialog(
@@ -1527,6 +1582,13 @@ class _eventDisplayState extends State<eventDisplay>
                             creatorID: widget.creatorID,
                             startDate: widget.starterDate,
                             endDate: widget.endDate),
+                        displayParticipants(
+                          eventID: widget.id,
+                        ),
+                        if (kIsWeb)
+                          Container(
+                            child: Text('participants'),
+                          )
                       ]),
                 ),
               ),

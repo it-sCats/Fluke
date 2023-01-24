@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flukepro/components/creatingEventsForm.dart';
@@ -20,9 +21,11 @@ class ParticiEventPrev extends StatefulWidget {
   String eventId;
   String eventTitle;
   String creatorId;
+  String eventImage;
   // String? userPic;
 
-  ParticiEventPrev(this.eventId, this.eventTitle, this.creatorId);
+  ParticiEventPrev(
+      this.eventId, this.eventTitle, this.creatorId, this.eventImage);
   @override
   State<ParticiEventPrev> createState() => _ParticiEventPrevState();
 }
@@ -92,7 +95,7 @@ class _ParticiEventPrevState extends State<ParticiEventPrev> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      "${Provider.of<siggning>(context, listen: false).userInfoDocument!['phone']}",
+                      "${Provider.of<siggning>(context, listen: false).userInfoDocument!['phone'] == null ? ' ' : Provider.of<siggning>(context, listen: false).userInfoDocument!['phone']}",
                       style: conHeadingsStyle.copyWith(
                           fontSize: 16, color: Color(0xFF605A5A)),
                     ),
@@ -170,11 +173,16 @@ class _ParticiEventPrevState extends State<ParticiEventPrev> {
                   isFullwidth: true,
                   onTap: () async {
                     if (_particiTypeFormKey.currentState!.validate()) {
+                      Provider.of<siggning>(context, listen: false)
+                          .getUserInfoDoc(_auth.currentUser!.uid);
                       var ref = await siggning().addJoinRequest(
                           eventId: widget.eventId,
                           eventName: widget.eventTitle,
                           userId: user!.uid,
                           eventCreatorId: widget.creatorId,
+                          eventImage: widget.eventImage,
+                          userPic:
+                              'https://t3.ftcdn.net/jpg/01/18/01/98/360_F_118019822_6CKXP6rXmVhDOzbXZlLqEM2ya4HhYzSV.jpg',
                           name: Provider.of<siggning>(context, listen: false)
                               .userInfoDocument!['name'],
                           field: Provider.of<siggning>(context, listen: false)
@@ -195,6 +203,18 @@ class _ParticiEventPrevState extends State<ParticiEventPrev> {
                                 .userInfoDocument!['field'],
                             widget.eventId,
                             widget.creatorId);
+                        FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(widget.creatorId)
+                            .collection('notification')
+                            .doc(widget.eventId)
+                            .set({
+                          'title': '',
+                          'date':
+                              ' شركة ${Provider.of<siggning>(context, listen: false).userInfoDocument!['name']} ترغب بالمشاركة في ${widget.eventTitle} الذي تنظمه كـ${_participantTypeCont.text}',
+                          'creatorID': siggning().loggedUser!.uid,
+                          'creationDate': Timestamp.now()
+                        });
                       }
 
                       //here we modifiy for request send request ID

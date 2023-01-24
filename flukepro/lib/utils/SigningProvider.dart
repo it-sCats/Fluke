@@ -72,6 +72,7 @@ class siggning extends ChangeNotifier {
       field,
       phone,
       eventCreatorId,
+      eventImage,
       email,
       joinType,
       eventName,
@@ -94,10 +95,9 @@ class siggning extends ChangeNotifier {
         'userId': userId,
         'eventId': eventId,
         'participantsName': name,
+        'image': eventImage,
         'particpantphone': phone,
-        'image': userPic == null
-            ? 'https://t3.ftcdn.net/jpg/01/18/01/98/360_F_118019822_6CKXP6rXmVhDOzbXZlLqEM2ya4HhYzSV.jpg'
-            : userPic,
+        'userPic': userPic,
         'eventName': eventName,
         'field': field,
         'EventcreatorID': eventCreatorId,

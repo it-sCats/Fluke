@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flukepro/components/cons.dart';
 import 'package:flukepro/components/customWidgets.dart';
 import 'package:flukepro/screens/OrganizersScreens/OdashoardImproved.dart';
-import 'package:flukepro/screens/mainScreens/notificationScreen.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -18,7 +20,6 @@ import '../../utils/notificationProvider.dart';
 import '../mainScreens/profile.dart';
 import 'Notifications.dart';
 import 'ODashboard.dart';
-import 'Oevents.dart';
 import 'Oprofile.dart';
 import 'package:intl/intl.dart' as intl;
 
@@ -252,26 +253,39 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                                     ),
                                     lessEdgeCTA(
                                         txt: 'إنشاء أجندة الحدث',
-                                        onTap: () {
-                                          // Provider.of<eventInfoHolder>(context,
-                                          //         listen: false)
-                                          //     .getEventInfoForTimetable(
-                                          //         eventId, context);
-                                          if (_eventChooseFormKey.currentState!
-                                              .validate()) {
-                                            if (_eventTypeCont.text != '') {
-                                              Navigator.pushNamed(
-                                                  //send event Id and name to the time table screen
-                                                  context,
-                                                  'timeTable',
-                                                  arguments: [
-                                                    starterDate,
-                                                    endDate,
-                                                    eventId,
-                                                    creatorId
-                                                  ]);
-                                            }
-                                          }
+                                        onTap: () async {
+                                          var res = await http.post(
+                                              Uri.parse(
+                                                  'http://10.0.2.2:3000/orderpizza'),
+                                              headers: <String, String>{
+                                                'Content-Type':
+                                                    'application/json; charset=UTF-8',
+                                              },
+                                              body: jsonEncode(<String, String>{
+                                                "userid": "544"
+                                              }));
+
+                                          print(res.statusCode);
+                                          print(res.body);
+                                          // // Provider.of<eventInfoHolder>(context,
+                                          // //         listen: false)
+                                          // //     .getEventInfoForTimetable(
+                                          // //         eventId, context);
+                                          // if (_eventChooseFormKey.currentState!
+                                          //     .validate()) {
+                                          //   if (_eventTypeCont.text != '') {
+                                          //     Navigator.pushNamed(
+                                          //         //send event Id and name to the time table screen
+                                          //         context,
+                                          //         'timeTable',
+                                          //         arguments: [
+                                          //           starterDate,
+                                          //           endDate,
+                                          //           eventId,
+                                          //           creatorId
+                                          //         ]);
+                                          //   }
+                                          // }
                                         })
                                   ],
                                 ),
@@ -498,6 +512,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                 Expanded(
                   flex: 1,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       defaultTargetPlatform == TargetPlatform.android ||
                               defaultTargetPlatform ==
@@ -521,6 +536,17 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                               },
                             )
                           : Container(),
+                      IconButton(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 23, horizontal: 30),
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/Osearch');
+                          },
+                          icon: Icon(
+                            Icons.search,
+                            color: conBlack.withOpacity(.9),
+                            size: 40,
+                          ))
                     ],
                   ),
                 ),

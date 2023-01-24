@@ -11,9 +11,36 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../components/formsAndDisplays/participationRequest.dart';
 import '../components/session.dart';
 import '../components/sessionDataSource.dart';
+import '../screens/mainScreens/explorePage.dart';
+import '../screens/mainScreens/home.dart';
+import '../screens/mainScreens/notificationScreen.dart';
+import '../screens/mainScreens/visAndPartiProfile.dart';
 import 'SigningProvider.dart';
 
 class notificationPRovider extends ChangeNotifier {
+  //bottom sheet nav
+  int? currentIndexOfNav =
+      base().onNotificationTap == null ? 3 : base().onNotificationTap;
+  int? pageIndex =
+      base().onNotificationTap == null ? 3 : base().onNotificationTap;
+  List<Widget> pages = [
+    Vprofile(),
+    notifiScreen(),
+    ExploreScreen(),
+    HomeScreen(),
+  ];
+  Widget pageToDisplay() {
+    Widget page = pages.elementAt(this.currentIndexOfNav as int);
+    return page;
+  }
+
+  updatePage(value) {
+    this.currentIndexOfNav = value;
+    this.pageIndex = value;
+    notifyListeners();
+  }
+
+  ///for agenda
   sessionDataSource? sessiondatasource; //for agenda
   setSessionDataSource(sessionDAta) {
     this.sessiondatasource = sessionDAta;
@@ -147,21 +174,21 @@ class notificationPRovider extends ChangeNotifier {
           payload: message.data['body']);
 
       if (message != null) {
-        FirebaseFirestore.instance
-            .collection('users')
-            .doc(siggning().loggedUser!.uid)
-            .collection('notification')
-            .doc(message!.data['eventId'])
-            .set({
-          'title': message!.notification!.title,
-          'date': message.notification!.body,
-          'creatorID': siggning().loggedUser!.uid,
-          'creationDate': Timestamp.now()
-        });
-        final eventData = FirebaseFirestore.instance
-            .collection('events')
-            .doc(message.data['eventId'])
-            .get();
+        // FirebaseFirestore.instance
+        //     .collection('users')
+        //     .doc(siggning().loggedUser!.uid)
+        //     .collection('notification')
+        //     .doc(message!.data['eventId'])
+        //     .set({
+        //   'title': message!.notification!.title,
+        //   'date': message.notification!.body,
+        //   'creatorID': siggning().loggedUser!.uid,
+        //   'creationDate': Timestamp.now()
+        // // });
+        // final eventData = FirebaseFirestore.instance
+        //     .collection('events')
+        //     .doc(message.data['eventId'])
+        //     .get();
       }
     });
     FirebaseMessaging.onMessageOpenedApp.listen((message) async {
@@ -184,20 +211,20 @@ class notificationPRovider extends ChangeNotifier {
           message.notification!.body, notificationDetails,
           payload: message.data['body']);
       if (message != null) {
-        FirebaseFirestore.instance
-            .collection('users')
-            .doc(siggning()
-                .loggedUser!
-                .uid) //here we remove the this and add the notification when it's added
-            .collection('notification')
-            .doc(message!.data['eventId'])
-            .set({
-          'title': message!.notification!.title,
-          'date': message.notification!.body,
-          'creatorID': siggning().loggedUser!.uid,
-          'image': message.data['image'],
-          'creationDate': Timestamp.now()
-        });
+        // FirebaseFirestore.instance
+        //     .collection('users')
+        //     .doc(siggning()
+        //         .loggedUser!
+        //         .uid) //here we remove the this and add the notification when it's added
+        //     .collection('notification')
+        //     .doc(message!.data['eventId'])
+        //     .set({
+        //   'title': message!.notification!.title,
+        //   'date': message.notification!.body,
+        //   'creatorID': siggning().loggedUser!.uid,
+        //   'image': message.data['image'],
+        //   'creationDate': Timestamp.now()
+        // });
         // navigatorKey?.currentState!.push(MaterialPageRoute(
         //   builder: (context) => base(
         //     onNotificationTap: 1,
@@ -227,7 +254,10 @@ sendPushToOrgnaizerNotification(
             body: jsonEncode(<String, dynamic>{
               "message": {
                 "token": userTokens,
-                "notification": {"title": title, "body": body},
+                "notification": {
+                  "title": title,
+                  "body": body,
+                },
                 "data": {
                   "click_action": "FLUTTER_NOTIFICATION_CLICK",
                   "creatorID": createrId,

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -6,11 +7,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 import '../base.dart';
 import '../screens/OrganizersScreens/OHome.dart';
 import '../screens/loginScreen.dart';
 import 'SigningProvider.dart';
+import 'notificationProvider.dart';
 
 final _firestore = FirebaseFirestore.instance;
 
@@ -33,6 +36,7 @@ class _recdirectRoleState extends State<recdirectRole> {
 
   void checkRole() async {
     User? user = FirebaseAuth.instance.currentUser;
+
     if (user != null) {
       Provider.of<siggning>(context, listen: false).getUserInfoDoc(user.uid);
       //
