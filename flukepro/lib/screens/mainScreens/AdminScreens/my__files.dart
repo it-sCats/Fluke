@@ -58,10 +58,9 @@ class FileInfoCardGridView extends StatelessWidget {
       mainAxisSpacing: default_Padding,
       childAspectRatio: childAspectRatio,
       children: [
-        //second
         InkWell(
           child: Container(
-            height: 100,
+            height: 90,
             decoration: BoxDecoration(
               color: conBlue,
               borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -74,24 +73,23 @@ class FileInfoCardGridView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    // padding: EdgeInsets.only(bottom: 10),
-                    height: 100,
+                    height: 90,
                     decoration: BoxDecoration(
-                      // color: info.color!.withOpacity(0.1),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Image.asset("images/visitors.png"),
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.only(top: 0.8, left: 0.8, right: 0.8),
                   child: Text(
                     "الزوار",
-                    style: conHeadingsStyle.copyWith(color: white),
+                    style:
+                        conHeadingsStyle.copyWith(color: white, fontSize: 16),
                   ),
                 ),
               ],
@@ -101,7 +99,7 @@ class FileInfoCardGridView extends StatelessWidget {
         ),
         InkWell(
           child: Container(
-            height: 100,
+            height: 90,
             decoration: BoxDecoration(
               color: conBlue,
               borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -114,24 +112,23 @@ class FileInfoCardGridView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    // padding: EdgeInsets.only(bottom: 10),
-                    height: 100,
+                    height: 90,
                     decoration: BoxDecoration(
-                      // color: info.color!.withOpacity(0.1),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Image.asset("images/organizer.png"),
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.only(top: 0.8, left: 0.8, right: 0.8),
                   child: Text(
                     "المنظمين",
-                    style: conHeadingsStyle.copyWith(color: white),
+                    style:
+                        conHeadingsStyle.copyWith(color: white, fontSize: 16),
                   ),
                 ),
               ],
@@ -141,7 +138,7 @@ class FileInfoCardGridView extends StatelessWidget {
         ),
         InkWell(
           child: Container(
-            height: 100,
+            height: 90,
             decoration: BoxDecoration(
               color: conBlue,
               borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -154,24 +151,23 @@ class FileInfoCardGridView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    // padding: EdgeInsets.only(bottom: 10),
-                    height: 100,
+                    height: 90,
                     decoration: BoxDecoration(
-                      // color: info.color!.withOpacity(0.1),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Image.asset("images/Perticipants.png"),
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.only(top: 0.8, left: 0.8, right: 0.8),
                   child: Text(
                     "المشاركين",
-                    style: conHeadingsStyle.copyWith(color: white),
+                    style:
+                        conHeadingsStyle.copyWith(color: white, fontSize: 16),
                   ),
                 ),
               ],
@@ -181,7 +177,7 @@ class FileInfoCardGridView extends StatelessWidget {
         ),
         InkWell(
           child: Container(
-            height: 100,
+            height: 90,
             decoration: BoxDecoration(
               color: conBlue,
               borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -194,24 +190,23 @@ class FileInfoCardGridView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    // padding: EdgeInsets.only(bottom: 10),
-                    height: 100,
+                    height: 90,
                     decoration: BoxDecoration(
-                      // color: info.color!.withOpacity(0.1),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Image.asset("images/calendar.png"),
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.only(top: 0.8, left: 0.8, right: 0.8),
                   child: Text(
                     " الأحداث",
-                    style: conHeadingsStyle.copyWith(color: white),
+                    style:
+                        conHeadingsStyle.copyWith(color: white, fontSize: 16),
                   ),
                 ),
               ],
@@ -221,7 +216,7 @@ class FileInfoCardGridView extends StatelessWidget {
         ),
         InkWell(
           child: Container(
-            height: 100,
+            height: 90,
             decoration: BoxDecoration(
               color: conBlue,
               borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -234,24 +229,23 @@ class FileInfoCardGridView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    // padding: EdgeInsets.only(bottom: 10),
-                    height: 100,
+                    height: 80,
                     decoration: BoxDecoration(
-                      // color: info.color!.withOpacity(0.1),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Image.asset("images/warning.png"),
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.only(top: 0.8, left: 0.8, right: 0.8),
                   child: Text(
                     "البلاغات",
-                    style: conHeadingsStyle.copyWith(color: white),
+                    style:
+                        conHeadingsStyle.copyWith(color: white, fontSize: 16),
                   ),
                 ),
               ],

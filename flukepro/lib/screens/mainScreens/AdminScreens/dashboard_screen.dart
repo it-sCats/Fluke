@@ -33,19 +33,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     flex: 5,
                     child: Column(
                       children: [
-                        // MyFiles(),
-                        LoadData(),
+                        MyFiles(),
+                        // LoadData(),
                       ],
                     ),
                   ),
                   if (!Responsive.isMobile(context))
                     SizedBox(width: default_Padding),
-                  // On Mobile means if the screen is less than 850 we dont want to show it
-                  // if (!Responsive.isMobile(context))
-                  //   Expanded(
-                  //     flex: 2,
-                  //     child: StarageDetails(),
-                  //   ),
                 ],
               ),
             )
