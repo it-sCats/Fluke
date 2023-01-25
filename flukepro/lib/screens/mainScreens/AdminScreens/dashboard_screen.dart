@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../components/cons.dart';
 import '../../../components/responsive.dart';
 import 'header.dart';
+import 'loadData.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -32,7 +33,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     flex: 5,
                     child: Column(
                       children: [
-                        MyFiles(),
+                        // MyFiles(),
+                        LoadData(),
                       ],
                     ),
                   ),
