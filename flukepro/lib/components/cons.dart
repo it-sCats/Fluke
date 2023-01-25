@@ -69,7 +69,7 @@ Color conORange = Color(0xffFF7124);
 Color conRed = Color(0xffFF000D);
 const primaryColor = Color(0xFFF1E6FF);
 Color conBlue = Color(0xff3F72BE);
-
+Color white = Color.fromARGB(255, 255, 255, 255);
 const kprimaryColor = Color.fromARGB(255, 104, 75, 123);
 //---------Padding
 double defaultPadding = 16.0;
@@ -101,4 +101,4 @@ class conRequestDivider extends StatelessWidget {
   }
 }
 
-const default_Padding = 16.0;
+const default_Padding = 20.0;
