@@ -467,7 +467,23 @@ class OrganizersInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      child: FutureBuilder<Map<String, dynamic>?>(
+        future: Provider.of<siggning>(context)
+            .getUserInfoDoc(FirebaseAuth.instance.currentUser!.uid),
+        builder: (context, snapshot) {
+          if (snapshot.hasData && snapshot.data != null) {
+            var inf = snapshot.data;
+
+            return Column(
+              children: [Text(inf!['name']), Text(inf!['email'])],
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
+        },
+      ),
+    );
   }
 }
 
