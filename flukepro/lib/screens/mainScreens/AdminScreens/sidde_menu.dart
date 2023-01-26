@@ -1,11 +1,32 @@
 import 'package:flukepro/components/cons.dart';
+import 'package:flukepro/screens/mainScreens/AdminScreens/loadData.dart';
 import 'package:flutter/material.dart';
 
-class SideMenu extends StatelessWidget {
+import 'package:flukepro/screens/OrganizersScreens/OHome.dart';
+
+import 'displayDataPrev.dart';
+
+int? pageIndex = 0;
+
+class SideMenu extends StatefulWidget {
   const SideMenu({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<SideMenu> createState() => _SideMenuState();
+}
+
+class _SideMenuState extends State<SideMenu>
+    with SingleTickerProviderStateMixin {
+  static List<Widget> _pages = [
+    //بدل ما يتم توجيه المستخدم لصفحات مختلفة, بالطريقة هذه حيكون عندي ويدجيتس يتم التغيير بيناتهم عن طريق النافيقيشن سايد
+    //هنا نتحكمو بالويدجيتس الي حينعرضو
+    displaydataDashboardScreen(), //لوحة التحكم
+    // Oprofile(), //الاحداث التي نظمها المنظم
+    // OnotifiScreen(), //الاشعارات
+    //الملف الشخصي متاعه
+  ];
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -17,8 +38,11 @@ class SideMenu extends StatelessWidget {
           DrawerListTile(
             title: "الرئيسية",
             Icond: Icons.view_compact_alt_rounded,
+
             //  Icond: Icons.manage_accounts_outlined,
-            press: () {},
+            press: () {
+              Navigator.pushNamed(context, '/log');
+            },
           ),
           DrawerListTile(
             title: "المنظمين",
@@ -91,4 +115,37 @@ class DrawerListTile extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget menuANavs(IconData icon, String text, Function callback,
+    String currentPath, BuildContext context) {
+  //ويدجيت خاصة بعناصر المينو
+  return Padding(
+    padding: EdgeInsets.all(10),
+    child: InkWell(
+        onTap: () => callback(),
+        child: Row(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          // crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 30,
+              color: ModalRoute.of(context)!.settings.name == currentPath
+                  ? Colors.white
+                  : Colors.white.withOpacity(.5),
+            ),
+            SizedBox(width: 30),
+            Text(
+              text,
+              style: conHeadingsStyle.copyWith(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: ModalRoute.of(context)!.settings.name == currentPath
+                      ? Colors.white
+                      : Colors.white.withOpacity(.5)),
+            )
+          ],
+        )),
+  );
 }

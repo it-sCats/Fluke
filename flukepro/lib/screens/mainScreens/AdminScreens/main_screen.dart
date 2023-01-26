@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../components/responsive.dart';
 import 'dashboard_screen.dart';
+import 'displayDataPrev.dart';
+
 import 'sidde_menu.dart';
 
 class MainScreen extends StatelessWidget {
@@ -26,6 +28,8 @@ class MainScreen extends StatelessWidget {
               // It takes 5/6 part of the screen
               flex: 5,
               child: DashboardScreen(),
+              // child: displaydataDashboardScreen(),
+              // child: LoadVisitorData(),
             ),
           ],
         ),

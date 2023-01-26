@@ -1,6 +1,7 @@
 import 'package:flukepro/components/responsive.dart';
 import 'package:flutter/material.dart';
 import '../../../components/cons.dart';
+import 'displayDataPrev.dart';
 
 class MyFiles extends StatelessWidget {
   const MyFiles({
@@ -95,7 +96,13 @@ class FileInfoCardGridView extends StatelessWidget {
               ],
             ),
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => displaydataDashboardScreen(),
+                ));
+          },
         ),
         InkWell(
           child: Container(
@@ -257,24 +264,3 @@ class FileInfoCardGridView extends StatelessWidget {
     );
   }
 }
-
-
-// Container(
-//       padding: EdgeInsets.only(right: 10.0),
-//       child: GridView.count(
-//         //حيعطينا التقسيمة للشاشة
-//         physics: AlwaysScrollableScrollPhysics(),
-//         mainAxisSpacing: 10,
-//         crossAxisSpacing: 10,
-//         crossAxisCount: defaultTargetPlatform == TargetPlatform.android ||
-//                 defaultTargetPlatform ==
-//                     TargetPlatform
-//                         .iOS //في حال استخدام الموبايل يتم عرض حدث واحد ف كل صف
-//             ? 1
-//             : 2, //في حال إستخدام الديسكتوب يتم عرض 2 أحداث فس الصف الواحد
-//         children: [
-//           dashboardSection('الأحداث الحالية ', siggning().getAllEvents()),
-//           VisitorFeedSection('أحداث قادمة ', siggning().getAllEvents()),
-//         ],
-//       ),
-//     );

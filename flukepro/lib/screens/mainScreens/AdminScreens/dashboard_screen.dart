@@ -8,12 +8,16 @@ import 'loadData.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
-
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _DashboardScreenState extends State<DashboardScreen>
+    with SingleTickerProviderStateMixin {
+  static List<Widget> _pagges = [
+    LoadVisistorData(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -34,6 +38,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: Column(
                       children: [
                         MyFiles(),
+                        // LoadVisistorData(),
                         // LoadData(),
                       ],
                     ),
