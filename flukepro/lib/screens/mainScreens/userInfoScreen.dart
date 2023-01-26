@@ -198,7 +198,8 @@ class _userInfoScreenState extends State<userInfoScreen> {
                                       _Emailcon.text == null) {}
 
                                   print(userInfo['name']);
-                                  if (_Phonecon.text.length < 10) {
+                                  if (_Phonecon.text != '' &&
+                                      _Phonecon.text.length < 10) {
                                     setState(() {
                                       ErrorMessage =
                                           'رقم الهاتف لا يجب أن يقل عن 10 خانات';
@@ -208,7 +209,7 @@ class _userInfoScreenState extends State<userInfoScreen> {
                                     _firestore
                                         .collection('users')
                                         .doc(user!.uid)
-                                        .set({
+                                        .update({
                                       'email': _Emailcon.text == ''
                                           ? userInfo['email']
                                           : _Emailcon
@@ -216,8 +217,12 @@ class _userInfoScreenState extends State<userInfoScreen> {
                                       'name': _gendercon.text == ''
                                           ? userInfo['name']
                                           : _gendercon.text,
-                                      'phone': _Phonecon.text,
-                                      'birthDate': _birthDatecon.text
+                                      'phone': _Phonecon.text == ''
+                                          ? userInfo['phone']
+                                          : _Phonecon.text,
+                                      'birthDate': _birthDatecon.text == ''
+                                          ? userInfo['birthDate']
+                                          : _birthDatecon.text
                                     }).then((value) {
                                       Navigator.pop(context);
                                     }, onError: (error) {

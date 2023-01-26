@@ -1011,7 +1011,8 @@ class _eventDisplayState extends State<eventDisplay>
                                                     onTap: () {
                                                       if (widget.creatorID !=
                                                           Provider.of<siggning>(
-                                                                  context)
+                                                                  context,
+                                                                  listen: false)
                                                               .loggedUser!
                                                               .uid) {
                                                         Navigator.push(

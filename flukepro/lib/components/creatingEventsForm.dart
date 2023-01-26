@@ -72,6 +72,7 @@ class _creatingEventState extends State<creatingEvent> {
   List<TextEditingController> _controllers = [];
   List<String> _controllersText = [];
   List<TextField> _fields = [];
+  List<String> rooms = [];
   Widget _addTile() {
     return Container(
       decoration: BoxDecoration(
@@ -87,6 +88,7 @@ class _creatingEventState extends State<creatingEvent> {
         onTap: () {
           final controller = TextEditingController();
           final field = TextField(
+            controller: controller,
             textDirection: TextDirection.rtl,
             textAlign: TextAlign.right,
             decoration: InputDecoration(
@@ -801,7 +803,7 @@ class _creatingEventState extends State<creatingEvent> {
 
                                     try {
                                       _controllers.forEach((element) {
-                                        _controllersText.add(element.text);
+                                        rooms.add(element.text);
                                       });
 
                                       //     .snapshotEvents
@@ -849,8 +851,7 @@ class _creatingEventState extends State<creatingEvent> {
                                         'eventCity': _eventCityCont.text,
                                         'location': _eventLocationCont.text,
                                         'field': _eventFieldCont.text,
-                                        'rooms': FieldValue.arrayUnion(
-                                            _controllersText),
+                                        'rooms': rooms,
                                         'acceptsParticapants':
                                             acceptsParticipants,
                                         'sendNotification': sendNotifications,
@@ -929,7 +930,7 @@ class _creatingEventState extends State<creatingEvent> {
 //publish event
                                     try {
                                       _controllers.forEach((element) {
-                                        _controllersText.add(element.text);
+                                        rooms.add(element.text);
                                       });
                                       final targetedAudience =
                                           _targetedAudienceCont.text.split(',');
@@ -960,8 +961,7 @@ class _creatingEventState extends State<creatingEvent> {
                                         'location': _eventLocationCont.text,
                                         'field': _eventFieldCont.text,
                                         'likes': {},
-                                        'rooms': FieldValue.arrayUnion(
-                                            _controllersText),
+                                        'rooms': rooms,
                                         'acceptsParticapants':
                                             acceptsParticipants,
                                         'sendNotification': sendNotifications,
@@ -981,6 +981,10 @@ class _creatingEventState extends State<creatingEvent> {
                                         'creationDate': Timestamp.now(),
                                         'eventSearchCases':
                                             setSearchParam(_eventNameCont.text),
+                                        'typeSearchCases':
+                                            setSearchParam(_eventTypeCont.text),
+                                        'citySearchCases':
+                                            setSearchParam(_eventCityCont.text),
                                         'fieldSearchCases':
                                             setSearchParam(_eventFieldCont.text)
                                       }).then((value) async {

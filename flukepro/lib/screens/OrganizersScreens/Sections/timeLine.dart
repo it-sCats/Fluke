@@ -270,7 +270,7 @@ class _eventTimelineState extends State<eventTimeline> {
                           child: Text(
                             session.sessionName,
                             style: conLittelTxt12.copyWith(
-                                fontSize: 12, fontWeight: FontWeight.w500),
+                                fontSize: 11, fontWeight: FontWeight.w500),
                           ),
                         ),
                         Expanded(
@@ -279,12 +279,12 @@ class _eventTimelineState extends State<eventTimeline> {
                           style: conLittelTxt12.copyWith(
                               fontSize: 10, color: conBlack.withOpacity(.8)),
                         )),
-                        // Expanded(
-                        //     child: Text(
-                        //   session.room,
-                        //   style: conLittelTxt12.copyWith(
-                        //       fontSize: 10, color: conBlack.withOpacity(.8)),
-                        // ))
+                        Expanded(
+                            child: Text(
+                          ' القاعة: ${session.room}',
+                          style: conLittelTxt12.copyWith(
+                              fontSize: 10, color: conBlack.withOpacity(.8)),
+                        ))
                       ],
                     ),
                   ),

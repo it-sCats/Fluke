@@ -156,7 +156,8 @@ class _OrgRequestState extends State<OrgRequest> {
                                 success!,
                                 widget.name.toString(),
                                 widget.eventsType.toString(),
-                                widget.phoneNum.toString());
+                                widget.phoneNum.toString(),
+                                widget.brief.toString());
                           });
                           updatingRequesStatus(widget.docId,
                               'accepted'); //changing the status of request
@@ -216,6 +217,7 @@ addingOrganizer(
   String name,
   String eventsTypes,
   String phone,
+  String breif,
 ) async {
   final _firestore = FirebaseFirestore.instance;
   //2 is for participants
@@ -224,7 +226,8 @@ addingOrganizer(
     "name": name,
     "eventsTypes": eventsTypes,
     "phone": phone,
-    "userType": 1
+    "userType": 1,
+    "brief": breif
   });
 }
 

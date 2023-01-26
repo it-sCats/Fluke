@@ -45,6 +45,7 @@ String? eventId;
 String? creatorId;
 Timestamp? starterDate;
 Timestamp? endDate;
+List? rooms;
 
 //صفحة الهوم متاع المنظم
 class Ohome extends StatefulWidget {
@@ -136,8 +137,6 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                   txt: "إنشاء أجندة",
                   onTap: () {
                     showModalBottomSheet(
-                        //تعرض كيو آر بعد تسجيل الزائر
-
                         elevation: 0,
                         context: context,
                         builder: (context) => Padding(
@@ -225,6 +224,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                                                         items['creatorID'],
                                                         items['starterDate'],
                                                         items['endDate'],
+                                                        items['rooms'],
                                                       ],
                                                       child: Text(items[
                                                           'title']), //درنا تحويل من ليستا عادية لليستا يقبلها الدروب داون
@@ -239,6 +239,7 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                                                     //the event id
                                                     starterDate = value[3];
                                                     endDate = value[4];
+                                                    rooms = value[5];
                                                     print(value[0]);
                                                     print(value[1]);
                                                     print(value[2]);
@@ -254,38 +255,26 @@ class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
                                     lessEdgeCTA(
                                         txt: 'إنشاء أجندة الحدث',
                                         onTap: () async {
-                                          var res = await http.post(
-                                              Uri.parse(
-                                                  'http://10.0.2.2:3000/orderpizza'),
-                                              headers: <String, String>{
-                                                'Content-Type':
-                                                    'application/json; charset=UTF-8',
-                                              },
-                                              body: jsonEncode(<String, String>{
-                                                "userid": "544"
-                                              }));
-
-                                          print(res.statusCode);
-                                          print(res.body);
-                                          // // Provider.of<eventInfoHolder>(context,
-                                          // //         listen: false)
-                                          // //     .getEventInfoForTimetable(
-                                          // //         eventId, context);
-                                          // if (_eventChooseFormKey.currentState!
-                                          //     .validate()) {
-                                          //   if (_eventTypeCont.text != '') {
-                                          //     Navigator.pushNamed(
-                                          //         //send event Id and name to the time table screen
-                                          //         context,
-                                          //         'timeTable',
-                                          //         arguments: [
-                                          //           starterDate,
-                                          //           endDate,
-                                          //           eventId,
-                                          //           creatorId
-                                          //         ]);
-                                          //   }
-                                          // }
+                                          // Provider.of<eventInfoHolder>(context,
+                                          //         listen: false)
+                                          //     .getEventInfoForTimetable(
+                                          //         eventId, context);
+                                          if (_eventChooseFormKey.currentState!
+                                              .validate()) {
+                                            if (_eventTypeCont.text != '') {
+                                              Navigator.pushNamed(
+                                                  //send event Id and name to the time table screen
+                                                  context,
+                                                  'timeTable',
+                                                  arguments: [
+                                                    starterDate,
+                                                    endDate,
+                                                    eventId,
+                                                    creatorId,
+                                                    rooms
+                                                  ]);
+                                            }
+                                          }
                                         })
                                   ],
                                 ),

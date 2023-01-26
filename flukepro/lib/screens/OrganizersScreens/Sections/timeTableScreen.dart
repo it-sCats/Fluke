@@ -410,6 +410,7 @@ class _sessionEditingState extends State<sessionEditing> {
   late DateTime fromDate;
   late DateTime toDate;
   late DateTime sessionDay;
+  late List rooms;
   @override
   void initState() {
     // TODO: implement initState
@@ -421,6 +422,7 @@ class _sessionEditingState extends State<sessionEditing> {
         .add(Duration(hours: 2));
     sessionDay = DateTime.fromMicrosecondsSinceEpoch(
         widget.args[0].microsecondsSinceEpoch);
+    rooms = widget.args[4];
   }
 
   @override
@@ -800,7 +802,7 @@ class _sessionEditingState extends State<sessionEditing> {
                             borderSide: BorderSide.none,
                             borderRadius: BorderRadius.circular(10))),
                     style: conTxtFeildHint.copyWith(color: conBlack),
-                    items: days.map((items) {
+                    items: rooms.map((items) {
                       return DropdownMenuItem(
                         value: items,
                         child: Text(items
