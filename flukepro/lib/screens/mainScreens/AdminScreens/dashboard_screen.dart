@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../components/cons.dart';
 import '../../../components/responsive.dart';
+// import 'displayDataPrev.dart';
 import 'header.dart';
 import 'loadData.dart';
 
@@ -38,8 +39,49 @@ class _DashboardScreenState extends State<DashboardScreen>
                     child: Column(
                       children: [
                         MyFiles(),
-                        // LoadVisistorData(),
-                        // LoadData(),
+                      ],
+                    ),
+                  ),
+                  if (!Responsive.isMobile(context))
+                    SizedBox(width: default_Padding),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ddscreen extends StatefulWidget {
+  const ddscreen({super.key});
+
+  @override
+  State<ddscreen> createState() => _ddscreenState();
+}
+
+class _ddscreenState extends State<ddscreen> {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: SingleChildScrollView(
+        primary: false,
+        // padding: EdgeInsets.all(defaultPadding),
+        child: Column(
+          children: [
+            Header(),
+            SizedBox(height: default_Padding),
+            Padding(
+              padding: EdgeInsets.all(default_Padding),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: Column(
+                      children: [
+                        // displaydataDashboardScreen(),
                       ],
                     ),
                   ),

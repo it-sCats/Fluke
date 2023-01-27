@@ -1,4 +1,5 @@
 import 'package:flukepro/screens/mainScreens/AdminScreens/header.dart';
+import 'package:flukepro/screens/mainScreens/AdminScreens/sidde_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/appengine/v1.dart';
 import 'package:googleapis/chromeuxreport/v1.dart';
@@ -8,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../../../components/cons.dart';
+// import 'displayDataPrev.dart';
 //https://react-native-firebase-testing.firebaseio.com
 
 class LoadVisistorData extends StatelessWidget {
@@ -20,7 +22,7 @@ class LoadVisistorData extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            // Header(),
+            Header(),
             SizedBox(height: default_Padding),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,

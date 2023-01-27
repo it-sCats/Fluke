@@ -8,7 +8,8 @@ import 'package:flukepro/screens/OrganizersScreens/ODashboard.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oprofile.dart';
 import 'package:flukepro/screens/OrganizersScreens/OsearchScreen.dart';
 import 'package:flukepro/screens/OrganizersScreens/Sections/timeTableScreen.dart';
-import 'package:flukepro/screens/mainScreens/AdminScreens/displayDataPrev.dart';
+import 'package:flukepro/screens/mainScreens/AdminScreens/dashboard_screen.dart';
+// import 'package:flukepro/screens/mainScreens/AdminScreens/displayDataPrev.dart';
 import 'package:flukepro/screens/mainScreens/AdminScreens/loadData.dart';
 import 'package:flukepro/screens/mainScreens/AdminScreens/main_screen.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
@@ -166,7 +167,6 @@ class _MyAppState extends State<MyApp> {
             background: Container(color: Color(0xFFF5F5F5))),
 
         home: Ahome(),
-        // home: LoadData(),
 
         debugShowCheckedModeBanner:
             false, //to remove debugging banner at the top of the screen
@@ -199,7 +199,7 @@ class _MyAppState extends State<MyApp> {
           'editEvent': ((context) => editEvent()),
           'timeTable': ((context) => timeTable()),
           '/Oprofile': ((context) => Oprofile()),
-          'displayD': ((context) => displaydataDashboardScreen()),
+          // 'displayD': ((context) => displaydataDashboardScreen()),
           //routes of Admin Screens
           '/Adash': ((context) => Ahome()),
 

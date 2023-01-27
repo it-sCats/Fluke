@@ -1,10 +1,12 @@
 import 'package:flukepro/components/cons.dart';
 import 'package:flukepro/screens/mainScreens/AdminScreens/loadData.dart';
+import 'package:flukepro/screens/mainScreens/AdminScreens/main_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flukepro/screens/OrganizersScreens/OHome.dart';
 
-import 'displayDataPrev.dart';
+import 'dashboard_screen.dart';
+// import 'displayDataPrev.dart';
 
 int? pageIndex = 0;
 
@@ -22,7 +24,7 @@ class _SideMenuState extends State<SideMenu>
   static List<Widget> _pages = [
     //بدل ما يتم توجيه المستخدم لصفحات مختلفة, بالطريقة هذه حيكون عندي ويدجيتس يتم التغيير بيناتهم عن طريق النافيقيشن سايد
     //هنا نتحكمو بالويدجيتس الي حينعرضو
-    displaydataDashboardScreen(), //لوحة التحكم
+    // displaydataDashboardScreen(), //لوحة التحكم
     // Oprofile(), //الاحداث التي نظمها المنظم
     // OnotifiScreen(), //الاشعارات
     //الملف الشخصي متاعه
@@ -38,10 +40,13 @@ class _SideMenuState extends State<SideMenu>
           DrawerListTile(
             title: "الرئيسية",
             Icond: Icons.view_compact_alt_rounded,
-
             //  Icond: Icons.manage_accounts_outlined,
             press: () {
-              Navigator.pushNamed(context, '/log');
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MainScreen(),
+                  ));
             },
           ),
           DrawerListTile(
@@ -52,7 +57,13 @@ class _SideMenuState extends State<SideMenu>
           DrawerListTile(
             title: "الزوار",
             Icond: Icons.groups_rounded,
-            press: () {},
+            press: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Visitormainscreen(),
+                  ));
+            },
           ),
           DrawerListTile(
             title: "المشاركين",

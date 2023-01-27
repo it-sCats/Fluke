@@ -2,6 +2,7 @@ import 'package:flukepro/components/responsive.dart';
 import 'package:flutter/material.dart';
 import '../../../components/cons.dart';
 import 'displayDataPrev.dart';
+import 'main_screen.dart';
 
 class MyFiles extends StatelessWidget {
   const MyFiles({
@@ -100,7 +101,7 @@ class FileInfoCardGridView extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => displaydataDashboardScreen(),
+                  builder: (context) => Visitormainscreen(),
                 ));
           },
         ),
