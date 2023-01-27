@@ -120,26 +120,26 @@ class LoadVisistorData extends StatelessWidget {
   //   return DataloadGridSource(dataLoadList);
   // }
 
-  List<GridColumn> getColumns() {
-    return <GridColumn>[
-      GridTextColumn(
-          columnName: 'userID',
-          width: 70,
-          label: Container(
-              padding: EdgeInsets.all(8),
-              alignment: Alignment.centerLeft,
-              child: Text('User ID',
-                  overflow: TextOverflow.clip, softWrap: true))),
-      GridTextColumn(
-          columnName: 'name',
-          width: 70,
-          label: Container(
-              padding: EdgeInsets.all(8),
-              alignment: Alignment.centerLeft,
-              child:
-                  Text('name', overflow: TextOverflow.clip, softWrap: true))),
-    ];
-  }
+  // List<GridColumn> getColumns() {
+  //   return <GridColumn>[
+  //     GridTextColumn(
+  //         columnName: 'userID',
+  //         width: 70,
+  //         label: Container(
+  //             padding: EdgeInsets.all(8),
+  //             alignment: Alignment.centerLeft,
+  //             child: Text('User ID',
+  //                 overflow: TextOverflow.clip, softWrap: true))),
+  //     GridTextColumn(
+  //         columnName: 'name',
+  //         width: 70,
+  //         label: Container(
+  //             padding: EdgeInsets.all(8),
+  //             alignment: Alignment.centerLeft,
+  //             child:
+  //                 Text('name', overflow: TextOverflow.clip, softWrap: true))),
+  //   ];
+  // }
 
   Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
       generateDataloadList() async {
@@ -201,11 +201,6 @@ class LoadData extends StatelessWidget {
     ]);
   }
 
-  // Future<DataloadGridSource> getDataloadGridSource() async {
-  //   var dataLoadList = await generateDataloadList();
-  //   return DataloadGridSource(dataLoadList);
-  // }
-
   List<GridColumn> getColumns() {
     return <GridColumn>[
       GridTextColumn(
@@ -227,71 +222,22 @@ class LoadData extends StatelessWidget {
     ];
   }
 
-  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
-      generateDataloadList() async {
-    var dataLoadList =
-        await FirebaseFirestore.instance.collection('users').get();
-    // var response = await http
-    //     .get(Uri.parse('https://react-native-firebase-testing.firebaseio.com'));
-    // var dacodeData = json.decode(response.body).cast<Map<String, dynamic>>();
-    // List<Data_load> dataLoadList = await dacodeData
-    //     .map<Data_load>((json) => Data_load.fromJson(json))
-    //     .toList();
-    return dataLoadList.docs;
-  }
+  // Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
+  //     generateDataloadList() async {
+  //   var dataLoadList =
+  //       await FirebaseFirestore.instance.collection('users').get();
+  //   // var response = await http
+  //   //     .get(Uri.parse('https://react-native-firebase-testing.firebaseio.com'));
+  //   // var dacodeData = json.decode(response.body).cast<Map<String, dynamic>>();
+  //   // List<Data_load> dataLoadList = await dacodeData
+  //   //     .map<Data_load>((json) => Data_load.fromJson(json))
+  //   //     .toList();
+  //   return dataLoadList.docs;
+  // }
 }
 
-class DataloadGridSource extends DataGridSource {
-  DataloadGridSource(this.dataLoadList) {
-    buildDataGridRow();
-  }
-  late List<DataGridRow> dataGridRows;
-  late List<Data_load> dataLoadList;
-  @override
-  DataGridRowAdapter? buildRow(DataGridRow row) {
-    return DataGridRowAdapter(cells: [
-      Container(
-        child: Text(row.getCells()[0].value.toString(),
-            overflow: TextOverflow.ellipsis),
-        alignment: Alignment.centerLeft,
-        padding: EdgeInsets.all(8.0),
-      ),
-      Container(
-        child: Text(row.getCells()[1].value.toString(),
-            overflow: TextOverflow.ellipsis),
-        alignment: Alignment.centerLeft,
-        padding: EdgeInsets.all(8.0),
-      ),
-    ]);
-  }
 
-  @override
-  // TODO: implement rows
-  List<DataGridRow> get rows => dataGridRows;
 
-  void buildDataGridRow() {
-    dataGridRows = dataLoadList.map<DataGridRow>((dataGridRow) {
-      return DataGridRow(cells: [
-        DataGridCell(columnName: 'userID', value: dataGridRow.userId),
-      ]);
-    }).toList(growable: false);
-  }
-}
-
-class Data_load {
-  factory Data_load.fromJson(Map<String, dynamic> json) {
-    return Data_load(
-      userId: json['userID'],
-      userName: json['name'],
-    );
-  }
-  Data_load({
-    required this.userId,
-    required this.userName,
-  });
-  final int? userId;
-  final String? userName;
-}
 // interests: json['interests'],
 // events: json['events'],
 // field: json['field'],

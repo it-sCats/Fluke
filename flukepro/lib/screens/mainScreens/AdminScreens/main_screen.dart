@@ -75,3 +75,17 @@ class _VisitormainscreenState extends State<Visitormainscreen> {
     );
   }
 }
+
+class Particimainscreen extends StatefulWidget {
+  const Particimainscreen({super.key});
+
+  @override
+  State<Particimainscreen> createState() => _ParticimainscreenState();
+}
+
+class _ParticimainscreenState extends State<Particimainscreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
