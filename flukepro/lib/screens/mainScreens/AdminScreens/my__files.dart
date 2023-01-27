@@ -220,7 +220,13 @@ class FileInfoCardGridView extends StatelessWidget {
               ],
             ),
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Eventmainscreen(),
+                ));
+          },
         ),
         InkWell(
           child: Container(
