@@ -18,6 +18,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../screens/OrganizersScreens/Oprofile.dart';
 import '../screens/OrganizersScreens/Sections/timeLine.dart';
+import '../screens/OrganizersScreens/Sections/timeTableScreen.dart';
 import '../screens/mainScreens/userInfoScreen.dart';
 import '../utils/SigningProvider.dart';
 import '../utils/SigningProvider.dart';
@@ -660,14 +661,17 @@ class _eventDisplayState extends State<eventDisplay>
                                     SizedBox(
                                       height: 20,
                                     ),
-                                    Container(
-                                      padding: EdgeInsets.only(bottom: 10),
-                                      // margin: const EdgeInsets.only(left: 5, right: 15),
-                                      child: new Divider(
-                                        color: conBlack.withOpacity(.6),
-                                        height: 4,
-                                      ),
-                                    ),
+                                    widget.location!.isNotEmpty
+                                        ? Container(
+                                            padding:
+                                                EdgeInsets.only(bottom: 10),
+                                            // margin: const EdgeInsets.only(left: 5, right: 15),
+                                            child: new Divider(
+                                              color: conBlack.withOpacity(.6),
+                                              height: 4,
+                                            ),
+                                          )
+                                        : Container(),
                                     widget.location!.isNotEmpty
                                         ? Expanded(
                                             child: Column(
@@ -715,14 +719,17 @@ class _eventDisplayState extends State<eventDisplay>
                                     SizedBox(
                                       height: 20,
                                     ),
-                                    Container(
-                                      padding: EdgeInsets.only(bottom: 10),
-                                      // margin: const EdgeInsets.only(left: 5, right: 15),
-                                      child: new Divider(
-                                        color: conBlack.withOpacity(.6),
-                                        height: 4,
-                                      ),
-                                    ),
+                                    widget.location!.isNotEmpty
+                                        ? Container(
+                                            padding:
+                                                EdgeInsets.only(bottom: 10),
+                                            // margin: const EdgeInsets.only(left: 5, right: 15),
+                                            child: new Divider(
+                                              color: conBlack.withOpacity(.6),
+                                              height: 4,
+                                            ),
+                                          )
+                                        : Container(),
                                     Expanded(
                                       child: Padding(
                                         padding:
@@ -919,14 +926,18 @@ class _eventDisplayState extends State<eventDisplay>
                                         SizedBox(
                                           height: 20,
                                         ),
-                                        Container(
-                                          padding: EdgeInsets.only(bottom: 10),
-                                          // margin: const EdgeInsets.only(left: 5, right: 15),
-                                          child: new Divider(
-                                            color: conBlack.withOpacity(.6),
-                                            height: 4,
-                                          ),
-                                        ),
+                                        widget.location!.isNotEmpty
+                                            ? Container(
+                                                padding:
+                                                    EdgeInsets.only(bottom: 10),
+                                                // margin: const EdgeInsets.only(left: 5, right: 15),
+                                                child: new Divider(
+                                                  color:
+                                                      conBlack.withOpacity(.6),
+                                                  height: 4,
+                                                ),
+                                              )
+                                            : Container(),
                                         widget.location!.isNotEmpty
                                             ? Expanded(
                                                 child: Column(
@@ -976,14 +987,18 @@ class _eventDisplayState extends State<eventDisplay>
                                         SizedBox(
                                           height: 20,
                                         ),
-                                        Container(
-                                          padding: EdgeInsets.only(bottom: 10),
-                                          // margin: const EdgeInsets.only(left: 5, right: 15),
-                                          child: new Divider(
-                                            color: conBlack.withOpacity(.6),
-                                            height: 4,
-                                          ),
-                                        ),
+                                        widget.location!.isNotEmpty
+                                            ? Container(
+                                                padding:
+                                                    EdgeInsets.only(bottom: 10),
+                                                // margin: const EdgeInsets.only(left: 5, right: 15),
+                                                child: new Divider(
+                                                  color:
+                                                      conBlack.withOpacity(.6),
+                                                  height: 4,
+                                                ),
+                                              )
+                                            : Container(),
                                         Expanded(
                                           child: Padding(
                                             padding: const EdgeInsets.only(
@@ -1356,14 +1371,18 @@ class _eventDisplayState extends State<eventDisplay>
                                         SizedBox(
                                           height: 20,
                                         ),
-                                        Container(
-                                          padding: EdgeInsets.only(bottom: 10),
-                                          // margin: const EdgeInsets.only(left: 5, right: 15),
-                                          child: new Divider(
-                                            color: conBlack.withOpacity(.6),
-                                            height: 4,
-                                          ),
-                                        ),
+                                        widget.location!.isNotEmpty
+                                            ? Container(
+                                                padding:
+                                                    EdgeInsets.only(bottom: 10),
+                                                // margin: const EdgeInsets.only(left: 5, right: 15),
+                                                child: new Divider(
+                                                  color:
+                                                      conBlack.withOpacity(.6),
+                                                  height: 4,
+                                                ),
+                                              )
+                                            : Container(),
                                         widget.location!.isNotEmpty
                                             ? Expanded(
                                                 child: Column(
@@ -1577,18 +1596,54 @@ class _eventDisplayState extends State<eventDisplay>
                                           ),
                                         )
                                       ],
-                                    )), //todo خلي الشرط هنا واعرضي زوز ويدجيت مختلفاتا للشاشة كلها
-                        eventTimeline(
-                            eventID: widget.id,
-                            creatorID: widget.creatorID,
-                            startDate: widget.starterDate,
-                            endDate: widget.endDate),
+                                    )),
+                        Stack(children: [
+                          eventTimeline(
+                              eventID: widget.id,
+                              creatorID: widget.creatorID,
+                              startDate: widget.starterDate,
+                              endDate: widget.endDate),
+                          Provider.of<siggning>(context, listen: false)
+                                      .loggedUser!
+                                      .uid ==
+                                  widget
+                                      .creatorID //هذا الشرط يعني بإظهار أزرار الحذف والتعديل في حال كان عارض الحدث هو المنشء
+                              ? Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 18.0, horizontal: 15),
+                                    child: FloatingActionButton(
+                                      onPressed: () {
+                                        showModalBottomSheet(
+                                            elevation: 50,
+                                            isScrollControlled: true,
+                                            context: context,
+                                            builder: (context) =>
+                                                sessionEditing(args: [
+                                                  widget.starterDate,
+                                                  widget.endDate,
+                                                  widget.id,
+                                                  widget.creatorID,
+                                                  widget.room
+                                                ]));
+                                      },
+                                      child: Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                      ),
+                                      backgroundColor: conBlue,
+                                    ),
+                                  ),
+                                )
+                              : Container()
+                        ]),
                         displayParticipants(
                           eventID: widget.id,
                         ),
                         if (kIsWeb)
                           Container(
-                            child: Text('participants'),
+                            child: Text('زوار'),
                           )
                       ]),
                 ),

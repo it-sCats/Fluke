@@ -422,7 +422,7 @@ class _sessionEditingState extends State<sessionEditing> {
         .add(Duration(hours: 2));
     sessionDay = DateTime.fromMicrosecondsSinceEpoch(
         widget.args[0].microsecondsSinceEpoch);
-    rooms = widget.args[4];
+    rooms = widget.args[4] == null ? [] : widget.args[4];
   }
 
   @override

@@ -72,6 +72,7 @@ class _editEventState extends State<editEvent> {
   TextEditingController? _eventLocationCont = TextEditingController();
   TextEditingController? _eventCityCont = TextEditingController();
   TextEditingController? _targetedAudienceCont = TextEditingController();
+  List<String> rooms = [];
 
   List<TextEditingController> _controllers = [];
   List<String> _controllersText = [];
@@ -516,7 +517,9 @@ class _editEventState extends State<editEvent> {
                                         TimeOfDay? pickedTime =
                                             await showTimePicker(
                                           context: context,
-                                          initialTime: eventData['endTime'],
+                                          initialTime: TimeOfDay(
+                                              hour: eventData['endTime'],
+                                              minute: 0),
                                         );
                                         //formatted date output using intl package =>  2021-03-16
                                         //you can implement different kind of Date Format here according to your requirement
@@ -561,8 +564,10 @@ class _editEventState extends State<editEvent> {
                                             TimeOfDay? pickedTime =
                                                 await showTimePicker(
                                               context: context,
-                                              initialTime:
-                                                  eventData['starterTime'],
+                                              initialTime: TimeOfDay(
+                                                  hour:
+                                                      eventData['starterTime'],
+                                                  minute: 0),
                                             );
 
                                             //formatted date output using intl package =>  2021-03-16
@@ -603,7 +608,7 @@ class _editEventState extends State<editEvent> {
                                 textDirection: TextDirection.rtl,
                                 child: DropdownButtonFormField(
                                   validator: (value) {
-                                    value == null ? 'جب تحديد المدينة' : null;
+                                    value == null ? 'يجب تحديد المدينة' : null;
                                   },
                                   decoration: InputDecoration(
                                       contentPadding: EdgeInsets.symmetric(
@@ -847,8 +852,7 @@ class _editEventState extends State<editEvent> {
 
                                             try {
                                               _controllers.forEach((element) {
-                                                _controllersText
-                                                    .add(element.text);
+                                                rooms.add(element.text);
                                               });
                                               var snapshot;
                                               if (imagePath != null) {
@@ -911,10 +915,9 @@ class _editEventState extends State<editEvent> {
                                                     _eventFieldCont!.text == ''
                                                         ? eventData['field']
                                                         : _eventFieldCont!.text,
-                                                'rooms': _controllersText == ''
+                                                'rooms': rooms.isEmpty
                                                     ? eventData['rooms']
-                                                    : FieldValue.arrayUnion(
-                                                        _controllersText),
+                                                    : rooms,
                                                 'acceptsParticapants':
                                                     acceptsParticipants == null
                                                         ? eventData[
@@ -926,17 +929,9 @@ class _editEventState extends State<editEvent> {
                                                             'sendNotification']
                                                         : sendNotifications,
                                                 'eventVisibility': false,
-                                                'creatorID':
-                                                    Provider.of<siggning>(
-                                                            context,
-                                                            listen: false)
-                                                        .loggedUser!
-                                                        .uid,
                                               }).then((value) async {
                                                 isLoading = false;
 
-                                                Navigator.pushReplacementNamed(
-                                                    context, 'OHome');
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(
                                                   const SnackBar(
@@ -947,7 +942,9 @@ class _editEventState extends State<editEvent> {
                                                       fontFamily: 'Cairo',
                                                     ),
                                                   )),
-                                                ); //todo give the starter and the final date in value
+                                                );
+                                                Navigator.pushNamed(context,
+                                                    'OHome'); //todo give the starter and the final date in value
                                               }).onError((error, stackTrace) {
                                                 print(error!.toString());
                                                 isLoading = false;
@@ -1013,7 +1010,7 @@ class _editEventState extends State<editEvent> {
 
                                         try {
                                           _controllers.forEach((element) {
-                                            _controllersText.add(element.text);
+                                            rooms.add(element.text);
                                           });
                                           final targetedAudience =
                                               _targetedAudienceCont!.text
@@ -1065,10 +1062,9 @@ class _editEventState extends State<editEvent> {
                                             'field': _eventFieldCont!.text == ''
                                                 ? eventData['field']
                                                 : _eventFieldCont!.text,
-                                            'rooms': _controllersText == ''
+                                            'rooms': rooms.isEmpty
                                                 ? eventData['rooms']
-                                                : FieldValue.arrayUnion(
-                                                    _controllersText),
+                                                : rooms,
                                             'acceptsParticapants':
                                                 acceptsParticipants == null
                                                     ? eventData[

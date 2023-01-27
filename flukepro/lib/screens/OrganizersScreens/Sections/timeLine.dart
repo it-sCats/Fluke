@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../../components/cons.dart';
+import '../../../components/creatingEventsForm.dart';
+import '../../../components/customWidgets.dart';
 import '../../../components/session.dart';
 import '../../../components/sessionDataSource.dart';
 import '../../../utils/notificationProvider.dart';
@@ -77,12 +79,57 @@ class _eventTimelineState extends State<eventTimeline> {
 
               appointmentBuilder: (context, calendarAppointmentDetails) {
                 Session session = calendarAppointmentDetails.appointments.first;
-                return GestureDetector(
+                return InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      elevation: 100,
+                      context: context,
+                      builder: (context) => Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 100, horizontal: 50),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'إسم الجلسة : ${session.sessionName}',
+                              style: conHeadingsStyle.copyWith(
+                                  fontSize: 17, fontWeight: FontWeight.normal),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'إسم المتحدث : ${session.speakerName}',
+                              style: conHeadingsStyle.copyWith(
+                                  fontSize: 17, fontWeight: FontWeight.normal),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'قاعة الجلسة : ${session.room.isEmpty ? 'لا توجد قاعة محددة' : session.room}',
+                              style: conHeadingsStyle.copyWith(
+                                  fontSize: 17, fontWeight: FontWeight.normal),
+                            ),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: lessEdgeCTA(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  txt: 'حسناً'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                   onTapDown: Provider.of<siggning>(context, listen: false)
                               .loggedUser!
                               .uid ==
                           widget.creatorID
                       ? (details) {
+                          print('longP');
                           showMenu<String>(
                             context: context,
                             shape: RoundedRectangleBorder(
@@ -279,12 +326,15 @@ class _eventTimelineState extends State<eventTimeline> {
                           style: conLittelTxt12.copyWith(
                               fontSize: 10, color: conBlack.withOpacity(.8)),
                         )),
-                        Expanded(
-                            child: Text(
-                          ' القاعة: ${session.room}',
-                          style: conLittelTxt12.copyWith(
-                              fontSize: 10, color: conBlack.withOpacity(.8)),
-                        ))
+                        session.room.isEmpty
+                            ? Container()
+                            : Expanded(
+                                child: Text(
+                                ' القاعة: ${session.room}',
+                                style: conLittelTxt12.copyWith(
+                                    fontSize: 10,
+                                    color: conBlack.withOpacity(.8)),
+                              ))
                       ],
                     ),
                   ),

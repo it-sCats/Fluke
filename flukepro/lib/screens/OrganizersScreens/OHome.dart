@@ -55,7 +55,7 @@ class Ohome extends StatefulWidget {
   State<Ohome> createState() => _OhomeState();
 }
 
-class _OhomeState extends State<Ohome> with SingleTickerProviderStateMixin {
+class _OhomeState extends State<Ohome> with TickerProviderStateMixin {
   static List<Widget> _pages = [
     //بدل ما يتم توجيه المستخدم لصفحات مختلفة, بالطريقة هذه حيكون عندي ويدجيتس يتم التغيير بيناتهم عن طريق النافيقيشن سايد
     //هنا نتحكمو بالويدجيتس الي حينعرضو

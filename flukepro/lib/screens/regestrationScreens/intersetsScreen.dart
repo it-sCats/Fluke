@@ -103,50 +103,50 @@ class _interestsSelectionState extends State<interestsSelection> {
                                   .update({'interests': selectedinterestes});
                               if (!kIsWeb) {
                                 selectedinterestes.forEach((element) {
-                                  element == 'المجال الطبي'
+                                  element.compareTo('المجال الطبي') == 0
                                       ? FirebaseMessaging.instance
                                           .subscribeToTopic('medical')
-                                      : element == 'برمجة'
+                                      : element.compareTo('برمجة') == 0
                                           ? FirebaseMessaging.instance
                                               .subscribeToTopic('coding')
-                                          : element == 'مالية'
+                                          : element.compareTo('مالية') == 0
                                               ? FirebaseMessaging.instance
                                                   .subscribeToTopic('finance')
-                                              : element == 'قانون'
+                                              : element.compareTo('قانون') == 0
                                                   ? FirebaseMessaging.instance
                                                       .subscribeToTopic('low')
-                                                  : element == 'مجال التقنية'
-                                                      ? FirebaseMessaging
-                                                          .instance
+                                                  : element.compareTo('مجال التقنية') ==
+                                                          0
+                                                      ? FirebaseMessaging.instance
                                                           .subscribeToTopic(
                                                               'tech')
-                                                      : element == 'أعمال حرة'
+                                                      : element.compareTo('أعمال حرة') ==
+                                                              0
                                                           ? FirebaseMessaging
                                                               .instance
                                                               .subscribeToTopic(
                                                                   'freelance')
-                                                          : element == 'أخرى'
+                                                          : element.compareTo(
+                                                                      'أخرى') ==
+                                                                  0
                                                               ? FirebaseMessaging
                                                                   .instance
                                                                   .subscribeToTopic(
                                                                       'others')
-                                                              : element ==
-                                                                      'محاسبة'
+                                                              : element.compareTo('محاسبة') ==
+                                                                      0
                                                                   ? FirebaseMessaging
                                                                       .instance
-                                                                      .subscribeToTopic(
-                                                                          'accountant')
-                                                                  : element ==
-                                                                          'كتابة محتوى'
-                                                                      ? FirebaseMessaging
-                                                                          .instance
-                                                                          .subscribeToTopic('content')
-                                                                      : element == 'تصميم جرافيكي'
+                                                                      .subscribeToTopic('accountant')
+                                                                  : element.compareTo('كتابة محتوى') == 0
+                                                                      ? FirebaseMessaging.instance.subscribeToTopic('content')
+                                                                      : element.compareTo('تصميم جرافيكي') == 0
                                                                           ? FirebaseMessaging.instance.subscribeToTopic('graphic design')
                                                                           : null;
                                 });
                               }
-                              Navigator.pushNamed(context, '/redirect');
+                              Navigator.pushReplacementNamed(
+                                  context, '/redirect');
                             }
                             // Navigator.pushNamed(context, '/home');
                           })

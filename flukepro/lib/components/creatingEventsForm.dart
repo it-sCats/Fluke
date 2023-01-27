@@ -25,7 +25,14 @@ class creatingEvent extends StatefulWidget {
   State<creatingEvent> createState() => _creatingEventState();
 }
 
-class _creatingEventState extends State<creatingEvent> {
+class _creatingEventState extends State<creatingEvent>
+    with SingleTickerProviderStateMixin {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   final eventRef = _firestore.collection('events');
   final _eventFormKey = GlobalKey<FormState>();
   bool isLoading = false;
@@ -285,6 +292,9 @@ class _creatingEventState extends State<creatingEvent> {
                           }
                           return null;
                         },
+                        // onTap: () {
+                        //   FocusScope.of(context).requestFocus(FocusNode());
+                        // },
                         controller: _eventNameCont,
                         textDirection: TextDirection.rtl,
                         textAlign: TextAlign.right,
@@ -583,7 +593,7 @@ class _creatingEventState extends State<creatingEvent> {
                         textDirection: TextDirection.rtl,
                         child: DropdownButtonFormField(
                           validator: (value) {
-                            if (value == null) {
+                            if (value == null || value == '') {
                               return 'يجب إختيار مدينة';
                             }
                             return null;

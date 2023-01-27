@@ -46,6 +46,7 @@ class _baseState extends State<base> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       bottomNavigationBar: SizedBox(
         height: 80,
         child: BottomNavigationBar(
