@@ -1,6 +1,8 @@
 import 'package:flukepro/components/responsive.dart';
 import 'package:flutter/material.dart';
 import '../../../components/cons.dart';
+import 'displayDataPrev.dart';
+import 'main_screen.dart';
 
 class MyFiles extends StatelessWidget {
   const MyFiles({
@@ -58,10 +60,9 @@ class FileInfoCardGridView extends StatelessWidget {
       mainAxisSpacing: default_Padding,
       childAspectRatio: childAspectRatio,
       children: [
-        //second
         InkWell(
           child: Container(
-            height: 100,
+            height: 90,
             decoration: BoxDecoration(
               color: conBlue,
               borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -74,34 +75,39 @@ class FileInfoCardGridView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    // padding: EdgeInsets.only(bottom: 10),
-                    height: 100,
+                    height: 90,
                     decoration: BoxDecoration(
-                      // color: info.color!.withOpacity(0.1),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Image.asset("images/visitors.png"),
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.only(top: 0.8, left: 0.8, right: 0.8),
                   child: Text(
                     "الزوار",
-                    style: conHeadingsStyle.copyWith(color: white),
+                    style:
+                        conHeadingsStyle.copyWith(color: white, fontSize: 16),
                   ),
                 ),
               ],
             ),
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Visitormainscreen(),
+                ));
+          },
         ),
         InkWell(
           child: Container(
-            height: 100,
+            height: 90,
             decoration: BoxDecoration(
               color: conBlue,
               borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -114,24 +120,23 @@ class FileInfoCardGridView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    // padding: EdgeInsets.only(bottom: 10),
-                    height: 100,
+                    height: 90,
                     decoration: BoxDecoration(
-                      // color: info.color!.withOpacity(0.1),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Image.asset("images/organizer.png"),
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.only(top: 0.8, left: 0.8, right: 0.8),
                   child: Text(
                     "المنظمين",
-                    style: conHeadingsStyle.copyWith(color: white),
+                    style:
+                        conHeadingsStyle.copyWith(color: white, fontSize: 16),
                   ),
                 ),
               ],
@@ -141,7 +146,7 @@ class FileInfoCardGridView extends StatelessWidget {
         ),
         InkWell(
           child: Container(
-            height: 100,
+            height: 90,
             decoration: BoxDecoration(
               color: conBlue,
               borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -154,24 +159,23 @@ class FileInfoCardGridView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    // padding: EdgeInsets.only(bottom: 10),
-                    height: 100,
+                    height: 90,
                     decoration: BoxDecoration(
-                      // color: info.color!.withOpacity(0.1),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Image.asset("images/Perticipants.png"),
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.only(top: 0.8, left: 0.8, right: 0.8),
                   child: Text(
                     "المشاركين",
-                    style: conHeadingsStyle.copyWith(color: white),
+                    style:
+                        conHeadingsStyle.copyWith(color: white, fontSize: 16),
                   ),
                 ),
               ],
@@ -181,7 +185,7 @@ class FileInfoCardGridView extends StatelessWidget {
         ),
         InkWell(
           child: Container(
-            height: 100,
+            height: 90,
             decoration: BoxDecoration(
               color: conBlue,
               borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -194,24 +198,23 @@ class FileInfoCardGridView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    // padding: EdgeInsets.only(bottom: 10),
-                    height: 100,
+                    height: 90,
                     decoration: BoxDecoration(
-                      // color: info.color!.withOpacity(0.1),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Image.asset("images/calendar.png"),
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.only(top: 0.8, left: 0.8, right: 0.8),
                   child: Text(
                     " الأحداث",
-                    style: conHeadingsStyle.copyWith(color: white),
+                    style:
+                        conHeadingsStyle.copyWith(color: white, fontSize: 16),
                   ),
                 ),
               ],
@@ -221,7 +224,7 @@ class FileInfoCardGridView extends StatelessWidget {
         ),
         InkWell(
           child: Container(
-            height: 100,
+            height: 90,
             decoration: BoxDecoration(
               color: conBlue,
               borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -234,24 +237,23 @@ class FileInfoCardGridView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    // padding: EdgeInsets.only(bottom: 10),
-                    height: 100,
+                    height: 80,
                     decoration: BoxDecoration(
-                      // color: info.color!.withOpacity(0.1),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Image.asset("images/warning.png"),
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.only(top: 0.8, left: 0.8, right: 0.8),
                   child: Text(
                     "البلاغات",
-                    style: conHeadingsStyle.copyWith(color: white),
+                    style:
+                        conHeadingsStyle.copyWith(color: white, fontSize: 16),
                   ),
                 ),
               ],
@@ -263,24 +265,3 @@ class FileInfoCardGridView extends StatelessWidget {
     );
   }
 }
-
-
-// Container(
-//       padding: EdgeInsets.only(right: 10.0),
-//       child: GridView.count(
-//         //حيعطينا التقسيمة للشاشة
-//         physics: AlwaysScrollableScrollPhysics(),
-//         mainAxisSpacing: 10,
-//         crossAxisSpacing: 10,
-//         crossAxisCount: defaultTargetPlatform == TargetPlatform.android ||
-//                 defaultTargetPlatform ==
-//                     TargetPlatform
-//                         .iOS //في حال استخدام الموبايل يتم عرض حدث واحد ف كل صف
-//             ? 1
-//             : 2, //في حال إستخدام الديسكتوب يتم عرض 2 أحداث فس الصف الواحد
-//         children: [
-//           dashboardSection('الأحداث الحالية ', siggning().getAllEvents()),
-//           VisitorFeedSection('أحداث قادمة ', siggning().getAllEvents()),
-//         ],
-//       ),
-//     );

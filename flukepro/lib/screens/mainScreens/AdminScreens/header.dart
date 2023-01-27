@@ -1,7 +1,10 @@
+import 'package:flukepro/screens/mainScreens/AdminScreens/sidde_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../components/cons.dart';
 import '../../../components/responsive.dart';
+// import 'displayDataPrev.dart';
 
 class Header extends StatelessWidget {
   const Header({
@@ -18,10 +21,51 @@ class Header extends StatelessWidget {
           children: [
             if (!Responsive.isDesktop(context))
               IconButton(
-                icon: Icon(Icons.menu),
-                onPressed: () {},
-                // onPressed: context.read<MenuController>().controlMenu,
+                  icon: Icon(Icons.menu),
+                  //
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SideMenu(),
+                        ));
+                  }),
+            if (!Responsive.isMobile(context))
+              Text(
+                "Dashboard",
               ),
+            if (!Responsive.isMobile(context))
+              Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+            // Expanded(child: SearchField()),
+            ProfileCard()
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HeaderDataReport extends StatelessWidget {
+  const HeaderDataReport({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: conBlue,
+      child: Padding(
+        padding: EdgeInsets.all(defaultPadding),
+        child: Row(
+          children: [
+            if (!Responsive.isDesktop(context))
+              IconButton(
+                  icon: Icon(Icons.menu),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SideMenu(),
+                        ));
+                  }),
             if (!Responsive.isMobile(context))
               // Text(
               //   "Dashboard",

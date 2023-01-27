@@ -8,6 +8,8 @@ import 'package:flukepro/screens/OrganizersScreens/ODashboard.dart';
 import 'package:flukepro/screens/OrganizersScreens/Oprofile.dart';
 import 'package:flukepro/screens/OrganizersScreens/OsearchScreen.dart';
 import 'package:flukepro/screens/OrganizersScreens/Sections/timeTableScreen.dart';
+import 'package:flukepro/screens/mainScreens/AdminScreens/dashboard_screen.dart';
+// import 'package:flukepro/screens/mainScreens/AdminScreens/displayDataPrev.dart';
 import 'package:flukepro/screens/mainScreens/AdminScreens/loadData.dart';
 import 'package:flukepro/screens/mainScreens/AdminScreens/main_screen.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
@@ -193,16 +195,15 @@ class _MyAppState extends State<MyApp> {
           'OHome': ((context) => Ohome()),
           '/Odash': ((context) => Odashboard()),
           '/Osearch': ((context) => OsearchScreen()),
-
-          // '/Adash': ((context) => Adashboard()),
-
           '/Onotification': ((context) => OnotifiScreen()),
           '/Oprofile': ((context) => Oprofile()),
           'editEvent': ((context) => editEvent()),
           'timeTable': ((context) => timeTable()),
-
           '/Oprofile': ((context) => Oprofile()),
+          // 'displayD': ((context) => displaydataDashboardScreen()),
+          //routes of Admin Screens
           '/Adash': ((context) => Ahome()),
+
           //routes of Admin Screens
         }, //routes are to ease the navigation btween pages
         //we give every page a name then when we want to navigate we just call that name
