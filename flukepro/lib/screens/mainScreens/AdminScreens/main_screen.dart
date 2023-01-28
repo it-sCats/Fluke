@@ -117,7 +117,7 @@ class OrganizerMainScreen extends StatefulWidget {
 }
 
 class _OrganizerMainScreenState extends State<OrganizerMainScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     // TabController _tabCont = TabController(length: 2, vsync: this);
@@ -132,6 +132,7 @@ class _OrganizerMainScreenState extends State<OrganizerMainScreen>
             // We want this side menu only for large screen
             if (Responsive.isDesktop(context))
               Expanded(
+                flex: 2,
                 // default flex = 1
                 // and it takes 1/6 part of the screen
                 child: SideMenu(),
@@ -150,7 +151,11 @@ class _OrganizerMainScreenState extends State<OrganizerMainScreen>
                             children: [
                               Padding(
                                 padding: EdgeInsets.only(left: 10, right: 50),
-                                child: Text("بيانات المنظمين"),
+                                child: Text(
+                                  "بيانات المنظمين",
+                                  style:
+                                      conHeadingsStyle.copyWith(fontSize: 20),
+                                ),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(left: 10, right: 50),
@@ -191,15 +196,15 @@ class _OrganizerMainScreenState extends State<OrganizerMainScreen>
                                 style: conLittelTxt12.copyWith(fontSize: 15),
                               ),
                             ),
-                            Expanded(
-                                child: TabBarView(
-                                    controller: _tabCont,
-                                    children: [
-                                  requestsList(),
-                                  LoadOrganizerData()
-                                ]))
                           ],
                         ),
+                        Expanded(
+                            child: TabBarView(controller: _tabCont, children: [
+                          Container(width: 400, child: LoadOrganizerData()),
+                          Container(
+                              padding: EdgeInsets.symmetric(horizontal: 200),
+                              child: requestsList()),
+                        ]))
                       ],
                     )),
               ),

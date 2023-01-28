@@ -29,8 +29,8 @@ class requestsList extends StatelessWidget {
           } else {
             if (!snapshot.hasData || snapshot.data.length == 0) {
               return Center(
-                child: Image.asset(
-                    'images/Hands Phone.png'), //في حال لايوجد ديكومنتس يتم عرض هذه الصورة
+                child: Image.asset('images/Hands Phone.png',
+                    width: 200), //في حال لايوجد ديكومنتس يتم عرض هذه الصورة
               );
               //في حال إحتوت السنابشوت على بيانات سيتم بناءها بإستخدام ليست فيو
 
@@ -40,7 +40,6 @@ class requestsList extends StatelessWidget {
                     snapshot.data.length, //عدد الدكيومنتس التي تم إحضارها
                 itemBuilder: (context, index) {
                   final requests = snapshot.data![index];
-
                   return OrgRequest(
                       //هنا يتم إرجاع الطلب ووضعه في الويدجيت وبناء عدد من الطلبات على عدد الدكيومنتس التي تم إحضارها
                       name: requests['name'],

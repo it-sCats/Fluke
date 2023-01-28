@@ -63,6 +63,7 @@ dependencies:
   oauth2: ^2.0.1
   googleapis: ^10.0.0
   syncfusion_flutter_datagrid: ^20.4.44
+  dropdown_search: ^5.0.5
 
 
 

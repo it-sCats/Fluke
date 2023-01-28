@@ -268,7 +268,6 @@ class LoadOrganizerData extends StatelessWidget {
                     if (!snapshot.hasData) {
                       return LinearProgressIndicator();
                     } else {
-                      print(snapshot.data!.docs[1].data());
                       return DataTable(
                           // border: TableBorder.all(),
                           border: TableBorder(
@@ -282,19 +281,22 @@ class LoadOrganizerData extends StatelessWidget {
                                 label: Text(
                               textAlign: TextAlign.end,
                               'مجال الحدث',
-                              style: conlabelsTxt.copyWith(color: conBlack),
+                              style: conlabelsTxt.copyWith(
+                                  color: conBlack, fontWeight: FontWeight.w600),
                             )),
                             DataColumn(
                                 label: Text(
                               textAlign: TextAlign.end,
                               'المدينة المقام بها الحدث',
-                              style: conlabelsTxt.copyWith(color: conBlack),
+                              style: conlabelsTxt.copyWith(
+                                  color: conBlack, fontWeight: FontWeight.w600),
                             )),
                             DataColumn(
                                 label: Text(
                               textAlign: TextAlign.end,
                               'إسم الحدث',
-                              style: conlabelsTxt.copyWith(color: conBlack),
+                              style: conlabelsTxt.copyWith(
+                                  color: conBlack, fontWeight: FontWeight.w600),
                             )),
                           ],
                           rows: _buildList(context, snapshot.data!.docs));

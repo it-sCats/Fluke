@@ -25,6 +25,7 @@ import '../utils/SigningProvider.dart';
 import 'cons.dart';
 import 'customWidgets.dart';
 import 'formsAndDisplays/displayEventParticipants.dart';
+import 'formsAndDisplays/reportForm.dart';
 
 sessionDataSource? sessiondatasource;
 final _firestore = FirebaseFirestore.instance;
@@ -496,7 +497,20 @@ class _eventDisplayState extends State<eventDisplay>
                                     ),
                                   ],
                                 )
-                              : Container()
+                              : IconButton(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 60, horizontal: 30),
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                        elevation: 100,
+                                        context: context,
+                                        builder: (context) => reportForm());
+                                  },
+                                  icon: Icon(
+                                    Icons.report,
+                                    color: Colors.white,
+                                    size: 40,
+                                  ))
                         ],
                       ),
                     ),
