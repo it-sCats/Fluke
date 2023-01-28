@@ -52,7 +52,14 @@ class _SideMenuState extends State<SideMenu>
           DrawerListTile(
             title: "المنظمين",
             Icond: Icons.co_present_rounded,
-            press: () {},
+            press: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrganizerMainScreen(),
+                  ));
+              // OrganizerMainScreen
+            },
           ),
           DrawerListTile(
             title: "الزوار",
@@ -74,7 +81,14 @@ class _SideMenuState extends State<SideMenu>
           DrawerListTile(
             title: "الأحداث",
             Icond: Icons.event,
-            press: () {},
+            press: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Eventmainscreen(),
+                  ));
+            },
+            // Eventmainscreen
           ),
           DrawerListTile(
             title: "بلاغات",

@@ -1,5 +1,8 @@
+import 'package:flukepro/OrganizersRequests/requestsList.dart';
+import 'package:flukepro/screens/mainScreens/AdminScreens/header.dart';
 import 'package:flutter/material.dart';
 
+import '../../../components/cons.dart';
 import '../../../components/responsive.dart';
 import 'dashboard_screen.dart';
 import 'displayDataPrev.dart';
@@ -76,16 +79,136 @@ class _VisitormainscreenState extends State<Visitormainscreen> {
   }
 }
 
-class Particimainscreen extends StatefulWidget {
-  const Particimainscreen({super.key});
+class Eventmainscreen extends StatelessWidget {
+  const Eventmainscreen({super.key});
 
-  @override
-  State<Particimainscreen> createState() => _ParticimainscreenState();
-}
-
-class _ParticimainscreenState extends State<Particimainscreen> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      drawer: SideMenu(),
+      body: SafeArea(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // We want this side menu only for large screen
+            if (Responsive.isDesktop(context))
+              Expanded(
+                // default flex = 1
+                // and it takes 1/6 part of the screen
+                child: SideMenu(),
+              ),
+            Expanded(
+              // It takes 5/6 part of the screen
+              flex: 5,
+              // child: ddscreen(),
+              // child: displaydataDashboardScreen(),
+              child: LoadEventData(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class OrganizerMainScreen extends StatefulWidget {
+  const OrganizerMainScreen({super.key});
+
+  @override
+  State<OrganizerMainScreen> createState() => _OrganizerMainScreenState();
+}
+
+class _OrganizerMainScreenState extends State<OrganizerMainScreen>
+    with SingleTickerProviderStateMixin {
+  @override
+  Widget build(BuildContext context) {
+    // TabController _tabCont = TabController(length: 2, vsync: this);
+
+    TabController _tabCont = TabController(length: 2, vsync: this);
+    return Scaffold(
+      drawer: SideMenu(),
+      body: SafeArea(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // We want this side menu only for large screen
+            if (Responsive.isDesktop(context))
+              Expanded(
+                // default flex = 1
+                // and it takes 1/6 part of the screen
+                child: SideMenu(),
+              ),
+            Expanded(
+              flex: 5,
+              child: DefaultTabController(
+                length: 2,
+                child: NestedScrollView(
+                    headerSliverBuilder: (context, bool) {
+                      return [
+                        SliverList(
+                            delegate: SliverChildListDelegate([
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(left: 10, right: 50),
+                                child: Text("بيانات المنظمين"),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 10, right: 50),
+                                child: SearchField(),
+                              ),
+                              SizedBox(
+                                height: 25,
+                              )
+                            ],
+                          ),
+                        ]))
+                      ];
+                    },
+                    body: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        TabBar(
+                          unselectedLabelStyle:
+                              conLittelTxt12.copyWith(fontSize: 15),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 20),
+                          labelStyle: conLittelTxt12,
+                          indicator: BoxDecoration(
+                              border: Border(
+                                  bottom:
+                                      BorderSide(width: 3, color: conBlue))),
+                          controller: _tabCont,
+                          tabs: [
+                            Tab(
+                              child: Text(
+                                'المنظمين',
+                                style: conLittelTxt12.copyWith(fontSize: 15),
+                              ),
+                            ),
+                            Tab(
+                              child: Text(
+                                'طلبات التسجيل',
+                                style: conLittelTxt12.copyWith(fontSize: 15),
+                              ),
+                            ),
+                            Expanded(
+                                child: TabBarView(
+                                    controller: _tabCont,
+                                    children: [
+                                  requestsList(),
+                                  LoadOrganizerData()
+                                ]))
+                          ],
+                        ),
+                      ],
+                    )),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
