@@ -4,20 +4,21 @@ import 'package:flutter/material.dart';
 
 import 'EventReports.dart';
 
-class reportList extends StatelessWidget {
-  final _firestore = FirebaseFirestore.instance;
+Future getReports() async {
+  QuerySnapshot qn =
+      await FirebaseFirestore.instance.collection('reports').get();
 
-  Future getReports() async {
-    //دالة لإحضار الطلبات التي تحمل حالة الانتظار
-    QuerySnapshot qn = await _firestore.collection('reports').get();
+  return qn.docs;
+}
 
-    return qn.docs;
-  }
+class EventReportsList extends StatelessWidget {
+  const EventReportsList({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(),
+
       child: FutureBuilder(
         //بناء الدكيومنتس التي تم إحضارها من قاعدة البياانات
         future: getReports(),
@@ -55,6 +56,8 @@ class reportList extends StatelessWidget {
           }
         },
       ),
+
+      // child:  ListView.builder(itemBuilder: itemBuilder)
     );
   }
 }

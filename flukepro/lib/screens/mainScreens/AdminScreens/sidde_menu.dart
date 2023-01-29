@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flukepro/screens/OrganizersScreens/OHome.dart';
 
+import '../../sideScreens/settingsScreen.dart';
 import 'dashboard_screen.dart';
 // import 'displayDataPrev.dart';
 
@@ -96,14 +97,15 @@ class _SideMenuState extends State<SideMenu>
             press: () {},
           ),
           DrawerListTile(
-            title: "الحساب",
-            Icond: Icons.account_circle,
-            press: () {},
-          ),
-          DrawerListTile(
             title: "الضبط",
             Icond: Icons.settings_sharp,
-            press: () {},
+            press: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => settingScreen(),
+                  ));
+            },
           ),
         ],
       ),

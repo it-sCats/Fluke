@@ -168,6 +168,7 @@ class _MyAppState extends State<MyApp> {
             background: Container(color: Color(0xFFF5F5F5))),
 
         //  home: Ahome(),
+        // home: Ahome(),
         home: recdirectRole(),
 
         debugShowCheckedModeBanner:
@@ -201,8 +202,6 @@ class _MyAppState extends State<MyApp> {
           'editEvent': ((context) => editEvent()),
           'timeTable': ((context) => timeTable()),
           '/Oprofile': ((context) => Oprofile()),
-          // 'displayD': ((context) => displaydataDashboardScreen()),
-          //routes of Admin Screens
           '/Adash': ((context) => Ahome()),
           '/testReport': ((context) => display()),
 
