@@ -132,7 +132,7 @@ class _OrganizerMainScreenState extends State<OrganizerMainScreen>
             // We want this side menu only for large screen
             if (Responsive.isDesktop(context))
               Expanded(
-                flex: 2,
+                flex: 1,
                 // default flex = 1
                 // and it takes 1/6 part of the screen
                 child: SideMenu(),
@@ -149,6 +149,7 @@ class _OrganizerMainScreenState extends State<OrganizerMainScreen>
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
+                              Header(),
                               Padding(
                                 padding: EdgeInsets.only(left: 10, right: 50),
                                 child: Text(

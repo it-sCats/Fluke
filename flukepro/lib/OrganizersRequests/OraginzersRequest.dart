@@ -43,7 +43,8 @@ class _OrgRequestState extends State<OrgRequest> {
           border: Border.all(color: Color(0xff282828).withOpacity(.5))),
       child: Padding(
         //المساحة بين المحتوى والبوردر
-        padding: EdgeInsets.only(left: 18.0, right: 30, top: 18, bottom: 15),
+        padding:
+            const EdgeInsets.only(left: 18.0, right: 30, top: 18, bottom: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end, //محاذاة لليمين
           children: [
@@ -55,7 +56,7 @@ class _OrgRequestState extends State<OrgRequest> {
             Text(
               widget.eventsType.toString(),
               textAlign: TextAlign.center,
-              style: conTxtFeildHint.copyWith(fontSize: 14, color: conBlack),
+              style: conTxtFeildHint.copyWith(fontSize: 14),
             ),
             conRequestDivider(), //الخط الفاصل بين المعلومات
             Wrap(children: [
@@ -65,8 +66,7 @@ class _OrgRequestState extends State<OrgRequest> {
                 child: Text(
                   widget.brief.toString(),
                   textAlign: TextAlign.right,
-                  style:
-                      conTxtFeildHint.copyWith(fontSize: 14, color: conBlack),
+                  style: conTxtFeildHint.copyWith(fontSize: 14),
                 ),
               ),
             ]),
@@ -80,142 +80,128 @@ class _OrgRequestState extends State<OrgRequest> {
               //last Row
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        CancleButton(
-                          txt: 'رفض الطلب',
-                          ontap: () {
-                            //الدالة التي ترفض الطلبات
-                            setState(() {
-                              updatingRequesStatus(widget.docId,
-                                  'rejected'); //هنا سيتم تحديث حالة الطلب إلى مرفوض
-                              showDialog(
-                                  context: context,
-                                  barrierDismissible: true,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                        //ثم يتم إظهار نافذة تنبيه نؤكد رفض الطلب
-                                        title: Text(
-                                      'تم رفض الطلب',
-                                      textAlign: TextAlign.center,
-                                      style: conTxtFeildHint,
-                                    ));
-                                  });
-                            });
-                            // //what happens when rejecting request
-                            //
-                          },
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Container(
-                          //من هنا يبدا زر القبول
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  10), //نعطي بادينق بدل من تحديد عرض للزر لمنع الأخطاء الناتجة عند تغيير حجم الشاشة
-                          height: 30,
-                          decoration: conCTADecoration.copyWith(
-                              borderRadius: BorderRadius.circular(9)),
-                          child: InkWell(
-                            onTap: () async {
-                              //دالة قبول طلب الشركة المنظمة
-                              final result = await Authentication().signUp(
-                                  widget.email.toString(),
-                                  '123456'); //اولا يتم إنشاء حساب للشركة
-                              result.when(
-                                  //تعيد دالة التسجيل نتيجة قد تكون خطأ في هذه الحالة يتم عرض الخطأ في سناك بار
-                                  (error) => setState(() {
-                                        String massege = AuthExceptionHandler
-                                            .generateErrorMessage(
-                                                AuthExceptionHandler
-                                                    .handleAuthException(
-                                                        error));
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                              content: Text(
-                                            massege,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontFamily: 'Cairo',
-                                            ),
-                                          )),
-                                        );
-                                      }), (success) {
-                                //وعندما تكون النتيجة نجاح فإنها ترجع قيمة تحوي المستخدم التي من خلالها بإمكاننا ان نصل للإيميل
-                                _auth.sendPasswordResetEmail(
-                                    //ثم يتم إرسال إيميل لأعادة تعيين كلمة مرور
-                                    email: widget.email.toString());
-
-                                setState(() {
-                                  buttonText =
-                                      'تم تأكيد الطلب'; //يتم إظهار رمز يوضح أن عملية التأكيد تمت
-                                  isVerfied = true;
-                                });
-                                addingOrganizer(
-                                    //وهنا يتم إضافة المنظم لقاعدة البيانات بالمعلومات الموجودة
-                                    //here we Added the Organizer to the database
-                                    success!,
-                                    widget.name.toString(),
-                                    widget.eventsType.toString(),
-                                    widget.phoneNum.toString(),
-                                    widget.brief.toString());
-                              });
-                              updatingRequesStatus(widget.docId,
-                                  'accepted'); //changing the status of request
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Visibility(
-                                  visible: isVerfied,
-                                  child: Icon(
-                                    Icons.check,
-                                    color: Colors.green,
-                                  ),
-                                ),
-                                Text(
-                                  buttonText,
+                    CancleButton(
+                      txt: 'رفض الطلب',
+                      ontap: () {
+                        //الدالة التي ترفض الطلبات
+                        setState(() {
+                          updatingRequesStatus(widget.docId,
+                              'rejected'); //هنا سيتم تحديث حالة الطلب إلى مرفوض
+                          showDialog(
+                              context: context,
+                              barrierDismissible: true,
+                              builder: (context) {
+                                return AlertDialog(
+                                    //ثم يتم إظهار نافذة تنبيه نؤكد رفض الطلب
+                                    title: Text(
+                                  'تم رفض الطلب',
                                   textAlign: TextAlign.center,
-                                  style: conCTATxt.copyWith(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                                  style: conTxtFeildHint,
+                                ));
+                              });
+                        });
+                        // //what happens when rejecting request
+                        //
+                      },
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          widget.email.toString(),
-                          textAlign: TextAlign.right,
-                          style: conTxtFeildHint.copyWith(
-                              fontSize: 14, color: conBlack),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Container(
+                      //من هنا يبدا زر القبول
+                      padding: EdgeInsets.symmetric(
+                          horizontal:
+                              10), //نعطي بادينق بدل من تحديد عرض للزر لمنع الأخطاء الناتجة عند تغيير حجم الشاشة
+                      height: 30,
+                      decoration: conCTADecoration.copyWith(
+                          borderRadius: BorderRadius.circular(9)),
+                      child: InkWell(
+                        onTap: () async {
+                          //دالة قبول طلب الشركة المنظمة
+                          final result = await Authentication().signUp(
+                              widget.email.toString(),
+                              '123456'); //اولا يتم إنشاء حساب للشركة
+                          result.when(
+                              //تعيد دالة التسجيل نتيجة قد تكون خطأ في هذه الحالة يتم عرض الخطأ في سناك بار
+                              (error) => setState(() {
+                                    String massege = AuthExceptionHandler
+                                        .generateErrorMessage(
+                                            AuthExceptionHandler
+                                                .handleAuthException(error));
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                        massege,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontFamily: 'Cairo',
+                                        ),
+                                      )),
+                                    );
+                                  }), (success) {
+                            //وعندما تكون النتيجة نجاح فإنها ترجع قيمة تحوي المستخدم التي من خلالها بإمكاننا ان نصل للإيميل
+                            _auth.sendPasswordResetEmail(
+                                //ثم يتم إرسال إيميل لأعادة تعيين كلمة مرور
+                                email: widget.email.toString());
+
+                            setState(() {
+                              buttonText =
+                                  'تم تأكيد الطلب'; //يتم إظهار رمز يوضح أن عملية التأكيد تمت
+                              isVerfied = true;
+                            });
+                            addingOrganizer(
+                                //وهنا يتم إضافة المنظم لقاعدة البيانات بالمعلومات الموجودة
+                                //here we Added the Organizer to the database
+                                success!,
+                                widget.name.toString(),
+                                widget.eventsType.toString(),
+                                widget.phoneNum.toString(),
+                                widget.brief.toString());
+                          });
+                          updatingRequesStatus(widget.docId,
+                              'accepted'); //changing the status of request
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Visibility(
+                              visible: isVerfied,
+                              child: Icon(
+                                Icons.check,
+                                color: Colors.green,
+                              ),
+                            ),
+                            Text(
+                              buttonText,
+                              textAlign: TextAlign.center,
+                              style: conCTATxt.copyWith(
+                                  fontSize: 13, fontWeight: FontWeight.normal),
+                            ),
+                          ],
                         ),
-                        Container(
-                          height: 15,
-                          child: new VerticalDivider(
-                            color: Color(0xff282828).withOpacity(.5),
-                            width: 20,
-                            thickness: 1,
-                          ),
-                        ),
-                        Text(
-                          widget.phoneNum.toString(),
-                          textAlign: TextAlign.right,
-                          style: conTxtFeildHint.copyWith(
-                              fontSize: 14, color: conBlack),
-                        )
-                      ],
-                    )
+                      ),
+                    ),
                   ],
                 ),
+                Text(
+                  widget.email.toString(),
+                  textAlign: TextAlign.right,
+                  style: conTxtFeildHint.copyWith(fontSize: 14),
+                ),
+                Container(
+                  height: 15,
+                  child: new VerticalDivider(
+                    color: Color(0xff282828).withOpacity(.5),
+                    width: 20,
+                    thickness: 1,
+                  ),
+                ),
+                Text(
+                  widget.phoneNum.toString(),
+                  textAlign: TextAlign.right,
+                  style: conTxtFeildHint.copyWith(fontSize: 14),
+                )
               ],
             )
           ],

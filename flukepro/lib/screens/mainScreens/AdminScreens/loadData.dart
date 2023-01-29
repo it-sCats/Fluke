@@ -59,19 +59,22 @@ class LoadVisistorData extends StatelessWidget {
                                 label: Text(
                               textAlign: TextAlign.end,
                               'الإهتمامات',
-                              style: conlabelsTxt.copyWith(color: conBlack),
+                              style: conlabelsTxt.copyWith(
+                                  color: conBlack, fontWeight: FontWeight.w600),
                             )),
                             DataColumn(
                                 label: Text(
                               textAlign: TextAlign.end,
                               'الحساب',
-                              style: conlabelsTxt.copyWith(color: conBlack),
+                              style: conlabelsTxt.copyWith(
+                                  color: conBlack, fontWeight: FontWeight.w600),
                             )),
                             DataColumn(
                                 label: Text(
                               textAlign: TextAlign.end,
                               'الإسم',
-                              style: conlabelsTxt.copyWith(color: conBlack),
+                              style: conlabelsTxt.copyWith(
+                                  color: conBlack, fontWeight: FontWeight.w600),
                             )),
                           ],
                           rows: _buildList(context, snapshot.data!.docs));
@@ -155,7 +158,10 @@ class LoadEventData extends StatelessWidget {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return LinearProgressIndicator();
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: LinearProgressIndicator(),
+                      );
                     } else {
                       print(snapshot.data!.docs[1].data());
                       return DataTable(
@@ -171,19 +177,22 @@ class LoadEventData extends StatelessWidget {
                                 label: Text(
                               textAlign: TextAlign.end,
                               'مجال الحدث',
-                              style: conlabelsTxt.copyWith(color: conBlack),
+                              style: conlabelsTxt.copyWith(
+                                  color: conBlack, fontWeight: FontWeight.w600),
                             )),
                             DataColumn(
                                 label: Text(
                               textAlign: TextAlign.end,
                               'المدينة المقام بها الحدث',
-                              style: conlabelsTxt.copyWith(color: conBlack),
+                              style: conlabelsTxt.copyWith(
+                                  color: conBlack, fontWeight: FontWeight.w600),
                             )),
                             DataColumn(
                                 label: Text(
                               textAlign: TextAlign.end,
                               'إسم الحدث',
-                              style: conlabelsTxt.copyWith(color: conBlack),
+                              style: conlabelsTxt.copyWith(
+                                  color: conBlack, fontWeight: FontWeight.w600),
                             )),
                           ],
                           rows: _buildList(context, snapshot.data!.docs));
@@ -244,19 +253,7 @@ class LoadOrganizerData extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            Header(),
             SizedBox(height: default_Padding),
-            // Row(
-            //   crossAxisAlignment: CrossAxisAlignment.end,
-            //   mainAxisAlignment: MainAxisAlignment.end,
-            //   children: [
-            //     Expanded(child: SearchField()),
-            //     Text(
-            //       "بيانات المنظمين",
-            //       style: conlabelsTxt.copyWith(color: conBlack, fontSize: 20),
-            //     ),
-            //   ],
-            // ),
             SizedBox(height: defaultPadding),
             Column(
               children: [
