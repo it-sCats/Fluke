@@ -345,3 +345,12 @@ class LoadOrganizerData extends StatelessWidget {
     return dataLoadList.docs;
   }
 }
+
+class LoadReportsData extends StatelessWidget {
+  const LoadReportsData({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}

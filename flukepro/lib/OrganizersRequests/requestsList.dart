@@ -33,7 +33,6 @@ class requestsList extends StatelessWidget {
                     'images/Hands Phone.png'), //في حال لايوجد ديكومنتس يتم عرض هذه الصورة
               );
               //في حال إحتوت السنابشوت على بيانات سيتم بناءها بإستخدام ليست فيو
-
             } else {
               return ListView.builder(
                 itemCount:
