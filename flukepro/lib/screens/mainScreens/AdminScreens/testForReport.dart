@@ -9,7 +9,7 @@ class display extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(width: 400, child: reportList()),
+      body: Container(width: 400, child: EventReportsList()),
     );
   }
 }
