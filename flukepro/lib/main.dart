@@ -166,8 +166,8 @@ class _MyAppState extends State<MyApp> {
             ],
             background: Container(color: Color(0xFFF5F5F5))),
 
-        home: Ahome(),
-        //home: recdirectRole(),
+        // home: Ahome(),
+        home: recdirectRole(),
 
         debugShowCheckedModeBanner:
             false, //to remove debugging banner at the top of the screen
@@ -200,8 +200,6 @@ class _MyAppState extends State<MyApp> {
           'editEvent': ((context) => editEvent()),
           'timeTable': ((context) => timeTable()),
           '/Oprofile': ((context) => Oprofile()),
-          // 'displayD': ((context) => displaydataDashboardScreen()),
-          //routes of Admin Screens
           '/Adash': ((context) => Ahome()),
 
           //routes of Admin Screens

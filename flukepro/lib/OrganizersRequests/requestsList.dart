@@ -25,7 +25,12 @@ class requestsList extends StatelessWidget {
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             //في حال لم يتم الاتصال يتم إظهار علامة تحميل
-            return CircularProgressIndicator();
+            return Container(
+                height: 10,
+                width: 10,
+                child: CircularProgressIndicator(
+                  strokeWidth: 1,
+                ));
           } else {
             if (!snapshot.hasData || snapshot.data.length == 0) {
               return Center(
