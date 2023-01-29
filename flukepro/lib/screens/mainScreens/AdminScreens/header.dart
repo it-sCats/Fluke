@@ -126,28 +126,37 @@ class SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: "Search",
-        fillColor: conBlue,
-        filled: true,
-        border: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
-        suffixIcon: InkWell(
-          onTap: () {},
-          child: Container(
-            padding: EdgeInsets.all(defaultPadding * 0.75),
-            margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-            decoration: BoxDecoration(
-              color: primaryColor,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.topCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(25.0),
+            child: TextFormField(
+              onChanged: (String query) {
+                // searchEvent(query);
+              },
+              textAlign: TextAlign.right,
+              decoration: InputDecoration(
+                hintText: "...ابحث عن أحداث",
+                hintStyle: conTxtFeildHint,
+                prefixIcon: new Icon(Icons.search),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                  borderSide: BorderSide(
+                    color: Colors.grey,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  borderSide:
+                      BorderSide(color: Color.fromARGB(255, 155, 5, 33)),
+                ),
+              ),
             ),
-            // child: Icon(),
           ),
         ),
-      ),
+      ],
     );
   }
 }
