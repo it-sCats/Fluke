@@ -57,7 +57,9 @@ class _recdirectRoleState extends State<recdirectRole> {
                             .subscribeToTopic('Organizers'),
                       NavigateNext('OHome')
                     }
-                  : NavigateNext('/log');
+                  : userT == 3
+                      ? NavigateNext('/testReport')
+                      : NavigateNext('/log');
     } else
       NavigateNext('/log');
   }

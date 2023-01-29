@@ -241,7 +241,8 @@ addingOrganizer(
     "eventsTypes": eventsTypes,
     "phone": phone,
     "userType": 1,
-    "brief": breif
+    "brief": breif,
+    "reports": 0
   });
 }
 

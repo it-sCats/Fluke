@@ -261,7 +261,16 @@ class _loginScreenState extends State<loginScreen> {
                       try {
                         if (_emailCon.text.trim().toString() == 'admin' &&
                             password.toString() == '111') {
-                          Navigator.pushNamed(context, '/Adash');
+                          UserCredential admin = await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                  email: 'admin@admin.com', password: "111111");
+
+                          provider.setLoggedInuser(admin.user);
+                          provider.getUserInfoDoc(admin.user!.uid);
+                          provider.setUserType(3);
+                          //  Navigator.pushReplacementNamed(context, '/Adash');
+                          Navigator.pushReplacementNamed(
+                              context, '/testReport');
                         }
 
                         final result = await Authentication().login(

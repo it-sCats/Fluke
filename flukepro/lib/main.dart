@@ -12,6 +12,7 @@ import 'package:flukepro/screens/mainScreens/AdminScreens/dashboard_screen.dart'
 // import 'package:flukepro/screens/mainScreens/AdminScreens/displayDataPrev.dart';
 import 'package:flukepro/screens/mainScreens/AdminScreens/loadData.dart';
 import 'package:flukepro/screens/mainScreens/AdminScreens/main_screen.dart';
+import 'package:flukepro/screens/mainScreens/AdminScreens/testForReport.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
 import 'package:flukepro/utils/eventProvider.dart';
 import 'package:flukepro/utils/fireStoreQueries.dart';
@@ -166,8 +167,8 @@ class _MyAppState extends State<MyApp> {
             ],
             background: Container(color: Color(0xFFF5F5F5))),
 
-        home: Ahome(),
-        //home: recdirectRole(),
+        //  home: Ahome(),
+        home: recdirectRole(),
 
         debugShowCheckedModeBanner:
             false, //to remove debugging banner at the top of the screen
@@ -203,6 +204,7 @@ class _MyAppState extends State<MyApp> {
           // 'displayD': ((context) => displaydataDashboardScreen()),
           //routes of Admin Screens
           '/Adash': ((context) => Ahome()),
+          '/testReport': ((context) => display()),
 
           //routes of Admin Screens
         }, //routes are to ease the navigation btween pages
