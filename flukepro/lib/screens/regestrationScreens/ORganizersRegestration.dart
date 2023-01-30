@@ -321,30 +321,149 @@ class _organizersRegistrationScreenState
                           // elevation: 100,
                           context: context,
                           builder: (context) => Container(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'أحقية الحصول على الخدمات',
-                                  textAlign: TextAlign.right,
-                                ),
-                                Text(':أنت تقر وتضمن التالي'),
-                                // ListTile(
-                                //   title: new Text(
-                                //       '.أنه لم يسبق أن تم تعطيل استخدامك لخدمات مرني او منعك من استخدامها في اي وقت من الأوقات'),
-                                //   leading: new MyBullet(),
-                                // ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    new Text(
-                                      '.أنه لم يسبق أن تم تعطيل استخدامك لخدمات مرني او منعك من استخدامها في اي وقت من الأوقات',
-                                      style: conlabelsTxt,
-                                    ),
-                                    MyBullet(),
-                                  ],
-                                )
-                              ],
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text('أحقية الحصول على الخدمات',
+                                      style: conHeadingsStyle.copyWith(
+                                          fontSize: 20)),
+                                  Text(
+                                    ':أنت تقر وتضمن التالي',
+                                    style: conlabelsTxt.copyWith(
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(2.0),
+                                            child: Text(
+                                              // 'Fluke' +
+                                              ' أنه لم يسبق أن تم تعطيل استخدامك لخدمات التطبيق، أو منعك من ',
+                                              style: conlabelsTxt,
+                                            ),
+                                          ),
+                                          MyBullet(),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 20),
+                                        child: Text(
+                                          '. إستخدامها في اي وقت من الأوقات',
+                                          style: conlabelsTxt,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text('التعهدات والضمانات',
+                                      style: conHeadingsStyle.copyWith(
+                                          fontSize: 20)),
+                                  Text(
+                                    ':أنت تقر وتضمن التالي',
+                                    style: conlabelsTxt.copyWith(
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Text(
+                                          '.سوف تمتثل لكافة القوانين واللوائح المعمول بها في دولة ليبيا',
+                                          style: conlabelsTxt,
+                                        ),
+                                      ),
+                                      MyBullet(),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Text(
+                                          '.Fluke سوف تقدم معلومات صحيحة ودقيقة إلى ',
+                                          style: conlabelsTxt,
+                                        ),
+                                      ),
+                                      MyBullet(),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Text(
+                                          '.سوف تستخدم الخدمة أو التطبيق لأغراض مشروعة فقط',
+                                          style: conlabelsTxt,
+                                        ),
+                                      ),
+                                      MyBullet(),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Text(
+                                          '.لن تستخدم الخدمة أو التطبيق للتسبب بإيذاء أو مضايقة أو إزعاج أحد ما',
+                                          style: conlabelsTxt,
+                                        ),
+                                      ),
+                                      MyBullet(),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Text(
+                                          '.لن تقوم بإلغاء الحدث  عند وصول اليوم المخصص للحدث',
+                                          style: conlabelsTxt,
+                                        ),
+                                      ),
+                                      MyBullet(),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Text(
+                                          '.لن تستخدم أي بيانات تصل اليها عن طريق التطبيق في أغراض غير قانونية',
+                                          style: conlabelsTxt,
+                                        ),
+                                      ),
+                                      MyBullet(),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Text(
+                                          '.سوف تحافظ على سرية كلمة مرور حسابك',
+                                          style: conlabelsTxt,
+                                        ),
+                                      ),
+                                      MyBullet(),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         );
@@ -421,12 +540,15 @@ class _organizersRegistrationScreenState
 class MyBullet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new Container(
-      height: 15.0,
-      width: 15.0,
-      decoration: new BoxDecoration(
-        color: Colors.black,
-        shape: BoxShape.circle,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        height: 10.0,
+        width: 10.0,
+        decoration: BoxDecoration(
+          color: Colors.black,
+          shape: BoxShape.rectangle,
+        ),
       ),
     );
   }
