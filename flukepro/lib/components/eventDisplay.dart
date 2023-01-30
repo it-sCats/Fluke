@@ -497,20 +497,44 @@ class _eventDisplayState extends State<eventDisplay>
                                     ),
                                   ],
                                 )
-                              : IconButton(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 60, horizontal: 30),
-                                  onPressed: () {
-                                    showModalBottomSheet(
-                                        elevation: 100,
-                                        context: context,
-                                        builder: (context) => reportForm());
-                                  },
-                                  icon: Icon(
-                                    Icons.report,
-                                    color: Colors.white,
-                                    size: 40,
-                                  ))
+                              : Provider.of<siggning>(context, listen: false)
+                                          .userInfoDocument!['userType'] ==
+                                      3
+                                  ? IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: Colors.white,
+                                        size: 40,
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 30, horizontal: 30),
+                                    )
+                                  : IconButton(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 60, horizontal: 30),
+                                      onPressed: () {
+                                        showModalBottomSheet(
+                                            elevation: 100,
+                                            context: context,
+                                            builder: (context) => reportForm(
+                                                  eventID: widget.id,
+                                                  eventOrganizerID:
+                                                      widget.creatorID,
+                                                  eventName: widget.title,
+                                                  reporterName: Provider.of<
+                                                              siggning>(context)
+                                                          .userInfoDocument![
+                                                      'name'],
+                                                  userId: FirebaseAuth.instance
+                                                      .currentUser!.uid,
+                                                ));
+                                      },
+                                      icon: Icon(
+                                        Icons.report,
+                                        color: Colors.white,
+                                        size: 40,
+                                      ))
                         ],
                       ),
                     ),
