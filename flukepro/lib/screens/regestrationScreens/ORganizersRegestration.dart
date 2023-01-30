@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flukepro/components/cons.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,7 +39,7 @@ class _organizersRegistrationScreenState
   String? eventType;
   bool agreeOnterms = false;
   Color borderLabelColor = conBlack;
-  String? errorMessage = 'مشكلة في الباس';
+  String? errorMessage = 'مشكلة في رمز المرور';
 
   bool LogInError = false;
 
@@ -306,11 +308,47 @@ class _organizersRegistrationScreenState
                             agreeOnterms = !agreeOnterms;
                           });
                         }),
-                    Text(
-                      'أوافق على شروط التسجيل وإستخدام البيانات',
-                      textAlign: TextAlign.right,
-                      style: conLittelTxt12.copyWith(
-                          fontSize: 11, color: borderLabelColor),
+                    InkWell(
+                      child: Text(
+                        'أوافق على شروط التسجيل وإستخدام البيانات',
+                        textAlign: TextAlign.right,
+                        style: conTxtLink.copyWith(
+                            fontSize: 11, color: borderLabelColor),
+                      ),
+                      onTap: (() {
+                        showModalBottomSheet(
+                          //تعرض كيو آر في حالل كان مشجل مسبقاً
+                          // elevation: 100,
+                          context: context,
+                          builder: (context) => Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  'أحقية الحصول على الخدمات',
+                                  textAlign: TextAlign.right,
+                                ),
+                                Text(':أنت تقر وتضمن التالي'),
+                                // ListTile(
+                                //   title: new Text(
+                                //       '.أنه لم يسبق أن تم تعطيل استخدامك لخدمات مرني او منعك من استخدامها في اي وقت من الأوقات'),
+                                //   leading: new MyBullet(),
+                                // ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    new Text(
+                                      '.أنه لم يسبق أن تم تعطيل استخدامك لخدمات مرني او منعك من استخدامها في اي وقت من الأوقات',
+                                      style: conlabelsTxt,
+                                    ),
+                                    MyBullet(),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
                     ),
                   ],
                 ),
@@ -375,6 +413,20 @@ class _organizersRegistrationScreenState
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class MyBullet extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new Container(
+      height: 15.0,
+      width: 15.0,
+      decoration: new BoxDecoration(
+        color: Colors.black,
+        shape: BoxShape.circle,
       ),
     );
   }
