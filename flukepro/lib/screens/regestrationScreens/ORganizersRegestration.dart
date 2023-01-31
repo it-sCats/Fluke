@@ -546,8 +546,8 @@ class MyBullet extends StatelessWidget {
         height: 10.0,
         width: 10.0,
         decoration: BoxDecoration(
-          color: Colors.black,
-          shape: BoxShape.rectangle,
+          color: kprimaryColor,
+          shape: BoxShape.circle,
         ),
       ),
     );
