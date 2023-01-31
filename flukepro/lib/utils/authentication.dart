@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flukepro/errorsHandling/AuthExceptionHandler.dart';
 import 'package:flutter/material.dart';
@@ -213,6 +214,10 @@ class Authentication {
   Future<void> deleteUser() async {
     try {
       _auth.currentUser?.delete();
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(_auth.currentUser!.uid)
+          .delete();
     } catch (error) {
       Error(throw error);
     }

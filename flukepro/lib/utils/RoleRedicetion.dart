@@ -58,7 +58,7 @@ class _recdirectRoleState extends State<recdirectRole> {
                       NavigateNext('OHome')
                     }
                   : userT == 3
-                      ? NavigateNext('/testReport')
+                      ? NavigateNext('/Adash')
                       : NavigateNext('/log');
     } else
       NavigateNext('/log');

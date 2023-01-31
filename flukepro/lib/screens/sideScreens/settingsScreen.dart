@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flukepro/components/cons.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
@@ -259,7 +260,10 @@ class settingScreen extends StatelessWidget {
                                       child: InkWell(
                                           onTap: () async {
                                             await Authentication().deleteUser();
+
                                             Navigator.pop(context);
+                                            Navigator.pushReplacementNamed(
+                                                context, '/log');
                                           },
                                           child: Text(
                                             'حدف الحساب',

@@ -269,8 +269,7 @@ class _loginScreenState extends State<loginScreen> {
                           provider.getUserInfoDoc(admin.user!.uid);
                           provider.setUserType(3);
                           //  Navigator.pushReplacementNamed(context, '/Adash');
-                          Navigator.pushReplacementNamed(
-                              context, '/testReport');
+                          Navigator.pushReplacementNamed(context, '/Adash');
                         }
 
                         final result = await Authentication().login(

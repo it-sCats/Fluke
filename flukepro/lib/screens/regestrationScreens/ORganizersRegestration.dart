@@ -416,7 +416,7 @@ class _organizersRegistrationScreenState
                                       Padding(
                                         padding: const EdgeInsets.all(2.0),
                                         child: Text(
-                                          '.لن تستخدم الخدمة أو التطبيق للتسبب بإيذاء أو مضايقة أو إزعاج أحد ما',
+                                          '.لن تستخدم التطبيق للتسبب بإيذاء أو مضايقة أو إزعاج أحد ما',
                                           style: conlabelsTxt,
                                         ),
                                       ),
@@ -442,7 +442,7 @@ class _organizersRegistrationScreenState
                                       Padding(
                                         padding: const EdgeInsets.all(2.0),
                                         child: Text(
-                                          '.لن تستخدم أي بيانات تصل اليها عن طريق التطبيق في أغراض غير قانونية',
+                                          '.لن تستخدم البيانات تصل اليها بالتطبيق في أغراض غير قانونية',
                                           style: conlabelsTxt,
                                         ),
                                       ),
@@ -491,10 +491,11 @@ class _organizersRegistrationScreenState
                           'phone': phoneNum,
                           'brief': breif,
                           'eventsType': selectedEventType,
-                          'status': "waiting"
+                          'status': "waiting",
+                          'creationDate': Timestamp.now()
                         });
                         if (d != null) {
-                          Navigator.pushNamed(context, '/log');
+                          Navigator.pushReplacementNamed(context, '/log');
                         }
                       } else {
                         setState(() {

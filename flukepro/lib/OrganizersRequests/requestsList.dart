@@ -10,6 +10,7 @@ class requestsList extends StatelessWidget {
     QuerySnapshot qn = await _firestore
         .collection('requests')
         .where('status', isEqualTo: "waiting")
+        .orderBy('creationDate', descending: true)
         .get();
 
     return qn.docs;

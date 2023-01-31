@@ -32,7 +32,8 @@ class _baseState extends State<base> {
         ? Provider.of<siggning>(context, listen: false).getCurrentUsertype(
             Provider.of<siggning>(context, listen: false).loggedUser!.uid)
         : null; //  هذه تتغير بحسب البيانات اللي نبيها
-    print('-----------${siggning().userType}');
+    print(
+        '-----------${Provider.of<notificationPRovider>(context, listen: false).currentIndexOfNav}');
     //here we called the provider so it settes the value of the ticket and likes num before going to profile screen
     Provider.of<siggning>(context, listen: false)
         .getUserTicketsEvents(FirebaseAuth.instance.currentUser!.uid);

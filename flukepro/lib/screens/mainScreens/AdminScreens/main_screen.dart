@@ -1,6 +1,7 @@
 import 'package:flukepro/OrganizersRequests/requestsList.dart';
 import 'package:flukepro/screens/mainScreens/AdminScreens/header.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../../components/cons.dart';
 import '../../../components/responsive.dart';
 import 'dashboard_screen.dart';
@@ -203,7 +204,9 @@ class _OrganizerMainScreenState extends State<OrganizerMainScreen>
                             child: TabBarView(controller: _tabCont, children: [
                           Container(width: 400, child: LoadOrganizerData()),
                           Container(
-                              padding: EdgeInsets.symmetric(horizontal: 200),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      MediaQuery.of(context).size.width * .02),
                               child: requestsList()),
                         ]))
                       ],
