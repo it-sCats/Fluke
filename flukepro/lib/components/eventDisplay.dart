@@ -12,6 +12,7 @@ import 'package:flukepro/components/visitorEventprev.dart';
 import 'package:flukepro/screens/OrganizersScreens/OHome.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -25,6 +26,7 @@ import '../utils/SigningProvider.dart';
 import 'cons.dart';
 import 'customWidgets.dart';
 import 'formsAndDisplays/displayEventParticipants.dart';
+import 'formsAndDisplays/displayEventVisitors.dart';
 import 'formsAndDisplays/reportForm.dart';
 
 sessionDataSource? sessiondatasource;
@@ -513,7 +515,7 @@ class _eventDisplayState extends State<eventDisplay>
                                   : IconButton(
                                       padding: EdgeInsets.symmetric(
                                           vertical: 60, horizontal: 30),
-                                      onPressed: () {
+                                      onPressed: () async {
                                         showModalBottomSheet(
                                             elevation: 100,
                                             context: context,
@@ -573,7 +575,9 @@ class _eventDisplayState extends State<eventDisplay>
                       style: conLittelTxt12.copyWith(fontSize: 15),
                     ),
                   ),
-                  if (kIsWeb)
+                  if (Provider.of<siggning>(context, listen: false)
+                          .userInfoDocument!['userType'] ==
+                      3)
                     Tab(
                       child: Text(
                         'الزوار',
@@ -1679,9 +1683,13 @@ class _eventDisplayState extends State<eventDisplay>
                         displayParticipants(
                           eventID: widget.id,
                         ),
-                        if (kIsWeb)
+                        if (Provider.of<siggning>(context, listen: false)
+                                .userInfoDocument!['userType'] ==
+                            3)
                           Container(
-                            child: Text('زوار'),
+                            child: displayVisitors(
+                              eventID: widget.id,
+                            ),
                           )
                       ]),
                 ),

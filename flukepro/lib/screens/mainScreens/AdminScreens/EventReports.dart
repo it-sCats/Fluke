@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flukepro/errorsHandling/AuthExceptionHandler.dart';
 import 'package:flukepro/utils/authentication.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:provider/provider.dart';
-
 import '../../../components/cons.dart';
 import '../../../components/customWidgets.dart';
 import '../../../components/eventDisplay.dart';
@@ -316,6 +316,16 @@ class _eventReportState extends State<eventReport> {
                                       vertical: 10, horizontal: 100),
                                 );
                               });
+                          //send email to inform about the deletion
+                          final Email email = Email(
+                            body:
+                                'لقد تم حذف حسابك نهائياً من تطبيق fluke مخالفة قواعد وسياسات التطبيق عدة مرات، ',
+                            subject: 'حذف حسابك لدى Fluke',
+                            recipients: [widget.OrganizerID.toString()],
+                            isHTML: false,
+                          );
+
+                          await FlutterEmailSender.send(email);
                         }
                       }
 

@@ -80,6 +80,7 @@ class _OhomeState extends State<Ohome> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     print('++++++++++++++');
+
     Provider.of<siggning>(context, listen: false).getCurrentUsertype(
         Provider.of<siggning>(context, listen: false).loggedUser!.uid);
     Provider.of<siggning>(context, listen: false).getUserInfoDoc(

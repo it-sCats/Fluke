@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flukepro/screens/mainScreens/explorePage.dart';
@@ -40,7 +41,7 @@ class _baseState extends State<base> {
     Provider.of<siggning>(context, listen: false)
         .getUserLikedEvents(FirebaseAuth.instance.currentUser!.uid);
     notificationPRovider().initInfo(context);
-    print(widget.onNotificationTap);
+
     print('the base argument');
   }
 

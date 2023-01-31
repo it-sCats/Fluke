@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flukepro/components/customWidgets.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -16,9 +17,39 @@ import '../utils/fireStoreQueries.dart';
 import 'cons.dart';
 import 'package:http/http.dart' as http;
 
+final acessToken =
+    'ya29.a0AVvZVsouW9vgJ3K-Zg2m_MbkSZyKb4nOfX31epgfmZ-aloWPzR9ja9ekVEKIaguxKSAIioMjeu8sMWIBKHzNu4BJy2Tca3Yn4sYxqcKX_dASexHy0Dacm5P-uu21EElhdAQ5VsvyESHP6KEoznBePZUIjJChaCgYKAR0SARESFQGbdwaIYfScYRIvKeUcA9eot4Nuhw0163';
+
 final _firebaseStorage = FirebaseStorage.instance.ref();
 final _firestore = FirebaseFirestore.instance;
 final List<String> tokenText = [];
+String TopicSelection(fieldInArabic) {
+  String topicInEng;
+  fieldInArabic.compareTo('المجال الطبي') == 0
+      ? topicInEng = 'medical'
+      : fieldInArabic.compareTo('برمجة') == 0
+          ? topicInEng = 'coding'
+          : fieldInArabic.compareTo('مالية') == 0
+              ? topicInEng = 'finance'
+              : fieldInArabic.compareTo('قانون') == 0
+                  ? topicInEng = 'low'
+                  : fieldInArabic.compareTo('مجال التقنية') == 0
+                      ? topicInEng = 'tech'
+                      : fieldInArabic.compareTo('أعمال حرة') == 0
+                          ? topicInEng = 'freelance'
+                          : fieldInArabic.compareTo('أخرى') == 0
+                              ? topicInEng = 'others'
+                              : fieldInArabic.compareTo('محاسبة') == 0
+                                  ? topicInEng = 'accountant'
+                                  : fieldInArabic.compareTo('كتابة محتوى') == 0
+                                      ? topicInEng = 'content'
+                                      : fieldInArabic
+                                                  .compareTo('تصميم جرافيكي') ==
+                                              0
+                                          ? topicInEng = 'graphicdesign'
+                                          : topicInEng = 'others';
+  return topicInEng;
+}
 
 class creatingEvent extends StatefulWidget {
   @override
@@ -43,6 +74,7 @@ class _creatingEventState extends State<creatingEvent>
     'ملتقى',
     'إجتماع',
   ];
+
   var fields = [
     'المجال الطبي',
     'برمجة',
@@ -672,6 +704,7 @@ class _creatingEventState extends State<creatingEvent>
                           }).toList(),
                           onChanged: (value) {
                             _eventFieldCont.text = value.toString();
+                            print(TopicSelection(_eventFieldCont.text));
                           },
                         ),
                       ),
@@ -947,10 +980,13 @@ class _creatingEventState extends State<creatingEvent>
                                       isLoading = true;
                                       //Upload to Firebase
                                       var snapshot;
+                                      var imageLink;
                                       if (imagePath != null) {
                                         snapshot = await _firebaseStorage
                                             .child(imagePath!)
                                             .putFile(image!);
+                                        imageLink = await snapshot!.ref
+                                            .getDownloadURL();
                                       }
                                       final event = await eventRef.add({
                                         // 'id': FieldPath.documentId,
@@ -1002,6 +1038,46 @@ class _creatingEventState extends State<creatingEvent>
                                         await eventRef
                                             .doc(value.id)
                                             .update({'id': value.id});
+                                        await FirebaseFirestore.instance
+                                            .collection('users')
+                                            .where('interests',
+                                                arrayContains:
+                                                    _eventFieldCont.text)
+                                            .get()
+                                            .then((doccc) {
+                                          doccc.docs.forEach((element) {
+                                            FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(element.id)
+                                                .collection('notification')
+                                                .add({
+                                              'title':
+                                                  ' ${_eventTypeCont.text} ${_eventNameCont.text}',
+                                              'date': starterDate
+                                                  .toDate()
+                                                  .toString(),
+                                              'image': snapshot != null
+                                                  ? imageLink
+                                                  : 'https://firebasestorage.googleapis.com/v0/b/fluke-db.appspot.com/o/data%2Fuser%2F0%2Fcom.example.flukepro%2Fcache%2Fphoto_2023-01-18_22-14-11.jpg?alt=media&token=5d0b48ba-77f0-4557-9cce-72524c5f4bb9',
+                                              'creatorID':
+                                                  siggning().loggedUser!.uid,
+                                              'creationDate': Timestamp.now()
+                                            });
+                                          });
+                                        });
+                                        if (sendNotifications) {
+                                          sendPushTopicNotification(
+                                              starterDate
+                                                  .toDate()
+                                                  .toString()
+                                                  .split(' ')
+                                                  .first,
+                                              ' ${_eventTypeCont.text} ${_eventNameCont.text}',
+                                              TopicSelection(
+                                                  _eventFieldCont.text),
+                                              value!.id,
+                                              siggning().loggedUser!.uid);
+                                        }
                                         isLoading = false;
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
@@ -1014,62 +1090,9 @@ class _creatingEventState extends State<creatingEvent>
                                             ),
                                           )),
                                         );
+
                                         Navigator.pushReplacementNamed(
                                             context, 'OHome');
-                                        sendNotifications
-                                            ? {
-                                                sendPushTopicNotification(
-                                                    starterDate
-                                                        .toDate()
-                                                        .toString(),
-                                                    _eventNameCont.text,
-                                                    _eventFieldCont,
-                                                    value!.id,
-                                                    siggning().loggedUser!.uid),
-                                                {
-                                                  FirebaseFirestore.instance
-                                                      .collection('users')
-                                                      .where('interests',
-                                                          arrayContains:
-                                                              _eventFieldCont
-                                                                  .text)
-                                                      .get()
-                                                      .then((doccc) =>
-                                                          doccc.docs.forEach(
-                                                              (element) {
-                                                            FirebaseFirestore
-                                                                .instance
-                                                                .collection(
-                                                                    'users')
-                                                                .doc(element.id)
-                                                                .collection(
-                                                                    'notification')
-                                                                .doc(value!.id)
-                                                                .set({
-                                                              'title':
-                                                                  _eventNameCont
-                                                                      .text,
-                                                              'date': starterDate
-                                                                  .toDate()
-                                                                  .toString(),
-                                                              'image': snapshot !=
-                                                                      null
-                                                                  ? snapshot!
-                                                                      .ref
-                                                                      .getDownloadURL()
-                                                                  : 'https://firebasestorage.googleapis.com/v0/b/fluke-db.appspot.com/o/data%2Fuser%2F0%2Fcom.example.flukepro%2Fcache%2Fphoto_2023-01-18_22-14-11.jpg?alt=media&token=5d0b48ba-77f0-4557-9cce-72524c5f4bb9',
-                                                              'creatorID':
-                                                                  siggning()
-                                                                      .loggedUser!
-                                                                      .uid,
-                                                              'creationDate':
-                                                                  Timestamp
-                                                                      .now()
-                                                            });
-                                                          }))
-                                                }
-                                              }
-                                            : null;
                                       }).onError((error, stackTrace) {
                                         isLoading = false;
                                         ScaffoldMessenger.of(context)
@@ -1084,11 +1107,7 @@ class _creatingEventState extends State<creatingEvent>
                                           )),
                                         );
                                       });
-                                      if (event.id != null) {
-                                        await eventRef
-                                            .doc(event.id)
-                                            .update({'id': event.id});
-                                      } //todo ticket num and liked num is the same fix it
+                                      //todo ticket num and liked num is the same fix it
 
                                       // if (sendNotifications) {
                                       //   final users = await FirebaseFirestore
@@ -1139,7 +1158,7 @@ sendPushTopicNotification(
             headers: <String, String>{
               'Content-Type': 'application/json',
               'Authorization':
-                  'Bearer ya29.a0AX9GBdV2bbEKV0CimcEvgGFyISboOll4-dCa4aBYpeJtd2ZzBubMykjED24oJtVBHFOCpeulH48FzLqwYEcGklvNH83Ixntur5-Bi69jmIY5kS33er992zrSP9bEyXDGPZW4uySPIwIizAznvuu9G8qOGJcAaCgYKARYSARESFQHUCsbCF6Nosq8ltpdmud7T1AvwRA016363'
+                  'Bearer ya29.a0AVvZVspgdUeUacuXxKFBoX1aKGhwtRwP3v6EcL7ffpl05Slo7wuCdOYsvXiiwpSWh3fhSmBBfiwYCO3LkWj9nhgEDA3l9iE1XobLo3aQe0epbxbHjZ-zo9p_1xfvIc7XLaU6INm-lKWML1AH5Z9GP1neZGxk1bIaCgYKAWESAQASFQGbdwaItGjk68IWQfj4qvWr3jo1Bw0166'
             },
             body: jsonEncode(<String, dynamic>{
               "message": {

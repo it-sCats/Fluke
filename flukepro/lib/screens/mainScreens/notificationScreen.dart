@@ -57,6 +57,7 @@ class _notifiScreenState extends State<notifiScreen> {
                       .collection('users')
                       .doc(siggning().loggedUser!.uid)
                       .collection('notification')
+                      .orderBy('creationDate', descending: true)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {

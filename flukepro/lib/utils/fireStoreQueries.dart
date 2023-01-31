@@ -148,6 +148,15 @@ Future<QuerySnapshot> getParticipantOfEvent(eventID) async {
   return parti;
 }
 
+Future<QuerySnapshot> getvisitorsOfEvent(eventID) async {
+  QuerySnapshot parti = await _firestore
+      .collection('events')
+      .doc(eventID)
+      .collection('visitors')
+      .get();
+  return parti;
+}
+
 getOrganizersEvent(context, OrganizerId) async {
   print(Provider.of<siggning>(context, listen: false).loggedUser!.uid.trim());
   QuerySnapshot AllEvents = await FirebaseFirestore.instance

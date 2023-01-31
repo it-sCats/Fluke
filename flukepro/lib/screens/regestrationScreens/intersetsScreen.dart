@@ -141,7 +141,7 @@ class _interestsSelectionState extends State<interestsSelection> {
                                                                   : element.compareTo('كتابة محتوى') == 0
                                                                       ? FirebaseMessaging.instance.subscribeToTopic('content')
                                                                       : element.compareTo('تصميم جرافيكي') == 0
-                                                                          ? FirebaseMessaging.instance.subscribeToTopic('graphic design')
+                                                                          ? FirebaseMessaging.instance.subscribeToTopic('graphicdesign')
                                                                           : null;
                                 });
                               }

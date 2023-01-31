@@ -97,6 +97,8 @@ class _GoogleAndFacebookButtonsState extends State<GoogleAndFacebookButtons> {
                 //if Sign in is successful check the user type if he is a visitor or participant
                 provider.setLoggedInuser(user);
                 provider.getUserInfoDoc(user!.uid);
+                // provider.userType = 0;
+
                 //if particepant
                 //2 is for participants
                 if (await isUniqueID(user!.uid)) {
@@ -105,7 +107,6 @@ class _GoogleAndFacebookButtonsState extends State<GoogleAndFacebookButtons> {
                     'name': user.displayName,
                     'userType': 0
                   });
-                  provider.userType = 0;
                   Navigator.pushNamed(
                     context,
                     interestsSelection.routeName,

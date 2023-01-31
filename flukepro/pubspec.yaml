@@ -64,6 +64,8 @@ dependencies:
   googleapis: ^10.0.0
   syncfusion_flutter_datagrid: ^20.4.44
   dropdown_search: ^5.0.5
+  flutter_email_sender: ^5.2.0
+  internet_connection_checker: ^1.0.0+1
 
 
 

@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
+import 'package:flukepro/components/cons.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -16,6 +17,7 @@ import 'SigningProvider.dart';
 import 'notificationProvider.dart';
 
 final _firestore = FirebaseFirestore.instance;
+late bool hasNet;
 
 //الصفحة هذه لإعادة توجيه المستخدم حسب صلاحياته
 class recdirectRole extends StatefulWidget {
@@ -28,8 +30,14 @@ class _recdirectRoleState extends State<recdirectRole> {
   @override
   void initState() {
     super.initState();
+    checkInternet();
+    hasNet
+        ? checkRole()
+        : null; //الدالة الي اتدير تشك على الرول الخاص بالمستخدم يتم إستعدعاءها خلال عملية انشاء الصفحة بحيث يتم إعادة التوجيه مباشرة
+  }
 
-    checkRole(); //الدالة الي اتدير تشك على الرول الخاص بالمستخدم يتم إستعدعاءها خلال عملية انشاء الصفحة بحيث يتم إعادة التوجيه مباشرة
+  checkInternet() async {
+    hasNet = await InternetConnectionChecker().hasConnection;
   }
 
   void checkRole() async {
@@ -47,7 +55,7 @@ class _recdirectRoleState extends State<recdirectRole> {
       int userT = userInfoDoc!['userType'];
 
       user == null
-          ? NavigateNext('log')
+          ? NavigateNext('/log')
           : userT == 0 || userT == 2
               ? NavigateNext('base')
               : userT == 1
@@ -76,7 +84,39 @@ class _recdirectRoleState extends State<recdirectRole> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: CircularProgressIndicator(), //يتم عرض دائرة تحميل في مدة التوجيه
+        child: hasNet
+            ? CircularProgressIndicator()
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset('images/Hands Phone.png'),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            checkRole();
+                          });
+                        },
+                        child: Text(
+                          'إعادة المحاولة..',
+                          style: conTxtLink,
+                        ),
+                      ),
+                      Text(
+                        "لا يتوفر لديك إتصال بالانترنت الرجاء التأكد...",
+                        style: conlabelsTxt,
+                      ),
+                    ],
+                  )
+                ],
+              ), //يتم عرض دائرة تحميل في مدة التوجيه
       ),
     );
   }

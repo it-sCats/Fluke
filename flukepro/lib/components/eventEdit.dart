@@ -793,30 +793,6 @@ class _editEventState extends State<editEvent> {
                                     )),
                               ],
                             ),
-                            Visibility(
-                                visible:
-                                    sendNotifications == null ? false : true,
-                                child: Container(
-                                  margin: EdgeInsets.symmetric(vertical: 10),
-                                  child: TextFormField(
-                                    textDirection: TextDirection.rtl,
-                                    controller: _targetedAudienceCont,
-                                    maxLines: 3,
-                                    textAlign: TextAlign.right,
-                                    decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.symmetric(
-                                            horizontal: 20, vertical: 20),
-                                        hintText: eventData['targetedAudiance']
-                                            .toString(),
-                                        hintStyle: conTxtFeildHint,
-                                        filled: true,
-                                        fillColor: Color(0xffF1F1F1),
-                                        border: OutlineInputBorder(
-                                            borderSide: BorderSide.none,
-                                            borderRadius:
-                                                BorderRadius.circular(10))),
-                                  ),
-                                )),
                             SizedBox(
                               height: 20,
                             ),

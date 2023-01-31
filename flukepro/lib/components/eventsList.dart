@@ -85,7 +85,6 @@ class _eventListState extends State<eventList> {
                                 .isAtSameMomentAs(DateTime.now())))
                     : DateTime.fromMicrosecondsSinceEpoch(strat.microsecondsSinceEpoch)
                         .isAfter(DateTime.now())) {
-                  print(eventa['title']);
                   eventWidget.add(Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: 20.0,

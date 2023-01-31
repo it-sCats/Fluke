@@ -34,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
       User LoggedinUser;
       if (user != null) {
         LoggedinUser = user;
-        print(LoggedinUser.email);
       }
     } catch (e) {
       print(e);
@@ -114,7 +113,11 @@ class _HomeScreenState extends State<HomeScreen> {
             VisitorVerticalEventList(
                 siggning().fieldBased(
                     Provider.of<siggning>(context, listen: false)
-                        .userInfoDocument!['interests']),
+                                .userInfoDocument!['interests'] ==
+                            null
+                        ? ['عام']
+                        : Provider.of<siggning>(context, listen: false)
+                            .userInfoDocument!['interests']),
                 // getInterstsBasedEvents(
                 //     Provider.of<siggning>(context).loggedUser!.uid, context),
                 true,

@@ -213,9 +213,8 @@ class siggning extends ChangeNotifier {
             .collection('users')
             .doc(loggedUser!.uid)
             .update({
-            'tokens': FieldValue.arrayUnion([
-              token
-            ]), //It is important to remember a user can have many tokens (from multiple devices, or token refreshes), therefore we use FieldValue.arrayUnion to store new tokens. When a message is sent via an admin SDK, invalid/expired tokens will throw an error allowing you to then remove them from the database.
+            'tokens': token
+            //It is important to remember a user can have many tokens (from multiple devices, or token refreshes), therefore we use FieldValue.arrayUnion to store new tokens. When a message is sent via an admin SDK, invalid/expired tokens will throw an error allowing you to then remove them from the database.
           })
         : null;
     notifyListeners();
