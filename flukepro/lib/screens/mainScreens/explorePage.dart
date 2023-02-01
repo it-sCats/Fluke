@@ -101,8 +101,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
                               ));
                     },
                     child: Container(
+                      margin: EdgeInsets.only(bottom: 2),
                       decoration: BoxDecoration(
-                          border: Border.symmetric(vertical: BorderSide())),
+                          border: Border.symmetric(vertical: BorderSide()),
+                          color: Colors.white70.withOpacity(1)),
                       child: Row(
                         children: [
                           Row(
@@ -114,7 +116,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                     vertical: 20, horizontal: 20),
                                 child: CircleAvatar(
                                   //Avatar
-                                  backgroundColor: conORange.withOpacity(0),
+                                  backgroundColor: conORange.withOpacity(.8),
                                   radius: 50,
                                   backgroundImage: NetworkImage(
                                       searchResult[index]['image']),

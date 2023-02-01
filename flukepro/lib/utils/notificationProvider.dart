@@ -241,7 +241,8 @@ sendPushToOrgnaizerNotification(
       .collection('users')
       .doc(createrId.toString().trim())
       .get();
-  final userTokens = user.data()!['tokens'].last.toString();
+  final userTokens = user.data()!['tokens'];
+  print('=====userToken $userTokens');
   try {
     await http
         .post(
@@ -277,7 +278,7 @@ participantAcceptanceNotifi(
       .collection('users')
       .doc(ParticipantId.toString().trim())
       .get();
-  var userTokens = user.data()!['tokens'].last.toString();
+  var userTokens = user.data()!['tokens'];
   try {
     await http
         .post(
