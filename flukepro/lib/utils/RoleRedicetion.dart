@@ -17,7 +17,7 @@ import 'SigningProvider.dart';
 import 'notificationProvider.dart';
 
 final _firestore = FirebaseFirestore.instance;
-late bool hasNet;
+bool hasNet = true;
 
 //الصفحة هذه لإعادة توجيه المستخدم حسب صلاحياته
 class recdirectRole extends StatefulWidget {
