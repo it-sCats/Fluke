@@ -286,21 +286,27 @@ class LoadOrganizerData extends StatelessWidget {
                               textAlign: TextAlign.end,
                               'مجال الحدث',
                               style: conlabelsTxt.copyWith(
-                                  color: conBlack, fontWeight: FontWeight.w600),
+                                  fontSize: 12,
+                                  color: conBlack,
+                                  fontWeight: FontWeight.w600),
                             )),
                             DataColumn(
                                 label: Text(
-                              textAlign: TextAlign.end,
-                              'المدينة المقام بها الحدث',
+                              textAlign: TextAlign.center,
+                              'مدينة الحدث ',
                               style: conlabelsTxt.copyWith(
-                                  color: conBlack, fontWeight: FontWeight.w600),
+                                  fontSize: 10,
+                                  color: conBlack,
+                                  fontWeight: FontWeight.w600),
                             )),
                             DataColumn(
                                 label: Text(
-                              textAlign: TextAlign.end,
+                              textAlign: TextAlign.center,
                               'إسم الحدث',
                               style: conlabelsTxt.copyWith(
-                                  color: conBlack, fontWeight: FontWeight.w600),
+                                  fontSize: 10,
+                                  color: conBlack,
+                                  fontWeight: FontWeight.w600),
                             )),
                           ],
                           rows: _buildList(context, snapshot.data!.docs));

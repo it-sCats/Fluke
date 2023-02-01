@@ -36,7 +36,9 @@ class _SideMenuState extends State<SideMenu>
       child: ListView(
         children: [
           DrawerHeader(
-            child: Image.asset("images/flukeLOGO.png"),
+            child: Image.asset(
+              "images/FlukeLOGO.png",
+            ),
           ),
           DrawerListTile(
             title: "الرئيسية",
