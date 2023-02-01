@@ -138,7 +138,7 @@ class _organizersRegistrationScreenState
                       if (value == null || value.isEmpty) {
                         return 'الرجاء إدخال البيانات المطلوبة';
                       } else if (!RegExp(
-                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                           .hasMatch(email.toString())) {
                         return 'تأكد من صحة كتابة الايميل المدخل';
                       }

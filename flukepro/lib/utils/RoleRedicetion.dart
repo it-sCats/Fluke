@@ -18,6 +18,7 @@ import 'notificationProvider.dart';
 
 final _firestore = FirebaseFirestore.instance;
 bool hasNet = true;
+InternetConnectionStatus internetStatus = InternetConnectionStatus.connected;
 
 //الصفحة هذه لإعادة توجيه المستخدم حسب صلاحياته
 class recdirectRole extends StatefulWidget {
@@ -38,6 +39,10 @@ class _recdirectRoleState extends State<recdirectRole> {
 
   checkInternet() async {
     hasNet = await InternetConnectionChecker().hasConnection;
+  }
+
+  checkInternetStatus() async {
+    internetStatus = await InternetConnectionChecker().connectionStatus;
   }
 
   void checkRole() async {
@@ -85,7 +90,29 @@ class _recdirectRoleState extends State<recdirectRole> {
     return Scaffold(
       body: Center(
         child: hasNet
-            ? CircularProgressIndicator()
+            ? internetStatus == InternetConnectionStatus.disconnected
+                ? Column(
+                    children: [
+                      CircularProgressIndicator(),
+                      Text(
+                        "الاتصال بالانترنت سيء تأكد من الانترنت لديك...",
+                        style: conlabelsTxt,
+                      ),
+                    ],
+                  )
+                : Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(),
+                        Text(
+                          "جاري الاتصال..",
+                          style: conlabelsTxt,
+                        ),
+                      ],
+                    ),
+                  )
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
