@@ -13,8 +13,8 @@ import '../eventDisplay.dart';
 
 final _auth = FirebaseAuth.instance;
 User? user = _auth.currentUser;
-final acessToken =
-    'ya29.a0AVvZVsrVaoU7-OtqGNYSG8qd-Lsj8NKvAEhFuqxMiZ7bxqw6kBRwBCcAAxRrVYCvm94FlNUfxtM6ZK1bkAtNUJdXZILZvyZ-1406Ir57mh9ASvwbJrkN3aZZA4OvkvkILmuqsicmPux8L36chRDUm1EMCNoUaCgYKAegSARESFQGbdwaIvBoXV84JWmQoFb3P_6IgOg0163';
+var acessToken =
+    'ya29.a0AVvZVsoRtHtv6iV40lWIjxbSo4B0U1yJ1W56BvXoR6ZJgdA6SrDq7Dtrv4tILzXOa7raRD0zDDD8SSGmvXucr4-Pij-HMULVscr0ffXBHt8UxCtwIgoSyUCC6hhsmv2G0AFZ0W6H4gxqDiwyrC3hWB9w2o8VS9saCgYKASgSAQASFQGbdwaIfaiTqjPZqavYJU3WsMtjhg0166';
 
 final _particiTypeFormKey = GlobalKey<FormState>();
 
@@ -91,21 +91,25 @@ class _ParticiRequsetPrevState extends State<ParticiRequsetPrev> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(right: 10.0, bottom: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      "${widget.field}",
-                      style: conHeadingsStyle.copyWith(
-                          fontSize: 16, color: Color(0xFF605A5A)),
-                    ),
-                    Text(
-                      " :المجال",
-                      style: conHeadingsStyle.copyWith(
-                          fontSize: 16, color: Color(0xFF605A5A)),
-                    ),
-                  ],
+                padding: EdgeInsets.only(right: 0.0, bottom: 10.0),
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.start,
+                    alignment: WrapAlignment.start,
+                    children: [
+                      Text(
+                        "المجال:",
+                        style: conHeadingsStyle.copyWith(
+                            fontSize: 16, color: Color(0xFF605A5A)),
+                      ),
+                      Text(
+                        "${widget.field}",
+                        style: conHeadingsStyle.copyWith(
+                            fontSize: 16, color: Color(0xFF605A5A)),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Padding(
@@ -187,8 +191,8 @@ class _ParticiRequsetPrevState extends State<ParticiRequsetPrev> {
                           .collection('joinRequest')
                           .doc(widget.reqID.trim())
                           .update({'requestStatus': 'accepted'})
-                          .then(
-                            (value) => Navigator.pop(context),
+                          .whenComplete(
+                            () => Navigator.pop(context),
                           )
                           .onError((error, stackTrace) =>
                               ScaffoldMessenger.of(context).showSnackBar(

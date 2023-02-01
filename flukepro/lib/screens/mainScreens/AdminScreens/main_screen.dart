@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../components/cons.dart';
 import '../../../components/responsive.dart';
+import 'EventReportsList.dart';
 import 'dashboard_screen.dart';
 import 'displayDataPrev.dart';
 import 'loadData.dart';
@@ -70,6 +71,62 @@ class _VisitormainscreenState extends State<Visitormainscreen> {
               // child: ddscreen(),
               // child: displaydataDashboardScreen(),
               child: LoadVisistorData(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ReportsMainscreen extends StatefulWidget {
+  ReportsMainscreen();
+
+  @override
+  State<ReportsMainscreen> createState() => _ReportsMainscreenState();
+}
+
+class _ReportsMainscreenState extends State<ReportsMainscreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      drawer: SideMenu(),
+      body: SafeArea(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // We want this side menu only for large screen
+            if (Responsive.isDesktop(context))
+              Expanded(
+                // default flex = 1
+                // and it takes 1/6 part of the screen
+                child: SideMenu(),
+              ),
+            Expanded(
+              // It takes 5/6 part of the screen
+              flex: 5,
+              // child: ddscreen(),
+              // child: displaydataDashboardScreen(),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: 18.0,
+                    horizontal: MediaQuery.of(context).size.width * .02),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                        flex: 1,
+                        child: Text(
+                          "بلاغات الاحداث",
+                          style: conHeadingsStyle.copyWith(fontSize: 20),
+                        )),
+                    Expanded(
+                        flex: 15,
+                        child:
+                            Container(width: 500, child: EventReportsList())),
+                  ],
+                ),
+              ),
             ),
           ],
         ),

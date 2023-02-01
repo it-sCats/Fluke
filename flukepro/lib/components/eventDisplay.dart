@@ -575,9 +575,7 @@ class _eventDisplayState extends State<eventDisplay>
                       style: conLittelTxt12.copyWith(fontSize: 15),
                     ),
                   ),
-                  if (Provider.of<siggning>(context, listen: false)
-                          .userInfoDocument!['userType'] ==
-                      3)
+                  if (kIsWeb)
                     Tab(
                       child: Text(
                         'الزوار',
@@ -720,15 +718,19 @@ class _eventDisplayState extends State<eventDisplay>
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  'موقع الحدث على الخرائط:',
-                                                  style:
-                                                      conHeadingsStyle.copyWith(
-                                                          fontSize: 18,
-                                                          color: conBlack
-                                                              .withOpacity(.8),
-                                                          fontWeight:
-                                                              FontWeight.w400),
+                                                Expanded(
+                                                  child: Text(
+                                                    'موقع الحدث على الخرائط:',
+                                                    style: conHeadingsStyle
+                                                        .copyWith(
+                                                            fontSize: 18,
+                                                            color: conBlack
+                                                                .withOpacity(
+                                                                    .8),
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                  ),
                                                 ),
                                                 Expanded(
                                                   child: GestureDetector(
@@ -1683,9 +1685,7 @@ class _eventDisplayState extends State<eventDisplay>
                         displayParticipants(
                           eventID: widget.id,
                         ),
-                        if (Provider.of<siggning>(context, listen: false)
-                                .userInfoDocument!['userType'] ==
-                            3)
+                        if (kIsWeb)
                           Container(
                             child: displayVisitors(
                               eventID: widget.id,

@@ -21,12 +21,12 @@ class _notifiScreenState extends State<notifiScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    //   setState(() {
-    //     _notification.add(message);
-    //     // _notification = [..._notification, message];
-    //   });
-    // });
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      setState(() {
+        _notification.add(message);
+        // _notification = [..._notification, message];
+      });
+    });
   }
 
   @override

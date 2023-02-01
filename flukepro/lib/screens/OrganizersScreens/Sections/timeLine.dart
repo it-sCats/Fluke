@@ -92,6 +92,7 @@ class _eventTimelineState extends State<eventTimeline> {
                           children: [
                             Text(
                               'إسم الجلسة : ${session.sessionName}',
+                              textAlign: TextAlign.center,
                               style: conHeadingsStyle.copyWith(
                                   fontSize: 17, fontWeight: FontWeight.normal),
                             ),

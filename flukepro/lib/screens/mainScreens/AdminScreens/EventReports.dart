@@ -376,8 +376,8 @@ class _eventReportState extends State<eventReport> {
                           context: context,
                           builder: (context) => eventDisplay(
                                 //نحي ايقونه الابلاغ لما يستعرضه الادمن وحطي حدف
-                                wholePage: false,
-                                justDisplay: false,
+                                wholePage: true,
+                                justDisplay: true,
                                 id: inf!['id'],
                                 title: inf!['title'],
                                 description: inf!['description'],

@@ -113,8 +113,6 @@ class _GoogleAndFacebookButtonsState extends State<GoogleAndFacebookButtons> {
                     arguments: {2},
                   );
                 } else {
-                  provider.getCurrentUsertype(user!.uid);
-
                   Navigator.pushReplacementNamed(context, '/redirect');
                 }
               } else {

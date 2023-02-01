@@ -105,61 +105,59 @@ class siggning extends ChangeNotifier {
         'joinType': joinType,
         'requestStatus': 'pending',
         'creationDate': DateTime.now()
+      }).then((value) {
+        FirebaseFirestore.instance
+            .collection('events')
+            .doc(eventId.toString().trim())
+            .collection('joinRequest')
+            .doc(value.id)
+            .update({'reqID': value.id});
+
+        return value;
       });
-      joinReqId.id.isNotEmpty
-          ? {
-              await FirebaseFirestore.instance
-                  .collection('events')
-                  .doc(eventId.toString().trim())
-                  .collection('joinRequest')
-                  .doc(joinReqId.id)
-                  .update({'reqID': joinReqId.id}),
-              showDialog(
-                  //save to drafts dialog
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text(
-                        '!تم تقديم طلبك',
-                        textAlign: TextAlign.center,
-                        style: conHeadingsStyle.copyWith(fontSize: 15),
-                      ),
-                      content: Text(
-                        'سيصلك اشعار فور قبول الطلب',
+      showDialog(
+          //save to drafts dialog
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(
+                '!تم تقديم طلبك',
+                textAlign: TextAlign.center,
+                style: conHeadingsStyle.copyWith(fontSize: 15),
+              ),
+              content: Text(
+                'سيصلك اشعار فور قبول الطلب',
+                textAlign: TextAlign.center,
+                style: conHeadingsStyle.copyWith(
+                    fontSize: 14, fontWeight: FontWeight.normal),
+              ),
+              actions: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  decoration: BoxDecoration(
+                      color: conORange,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'حسناً',
                         textAlign: TextAlign.center,
                         style: conHeadingsStyle.copyWith(
-                            fontSize: 14, fontWeight: FontWeight.normal),
-                      ),
-                      actions: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          decoration: BoxDecoration(
-                              color: conORange,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: InkWell(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                'حسناً',
-                                textAlign: TextAlign.center,
-                                style: conHeadingsStyle.copyWith(
-                                    color: Colors.white,
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold),
-                              )),
-                        ),
-                      ],
-                      buttonPadding: EdgeInsets.all(20),
-                      actionsAlignment: MainAxisAlignment.spaceAround,
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 100),
-                    );
-                  })
-            }
-          : null;
-      return joinReqId.id;
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold),
+                      )),
+                ),
+              ],
+              buttonPadding: EdgeInsets.all(20),
+              actionsAlignment: MainAxisAlignment.spaceAround,
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 10, horizontal: 100),
+            );
+          });
+      Navigator.pop(context);
     } else {
       showDialog(
           //save to drafts dialog

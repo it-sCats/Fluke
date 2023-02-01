@@ -96,7 +96,13 @@ class _SideMenuState extends State<SideMenu>
           DrawerListTile(
             title: "بلاغات",
             Icond: Icons.report_problem_rounded,
-            press: () {},
+            press: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ReportsMainscreen(),
+                  ));
+            },
           ),
           DrawerListTile(
             title: "الضبط",

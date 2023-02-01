@@ -66,6 +66,7 @@ dependencies:
   dropdown_search: ^5.0.5
   flutter_email_sender: ^5.2.0
   internet_connection_checker: ^1.0.0+1
+  connectivity_plus: ^3.0.2
 
 
 

@@ -72,17 +72,18 @@ class _ParticiEventPrevState extends State<ParticiEventPrev> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(right: 10.0, bottom: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                padding: EdgeInsets.only(bottom: 10.0),
+                child: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.start,
+                  textDirection: TextDirection.rtl,
                   children: [
                     Text(
-                      "${Provider.of<siggning>(context, listen: false).userInfoDocument!['interests']}",
+                      " :المجال",
                       style: conHeadingsStyle.copyWith(
                           fontSize: 16, color: Color(0xFF605A5A)),
                     ),
                     Text(
-                      " :المجال",
+                      "${Provider.of<siggning>(context, listen: false).userInfoDocument!['interests']}",
                       style: conHeadingsStyle.copyWith(
                           fontSize: 16, color: Color(0xFF605A5A)),
                     ),

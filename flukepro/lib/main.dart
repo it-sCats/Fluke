@@ -175,7 +175,7 @@ class _MyAppState extends State<MyApp> {
             false, //to remove debugging banner at the top of the screen
 //todo جيبي الهاندل متاع النوتيفيكسشن للماين بحيث يفتحله طول وابعتي الارقيومنت الي يفتح صفحة الفونتيفيكشن لما نفتحو النوتيفيكيشن
         routes: {
-          '/log': ((context) => loginScreen()),
+          'log': ((context) => loginScreen()),
           VisitorRegistration.routeName: (context) => VisitorRegistration(),
           '/reset': (context) => resetPass(),
           '/OrganizSign': ((context) => organizersRegistrationScreen()),

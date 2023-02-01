@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:connectivity_plus/connectivity_plus.dart';
 import '../base.dart';
 import '../screens/OrganizersScreens/OHome.dart';
 import '../screens/loginScreen.dart';
@@ -31,10 +31,13 @@ class _recdirectRoleState extends State<recdirectRole> {
   @override
   void initState() {
     super.initState();
-    checkInternet();
-    hasNet
+
+    kIsWeb
         ? checkRole()
-        : null; //الدالة الي اتدير تشك على الرول الخاص بالمستخدم يتم إستعدعاءها خلال عملية انشاء الصفحة بحيث يتم إعادة التوجيه مباشرة
+        : {
+            checkInternet(),
+            hasNet ? checkRole() : null
+          }; //الدالة الي اتدير تشك على الرول الخاص بالمستخدم يتم إستعدعاءها خلال عملية انشاء الصفحة بحيث يتم إعادة التوجيه مباشرة
   }
 
   checkInternet() async {
@@ -60,7 +63,7 @@ class _recdirectRoleState extends State<recdirectRole> {
       int userT = userInfoDoc!['userType'];
 
       user == null
-          ? NavigateNext('/log')
+          ? NavigateNext('log')
           : userT == 0 || userT == 2
               ? NavigateNext('base')
               : userT == 1
@@ -72,9 +75,9 @@ class _recdirectRoleState extends State<recdirectRole> {
                     }
                   : userT == 3
                       ? NavigateNext('/Adash')
-                      : NavigateNext('/log');
+                      : NavigateNext('log');
     } else
-      NavigateNext('/log');
+      NavigateNext('log');
   }
 
   void NavigateNext(String RouteName) {
@@ -89,61 +92,86 @@ class _recdirectRoleState extends State<recdirectRole> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: hasNet
-            ? internetStatus == InternetConnectionStatus.disconnected
-                ? Column(
-                    children: [
-                      CircularProgressIndicator(),
-                      Text(
-                        "الاتصال بالانترنت سيء تأكد من الانترنت لديك...",
-                        style: conlabelsTxt,
-                      ),
-                    ],
-                  )
-                : Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(),
-                        Text(
-                          "جاري الاتصال..",
-                          style: conlabelsTxt,
-                        ),
-                      ],
+        child: kIsWeb
+            ? Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    Text(
+                      "جاري الاتصال..",
+                      style: conlabelsTxt,
                     ),
-                  )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset('images/Hands Phone.png'),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          checkRole();
+                        });
+                      },
+                      child: Text(
+                        'إعادة المحاولة..',
+                        style: conTxtLink,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : hasNet
+                ? internetStatus == InternetConnectionStatus.disconnected
+                    ? Column(
+                        children: [
+                          CircularProgressIndicator(),
+                          Text(
+                            "الاتصال بالانترنت سيء تأكد من الانترنت لديك...",
+                            style: conlabelsTxt,
+                          ),
+                        ],
+                      )
+                    : Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(),
+                            Text(
+                              "جاري الاتصال..",
+                              style: conlabelsTxt,
+                            ),
+                          ],
+                        ),
+                      )
+                : Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            checkRole();
-                          });
-                        },
-                        child: Text(
-                          'إعادة المحاولة..',
-                          style: conTxtLink,
-                        ),
+                      Image.asset('images/Hands Phone.png'),
+                      SizedBox(
+                        height: 20,
                       ),
-                      Text(
-                        "لا يتوفر لديك إتصال بالانترنت الرجاء التأكد...",
-                        style: conlabelsTxt,
-                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                checkRole();
+                              });
+                            },
+                            child: Text(
+                              'إعادة المحاولة..',
+                              style: conTxtLink,
+                            ),
+                          ),
+                          Text(
+                            "لا يتوفر لديك إتصال بالانترنت الرجاء التأكد...",
+                            style: conlabelsTxt,
+                          ),
+                        ],
+                      )
                     ],
-                  )
-                ],
-              ), //يتم عرض دائرة تحميل في مدة التوجيه
+                  ), //يتم عرض دائرة تحميل في مدة التوجيه
       ),
     );
   }

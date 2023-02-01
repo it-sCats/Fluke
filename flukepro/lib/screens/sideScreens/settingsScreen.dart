@@ -198,7 +198,7 @@ class settingScreen extends StatelessWidget {
                         onTap: () async {
                           await FirebaseAuth.instance.signOut();
                           await GoogleSignIn().signOut();
-                          Navigator.pushNamed(context, '/log');
+                          Navigator.pushReplacementNamed(context, 'log');
                           // await Authentication.signOut(context: context);
                         },
                       ),

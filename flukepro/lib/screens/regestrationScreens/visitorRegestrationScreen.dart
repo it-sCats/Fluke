@@ -435,7 +435,8 @@ class _VisitorRegistrationState extends State<VisitorRegistration> {
                               "email": user.email,
                               "name": name.toString(),
                               "userType": 0,
-                              "phone": phoneNum.toString()
+                              "phone": phoneNum.toString(),
+                              "likes": []
                             }) // create documentID with userID
                                 ;
                             await FirebaseMessaging.instance
