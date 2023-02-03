@@ -26,7 +26,7 @@ String? userId;
 
 class Vprofile extends StatefulWidget {
   String? OrganizerToDisplayID;
-  Vprofile();
+  Vprofile({this.OrganizerToDisplayID});
 
   @override
   State<Vprofile> createState() => _VprofileState();
@@ -39,6 +39,7 @@ class _VprofileState extends State<Vprofile> with TickerProviderStateMixin {
 
     // TODO: implement initState
     super.initState();
+    getParticipantsEvents(widget.OrganizerToDisplayID);
     userId = _auth.currentUser!.uid;
     Provider.of<siggning>(context, listen: false).getUserTicketsEvents(
         Provider.of<siggning>(context, listen: false).loggedUser!.uid);
@@ -75,270 +76,513 @@ class _VprofileState extends State<Vprofile> with TickerProviderStateMixin {
     Provider.of<siggning>(context, listen: false)
         .getUserInfoDoc(FirebaseAuth.instance.currentUser!.uid);
 
-    TabController _tabCont = TabController(length: 2, vsync: this);
+    TabController _tabCont = TabController(length: 1, vsync: this);
     return //if from outside
-        SafeArea(
-            child: DefaultTabController(
-      length: 2,
-      child: NestedScrollView(
-        headerSliverBuilder: (context, bool) {
-          return [
-            SliverList(
-              delegate: SliverChildListDelegate([
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, 'settings');
-                        },
-                        padding: EdgeInsets.all(20),
-                        icon: Icon(
-                          Icons.settings,
-                          color: conBlack,
-                          size: 30,
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 0.0, top: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  Provider.of<siggning>(context, listen: false)
-                                      .userInfoDocument!['name'],
-                                  style: conHeadingsStyle.copyWith(
-                                      color: conBlack, fontSize: 15),
-                                ),
-                                Text(
-                                  Provider.of<siggning>(context, listen: false)
-                                              .userInfoDocument!['userType'] ==
-                                          0
-                                      ? "حساب زائر"
-                                      : Provider.of<siggning>(context,
-                                                          listen: false)
-                                                      .userInfoDocument![
-                                                  'userType'] ==
-                                              2
-                                          ? "حساب مشارك"
-                                          : "حساب منظم",
-                                  style: conHeadingsStyle.copyWith(
-                                      color: conBlack.withOpacity(0.50),
-                                      fontSize: 15),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: CircleAvatar(
-                              //Avatar
-                              backgroundColor: conBlue.withOpacity(.5),
-                              radius: 50,
-                              backgroundImage: NetworkImage(
-                                  'https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=45&dpr=2&s=none'),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 20),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Column(
-                              children: [
-                                Text(
-                                  "تذكارك",
-                                  style: conHeadingsStyle.copyWith(
-                                      color: conBlack.withOpacity(0.50),
-                                      fontSize: 14),
-                                ),
-                                SizedBox(height: 20),
-                                Text(
-                                  Provider.of<siggning>(context, listen: false)
-                                      .userTickets
-                                      .toString(),
-                                  style: conHeadingsStyle.copyWith(
-                                      color: conBlack.withOpacity(.7),
-                                      fontSize: 20),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: 25,
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Column(
-                              children: [
-                                Text(
-                                  " أحداث مهتم بها",
-                                  style: conHeadingsStyle.copyWith(
-                                      color: conBlack.withOpacity(0.50),
-                                      fontSize: 13),
-                                ),
-                                SizedBox(height: 20),
-                                Text(
-                                  // _auth.currentUser!.displayName.toString(),
-                                  Provider.of<siggning>(context, listen: false)
-                                      .userLiked
-                                      .toString(),
-                                  textAlign: TextAlign.center,
-                                  style: conHeadingsStyle.copyWith(
-                                      color: conBlack.withOpacity(.7),
-                                      fontSize: 20),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                )
-              ]),
-            ),
-          ];
-        },
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          //الأساسي
-
-          children: [
-            TabBar(
-              unselectedLabelStyle: conLittelTxt12.copyWith(fontSize: 15),
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-              labelStyle: conLittelTxt12,
-              indicator: BoxDecoration(
-                  border: Border(bottom: BorderSide(width: 3, color: conBlue))),
-              controller: _tabCont,
-              tabs: [
-                Tab(
-                  child: Text(
-                    'تذاكرك',
-                    style: conLittelTxt12.copyWith(
-                        fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Tab(
-                  child: Text(
-                    'المفضلة',
-                    style: conLittelTxt12.copyWith(
-                        fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            Expanded(
-              // color: Color.fromARGB(255, 255, 255, 255),
-
-              child: TabBarView(
-                controller: _tabCont,
-                children: [
-                  StreamBuilder<QuerySnapshot>(
-
-                      //باش نبنو الداتا الي بنجيبوها من قاعدة البيانات نحتاجو نحطوها في الفيوتشر بيلدر
-                      stream: getUserReegiteredEvents(userId.toString()),
-                      builder: (context, AsyncSnapshot snapshot) {
-                        List<Widget> tiketsWidget = [];
-
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          //في حال لم يتم الاتصال يتم إظهار علامة تحميل
-                          return CircularProgressIndicator();
-                        } else {
-                          if (!snapshot.hasData || snapshot.data == null) {
-                            return Center(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset('images/Hands Phone.png'),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    'عند تسجيلك في أي حدث ستظهر تذاكر دخولك هنا',
-                                    style: conHeadingsStyle.copyWith(
-                                        fontSize: 14,
-                                        color: conBlack.withOpacity(.7)),
-                                  )
-                                ],
-                              ), //في حال لايوجد ديكومنتس يتم عرض هذه الصورة
-                            );
-                            //في حال إحتوت السنابشوت على بيانات سيتم بناءها بإستخدام ليست فيو
-                          } else {
-                            final tickets = snapshot.data!.docs;
-
-                            for (var ticket in tickets) {
-                              tiketsWidget.add(visitorEventPrev(
-                                  //هنا نجيب في كل دكيومنت ونعرض البيانات الي فيه ككارد عليها كيو آر
-                                  ticket.id, //event id
-                                  ticket['eventTitle'],
-                                  ticket['name'],
-                                  ticket!['phone'] == null
-                                      ? ' '
-                                      : ticket!['phone'],
-                                  ticket!['participationType'],
-                                  QrImage(
-                                      padding: EdgeInsets.all(1),
-                                      size: 60,
-                                      data: '${Provider.of<siggning>(context, listen: false).userInfoDocument!['name']},\n' +
-                                          '${Provider.of<siggning>(context, listen: false).userInfoDocument!['phone']}\n' +
-                                          '${ticket!['eventTitle']}\n' +
-                                          '${ticket!['participationType']},\n')));
-                            }
-                            return ListView(
-                              physics: BouncingScrollPhysics(),
-                              reverse: false,
-                              children: tiketsWidget.isEmpty
-                                  ? [
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+        widget.OrganizerToDisplayID == null
+            ? SafeArea(
+                child: DefaultTabController(
+                length: 2,
+                child: NestedScrollView(
+                  headerSliverBuilder: (context, bool) {
+                    return [
+                      SliverList(
+                        delegate: SliverChildListDelegate([
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, 'settings');
+                                  },
+                                  padding: EdgeInsets.all(20),
+                                  icon: Icon(
+                                    Icons.settings,
+                                    color: conBlack,
+                                    size: 30,
+                                  )),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 18.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          right: 0.0, top: 10),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
                                         children: [
-                                          SizedBox(
-                                            height: 60,
-                                          ),
-                                          Center(
-                                            child: Image.asset(
-                                                'images/Hands Phone.png'), //في حال لايوجد ديكومنتس يتم عرض هذه الصورة
-                                          ),
-                                          SizedBox(
-                                            height: 20,
+                                          Text(
+                                            Provider.of<siggning>(context,
+                                                    listen: false)
+                                                .userInfoDocument!['name'],
+                                            style: conHeadingsStyle.copyWith(
+                                                color: conBlack, fontSize: 15),
                                           ),
                                           Text(
-                                            'لم تقم بالتسجيل في أي حدث بعد',
-                                            textAlign: TextAlign.center,
-                                            style: conLittelTxt12.copyWith(
-                                                fontSize: 14),
-                                          )
+                                            Provider.of<siggning>(context,
+                                                                listen: false)
+                                                            .userInfoDocument![
+                                                        'userType'] ==
+                                                    0
+                                                ? "حساب زائر"
+                                                : Provider.of<siggning>(context,
+                                                                    listen: false)
+                                                                .userInfoDocument![
+                                                            'userType'] ==
+                                                        2
+                                                    ? "حساب مشارك"
+                                                    : "حساب منظم",
+                                            style: conHeadingsStyle.copyWith(
+                                                color:
+                                                    conBlack.withOpacity(0.50),
+                                                fontSize: 15),
+                                          ),
                                         ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20),
+                                      child: CircleAvatar(
+                                        //Avatar
+                                        backgroundColor:
+                                            conBlue.withOpacity(.5),
+                                        radius: 50,
+                                        backgroundImage: NetworkImage(
+                                            'https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=45&dpr=2&s=none'),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 20),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            "تذكارك",
+                                            style: conHeadingsStyle.copyWith(
+                                                color:
+                                                    conBlack.withOpacity(0.50),
+                                                fontSize: 14),
+                                          ),
+                                          SizedBox(height: 20),
+                                          Text(
+                                            Provider.of<siggning>(context,
+                                                    listen: false)
+                                                .userTickets
+                                                .toString(),
+                                            style: conHeadingsStyle.copyWith(
+                                                color: conBlack.withOpacity(.7),
+                                                fontSize: 20),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 25,
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            " أحداث مهتم بها",
+                                            style: conHeadingsStyle.copyWith(
+                                                color:
+                                                    conBlack.withOpacity(0.50),
+                                                fontSize: 13),
+                                          ),
+                                          SizedBox(height: 20),
+                                          Text(
+                                            // _auth.currentUser!.displayName.toString(),
+                                            Provider.of<siggning>(context,
+                                                    listen: false)
+                                                .userLiked
+                                                .toString(),
+                                            textAlign: TextAlign.center,
+                                            style: conHeadingsStyle.copyWith(
+                                                color: conBlack.withOpacity(.7),
+                                                fontSize: 20),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          )
+                        ]),
+                      ),
+                    ];
+                  },
+                  body: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    //الأساسي
+
+                    children: [
+                      TabBar(
+                        unselectedLabelStyle:
+                            conLittelTxt12.copyWith(fontSize: 15),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                        labelStyle: conLittelTxt12,
+                        indicator: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(width: 3, color: conBlue))),
+                        controller: _tabCont,
+                        tabs: [
+                          Tab(
+                            child: Text(
+                              'تذاكرك',
+                              style: conLittelTxt12.copyWith(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Tab(
+                            child: Text(
+                              'المفضلة',
+                              style: conLittelTxt12.copyWith(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Expanded(
+                        // color: Color.fromARGB(255, 255, 255, 255),
+
+                        child: TabBarView(
+                          controller: _tabCont,
+                          children: [
+                            StreamBuilder<QuerySnapshot>(
+
+                                //باش نبنو الداتا الي بنجيبوها من قاعدة البيانات نحتاجو نحطوها في الفيوتشر بيلدر
+                                stream:
+                                    getUserReegiteredEvents(userId.toString()),
+                                builder: (context, AsyncSnapshot snapshot) {
+                                  List<Widget> tiketsWidget = [];
+
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    //في حال لم يتم الاتصال يتم إظهار علامة تحميل
+                                    return CircularProgressIndicator();
+                                  } else {
+                                    if (!snapshot.hasData ||
+                                        snapshot.data == null) {
+                                      return Center(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset(
+                                                'images/Hands Phone.png'),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Text(
+                                              'عند تسجيلك في أي حدث ستظهر تذاكر دخولك هنا',
+                                              style: conHeadingsStyle.copyWith(
+                                                  fontSize: 14,
+                                                  color:
+                                                      conBlack.withOpacity(.7)),
+                                            )
+                                          ],
+                                        ), //في حال لايوجد ديكومنتس يتم عرض هذه الصورة
+                                      );
+                                      //في حال إحتوت السنابشوت على بيانات سيتم بناءها بإستخدام ليست فيو
+                                    } else {
+                                      final tickets = snapshot.data!.docs;
+
+                                      for (var ticket in tickets) {
+                                        tiketsWidget.add(visitorEventPrev(
+                                            //هنا نجيب في كل دكيومنت ونعرض البيانات الي فيه ككارد عليها كيو آر
+                                            ticket.id, //event id
+                                            ticket['eventTitle'],
+                                            ticket['name'],
+                                            ticket!['phone'] == null
+                                                ? ' '
+                                                : ticket!['phone'],
+                                            ticket!['participationType'],
+                                            QrImage(
+                                                padding: EdgeInsets.all(1),
+                                                size: 60,
+                                                data: '${Provider.of<siggning>(context, listen: false).userInfoDocument!['name']},\n' +
+                                                    '${Provider.of<siggning>(context, listen: false).userInfoDocument!['phone']}\n' +
+                                                    '${ticket!['eventTitle']}\n' +
+                                                    '${ticket!['participationType']},\n')));
+                                      }
+                                      return ListView(
+                                        physics: BouncingScrollPhysics(),
+                                        reverse: false,
+                                        children: tiketsWidget.isEmpty
+                                            ? [
+                                                Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 60,
+                                                    ),
+                                                    Center(
+                                                      child: Image.asset(
+                                                          'images/Hands Phone.png'), //في حال لايوجد ديكومنتس يتم عرض هذه الصورة
+                                                    ),
+                                                    SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    Text(
+                                                      'لم تقم بالتسجيل في أي حدث بعد',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: conLittelTxt12
+                                                          .copyWith(
+                                                              fontSize: 14),
+                                                    )
+                                                  ],
+                                                )
+                                              ]
+                                            : tiketsWidget,
+                                      );
+                                    }
+                                  }
+                                }),
+                            visiPartiInterests()
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ))
+            : Scaffold(
+                body: SafeArea(
+                    child: DefaultTabController(
+                  length: 1,
+                  child: NestedScrollView(
+                    headerSliverBuilder: (context, bool) {
+                      return [
+                        SliverList(
+                          delegate: SliverChildListDelegate([
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 18.0, vertical: 50),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            right: 0.0, top: 10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              Provider.of<siggning>(context,
+                                                      listen: false)
+                                                  .userInfoDocument!['name'],
+                                              style: conHeadingsStyle.copyWith(
+                                                  color: conBlack,
+                                                  fontSize: 15),
+                                            ),
+                                            Text(
+                                              "حساب مشارك",
+                                              style: conHeadingsStyle.copyWith(
+                                                  color: conBlack
+                                                      .withOpacity(0.50),
+                                                  fontSize: 15),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: CircleAvatar(
+                                          //Avatar
+                                          backgroundColor:
+                                              conBlue.withOpacity(.5),
+                                          radius: 50,
+                                          backgroundImage: NetworkImage(
+                                              'https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=45&dpr=2&s=none'),
+                                        ),
                                       )
-                                    ]
-                                  : tiketsWidget,
-                            );
-                          }
-                        }
-                      }),
-                  visiPartiInterests()
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    ));
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
+                          ]),
+                        ),
+                      ];
+                    },
+                    body: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      //الأساسي
+
+                      children: [
+                        TabBar(
+                          unselectedLabelStyle:
+                              conLittelTxt12.copyWith(fontSize: 15),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 20),
+                          labelStyle: conLittelTxt12,
+                          indicator: BoxDecoration(
+                              border: Border(
+                                  bottom:
+                                      BorderSide(width: 3, color: conBlue))),
+                          controller: _tabCont,
+                          tabs: [
+                            Tab(
+                              child: Text(
+                                'الاحداث المشارك فيها',
+                                style: conLittelTxt12.copyWith(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Expanded(
+                          // color: Color.fromARGB(255, 255, 255, 255),
+
+                          child: TabBarView(
+                            controller: _tabCont,
+                            children: [
+                              FutureBuilder(
+                                  //todo change this to streambuilder
+                                  //الايفينتس متاع المنظم
+
+                                  //باش نبنو الداتا الي بنجيبوها من قاعدة البيانات نحتاجو نحطوها في الفيوتشر بيلدر
+                                  future: getParticipantsEvents(
+                                      widget.OrganizerToDisplayID),
+                                  builder: (context, AsyncSnapshot snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      //في حال لم يتم الاتصال يتم إظهار علامة تحميل
+                                      return CircularProgressIndicator();
+                                    } else {
+                                      if (!snapshot.hasData) {
+                                        return Center(
+                                          child: Image.asset(
+                                              'images/Hands Phone.png'), //في حال لايوجد ديكومنتس يتم عرض هذه الصورة
+                                        );
+                                        //في حال إحتوت السنابشوت على بيانات سيتم بناءها بإستخدام ليست فيو
+                                      } else {
+                                        return Padding(
+                                          padding: EdgeInsets.only(bottom: 0),
+                                          child: GridView.builder(
+                                            gridDelegate:
+                                                SliverGridDelegateWithMaxCrossAxisExtent(
+                                                    maxCrossAxisExtent: 300,
+                                                    childAspectRatio: 4 / 5,
+                                                    crossAxisSpacing: 0,
+                                                    mainAxisSpacing: 5),
+                                            itemBuilder: (context, index) {
+                                              var eventData =
+                                                  snapshot.data![index];
+
+                                              return GestureDetector(
+                                                child: OrganizerEventPreview(
+                                                    //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
+                                                    title: eventData['title'],
+                                                    image: eventData['image'],
+                                                    description: eventData[
+                                                        'description'],
+                                                    field: eventData['field'],
+                                                    location:
+                                                        eventData['location'],
+                                                    city:
+                                                        eventData['eventCity'],
+                                                    starterDate: eventData[
+                                                        'starterDate'],
+                                                    endDate:
+                                                        eventData['endDate'],
+                                                    starterTime: eventData[
+                                                        'starterTime'],
+                                                    endTime:
+                                                        eventData['endTime'],
+                                                    eventType:
+                                                        eventData['eventType'],
+                                                    creationDate: eventData[
+                                                        'creationDate'],
+                                                    acceptsParticapants: eventData[
+                                                        'acceptsParticapants'],
+                                                    eventVisibilty: eventData[
+                                                        'eventVisibility']),
+                                                onTap: () {
+                                                  showModalBottomSheet(
+                                                      isScrollControlled: true,
+                                                      elevation: 100,
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          eventDisplay(
+                                                            wholePage: false,
+                                                            justDisplay: true,
+                                                            id: eventData['id'],
+                                                            title: eventData[
+                                                                'title'],
+                                                            description: eventData[
+                                                                'description'],
+                                                            starterDate: eventData[
+                                                                'starterDate'],
+                                                            location: eventData[
+                                                                'location'],
+                                                            image: eventData[
+                                                                'image'],
+                                                            endDate: eventData[
+                                                                'endDate'],
+                                                            starterTime: eventData[
+                                                                'starterTime'],
+                                                            endTime: eventData[
+                                                                'endTime'],
+                                                            creationDate: eventData[
+                                                                'creationDate'],
+                                                            city: eventData[
+                                                                'eventCity'],
+                                                            acceptsParticapants:
+                                                                eventData[
+                                                                    'acceptsParticapants'],
+                                                            eventVisibilty:
+                                                                eventData[
+                                                                    'eventVisibility'],
+                                                            visitorsNum:
+                                                                visitorsNum,
+                                                            creatorID: eventData[
+                                                                'creatorID'],
+                                                            creatorName: eventData[
+                                                                'creatorName'],
+                                                          ));
+                                                },
+                                              );
+                                            },
+                                            itemCount: snapshot.data?.length,
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  })
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )),
+              );
   }
 }
 

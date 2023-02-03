@@ -10,6 +10,7 @@ class ExploreScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreScreen> {
+  TextEditingController cont = TextEditingController();
   List searchResult = [];
 
   void searchEvent(String query) async {
@@ -39,6 +40,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
             child: Padding(
               padding: const EdgeInsets.all(25.0),
               child: TextFormField(
+                textDirection: TextDirection.rtl,
+                controller: cont,
+                keyboardType: TextInputType.text,
                 onChanged: (String query) {
                   searchEvent(query);
                 },
