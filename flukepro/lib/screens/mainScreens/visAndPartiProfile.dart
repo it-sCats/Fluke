@@ -39,6 +39,7 @@ class _VprofileState extends State<Vprofile> with TickerProviderStateMixin {
 
     // TODO: implement initState
     super.initState();
+
     //  getParticipantsEvents(widget.OrganizerToDisplayID);
     userId = _auth.currentUser!.uid;
     Provider.of<siggning>(context, listen: false).getUserTicketsEvents(
@@ -78,6 +79,7 @@ class _VprofileState extends State<Vprofile> with TickerProviderStateMixin {
 
     TabController _tabCont = TabController(
         length: widget.OrganizerToDisplayID == null ? 2 : 1, vsync: this);
+
     return //if from outside
         widget.OrganizerToDisplayID == null
             ? SafeArea(
@@ -153,7 +155,7 @@ class _VprofileState extends State<Vprofile> with TickerProviderStateMixin {
                                             conBlue.withOpacity(.5),
                                         radius: 50,
                                         backgroundImage: NetworkImage(
-                                            'https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=45&dpr=2&s=none'),
+                                            'https://p.kindpng.com/picc/s/272-2720630_grey-user-hd-png-download.png'),
                                       ),
                                     )
                                   ],
@@ -369,234 +371,261 @@ class _VprofileState extends State<Vprofile> with TickerProviderStateMixin {
             : Scaffold(
                 body: SafeArea(
                     child: DefaultTabController(
-                  length: 1,
-                  child: NestedScrollView(
-                    headerSliverBuilder: (context, bool) {
-                      return [
-                        SliverList(
-                          delegate: SliverChildListDelegate([
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Align(
-                                  alignment: Alignment.topLeft,
-                                  child: IconButton(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 20),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      icon: Icon(
-                                        Icons.arrow_back,
-                                        size: 40,
-                                      )),
+                        length: 1,
+                        child: NestedScrollView(
+                            headerSliverBuilder: (context, bool) {
+                              return [
+                                SliverList(
+                                  delegate: SliverChildListDelegate([
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.topLeft,
+                                          child: IconButton(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 20, vertical: 20),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              icon: Icon(
+                                                Icons.arrow_back,
+                                                size: 40,
+                                              )),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 18.0, vertical: 50),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 0.0, top: 10),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                      Provider.of<siggning>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .userInfoDocument![
+                                                          'name'],
+                                                      style: conHeadingsStyle
+                                                          .copyWith(
+                                                              color: conBlack,
+                                                              fontSize: 15),
+                                                    ),
+                                                    Text(
+                                                      "حساب مشارك",
+                                                      style: conHeadingsStyle
+                                                          .copyWith(
+                                                              color: conBlack
+                                                                  .withOpacity(
+                                                                      0.50),
+                                                              fontSize: 15),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20),
+                                                child: CircleAvatar(
+                                                  //Avatar
+                                                  backgroundColor:
+                                                      conBlue.withOpacity(.5),
+                                                  radius: 50,
+                                                  backgroundImage: NetworkImage(
+                                                      'https://p.kindpng.com/picc/s/272-2720630_grey-user-hd-png-download.png'),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ]),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 18.0, vertical: 50),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            right: 0.0, top: 10),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              Provider.of<siggning>(context,
-                                                      listen: false)
-                                                  .userInfoDocument!['name'],
-                                              style: conHeadingsStyle.copyWith(
-                                                  color: conBlack,
-                                                  fontSize: 15),
-                                            ),
-                                            Text(
-                                              "حساب مشارك",
-                                              style: conHeadingsStyle.copyWith(
-                                                  color: conBlack
-                                                      .withOpacity(0.50),
-                                                  fontSize: 15),
-                                            ),
-                                          ],
-                                        ),
+                              ];
+                            },
+                            body: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              //الأساسي
+
+                              children: [
+                                TabBar(
+                                  unselectedLabelStyle:
+                                      conLittelTxt12.copyWith(fontSize: 15),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 20),
+                                  labelStyle: conLittelTxt12,
+                                  indicator: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              width: 3, color: conBlue))),
+                                  controller: _tabCont,
+                                  tabs: [
+                                    Tab(
+                                      child: Text(
+                                        'الاحداث المشارك فيها',
+                                        style: conLittelTxt12.copyWith(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20),
-                                        child: CircleAvatar(
-                                          //Avatar
-                                          backgroundColor:
-                                              conBlue.withOpacity(.5),
-                                          radius: 50,
-                                          backgroundImage: NetworkImage(
-                                              'https://p.kindpng.com/picc/s/272-2720630_grey-user-hd-png-download.png'),
-                                        ),
-                                      )
+                                    ),
+                                  ],
+                                ),
+                                Expanded(
+                                  // color: Color.fromARGB(255, 255, 255, 255),
+
+                                  child: TabBarView(
+                                    controller: _tabCont,
+                                    children: [
+                                      FutureBuilder(
+                                          //todo change this to streambuilder
+                                          //الايفينتس متاع المنظم
+
+                                          //باش نبنو الداتا الي بنجيبوها من قاعدة البيانات نحتاجو نحطوها في الفيوتشر بيلدر
+                                          future: getParticipantsEvents(
+                                              widget.OrganizerToDisplayID),
+                                          builder: (context,
+                                              AsyncSnapshot snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              //في حال لم يتم الاتصال يتم إظهار علامة تحميل
+                                              return CircularProgressIndicator();
+                                            } else {
+                                              if (!snapshot.hasData) {
+                                                return Center(
+                                                  child: Image.asset(
+                                                      'images/Hands Phone.png'), //في حال لايوجد ديكومنتس يتم عرض هذه الصورة
+                                                );
+                                                //في حال إحتوت السنابشوت على بيانات سيتم بناءها بإستخدام ليست فيو
+                                              } else {
+                                                return Padding(
+                                                  padding: EdgeInsets.only(
+                                                      bottom: 0),
+                                                  child: GridView.builder(
+                                                    gridDelegate:
+                                                        SliverGridDelegateWithMaxCrossAxisExtent(
+                                                            maxCrossAxisExtent:
+                                                                300,
+                                                            childAspectRatio:
+                                                                4 / 5,
+                                                            crossAxisSpacing: 0,
+                                                            mainAxisSpacing: 5),
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      var eventData =
+                                                          snapshot.data![index];
+
+                                                      return GestureDetector(
+                                                        child:
+                                                            OrganizerEventPreview(
+                                                                //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
+                                                                title: eventData[
+                                                                    'title'],
+                                                                image: eventData[
+                                                                    'image'],
+                                                                description:
+                                                                    eventData[
+                                                                        'description'],
+                                                                field: eventData[
+                                                                    'field'],
+                                                                location: eventData[
+                                                                    'location'],
+                                                                city: eventData[
+                                                                    'eventCity'],
+                                                                starterDate:
+                                                                    eventData[
+                                                                        'starterDate'],
+                                                                endDate: eventData[
+                                                                    'endDate'],
+                                                                starterTime:
+                                                                    eventData[
+                                                                        'starterTime'],
+                                                                endTime: eventData[
+                                                                    'endTime'],
+                                                                eventType:
+                                                                    eventData[
+                                                                        'eventType'],
+                                                                creationDate:
+                                                                    eventData[
+                                                                        'creationDate'],
+                                                                acceptsParticapants:
+                                                                    eventData[
+                                                                        'acceptsParticapants'],
+                                                                eventVisibilty:
+                                                                    eventData[
+                                                                        'eventVisibility']),
+                                                        onTap: () {
+                                                          showModalBottomSheet(
+                                                              isScrollControlled:
+                                                                  true,
+                                                              elevation: 100,
+                                                              context: context,
+                                                              builder:
+                                                                  (context) =>
+                                                                      eventDisplay(
+                                                                        wholePage:
+                                                                            false,
+                                                                        justDisplay:
+                                                                            true,
+                                                                        id: eventData[
+                                                                            'id'],
+                                                                        title: eventData[
+                                                                            'title'],
+                                                                        description:
+                                                                            eventData['description'],
+                                                                        starterDate:
+                                                                            eventData['starterDate'],
+                                                                        location:
+                                                                            eventData['location'],
+                                                                        image: eventData[
+                                                                            'image'],
+                                                                        endDate:
+                                                                            eventData['endDate'],
+                                                                        starterTime:
+                                                                            eventData['starterTime'],
+                                                                        endTime:
+                                                                            eventData['endTime'],
+                                                                        creationDate:
+                                                                            eventData['creationDate'],
+                                                                        city: eventData[
+                                                                            'eventCity'],
+                                                                        acceptsParticapants:
+                                                                            eventData['acceptsParticapants'],
+                                                                        eventVisibilty:
+                                                                            eventData['eventVisibility'],
+                                                                        visitorsNum:
+                                                                            visitorsNum,
+                                                                        creatorID:
+                                                                            eventData['creatorID'],
+                                                                        creatorName:
+                                                                            eventData['creatorName'],
+                                                                      ));
+                                                        },
+                                                      );
+                                                    },
+                                                    itemCount:
+                                                        snapshot.data?.length,
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          })
                                     ],
                                   ),
-                                ),
+                                )
                               ],
-                            )
-                          ]),
-                        ),
-                      ];
-                    },
-                    body: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      //الأساسي
-
-                      children: [
-                        TabBar(
-                          unselectedLabelStyle:
-                              conLittelTxt12.copyWith(fontSize: 15),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 20),
-                          labelStyle: conLittelTxt12,
-                          indicator: BoxDecoration(
-                              border: Border(
-                                  bottom:
-                                      BorderSide(width: 3, color: conBlue))),
-                          controller: _tabCont,
-                          tabs: [
-                            Tab(
-                              child: Text(
-                                'الاحداث المشارك فيها',
-                                style: conLittelTxt12.copyWith(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Expanded(
-                          // color: Color.fromARGB(255, 255, 255, 255),
-
-                          child: TabBarView(
-                            controller: _tabCont,
-                            children: [
-                              FutureBuilder(
-                                  //todo change this to streambuilder
-                                  //الايفينتس متاع المنظم
-
-                                  //باش نبنو الداتا الي بنجيبوها من قاعدة البيانات نحتاجو نحطوها في الفيوتشر بيلدر
-                                  future: getParticipantsEvents(
-                                      widget.OrganizerToDisplayID),
-                                  builder: (context, AsyncSnapshot snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      //في حال لم يتم الاتصال يتم إظهار علامة تحميل
-                                      return CircularProgressIndicator();
-                                    } else {
-                                      if (!snapshot.hasData) {
-                                        return Center(
-                                          child: Image.asset(
-                                              'images/Hands Phone.png'), //في حال لايوجد ديكومنتس يتم عرض هذه الصورة
-                                        );
-                                        //في حال إحتوت السنابشوت على بيانات سيتم بناءها بإستخدام ليست فيو
-                                      } else {
-                                        return Padding(
-                                          padding: EdgeInsets.only(bottom: 0),
-                                          child: GridView.builder(
-                                            gridDelegate:
-                                                SliverGridDelegateWithMaxCrossAxisExtent(
-                                                    maxCrossAxisExtent: 300,
-                                                    childAspectRatio: 4 / 5,
-                                                    crossAxisSpacing: 0,
-                                                    mainAxisSpacing: 5),
-                                            itemBuilder: (context, index) {
-                                              var eventData =
-                                                  snapshot.data![index];
-
-                                              return GestureDetector(
-                                                child: OrganizerEventPreview(
-                                                    //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
-                                                    title: eventData['title'],
-                                                    image: eventData['image'],
-                                                    description: eventData[
-                                                        'description'],
-                                                    field: eventData['field'],
-                                                    location:
-                                                        eventData['location'],
-                                                    city:
-                                                        eventData['eventCity'],
-                                                    starterDate: eventData[
-                                                        'starterDate'],
-                                                    endDate:
-                                                        eventData['endDate'],
-                                                    starterTime: eventData[
-                                                        'starterTime'],
-                                                    endTime:
-                                                        eventData['endTime'],
-                                                    eventType:
-                                                        eventData['eventType'],
-                                                    creationDate: eventData[
-                                                        'creationDate'],
-                                                    acceptsParticapants: eventData[
-                                                        'acceptsParticapants'],
-                                                    eventVisibilty: eventData[
-                                                        'eventVisibility']),
-                                                onTap: () {
-                                                  showModalBottomSheet(
-                                                      isScrollControlled: true,
-                                                      elevation: 100,
-                                                      context: context,
-                                                      builder: (context) =>
-                                                          eventDisplay(
-                                                            wholePage: false,
-                                                            justDisplay: true,
-                                                            id: eventData['id'],
-                                                            title: eventData[
-                                                                'title'],
-                                                            description: eventData[
-                                                                'description'],
-                                                            starterDate: eventData[
-                                                                'starterDate'],
-                                                            location: eventData[
-                                                                'location'],
-                                                            image: eventData[
-                                                                'image'],
-                                                            endDate: eventData[
-                                                                'endDate'],
-                                                            starterTime: eventData[
-                                                                'starterTime'],
-                                                            endTime: eventData[
-                                                                'endTime'],
-                                                            creationDate: eventData[
-                                                                'creationDate'],
-                                                            city: eventData[
-                                                                'eventCity'],
-                                                            acceptsParticapants:
-                                                                eventData[
-                                                                    'acceptsParticapants'],
-                                                            eventVisibilty:
-                                                                eventData[
-                                                                    'eventVisibility'],
-                                                            visitorsNum:
-                                                                visitorsNum,
-                                                            creatorID: eventData[
-                                                                'creatorID'],
-                                                            creatorName: eventData[
-                                                                'creatorName'],
-                                                          ));
-                                                },
-                                              );
-                                            },
-                                            itemCount: snapshot.data?.length,
-                                          ),
-                                        );
-                                      }
-                                    }
-                                  })
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                )),
-              );
+                            )))));
   }
 }
 

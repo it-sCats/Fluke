@@ -142,7 +142,13 @@ class FileInfoCardGridView extends StatelessWidget {
               ],
             ),
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => OrganizerMainScreen(),
+                ));
+          },
         ),
         InkWell(
           child: Container(
@@ -181,7 +187,13 @@ class FileInfoCardGridView extends StatelessWidget {
               ],
             ),
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Particimainscreen(),
+                ));
+          },
         ),
         InkWell(
           child: Container(
@@ -265,7 +277,13 @@ class FileInfoCardGridView extends StatelessWidget {
               ],
             ),
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ReportsMainscreen(),
+                ));
+          },
         ),
       ],
     );
