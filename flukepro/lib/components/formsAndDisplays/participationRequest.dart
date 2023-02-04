@@ -90,8 +90,8 @@ class _ParticiRequsetPrevState extends State<ParticiRequsetPrev> {
                     children: [
                       Text(
                         "${widget.participantsName} ",
-                        style: conHeadingsStyle.copyWith(
-                            fontSize: 16, color: Color(0xFF605A5A)),
+                        style: conTxtLink.copyWith(
+                            fontSize: 17, color: Color(0xFF605A5A)),
                       ),
                       Text(
                         " :شركة",

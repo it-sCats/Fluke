@@ -39,7 +39,7 @@ class _VprofileState extends State<Vprofile> with TickerProviderStateMixin {
 
     // TODO: implement initState
     super.initState();
-    getParticipantsEvents(widget.OrganizerToDisplayID);
+    //  getParticipantsEvents(widget.OrganizerToDisplayID);
     userId = _auth.currentUser!.uid;
     Provider.of<siggning>(context, listen: false).getUserTicketsEvents(
         Provider.of<siggning>(context, listen: false).loggedUser!.uid);
@@ -76,7 +76,8 @@ class _VprofileState extends State<Vprofile> with TickerProviderStateMixin {
     Provider.of<siggning>(context, listen: false)
         .getUserInfoDoc(FirebaseAuth.instance.currentUser!.uid);
 
-    TabController _tabCont = TabController(length: 1, vsync: this);
+    TabController _tabCont = TabController(
+        length: widget.OrganizerToDisplayID == null ? 2 : 1, vsync: this);
     return //if from outside
         widget.OrganizerToDisplayID == null
             ? SafeArea(
@@ -378,6 +379,19 @@ class _VprofileState extends State<Vprofile> with TickerProviderStateMixin {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: IconButton(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 20),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      icon: Icon(
+                                        Icons.arrow_back,
+                                        size: 40,
+                                      )),
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 18.0, vertical: 50),
@@ -418,7 +432,7 @@ class _VprofileState extends State<Vprofile> with TickerProviderStateMixin {
                                               conBlue.withOpacity(.5),
                                           radius: 50,
                                           backgroundImage: NetworkImage(
-                                              'https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=45&dpr=2&s=none'),
+                                              'https://p.kindpng.com/picc/s/272-2720630_grey-user-hd-png-download.png'),
                                         ),
                                       )
                                     ],

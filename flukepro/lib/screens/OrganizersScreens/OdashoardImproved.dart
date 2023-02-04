@@ -12,50 +12,103 @@ import 'Sections/ongoingEvents.dart';
 class OdashboardImproved extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ListView(padding: EdgeInsets.only(top: 40), children: [
-      Padding(
-        padding: EdgeInsets.only(right: 50.0),
-        child: Text(
-          'الاحداث الحالية',
-          textAlign: TextAlign.right,
-          style: conHeadingsStyle.copyWith(
-              fontWeight: FontWeight.normal, fontSize: 20),
-        ),
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      Container(
-          height: 200,
-          child: eventList(siggning().getAllOrganizersVisibleEvents(context),
-              false, true, false)),
-      SizedBox(
-        height: 20,
-      ),
-      Container(
-        margin: const EdgeInsets.only(left: 55, right: 30),
-        child: new Divider(
-          color: conBlack.withOpacity(.1),
-          thickness: 2,
-          height: 4,
-        ),
-      ),
-      SizedBox(
-        height: 20,
-      ),
-      Padding(
-        padding: EdgeInsets.only(right: 50.0),
-        child: Text(
-          'الاحداث القادمة',
-          textAlign: TextAlign.right,
-          style: conHeadingsStyle.copyWith(
-              fontWeight: FontWeight.normal, fontSize: 20),
-        ),
-      ),
-      SizedBox(
-        height: 5,
-      ),
-      VisitorVerticalEventList(siggning().getAllEvents(), true, false, true),
-    ]);
+    return defaultTargetPlatform == TargetPlatform.android ||
+            defaultTargetPlatform == TargetPlatform.iOS
+        ? ListView(padding: EdgeInsets.only(top: 40), children: [
+            Padding(
+              padding: EdgeInsets.only(right: 50.0),
+              child: Text(
+                'الاحداث الحالية',
+                textAlign: TextAlign.right,
+                style: conHeadingsStyle.copyWith(
+                    fontWeight: FontWeight.normal, fontSize: 20),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+                height: 200,
+                child: eventList(
+                    siggning().getAllOrganizersVisibleEvents(context),
+                    false,
+                    true,
+                    false)),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 55, right: 30),
+              child: new Divider(
+                color: conBlack.withOpacity(.1),
+                thickness: 2,
+                height: 4,
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 50.0),
+              child: Text(
+                'الاحداث القادمة',
+                textAlign: TextAlign.right,
+                style: conHeadingsStyle.copyWith(
+                    fontWeight: FontWeight.normal, fontSize: 20),
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            VisitorVerticalEventList(
+                siggning().getAllEvents(), true, false, true),
+          ])
+        : ListView(padding: EdgeInsets.only(top: 40), children: [
+            Padding(
+              padding: EdgeInsets.only(right: 50.0),
+              child: Text(
+                'الاحداث الحالية',
+                textAlign: TextAlign.right,
+                style: conHeadingsStyle.copyWith(
+                    fontWeight: FontWeight.normal, fontSize: 20),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+                child: webEventList(
+                    siggning().getAllOrganizersVisibleEvents(context),
+                    true,
+                    false)),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 55, right: 30),
+              child: new Divider(
+                color: conBlack.withOpacity(.1),
+                thickness: 2,
+                height: 4,
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 50.0),
+              child: Text(
+                'الاحداث القادمة',
+                textAlign: TextAlign.right,
+                style: conHeadingsStyle.copyWith(
+                    fontWeight: FontWeight.normal, fontSize: 20),
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            webEventList(
+                siggning().getAllOrganizersVisibleEvents(context), false, true),
+          ]);
   }
 }

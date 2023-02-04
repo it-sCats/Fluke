@@ -117,7 +117,12 @@ class _eventHorizCardState extends State<eventHorizCard> {
                       widget.title,
                       textAlign: TextAlign.right,
                       style: conHeadingsStyle.copyWith(
-                          fontSize: 17, color: Colors.white),
+                          fontSize: defaultTargetPlatform ==
+                                      TargetPlatform.android ||
+                                  defaultTargetPlatform == TargetPlatform.iOS
+                              ? 17
+                              : 13,
+                          color: Colors.white),
                     ),
                   ),
                   Expanded(

@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: EdgeInsets.only(right: 50.0),
               child: Text(
-                'أحداث تهمك ',
+                'أحداث قادمة تهمك ',
                 textAlign: TextAlign.right,
                 style: conHeadingsStyle.copyWith(
                     fontWeight: FontWeight.normal, fontSize: 20),
@@ -122,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 //     Provider.of<siggning>(context).loggedUser!.uid, context),
                 true,
                 false,
-                false),
+                true),
           ],
         ),
       ),

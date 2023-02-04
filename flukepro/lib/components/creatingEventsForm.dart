@@ -93,6 +93,9 @@ class _creatingEventState extends State<creatingEvent>
     'مصراتة',
     'الخمس',
     'سبها',
+    'يفرن',
+    'سرت',
+    'الزاوية',
   ];
   TextEditingController _eventNameCont = TextEditingController();
   TextEditingController _eventTypeCont = TextEditingController();

@@ -157,7 +157,7 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         navigatorKey: navigatorKey,
         builder: (context, child) => ResponsiveWrapper.builder(child,
-            maxWidth: 3000,
+            maxWidth: 2000,
             minWidth: 1000,
             defaultScale: true,
             breakpoints: [

@@ -214,7 +214,11 @@ class _eventDisplayState extends State<eventDisplay>
 
     return DefaultTabController(
         //this layout guarantees that the scroll works properly
-        length: kIsWeb ? 4 : 3,
+        length: Provider.of<siggning>(context, listen: false)
+                    .userInfoDocument!['userType'] ==
+                3
+            ? 4
+            : 3,
         child: NestedScrollView(
           headerSliverBuilder: ((context, innerBoxIsScrolled) {
             return [
@@ -575,7 +579,9 @@ class _eventDisplayState extends State<eventDisplay>
                       style: conLittelTxt12.copyWith(fontSize: 15),
                     ),
                   ),
-                  if (kIsWeb)
+                  if (Provider.of<siggning>(context, listen: false)
+                          .userInfoDocument!['userType'] ==
+                      3)
                     Tab(
                       child: Text(
                         'الزوار',
@@ -1641,6 +1647,8 @@ class _eventDisplayState extends State<eventDisplay>
                                         )
                                       ],
                                     )),
+
+                        ///here goes the timeline
                         Stack(children: [
                           eventTimeline(
                               eventID: widget.id,
@@ -1685,7 +1693,9 @@ class _eventDisplayState extends State<eventDisplay>
                         displayParticipants(
                           eventID: widget.id,
                         ),
-                        if (kIsWeb)
+                        if (Provider.of<siggning>(context, listen: false)
+                                .userInfoDocument!['userType'] ==
+                            3)
                           Container(
                             child: displayVisitors(
                               eventID: widget.id,

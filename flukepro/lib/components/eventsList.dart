@@ -258,6 +258,236 @@ class _eventListState extends State<eventList> {
   }
 }
 
+class webEventList extends StatefulWidget {
+  bool isOngoing;
+  bool isUpcoming;
+  Stream<QuerySnapshot<Object?>> EventQuery;
+
+  webEventList(this.EventQuery, this.isOngoing, this.isUpcoming);
+
+  @override
+  State<webEventList> createState() => _webEventListState();
+}
+
+class _webEventListState extends State<webEventList> {
+  List _events = [];
+
+  waitingFunction(eventId) async {
+    visitorsNum = await gettingNumberOfEventVisitors(eventId);
+  }
+
+  eventsStream() async {}
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> eventWidget = [];
+    return Container(
+      width: double.infinity,
+      child: StreamBuilder<QuerySnapshot>(
+
+          //باش نبنو الداتا الي بنجيبوها من قاعدة البيانات نحتاجو نحطوها في الفيوتشر بيلدر
+          stream: widget.EventQuery,
+          builder: (context, AsyncSnapshot snapshot) {
+            if (!snapshot.hasData) {
+              return Image.asset('images/Hands - PhoneCrying.png');
+              //في حال إحتوت السنابشوت على بيانات سيتم بناءها بإستخدام ليست فيو
+            } else {
+              final events = snapshot.data!.docs;
+              // print(events);
+              for (var eventa in events) {
+                Timestamp strat = eventa['starterDate'];
+                Timestamp end = eventa['endDate'];
+                bool isLiked = eventa['likes']
+                            [Provider.of<siggning>(context).loggedUser!.uid] !=
+                        null
+                    ? eventa['likes']
+                        [Provider.of<siggning>(context).loggedUser!.uid]
+                    : false;
+                // print(DateTime.fromMicrosecondsSinceEpoch(
+                //     strat.microsecondsSinceEpoch));
+                // print(DateTime.fromMicrosecondsSinceEpoch(
+                //     end.microsecondsSinceEpoch)); //testing
+
+                // print((DateTime.fromMicrosecondsSinceEpoch(
+                //             strat.microsecondsSinceEpoch)
+                //         .isBefore(DateTime.now()) ||
+                //     DateTime.fromMicrosecondsSinceEpoch(
+                //             strat.microsecondsSinceEpoch)
+                //         .isAtSameMomentAs(DateTime.now())));
+                Map likes = eventa['likes'];
+
+                if (widget.isOngoing
+                    ? ((DateTime.fromMicrosecondsSinceEpoch(
+                                    strat.microsecondsSinceEpoch)
+                                .isBefore(DateTime.now()) ||
+                            DateTime.fromMicrosecondsSinceEpoch(
+                                    strat.microsecondsSinceEpoch)
+                                .isAtSameMomentAs(DateTime.now())) &&
+                        (DateTime.fromMicrosecondsSinceEpoch(
+                                    end.microsecondsSinceEpoch)
+                                .isAfter(DateTime.now()) ||
+                            DateTime.fromMicrosecondsSinceEpoch(
+                                    end.microsecondsSinceEpoch)
+                                .isAtSameMomentAs(DateTime.now())))
+                    : DateTime.fromMicrosecondsSinceEpoch(strat.microsecondsSinceEpoch)
+                        .isAfter(DateTime.now())) {
+                  eventWidget.add(Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.002,
+                        vertical: 0),
+                    child: Stack(children: [
+                      GestureDetector(
+                        child: eventHorizCard(
+                          //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
+                          title: eventa['title'],
+                          image: eventa['image'],
+                          description: eventa['description'],
+                          field: eventa['field'],
+                          id: eventa['id'],
+                          isLiked: isLiked,
+                          location: eventa['location'],
+                          city: eventa['eventCity'],
+                          starterDate: eventa['starterDate'],
+                          endDate: eventa['endDate'],
+                          starterTime: eventa['starterTime'].toString(),
+                          endTime: eventa['endTime'].toString(),
+                          eventType: eventa['eventType'],
+                          creationDate: eventa['creationDate'],
+                          acceptsParticapants: eventa['acceptsParticapants'],
+                          eventVisibilty: eventa['eventVisibility'],
+                          visitorsNum: visitorsNum,
+                        ),
+                        onTap: () {
+                          showModalBottomSheet(
+                              isScrollControlled: true,
+                              elevation: 100,
+                              context: context,
+                              builder: (context) => eventDisplay(
+                                    wholePage: false,
+                                    justDisplay: false,
+                                    id: eventa['id'],
+                                    title: eventa['title'],
+                                    description: eventa['description'],
+                                    starterDate: eventa['starterDate'],
+                                    location: eventa['location'],
+                                    image: eventa['image'],
+                                    endDate: eventa['endDate'],
+                                    starterTime: eventa['starterTime'],
+                                    eventType: eventa['eventType'],
+                                    endTime: eventa['endTime'],
+                                    field: eventa['field'],
+                                    creationDate: eventa['creationDate'],
+                                    city: eventa['eventCity'],
+                                    acceptsParticapants:
+                                        eventa['acceptsParticapants'],
+                                    eventVisibilty: eventa['eventVisibility'],
+                                    visitorsNum: visitorsNum,
+                                    creatorID: eventa['creatorID'],
+                                    creatorName: eventa['creatorName'],
+                                  ));
+                        },
+                      ),
+                      Provider.of<siggning>(context, listen: false)
+                                  .userInfoDocument!['userType'] !=
+                              1
+                          ? Align(
+                              alignment: Alignment.topLeft,
+                              child: GestureDetector(
+                                onTap: () {
+                                  bool _isLiked = eventa['likes'][
+                                          Provider.of<siggning>(context,
+                                                  listen: false)
+                                              .loggedUser!
+                                              .uid] ==
+                                      true;
+                                  if (_isLiked) {
+                                    FirebaseFirestore.instance
+                                        .collection('events')
+                                        .doc(eventa['id'])
+                                        .update({
+                                      'likes': {
+                                        Provider.of<siggning>(context,
+                                                listen: false)
+                                            .loggedUser!
+                                            .uid: false
+                                      }
+                                    });
+                                    setState(() {
+                                      isLiked = false;
+                                    });
+                                  } else if (!_isLiked) {
+                                    FirebaseFirestore.instance
+                                        .collection('events')
+                                        .doc(eventa['id'])
+                                        .update({
+                                      'likes': {
+                                        Provider.of<siggning>(context,
+                                                listen: false)
+                                            .loggedUser!
+                                            .uid: true
+                                      }
+                                    });
+                                    setState(() {
+                                      isLiked = true;
+                                    });
+                                  }
+                                },
+                                child: Container(
+                                    margin: EdgeInsets.all(25),
+                                    child: !isLiked
+                                        ? Icon(
+                                            Icons.favorite_border,
+                                            color: Colors.white,
+                                            size: 30,
+                                          )
+                                        : Icon(
+                                            Icons.favorite,
+                                            color: Colors.red,
+                                            size: 30,
+                                          )),
+                              ),
+                            )
+                          : Container()
+                    ]),
+                  ));
+                }
+              }
+              return GridView.count(
+                physics: BouncingScrollPhysics(),
+                crossAxisCount: 4,
+                shrinkWrap: true,
+                mainAxisSpacing: 5,
+                scrollDirection: Axis.vertical,
+                children: (eventWidget.isEmpty)
+                    ? [
+                        Center(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width / 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset('images/no events.png', width: 180),
+                                Text(
+                                  'لا توجد أحداث حالية ',
+                                  style: conLittelTxt12,
+                                  textAlign: TextAlign.left,
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ]
+                    :
+                    //في حال إحتوت السنابشوت على بيانات سيتم بناءها بإستخدام ليست فيو
+                    eventWidget,
+              );
+            }
+            //في حال لم يتم الاتصال يتم إظهار علامة تحميل
+          }),
+    );
+  }
+}
+
 class VisitorVerticalEventList extends StatefulWidget {
   bool isVisitorVertical;
   bool isOngoing;
