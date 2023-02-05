@@ -129,124 +129,277 @@ class LoadVisistorData extends StatelessWidget {
   }
 }
 
-//events
-// class LoadEventData extends StatelessWidget {
-//   const LoadEventData({super.key});
+// LoadEventData
+class LoadEventData extends StatelessWidget {
+  const LoadEventData({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return SafeArea(
-//       child: SingleChildScrollView(
-//         child: Column(
-//           children: [
-//             Header(),
-//             SizedBox(height: default_Padding),
-//             Column(
-//               crossAxisAlignment: CrossAxisAlignment.end,
-//               mainAxisAlignment: MainAxisAlignment.end,
-//               children: [
-//                 Text(
-//                   "بيانات الأحداث",
-//                   style:
-//                       conHeadingsStyle.copyWith(color: conBlack, fontSize: 20),
-//                 ),
-//                 Expanded(child: SearchField()),
-//               ],
-//             ),
-//             SizedBox(height: defaultPadding),
-//             Column(
-//               children: [
-//                 StreamBuilder<QuerySnapshot>(
-//                   stream: FirebaseFirestore.instance
-//                       .collection('events')
-//                       .snapshots(),
-//                   builder: (context, snapshot) {
-//                     if (!snapshot.hasData) {
-//                       return Padding(
-//                         padding: const EdgeInsets.all(10.0),
-//                         child: LinearProgressIndicator(),
-//                       );
-//                     } else {
-//                       print(snapshot.data!.docs[1].data());
-//                       return DataTable(
-//                           // border: TableBorder.all(),
-//                           border: TableBorder(
-//                             horizontalInside: BorderSide(
-//                                 width: 1,
-//                                 color: Colors.blue,
-//                                 style: BorderStyle.solid),
-//                           ),
-//                           columns: [
-//                             DataColumn(
-//                                 label: Text(
-//                               textAlign: TextAlign.end,
-//                               'مجال الحدث',
-//                               style: conlabelsTxt.copyWith(
-//                                   color: conBlack, fontWeight: FontWeight.w600),
-//                             )),
-//                             DataColumn(
-//                                 label: Text(
-//                               textAlign: TextAlign.end,
-//                               'المدينة المقام بها الحدث',
-//                               style: conlabelsTxt.copyWith(
-//                                   color: conBlack, fontWeight: FontWeight.w600),
-//                             )),
-//                             DataColumn(
-//                                 label: Text(
-//                               textAlign: TextAlign.end,
-//                               'إسم الحدث',
-//                               style: conlabelsTxt.copyWith(
-//                                   color: conBlack, fontWeight: FontWeight.w600),
-//                             )),
-//                           ],
-//                           rows: _buildList(context, snapshot.data!.docs));
-//                     }
-//                   },
-//                 ),
-//               ],
-//             )
-//           ],
-//         ),
-//       ),
-//     );
-//   }
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Header(),
+            SizedBox(height: default_Padding),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Expanded(child: SearchField()),
+                Text(
+                  "بيانات الأحداث",
+                  style: conlabelsTxt.copyWith(color: conBlack, fontSize: 20),
+                ),
+              ],
+            ),
+            SizedBox(height: defaultPadding),
+            Column(
+              children: [
+                StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('events')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: LinearProgressIndicator(),
+                      );
+                    } else {
+                      print(snapshot.data!.docs[1].data());
+                      return DataTable(
+                          // border: TableBorder.all(),
+                          border: TableBorder(
+                            horizontalInside: BorderSide(
+                                width: 1,
+                                color: Colors.blue,
+                                style: BorderStyle.solid),
+                          ),
+                          columns: [
+                            DataColumn(
+                                label: Text(
+                              textAlign: TextAlign.end,
+                              '  نوع الحدث',
+                              style: conlabelsTxt.copyWith(
+                                  color: conBlack, fontWeight: FontWeight.w600),
+                            )),
+                            DataColumn(
+                                label: Text(
+                              textAlign: TextAlign.end,
+                              '  مجال الحدث',
+                              style: conlabelsTxt.copyWith(
+                                  color: conBlack, fontWeight: FontWeight.w600),
+                            )),
+                            DataColumn(
+                                label: Text(
+                              textAlign: TextAlign.end,
+                              '  المدينة المقام بها الحدث',
+                              style: conlabelsTxt.copyWith(
+                                  color: conBlack, fontWeight: FontWeight.w600),
+                            )),
+                            DataColumn(
+                                label: Text(
+                              textAlign: TextAlign.end,
+                              'وقت إنشاء الحدث',
+                              style: conlabelsTxt.copyWith(
+                                  color: conBlack, fontWeight: FontWeight.w600),
+                            )),
+                            DataColumn(
+                                label: Text(
+                              textAlign: TextAlign.end,
+                              'إسم منشيء الحدث',
+                              style: conlabelsTxt.copyWith(
+                                  color: conBlack, fontWeight: FontWeight.w600),
+                            )),
+                            DataColumn(
+                                label: Text(
+                              textAlign: TextAlign.end,
+                              'إسم الحدث',
+                              style: conlabelsTxt.copyWith(
+                                  color: conBlack, fontWeight: FontWeight.w600),
+                            )),
+                          ],
+                          rows: _buildList(context, snapshot.data!.docs));
+                    }
+                  },
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
 
-//   List<DataRow> _buildList(
-//       BuildContext context, List<DocumentSnapshot> snapshot) {
-//     return snapshot
-//         .map((data) =>
-//             _buildListItem(context, data.data() as Map<String, dynamic>))
-//         .toList();
-//   }
+  List<DataRow> _buildList(
+      BuildContext context, List<DocumentSnapshot> snapshot) {
+    return snapshot
+        .map((data) =>
+            _buildListItem(context, data.data() as Map<String, dynamic>))
+        .toList();
+  }
 
-//   DataRow _buildListItem(BuildContext context, Map<String, dynamic> data) {
-//     return DataRow(cells: [
-//       DataCell(Text(
-//         // textAlign: TextAlign.end,
-//         data['field'].toString(),
-//         style: conlabelsTxt.copyWith(color: conBlack),
-//       )),
-//       DataCell(Text(
-//         textAlign: TextAlign.end,
-//         data['eventCity'].toString(),
-//         style: conlabelsTxt.copyWith(color: conBlack),
-//       )),
-//       DataCell(Text(
-//         textAlign: TextAlign.end,
-//         data['title'].toString(),
-//         style: conlabelsTxt.copyWith(color: conBlack),
-//       )),
-//     ]);
-//   }
+  DataRow _buildListItem(BuildContext context, Map<String, dynamic> data) {
+    return DataRow(cells: [
+      DataCell(Text(
+        // textAlign: TextAlign.end,
+        data['eventType'].toString(),
+        style: conlabelsTxt.copyWith(color: conBlack),
+      )),
+      DataCell(Text(
+        // textAlign: TextAlign.end,
+        data['field'].toString(),
+        style: conlabelsTxt.copyWith(color: conBlack),
+      )),
+      DataCell(Text(
+        // textAlign: TextAlign.end,
+        data['eventCity'].toString(),
+        style: conlabelsTxt.copyWith(color: conBlack),
+      )),
+      DataCell(Text(
+        // textAlign: TextAlign.end,
+        data['creatorName'].toString(),
+        style: conlabelsTxt.copyWith(color: conBlack),
+      )),
+      DataCell(Text(
+        textAlign: TextAlign.end,
+        data['creatorName'].toString(),
+        style: conlabelsTxt.copyWith(color: conBlack),
+      )),
+      DataCell(Text(
+        textAlign: TextAlign.end,
+        data['title'].toString(),
+        style: conlabelsTxt.copyWith(color: conBlack),
+      )),
+    ]);
+  }
 
-//   Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
-//       generateDataloadList() async {
-//     var dataLoadList =
-//         await FirebaseFirestore.instance.collection('events').get();
+  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
+      generateDataloadList() async {
+    var dataLoadList =
+        await FirebaseFirestore.instance.collection('users').get();
 
-//     return dataLoadList.docs;
-//   }
-// }
+    return dataLoadList.docs;
+  }
+}
+
+class LoadParticipantData extends StatelessWidget {
+  const LoadParticipantData({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Header(),
+            SizedBox(height: default_Padding),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Expanded(child: SearchField()),
+                Text(
+                  "بيانات المشاركين",
+                  style: conlabelsTxt.copyWith(color: conBlack, fontSize: 20),
+                ),
+              ],
+            ),
+            SizedBox(height: defaultPadding),
+            Column(
+              children: [
+                StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('users')
+                      .where('userType', isEqualTo: 2)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: LinearProgressIndicator(),
+                      );
+                    } else {
+                      print(snapshot.data!.docs[1].data());
+                      return DataTable(
+                          // border: TableBorder.all(),
+                          border: TableBorder(
+                            horizontalInside: BorderSide(
+                                width: 1,
+                                color: Colors.blue,
+                                style: BorderStyle.solid),
+                          ),
+                          columns: [
+                            DataColumn(
+                                label: Text(
+                              textAlign: TextAlign.end,
+                              'الإهتمامات',
+                              style: conlabelsTxt.copyWith(
+                                  color: conBlack, fontWeight: FontWeight.w600),
+                            )),
+                            DataColumn(
+                                label: Text(
+                              textAlign: TextAlign.end,
+                              'الحساب',
+                              style: conlabelsTxt.copyWith(
+                                  color: conBlack, fontWeight: FontWeight.w600),
+                            )),
+                            DataColumn(
+                                label: Text(
+                              textAlign: TextAlign.end,
+                              'الإسم',
+                              style: conlabelsTxt.copyWith(
+                                  color: conBlack, fontWeight: FontWeight.w600),
+                            )),
+                          ],
+                          rows: _buildList(context, snapshot.data!.docs));
+                    }
+                  },
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<DataRow> _buildList(
+      BuildContext context, List<DocumentSnapshot> snapshot) {
+    return snapshot
+        .map((data) =>
+            _buildListItem(context, data.data() as Map<String, dynamic>))
+        .toList();
+  }
+
+  DataRow _buildListItem(BuildContext context, Map<String, dynamic> data) {
+    return DataRow(cells: [
+      DataCell(Text(
+        // textAlign: TextAlign.end,
+        data['interests'].toString(),
+        style: conlabelsTxt.copyWith(color: conBlack),
+      )),
+      DataCell(Text(
+        textAlign: TextAlign.end,
+        data['email'].toString(),
+        style: conlabelsTxt.copyWith(color: conBlack),
+      )),
+      DataCell(Text(
+        textAlign: TextAlign.end,
+        data['name'].toString(),
+        style: conlabelsTxt.copyWith(color: conBlack),
+      )),
+    ]);
+  }
+
+  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
+      generateDataloadList() async {
+    var dataLoadList =
+        await FirebaseFirestore.instance.collection('users').get();
+
+    return dataLoadList.docs;
+  }
+}
 
 class LoadOrganizerData extends StatelessWidget {
   const LoadOrganizerData({super.key});
@@ -263,7 +416,8 @@ class LoadOrganizerData extends StatelessWidget {
               children: [
                 StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
-                      .collection('events')
+                      .collection('users')
+                      .where('userType', isEqualTo: 1)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
@@ -284,7 +438,7 @@ class LoadOrganizerData extends StatelessWidget {
                             DataColumn(
                                 label: Text(
                               textAlign: TextAlign.end,
-                              'مجال الحدث',
+                              ' رقم الهاتف',
                               style: conlabelsTxt.copyWith(
                                   fontSize: 12,
                                   color: conBlack,
@@ -293,7 +447,7 @@ class LoadOrganizerData extends StatelessWidget {
                             DataColumn(
                                 label: Text(
                               textAlign: TextAlign.center,
-                              'مدينة الحدث ',
+                              'الحساب',
                               style: conlabelsTxt.copyWith(
                                   fontSize: 10,
                                   color: conBlack,
@@ -302,7 +456,7 @@ class LoadOrganizerData extends StatelessWidget {
                             DataColumn(
                                 label: Text(
                               textAlign: TextAlign.center,
-                              'إسم الحدث',
+                              'إسم المنظم',
                               style: conlabelsTxt.copyWith(
                                   fontSize: 10,
                                   color: conBlack,
@@ -333,17 +487,17 @@ class LoadOrganizerData extends StatelessWidget {
     return DataRow(cells: [
       DataCell(Text(
         // textAlign: TextAlign.end,
-        data['field'].toString(),
+        data['phone'].toString(),
         style: conlabelsTxt.copyWith(color: conBlack),
       )),
       DataCell(Text(
         textAlign: TextAlign.end,
-        data['eventCity'].toString(),
+        data['email'].toString(),
         style: conlabelsTxt.copyWith(color: conBlack),
       )),
       DataCell(Text(
         textAlign: TextAlign.end,
-        data['title'].toString(),
+        data['name'].toString(),
         style: conlabelsTxt.copyWith(color: conBlack),
       )),
     ]);

@@ -79,7 +79,13 @@ class _SideMenuState extends State<SideMenu>
             title: "المشاركين",
             // Icond: Icons.pan_tool_alt_sharp,
             Icond: Icons.sports_handball_sharp,
-            press: () {},
+            press: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Particimainscreen(),
+                  ));
+            },
           ),
           DrawerListTile(
             title: "الأحداث",
@@ -101,17 +107,6 @@ class _SideMenuState extends State<SideMenu>
                   context,
                   MaterialPageRoute(
                     builder: (context) => ReportsMainscreen(),
-                  ));
-            },
-          ),
-          DrawerListTile(
-            title: "الضبط",
-            Icond: Icons.settings_sharp,
-            press: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => settingScreen(),
                   ));
             },
           ),
