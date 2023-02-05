@@ -7,6 +7,7 @@ import 'package:flukepro/utils/SigningProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../screens/mainScreens/visAndPartiProfile.dart';
 import '../../utils/notificationProvider.dart';
 import '../cons.dart';
 import '../eventDisplay.dart';
@@ -74,20 +75,31 @@ class _ParticiRequsetPrevState extends State<ParticiRequsetPrev> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 10.0, bottom: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      "${widget.participantsName} ",
-                      style: conHeadingsStyle.copyWith(
-                          fontSize: 16, color: Color(0xFF605A5A)),
-                    ),
-                    Text(
-                      " :شركة",
-                      style: conHeadingsStyle.copyWith(
-                          fontSize: 16, color: Color(0xFF605A5A)),
-                    ),
-                  ],
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Vprofile(
+                                  OrganizerToDisplayID:
+                                      widget.participantsId.trim(),
+                                )));
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "${widget.participantsName} ",
+                        style: conHeadingsStyle.copyWith(
+                            fontSize: 16, color: Color(0xFF605A5A)),
+                      ),
+                      Text(
+                        " :شركة",
+                        style: conHeadingsStyle.copyWith(
+                            fontSize: 16, color: Color(0xFF605A5A)),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Padding(
@@ -228,7 +240,8 @@ class _ParticiRequsetPrevState extends State<ParticiRequsetPrev> {
                               ? ' '
                               : userInfoDoc['phone'],
                           'interests': userInfoDoc['interests'],
-                          'participationType': widget.joinType
+                          'participationType': widget.joinType,
+                          'eventID': widget.eventId
                         });
                         //in case no documents were returned which means user is not registered then register user
                         FirebaseFirestore.instance

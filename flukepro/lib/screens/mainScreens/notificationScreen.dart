@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../components/cons.dart';
 import '../../components/customWidgets.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import '../../components/eventDisplay.dart';
 import '../../components/participantEventRegisterForm.dart';
 import '../../utils/SigningProvider.dart';
 
@@ -92,13 +93,14 @@ class _notifiScreenState extends State<notifiScreen> {
                       List<notificationa> notificatinat = [];
                       for (QueryDocumentSnapshot notifi in notifications) {
                         final notifiTitle = notifi['title'];
+                        final eventID = notifi.id;
                         final notifibody =
                             notifi['date'].toString().split(' ').first;
                         final notifiCreation = notifi['creationDate'];
                         final image = notifi['image'];
 
-                        notificatinat.add(notificationa(
-                            notifiTitle, notifibody, notifiCreation, image));
+                        notificatinat.add(notificationa(notifiTitle, notifibody,
+                            notifiCreation, image, eventID));
                       }
                       return ListView(
                         padding: EdgeInsets.symmetric(vertical: 5),
@@ -117,9 +119,11 @@ class _notifiScreenState extends State<notifiScreen> {
 class notificationa extends StatefulWidget {
   String title;
   String body;
+  String eventId;
   String image;
   Timestamp timeOfsend;
-  notificationa(this.title, this.body, this.timeOfsend, this.image);
+  notificationa(
+      this.title, this.body, this.timeOfsend, this.image, this.eventId);
 
   @override
   State<notificationa> createState() => _notificationaState();
@@ -129,107 +133,145 @@ class _notificationaState extends State<notificationa> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        child: Container(
-          height: 140,
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          // height: 150,
-          decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(color: conBlack.withOpacity(.1), width: 2)),
-            // color: Color(0xffB2C6E4),
-            color: Colors.white,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Expanded(
-                flex: 5,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 18.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Wrap(children: [
-                        Text(
+      onTap: () async {
+        DocumentSnapshot<Map<String, dynamic>> eventInfo =
+            await FirebaseFirestore.instance
+                .collection('events')
+                .doc(widget.eventId)
+                .get();
+        var inf = eventInfo.data();
+        showModalBottomSheet(
+            isScrollControlled: true,
+            elevation: 100,
+            context: context,
+            builder: (context) => eventDisplay(
+                  //نحي ايقونه الابلاغ لما يستعرضه الادمن وحطي حدف
+                  wholePage: false,
+                  justDisplay: false,
+                  id: inf!['id'],
+                  title: inf!['title'],
+                  description: inf!['description'],
+                  starterDate: inf!['starterDate'],
+                  location: inf!['location'],
+                  image: inf!['image'],
+                  endDate: inf!['endDate'],
+                  starterTime: inf!['starterTime'],
+                  eventType: inf!['eventType'],
+                  endTime: inf!['endTime'],
+                  field: inf!['field'],
+                  creationDate: inf!['creationDate'],
+                  city: inf!['eventCity'],
+                  acceptsParticapants: inf!['acceptsParticapants'],
+                  eventVisibilty: inf!['eventVisibility'],
+
+                  creatorID: inf!['creatorID'],
+                  creatorName: inf!['creatorName'], //يوم المرأة
+                ));
+      },
+      child: Container(
+        height: 140,
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        // height: 150,
+        decoration: BoxDecoration(
+          border: Border(
+              bottom: BorderSide(color: conBlack.withOpacity(.1), width: 2)),
+          // color: Color(0xffB2C6E4),
+          color: Colors.white,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Expanded(
+              flex: 5,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 18.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Wrap(children: [
+                      InkWell(
+                        child: Text(
                           widget.title.toString(),
                           style: conHeadingsStyle.copyWith(fontSize: 14),
                           textAlign: TextAlign.right,
                         ),
-                      ]),
-                      Text(
-                        widget.body.toString(),
-                        style: conHeadingsStyle.copyWith(
-                            fontSize: 14, fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.right,
                       ),
-                      //this row is for the event name pic and title
-                      //this row is for the heddin btns
-                      Text(
-                        '    ${timeago.format(DateTime.fromMicrosecondsSinceEpoch(widget.timeOfsend.microsecondsSinceEpoch))} ',
-                        style: conLittelTxt12.copyWith(
-                            color: Color(0xff676767), fontSize: 10),
-                      ) //this row for date
-                    ],
-                  ),
+                    ]),
+                    Text(
+                      widget.body.toString(),
+                      style: conHeadingsStyle.copyWith(
+                          fontSize: 14, fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.right,
+                    ),
+                    //this row is for the event name pic and title
+                    //this row is for the heddin btns
+                    Text(
+                      '    ${timeago.format(DateTime.fromMicrosecondsSinceEpoch(widget.timeOfsend.microsecondsSinceEpoch))} ',
+                      style: conLittelTxt12.copyWith(
+                          color: Color(0xff676767), fontSize: 10),
+                    ) //this row for date
+                  ],
                 ),
               ),
-              Expanded(
-                  flex: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: CircleAvatar(
-                      //Avatar
-                      backgroundColor: Color(0xff).withOpacity(0),
-                      radius: 50,
-                      backgroundImage: NetworkImage(widget.image),
-                    ),
-                  ))
-            ],
-          ),
+            ),
+            Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: CircleAvatar(
+                    //Avatar
+                    backgroundColor: Color(0xff).withOpacity(0),
+                    radius: 50,
+                    backgroundImage: NetworkImage(widget.image),
+                  ),
+                ))
+          ],
         ),
-        onTap: () {
-          // showModalBottomSheet(
-          //     isScrollControlled: true,
-          //     elevation: 100,
-          //     context: context,
-          //     builder: (context) => eventDisplay(
-          //         wholePage: false,
-          //         justDisplay: false,
-          //         id: eventData['id'],
-          //         title:
-          //             eventData['title'],
-          //         description: eventData[
-          //             'description'],
-          //         starterDate: eventData[
-          //             'starterDate'],
-          //         location: eventData[
-          //             'location'],
-          //         image:
-          //             eventData['image'],
-          //         endDate: eventData[
-          //             'endDate'],
-          //         starterTime: eventData[
-          //             'starterTime'],
-          //         endTime: eventData[
-          //             'endTime'],
-          //         creationDate: eventData[
-          //             'creationDate'],
-          //         city: eventData[
-          //             'eventCity'],
-          //         acceptsParticapants:
-          //             eventData[
-          //                 'acceptsParticapants'],
-          //         eventVisibilty: eventData[
-          //             'eventVisibility']));
-
-          //   if (tapItemIndex.contains(index)) {
-          //     tapItemIndex.remove(index);
-          //   } else {
-          //     tapItemIndex.add(index);
-          //   }
-          //   setState(() {});
-          // },
-        });
+      ),
+      // onTap: () {
+      //   // showModalBottomSheet(
+      //   //     isScrollControlled: true,
+      //   //     elevation: 100,
+      //   //     context: context,
+      //   //     builder: (context) => eventDisplay(
+      //   //         wholePage: false,
+      //   //         justDisplay: false,
+      //   //         id: eventData['id'],
+      //   //         title:
+      //   //             eventData['title'],
+      //   //         description: eventData[
+      //   //             'description'],
+      //   //         starterDate: eventData[
+      //   //             'starterDate'],
+      //   //         location: eventData[
+      //   //             'location'],
+      //   //         image:
+      //   //             eventData['image'],
+      //   //         endDate: eventData[
+      //   //             'endDate'],
+      //   //         starterTime: eventData[
+      //   //             'starterTime'],
+      //   //         endTime: eventData[
+      //   //             'endTime'],
+      //   //         creationDate: eventData[
+      //   //             'creationDate'],
+      //   //         city: eventData[
+      //   //             'eventCity'],
+      //   //         acceptsParticapants:
+      //   //             eventData[
+      //   //                 'acceptsParticapants'],
+      //   //         eventVisibilty: eventData[
+      //   //             'eventVisibility']));
+      //
+      //   //   if (tapItemIndex.contains(index)) {
+      //   //     tapItemIndex.remove(index);
+      //   //   } else {
+      //   //     tapItemIndex.add(index);
+      //   //   }
+      //   //   setState(() {});
+      //   // },
+      // }
+    );
   }
 }
 

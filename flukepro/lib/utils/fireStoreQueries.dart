@@ -168,6 +168,24 @@ getOrganizersEvent(context, OrganizerId) async {
   return AllEvents.docs;
 }
 
+getParticipantsEvents(participantsId) async {
+  QuerySnapshot AllEvents = await FirebaseFirestore.instance
+      .collectionGroup('participants')
+      .where('id', isEqualTo: participantsId.toString().trim())
+      .get();
+  List EventIds = [];
+  AllEvents.docs.forEach((element) {
+    EventIds.add(element['eventID']);
+  });
+  QuerySnapshot eve = await FirebaseFirestore.instance
+      .collection('events')
+      .where('id', whereIn: EventIds)
+      .get();
+  print(EventIds);
+
+  return eve.docs;
+}
+
 getOrganizersVisisbleEvent(context) async {
   print(Provider.of<siggning>(context, listen: false).loggedUser!.uid.trim());
   QuerySnapshot AllEvents = await FirebaseFirestore.instance

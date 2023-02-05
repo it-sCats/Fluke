@@ -20,8 +20,7 @@ class Oprofile extends StatefulWidget {
   State<Oprofile> createState() => _OprofileState();
 }
 
-class _OprofileState extends State<Oprofile>
-    with SingleTickerProviderStateMixin {
+class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
   @override
   void initState() {
     // TODO: implement initState
