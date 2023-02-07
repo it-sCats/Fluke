@@ -168,6 +168,8 @@ class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
                                               mainAxisSpacing: 5),
                                       itemBuilder: (context, index) {
                                         var eventData = snapshot.data![index];
+                                        Map likes = eventData['likes'];
+                                        int likesCount = likes.length;
 
                                         return GestureDetector(
                                           child: OrganizerEventPreview(
@@ -226,6 +228,7 @@ class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
                                                       eventVisibilty: eventData[
                                                           'eventVisibility'],
                                                       visitorsNum: visitorsNum,
+                                                      likes: likesCount,
                                                       creatorID: eventData[
                                                           'creatorID'],
                                                       creatorName: eventData[
@@ -374,7 +377,8 @@ class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
                                                 mainAxisSpacing: 5),
                                         itemBuilder: (context, index) {
                                           var eventData = snapshot.data![index];
-
+                                          int likesCount =
+                                              eventData['likes'].length;
                                           return GestureDetector(
                                             child: OrganizerEventPreview(
                                                 //ويدجيت خاصة بالكارت الخاص بالحدث يتم تمرير البيانت التي تم إحضارها من قاعدة البيانات إليها
@@ -434,6 +438,7 @@ class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
                                                                 'acceptsParticapants'],
                                                         eventVisibilty: eventData[
                                                             'eventVisibility'],
+                                                        likes: likesCount,
                                                         visitorsNum:
                                                             visitorsNum,
                                                         creatorID: eventData[
@@ -518,6 +523,7 @@ class eventDrafts extends StatelessWidget {
             for (var eventa in events) {
               Timestamp strat = eventa['starterDate'];
               Timestamp end = eventa['endDate'];
+              int likesCount = eventa['likes'].length;
               // print(DateTime.fromMicrosecondsSinceEpoch(
               //     strat.microsecondsSinceEpoch));
               // print(DateTime.fromMicrosecondsSinceEpoch(
@@ -568,6 +574,7 @@ class eventDrafts extends StatelessWidget {
                                 city: eventa['eventCity'],
                                 acceptsParticapants:
                                     eventa['acceptsParticapants'],
+                                likes: likesCount,
                                 eventVisibilty: eventa['eventVisibility'],
                                 visitorsNum: visitorsNum,
                                 creatorID: eventa['creatorID'],

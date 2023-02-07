@@ -610,6 +610,8 @@ class _VprofileState extends State<Vprofile> with TickerProviderStateMixin {
                                                                             eventData['creatorID'],
                                                                         creatorName:
                                                                             eventData['creatorName'],
+                                                                        likes: eventData['likes']
+                                                                            .length,
                                                                       ));
                                                         },
                                                       );
@@ -714,6 +716,7 @@ class visiPartiInterests extends StatelessWidget {
                                   city: eventData['eventCity'],
                                   acceptsParticapants:
                                       eventData['acceptsParticapants'],
+                                  likes: eventData['likes'].length,
                                   eventVisibilty: eventData['eventVisibility'],
                                   visitorsNum: visitorsNum,
                                   creatorID: eventData['creatorID'],
@@ -814,6 +817,7 @@ class eventDrafts extends StatelessWidget {
                                   field: eventa['field'],
                                   creationDate: eventa['creationDate'],
                                   city: eventa['eventCity'],
+                                  likes: eventa['likes'].length,
                                   acceptsParticapants:
                                       eventa['acceptsParticapants'],
                                   eventVisibilty: eventa['eventVisibility'],

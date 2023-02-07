@@ -181,42 +181,54 @@ class LoadEventData extends StatelessWidget {
                               textAlign: TextAlign.end,
                               '  نوع الحدث',
                               style: conlabelsTxt.copyWith(
-                                  color: conBlack, fontWeight: FontWeight.w600),
+                                  fontSize: 9,
+                                  color: conBlack,
+                                  fontWeight: FontWeight.w600),
                             )),
                             DataColumn(
                                 label: Text(
                               textAlign: TextAlign.end,
                               '  مجال الحدث',
                               style: conlabelsTxt.copyWith(
-                                  color: conBlack, fontWeight: FontWeight.w600),
+                                  fontSize: 9,
+                                  color: conBlack,
+                                  fontWeight: FontWeight.w600),
                             )),
                             DataColumn(
                                 label: Text(
                               textAlign: TextAlign.end,
                               '  المدينة المقام بها الحدث',
                               style: conlabelsTxt.copyWith(
-                                  color: conBlack, fontWeight: FontWeight.w600),
+                                  fontSize: 9,
+                                  color: conBlack,
+                                  fontWeight: FontWeight.w600),
                             )),
                             DataColumn(
                                 label: Text(
                               textAlign: TextAlign.end,
                               'وقت إنشاء الحدث',
                               style: conlabelsTxt.copyWith(
-                                  color: conBlack, fontWeight: FontWeight.w600),
+                                  fontSize: 11,
+                                  color: conBlack,
+                                  fontWeight: FontWeight.w600),
                             )),
                             DataColumn(
                                 label: Text(
                               textAlign: TextAlign.end,
                               'إسم منشيء الحدث',
                               style: conlabelsTxt.copyWith(
-                                  color: conBlack, fontWeight: FontWeight.w600),
+                                  fontSize: 9,
+                                  color: conBlack,
+                                  fontWeight: FontWeight.w600),
                             )),
                             DataColumn(
                                 label: Text(
                               textAlign: TextAlign.end,
                               'إسم الحدث',
                               style: conlabelsTxt.copyWith(
-                                  color: conBlack, fontWeight: FontWeight.w600),
+                                  fontSize: 9,
+                                  color: conBlack,
+                                  fontWeight: FontWeight.w600),
                             )),
                           ],
                           rows: _buildList(context, snapshot.data!.docs));

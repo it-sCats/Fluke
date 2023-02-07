@@ -403,9 +403,11 @@ class _creatingEventState extends State<creatingEvent>
                                 if (value == null || value.isEmpty) {
                                   return 'الرجاء إدخال تاريخ الحدث';
                                 } else if (starterDate.compareTo(endDate) > 0) {
-                                  return 'تأكد من صحة تاريخ النهاية';
+                                  return 'لا يمكن أن يكون تاريخ النهاية قبل البداية ';
+                                } else if (endDate.compareTo(Timestamp.now()) <
+                                    0) {
+                                  return 'تاريخ النهاية فائت ';
                                 }
-
                                 return null;
                               },
                               controller: endDateCont,
@@ -1064,7 +1066,8 @@ class _creatingEventState extends State<creatingEvent>
                                                   : 'https://firebasestorage.googleapis.com/v0/b/fluke-db.appspot.com/o/data%2Fuser%2F0%2Fcom.example.flukepro%2Fcache%2Fphoto_2023-01-18_22-14-11.jpg?alt=media&token=5d0b48ba-77f0-4557-9cce-72524c5f4bb9',
                                               'creatorID':
                                                   siggning().loggedUser!.uid,
-                                              'creationDate': Timestamp.now()
+                                              'creationDate': Timestamp.now(),
+                                              'eventID': value.id.trim()
                                             });
                                           });
                                         });

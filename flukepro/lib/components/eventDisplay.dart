@@ -139,6 +139,7 @@ class eventDisplay extends StatefulWidget {
   bool eventVisibilty;
   bool justDisplay;
   int? visitorsNum;
+  int? likes;
   String creatorID;
   String creatorName;
 
@@ -161,6 +162,7 @@ class eventDisplay extends StatefulWidget {
       required this.acceptsParticapants,
       required this.eventVisibilty,
       this.room,
+      this.likes,
       this.visitorsNum,
       required this.creatorID,
       required this.creatorName});
@@ -462,16 +464,12 @@ class _eventDisplayState extends State<eventDisplay>
                                                               .instance
                                                               .collection(
                                                                   'events')
-                                                              .doc(widget.id
-                                                                  .trim())
+                                                              .doc(widget.id)
                                                               .delete()
-                                                              .whenComplete(
-                                                                //بعد إنهاء عملية الحدث يقوم بإعادة التوجيه للصفحة الرئيسية
-                                                                () => Navigator
-                                                                    .pushNamed(
-                                                                        context,
-                                                                        'OHome'),
-                                                              );
+                                                              .whenComplete(() =>
+                                                                  Navigator.pushReplacementNamed(
+                                                                      context,
+                                                                      'OHome'));
                                                         },
                                                         child: Text(
                                                           'حدف الحدث',
@@ -611,6 +609,20 @@ class _eventDisplayState extends State<eventDisplay>
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(children: [
+                                      Icon(
+                                        Icons.favorite,
+                                        color: conORange.withOpacity(.8),
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                          ' ${widget.likes == null ? 0 : widget.likes.toString()}'),
+                                    ]),
                                     SizedBox(
                                       height: 5,
                                     ),
@@ -877,6 +889,17 @@ class _eventDisplayState extends State<eventDisplay>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
+                                        Row(children: [
+                                          Icon(
+                                            Icons.favorite,
+                                            color: conORange.withOpacity(.8),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                              ' ${widget.likes == null ? 0 : widget.likes.toString()}'),
+                                        ]),
                                         SizedBox(
                                           height: 5,
                                         ),
@@ -1322,6 +1345,17 @@ class _eventDisplayState extends State<eventDisplay>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
+                                        Row(children: [
+                                          Icon(
+                                            Icons.favorite,
+                                            color: conORange.withOpacity(.8),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                              ' ${widget.likes == null ? 0 : widget.likes.toString()}'),
+                                        ]),
                                         SizedBox(
                                           height: 5,
                                         ),

@@ -125,6 +125,8 @@ class QrwidgetProfile extends StatelessWidget {
                       .getORganizerInfo(eventInfo!['creatorID']);
                   print('${eventInfo!.length}eventInfo');
                   waitingFunction(eventInfo['id']);
+                  Map likes = eventInfo!['likes'];
+                  int likesCount = likes.length;
                   showModalBottomSheet(
                     isScrollControlled: true,
                     elevation: 100,
@@ -144,6 +146,7 @@ class QrwidgetProfile extends StatelessWidget {
                         endTime: eventInfo!['endTime'],
                         creationDate: eventInfo!['creationDate'],
                         city: eventInfo!['eventCity'],
+                        likes: likesCount,
                         acceptsParticapants: eventInfo!['acceptsParticapants'],
                         eventVisibilty: eventInfo!['eventVisibility'],
                         visitorsNum: visitorsNum,

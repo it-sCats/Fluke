@@ -370,6 +370,8 @@ class _eventReportState extends State<eventReport> {
                               .doc(widget.eventID)
                               .get();
                       var inf = eventInfo.data();
+
+                      int likesCount = inf!['likes'].length;
                       showModalBottomSheet(
                           isScrollControlled: true,
                           elevation: 100,
@@ -393,6 +395,7 @@ class _eventReportState extends State<eventReport> {
                                 city: inf!['eventCity'],
                                 acceptsParticapants:
                                     inf!['acceptsParticapants'],
+                                likes: likesCount,
                                 eventVisibilty: inf!['eventVisibility'],
 
                                 creatorID: inf!['creatorID'],
