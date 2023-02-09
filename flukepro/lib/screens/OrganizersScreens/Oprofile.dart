@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flukepro/components/eventDisplay.dart';
 import 'package:flukepro/utils/SigningProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/cons.dart';
@@ -12,6 +16,8 @@ import '../../utils/fireStoreQueries.dart';
 
 String userIn = '';
 var userInfo;
+File? image;
+String? imagePath;
 
 class Oprofile extends StatefulWidget {
   String? OrganizerToDisplayID;
@@ -20,15 +26,22 @@ class Oprofile extends StatefulWidget {
   State<Oprofile> createState() => _OprofileState();
 }
 
+getORganizerInfo(id) async {
+  DocumentSnapshot<Map<String, dynamic>> creator =
+      await FirebaseFirestore.instance.collection('users').doc(id.trim()).get();
+  userInfo = creator.data();
+  return creator.data();
+}
+
 class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    userInfo = Provider.of<siggning>(context, listen: false).getUserInfoDoc(
-        widget.OrganizerToDisplayID == null
-            ? Provider.of<siggning>(context, listen: false).loggedUser!.uid
-            : widget.OrganizerToDisplayID);
+    userInfo = widget.OrganizerToDisplayID == null
+        ? Provider.of<siggning>(context, listen: false).getUserInfoDoc(
+            Provider.of<siggning>(context, listen: false).loggedUser!.uid)
+        : getORganizerInfo(widget.OrganizerToDisplayID);
   }
 
   @override
@@ -39,6 +52,10 @@ class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    // userInfo = Provider.of<siggning>(context, listen: false).getUserInfoDoc(
+    //     widget.OrganizerToDisplayID == null
+    //         ? Provider.of<siggning>(context, listen: false).loggedUser!.uid
+    //         : widget.OrganizerToDisplayID);
     Provider.of<siggning>(context, listen: false)
         .getUserInfoDoc(FirebaseAuth.instance.currentUser!.uid);
 
@@ -58,12 +75,73 @@ class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(left: 10, right: 50),
-                            child: CircleAvatar(
-                              //Avatar
-                              backgroundColor: Color(0xff).withOpacity(0),
-                              radius: 50,
-                              backgroundImage: NetworkImage(
-                                  'https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=45&dpr=2&s=none'),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                InkWell(
+                                  onTap: () async {
+                                    var snapshot;
+                                    final ImagePicker _picker = ImagePicker();
+                                    // Pick an image
+                                    final imageFile = await _picker.pickImage(
+                                        source: ImageSource.gallery);
+                                    imageFile != null
+                                        ? {
+                                            setState(() {
+                                              imagePath = imageFile!.path;
+                                              image = File(imageFile!.path);
+                                            }),
+                                            snapshot = await FirebaseStorage
+                                                .instance
+                                                .ref()
+                                                .child(imagePath != null
+                                                    ? imagePath!
+                                                    : 'https://p.kindpng.com/picc/s/272-2720630_grey-user-hd-png-download.png'!)
+                                                .putFile(image!),
+                                            FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(FirebaseAuth
+                                                    .instance.currentUser!.uid)
+                                                .update({
+                                              'profilePic': await snapshot!.ref
+                                                  .getDownloadURL()
+                                            })
+                                          }
+                                        : null;
+
+                                    // Capture a photo
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'تغيير الصورة',
+                                        style: conTxtLink,
+                                      ),
+                                      IconButton(
+                                          onPressed: () {},
+                                          icon: Icon(Icons.edit)),
+                                    ],
+                                  ),
+                                ),
+                                CircleAvatar(
+                                    //Avatar
+                                    backgroundColor:
+                                        Color(0xff).withOpacity(0.5),
+                                    radius: 50,
+                                    backgroundImage: image == null
+                                        ? NetworkImage(Provider.of<siggning>(
+                                                            context,
+                                                            listen: false)
+                                                        .userInfoDocument![
+                                                    'profilePic'] ==
+                                                null
+                                            ? 'https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=45&dpr=2&s=none'
+                                            : Provider.of<siggning>(context,
+                                                        listen: false)
+                                                    .userInfoDocument![
+                                                'profilePic'])
+                                        : FileImage(image!) as ImageProvider),
+                              ],
                             ),
                           ),
                           Padding(
@@ -245,7 +323,8 @@ class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
                             }),
                         widget.OrganizerToDisplayID == null
                             ? eventDrafts()
-                            : OrganizersInfo()
+                            : OrganizersInfo(
+                                widget.OrganizerToDisplayID.toString())
                       ],
                     ),
                   )
@@ -262,50 +341,74 @@ class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
                   return [
                     SliverList(
                       delegate: SliverChildListDelegate([
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(50),
-                              child: CircleAvatar(
-                                //Avatar
-                                backgroundColor: Color(0xff).withOpacity(0),
-                                radius: 50,
-                                backgroundImage: NetworkImage(
-                                    'https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=45&dpr=2&s=none'),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(right: 60.0, top: 10),
-                              child: Column(
+                        FutureBuilder<Map<String, dynamic>?>(
+                            future: Provider.of<siggning>(context)
+                                .getFastUserInfoDoc(
+                                    widget.OrganizerToDisplayID),
+                            builder: (context, snapshot) {
+                              Map<String, dynamic>? inf = snapshot!.data;
+                              return Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Text(
-                                    Provider.of<siggning>(context,
-                                            listen: false)
-                                        .userInfoDocument!['name'],
-                                    style: conHeadingsStyle.copyWith(
-                                        color: conBlack.withOpacity(.8),
-                                        fontSize: 15),
+                                  Padding(
+                                    padding: EdgeInsets.all(50),
+                                    child: CircleAvatar(
+                                        //Avatar
+                                        backgroundColor:
+                                            conORange.withOpacity(0.5),
+                                        radius: 50,
+                                        backgroundImage: NetworkImage(inf ==
+                                                null
+                                            ? 'https://p.kindpng.com/picc/s/272-2720630_grey-user-hd-png-download.png'
+                                            : inf!['profilePic'])),
                                   ),
-                                  Text(
-                                    "منظم",
-                                    style: conHeadingsStyle.copyWith(
-                                        color: conBlack
-                                            .withOpacity(.6)
-                                            .withOpacity(0.50),
-                                        fontSize: 15),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.only(right: 60.0, top: 10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        inf == null
+                                            ? Divider(
+                                                thickness: 10,
+                                                indent: 200,
+                                                color: conBlack.withOpacity(.2),
+                                              )
+                                            : Text(
+                                                inf!['name'],
+                                                style:
+                                                    conHeadingsStyle.copyWith(
+                                                        color: conBlack
+                                                            .withOpacity(.8),
+                                                        fontSize: 15),
+                                              ),
+                                        inf == null
+                                            ? Divider(
+                                                thickness: 10,
+                                                indent: 200,
+                                                color: conBlack.withOpacity(.2),
+                                              )
+                                            : Text(
+                                                "منظم",
+                                                style:
+                                                    conHeadingsStyle.copyWith(
+                                                        color: conBlack
+                                                            .withOpacity(.6)
+                                                            .withOpacity(0.50),
+                                                        fontSize: 15),
+                                              ),
+                                        SizedBox(
+                                          height: 25,
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                  SizedBox(
-                                    height: 25,
-                                  )
                                 ],
-                              ),
-                            ),
-                          ],
-                        )
+                              );
+                            })
                       ]),
-                    ),
+                    )
                   ];
                 },
                 body: Column(
@@ -455,7 +558,7 @@ class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
                                   }
                                 }
                               }),
-                          OrganizersInfo()
+                          OrganizersInfo(widget.OrganizerToDisplayID.toString())
                         ],
                       ),
                     )
@@ -468,14 +571,14 @@ class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
 }
 
 class OrganizersInfo extends StatelessWidget {
-  const OrganizersInfo({Key? key}) : super(key: key);
+  String id;
+  OrganizersInfo(this.id);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: FutureBuilder<Map<String, dynamic>?>(
-        future: Provider.of<siggning>(context)
-            .getUserInfoDoc(FirebaseAuth.instance.currentUser!.uid),
+        future: Provider.of<siggning>(context).getFastUserInfoDoc(id),
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data != null) {
             var inf = snapshot.data;

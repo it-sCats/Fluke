@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flukepro/components/eventDisplay.dart';
@@ -16,7 +18,8 @@ final _auth = FirebaseAuth.instance;
 String userIn = '';
 var userInfo;
 String? userId;
-
+File? image;
+String? imagePath;
 // getTicketNum() async {
 //   //todo fetch the num of the tickets
 //   ticketsLength = await getUserTicketsEvents(userId.toString());
