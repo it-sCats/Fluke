@@ -77,7 +77,10 @@ class _TestMeState extends State<TestMe> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("التعليقات"),
+        title: Text(
+          "التعليقات",
+          style: conHeadingsStyle,
+        ),
         backgroundColor: conBlue,
       ),
       body: Container(
