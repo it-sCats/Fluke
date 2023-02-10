@@ -267,6 +267,14 @@ class siggning extends ChangeNotifier {
     return userInfo.data();
   }
 
+  Future<Map<String, dynamic>?> getFastUserInfoDoc(userID) async {
+    DocumentSnapshot<Map<String, dynamic>> userInfo =
+        await _firestore.collection('users').doc(userID).get();
+
+    notifyListeners();
+    return userInfo.data();
+  }
+
   //firebase
   getAllEvents() {
     Stream<QuerySnapshot> AllEvents = _firestore

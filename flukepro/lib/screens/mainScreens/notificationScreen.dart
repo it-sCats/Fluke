@@ -93,14 +93,14 @@ class _notifiScreenState extends State<notifiScreen> {
                       List<notificationa> notificatinat = [];
                       for (QueryDocumentSnapshot notifi in notifications) {
                         final notifiTitle = notifi['title'];
-                        final eventID = notifi.id;
+                        final eventID = notifi['eventID'];
                         final notifibody =
                             notifi['date'].toString().split(' ').first;
                         final notifiCreation = notifi['creationDate'];
                         final image = notifi['image'];
 
                         notificatinat.add(notificationa(notifiTitle, notifibody,
-                            notifiCreation, image, eventID));
+                            notifiCreation, image, eventID.toString().trim()));
                       }
                       return ListView(
                         padding: EdgeInsets.symmetric(vertical: 5),
@@ -140,6 +140,7 @@ class _notificationaState extends State<notificationa> {
                 .doc(widget.eventId)
                 .get();
         var inf = eventInfo.data();
+
         showModalBottomSheet(
             isScrollControlled: true,
             elevation: 100,
@@ -148,7 +149,7 @@ class _notificationaState extends State<notificationa> {
                   //نحي ايقونه الابلاغ لما يستعرضه الادمن وحطي حدف
                   wholePage: false,
                   justDisplay: false,
-                  id: inf!['id'],
+                  id: eventInfo!['id'],
                   title: inf!['title'],
                   description: inf!['description'],
                   starterDate: inf!['starterDate'],
@@ -160,6 +161,7 @@ class _notificationaState extends State<notificationa> {
                   endTime: inf!['endTime'],
                   field: inf!['field'],
                   creationDate: inf!['creationDate'],
+                  likes: inf!['likes'].length,
                   city: inf!['eventCity'],
                   acceptsParticapants: inf!['acceptsParticapants'],
                   eventVisibilty: inf!['eventVisibility'],

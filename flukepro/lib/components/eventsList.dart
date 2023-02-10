@@ -69,6 +69,7 @@ class _eventListState extends State<eventList> {
                 //             strat.microsecondsSinceEpoch)
                 //         .isAtSameMomentAs(DateTime.now())));
                 Map likes = eventa['likes'];
+                int likeCount = likes.length;
 
                 if (widget.isOngoing
                     ? ((DateTime.fromMicrosecondsSinceEpoch(
@@ -134,6 +135,7 @@ class _eventListState extends State<eventList> {
                                     city: eventa['eventCity'],
                                     acceptsParticapants:
                                         eventa['acceptsParticapants'],
+                                    likes: likeCount,
                                     eventVisibilty: eventa['eventVisibility'],
                                     visitorsNum: visitorsNum,
                                     creatorID: eventa['creatorID'],
@@ -314,7 +316,7 @@ class _webEventListState extends State<webEventList> {
                 //             strat.microsecondsSinceEpoch)
                 //         .isAtSameMomentAs(DateTime.now())));
                 Map likes = eventa['likes'];
-
+                int likesCount = likes.length;
                 if (widget.isOngoing
                     ? ((DateTime.fromMicrosecondsSinceEpoch(
                                     strat.microsecondsSinceEpoch)
@@ -379,6 +381,7 @@ class _webEventListState extends State<webEventList> {
                                     city: eventa['eventCity'],
                                     acceptsParticapants:
                                         eventa['acceptsParticapants'],
+                                    likes: likesCount,
                                     eventVisibilty: eventa['eventVisibility'],
                                     visitorsNum: visitorsNum,
                                     creatorID: eventa['creatorID'],

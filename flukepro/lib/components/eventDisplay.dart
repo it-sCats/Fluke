@@ -34,6 +34,7 @@ final _firestore = FirebaseFirestore.instance;
 //كائن من الداتابيز 1
 final _auth = FirebaseAuth.instance;
 final user = _auth!.currentUser;
+var creatorPic = '';
 var userType;
 bool isLoading = false;
 String? creatorName;
@@ -139,6 +140,7 @@ class eventDisplay extends StatefulWidget {
   bool eventVisibilty;
   bool justDisplay;
   int? visitorsNum;
+  int? likes;
   String creatorID;
   String creatorName;
 
@@ -161,6 +163,7 @@ class eventDisplay extends StatefulWidget {
       required this.acceptsParticapants,
       required this.eventVisibilty,
       this.room,
+      this.likes,
       this.visitorsNum,
       required this.creatorID,
       required this.creatorName});
@@ -169,6 +172,7 @@ class eventDisplay extends StatefulWidget {
         await _firestore.collection('users').doc(creatorID.trim()).get();
 
     creatorName = creator.get('name');
+    creatorPic = creator.get('profilePic');
   }
 
   @override
@@ -462,16 +466,12 @@ class _eventDisplayState extends State<eventDisplay>
                                                               .instance
                                                               .collection(
                                                                   'events')
-                                                              .doc(widget.id
-                                                                  .trim())
+                                                              .doc(widget.id)
                                                               .delete()
-                                                              .whenComplete(
-                                                                //بعد إنهاء عملية الحدث يقوم بإعادة التوجيه للصفحة الرئيسية
-                                                                () => Navigator
-                                                                    .pushNamed(
-                                                                        context,
-                                                                        'OHome'),
-                                                              );
+                                                              .whenComplete(() =>
+                                                                  Navigator.pushReplacementNamed(
+                                                                      context,
+                                                                      'OHome'));
                                                         },
                                                         child: Text(
                                                           'حدف الحدث',
@@ -611,6 +611,20 @@ class _eventDisplayState extends State<eventDisplay>
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(children: [
+                                      Icon(
+                                        Icons.favorite,
+                                        color: conORange.withOpacity(.8),
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                          ' ${widget.likes == null ? 0 : widget.likes.toString()}'),
+                                    ]),
                                     SizedBox(
                                       height: 5,
                                     ),
@@ -834,11 +848,12 @@ class _eventDisplayState extends State<eventDisplay>
                                                         //Avatar
                                                         backgroundColor:
                                                             conORange
-                                                                .withOpacity(0),
+                                                                .withOpacity(
+                                                                    0.5),
                                                         radius: 50,
                                                         backgroundImage:
                                                             NetworkImage(
-                                                                'https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=45&dpr=2&s=none'),
+                                                                creatorPic),
                                                       ),
                                                     ),
                                                     SizedBox(
@@ -877,6 +892,17 @@ class _eventDisplayState extends State<eventDisplay>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
+                                        Row(children: [
+                                          Icon(
+                                            Icons.favorite,
+                                            color: conORange.withOpacity(.8),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                              ' ${widget.likes == null ? 0 : widget.likes.toString()}'),
+                                        ]),
                                         SizedBox(
                                           height: 5,
                                         ),
@@ -1109,11 +1135,11 @@ class _eventDisplayState extends State<eventDisplay>
                                                             backgroundColor:
                                                                 conORange
                                                                     .withOpacity(
-                                                                        0),
+                                                                        0.5),
                                                             radius: 50,
                                                             backgroundImage:
                                                                 NetworkImage(
-                                                                    'https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=45&dpr=2&s=none'),
+                                                                    creatorPic),
                                                           ),
                                                         ),
                                                         SizedBox(
@@ -1322,6 +1348,17 @@ class _eventDisplayState extends State<eventDisplay>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
+                                        Row(children: [
+                                          Icon(
+                                            Icons.favorite,
+                                            color: conORange.withOpacity(.8),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                              ' ${widget.likes == null ? 0 : widget.likes.toString()}'),
+                                        ]),
                                         SizedBox(
                                           height: 5,
                                         ),
@@ -1545,16 +1582,15 @@ class _eventDisplayState extends State<eventDisplay>
                                                               EdgeInsets.only(
                                                                   left: 10),
                                                           child: CircleAvatar(
-                                                            //Avatar
-                                                            backgroundColor:
-                                                                conORange
-                                                                    .withOpacity(
-                                                                        0),
-                                                            radius: 50,
-                                                            backgroundImage:
-                                                                NetworkImage(
-                                                                    'https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=45&dpr=2&s=none'),
-                                                          ),
+                                                              //Avatar
+                                                              backgroundColor:
+                                                                  conORange
+                                                                      .withOpacity(
+                                                                          0.5),
+                                                              radius: 50,
+                                                              backgroundImage:
+                                                                  NetworkImage(
+                                                                      creatorPic)),
                                                         ),
                                                         SizedBox(
                                                           width: 5,

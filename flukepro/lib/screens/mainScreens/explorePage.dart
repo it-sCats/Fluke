@@ -94,6 +94,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                 field: searchResult[index]['field'],
                                 creationDate: searchResult[index]
                                     ['creationDate'],
+                                likes: searchResult[index]['likes'].length,
                                 city: searchResult[index]['eventCity'],
                                 acceptsParticapants: searchResult[index]
                                     ['acceptsParticapants'],
@@ -209,7 +210,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                           Text(
                                             searchResult[index]['field'],
                                             style: conHeadingsStyle.copyWith(
-                                                fontSize: 14,
+                                                fontSize: 12,
                                                 fontWeight: FontWeight.w500,
                                                 color: conBlack),
                                           ),
