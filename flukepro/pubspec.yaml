@@ -67,6 +67,7 @@ dependencies:
   flutter_email_sender: ^5.2.0
   internet_connection_checker: ^1.0.0+1
   connectivity_plus: ^3.0.2
+  comment_box: ^0.0.18
 
 
 
