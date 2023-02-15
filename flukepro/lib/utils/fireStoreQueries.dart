@@ -46,6 +46,19 @@ Future<Map<String, dynamic>?> getTempUser(userID) async {
   return userInfoDoc;
 }
 
+Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getCommentsOnEvent(
+    eventID) async {
+  QuerySnapshot<Map<String, dynamic>> comments = await FirebaseFirestore
+      .instance
+      .collection('comments')
+      .doc(eventID)
+      .collection('comment')
+      .get();
+
+  return comments.docs;
+  ;
+}
+
 getInterstsBasedEvents(userId, context) {
   //make sure that there is the same interest in the event and the user if it didnt work filter in the app
   var info = getTempUser(userId);
@@ -113,6 +126,17 @@ Stream<QuerySnapshot<Map<String, dynamic>>> getUserReegiteredEvents(
       .collection('users')
       .doc(userId)
       .collection('tickets')
+      .snapshots();
+
+  return AllEvents;
+}
+
+Stream<QuerySnapshot<Map<String, dynamic>>> getPostComments(String eventID) {
+  final AllEvents = _firestore
+      .collection('comments')
+      .doc(eventID)
+      .collection('comment')
+      .orderBy('creationDate', descending: true)
       .snapshots();
 
   return AllEvents;

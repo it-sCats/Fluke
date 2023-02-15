@@ -396,6 +396,7 @@ class _eventReportState extends State<eventReport> {
                                 acceptsParticapants:
                                     inf!['acceptsParticapants'],
                                 likes: likesCount,
+                                rate: inf!['rate'],
                                 eventVisibilty: inf!['eventVisibility'],
 
                                 creatorID: inf!['creatorID'],

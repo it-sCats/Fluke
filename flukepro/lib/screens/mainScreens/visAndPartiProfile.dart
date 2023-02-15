@@ -578,7 +578,7 @@ class _VprofileState extends State<Vprofile> with TickerProviderStateMixin {
                                                                   (context) =>
                                                                       eventDisplay(
                                                                         wholePage:
-                                                                            false,
+                                                                            true,
                                                                         justDisplay:
                                                                             true,
                                                                         id: eventData[
@@ -615,6 +615,8 @@ class _VprofileState extends State<Vprofile> with TickerProviderStateMixin {
                                                                             eventData['creatorName'],
                                                                         likes: eventData['likes']
                                                                             .length,
+                                                                        rate: eventData[
+                                                                            'rate'],
                                                                       ));
                                                         },
                                                       );
@@ -704,7 +706,7 @@ class visiPartiInterests extends StatelessWidget {
                             elevation: 100,
                             context: context,
                             builder: (context) => eventDisplay(
-                                  wholePage: false,
+                                  wholePage: true,
                                   justDisplay: true,
                                   id: eventData['id'],
                                   title: eventData['title'],
@@ -720,6 +722,7 @@ class visiPartiInterests extends StatelessWidget {
                                   acceptsParticapants:
                                       eventData['acceptsParticapants'],
                                   likes: eventData['likes'].length,
+                                  rate: eventData['rate'],
                                   eventVisibilty: eventData['eventVisibility'],
                                   visitorsNum: visitorsNum,
                                   creatorID: eventData['creatorID'],
@@ -805,7 +808,7 @@ class eventDrafts extends StatelessWidget {
                             elevation: 100,
                             context: context,
                             builder: (context) => eventDisplay(
-                                  wholePage: false,
+                                  wholePage: true,
                                   justDisplay: false,
                                   id: eventa['id'],
                                   title: eventa['title'],
@@ -821,6 +824,7 @@ class eventDrafts extends StatelessWidget {
                                   creationDate: eventa['creationDate'],
                                   city: eventa['eventCity'],
                                   likes: eventa['likes'].length,
+                                  rate: eventa['rate'],
                                   acceptsParticapants:
                                       eventa['acceptsParticapants'],
                                   eventVisibilty: eventa['eventVisibility'],

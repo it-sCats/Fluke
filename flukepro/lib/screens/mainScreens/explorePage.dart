@@ -79,7 +79,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           elevation: 100,
                           context: context,
                           builder: (context) => eventDisplay(
-                                wholePage: false,
+                                wholePage: true,
                                 justDisplay: false,
                                 id: searchResult[index]['id'],
                                 title: searchResult[index]['title'],
@@ -95,6 +95,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                 creationDate: searchResult[index]
                                     ['creationDate'],
                                 likes: searchResult[index]['likes'].length,
+                                rate: searchResult[index]['rate'],
                                 city: searchResult[index]['eventCity'],
                                 acceptsParticapants: searchResult[index]
                                     ['acceptsParticapants'],

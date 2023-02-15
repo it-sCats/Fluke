@@ -6,25 +6,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flukepro/components/QrCodeWidget.dart';
 import 'package:flukepro/components/eventEdit.dart';
 import 'package:flukepro/components/participantEventRegisterForm.dart';
-import 'package:flukepro/components/session.dart';
 import 'package:flukepro/components/sessionDataSource.dart';
-import 'package:flukepro/components/visitorEventprev.dart';
-import 'package:flukepro/screens/OrganizersScreens/OHome.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 import '../screens/OrganizersScreens/Oprofile.dart';
 import '../screens/OrganizersScreens/Sections/timeLine.dart';
 import '../screens/OrganizersScreens/Sections/timeTableScreen.dart';
-import '../screens/mainScreens/userInfoScreen.dart';
-import '../utils/SigningProvider.dart';
 import '../utils/SigningProvider.dart';
 import 'cons.dart';
 import 'customWidgets.dart';
+import 'formsAndDisplays/comments.dart';
 import 'formsAndDisplays/displayEventParticipants.dart';
 import 'formsAndDisplays/displayEventVisitors.dart';
 import 'formsAndDisplays/reportForm.dart';
@@ -141,6 +135,7 @@ class eventDisplay extends StatefulWidget {
   bool justDisplay;
   int? visitorsNum;
   int? likes;
+  double? rate;
   String creatorID;
   String creatorName;
 
@@ -164,6 +159,7 @@ class eventDisplay extends StatefulWidget {
       required this.eventVisibilty,
       this.room,
       this.likes,
+      required this.rate,
       this.visitorsNum,
       required this.creatorID,
       required this.creatorName});
@@ -221,8 +217,8 @@ class _eventDisplayState extends State<eventDisplay>
         length: Provider.of<siggning>(context, listen: false)
                     .userInfoDocument!['userType'] ==
                 3
-            ? 4
-            : 3,
+            ? 5
+            : 4,
         child: NestedScrollView(
           headerSliverBuilder: ((context, innerBoxIsScrolled) {
             return [
@@ -555,7 +551,7 @@ class _eventDisplayState extends State<eventDisplay>
             children: [
               TabBar(
                 unselectedLabelStyle: conLittelTxt12.copyWith(fontSize: 15),
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 25),
                 labelStyle: conLittelTxt12,
                 indicator: BoxDecoration(
                     border:
@@ -564,7 +560,8 @@ class _eventDisplayState extends State<eventDisplay>
                   Tab(
                     child: Text(
                       'معلومات الحدث',
-                      style: conLittelTxt12.copyWith(fontSize: 15),
+                      textAlign: TextAlign.center,
+                      style: conLittelTxt12.copyWith(fontSize: 13),
                     ),
                   ),
                   Tab(
@@ -576,6 +573,12 @@ class _eventDisplayState extends State<eventDisplay>
                   Tab(
                     child: Text(
                       'المشاركين',
+                      style: conLittelTxt12.copyWith(fontSize: 15),
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      'التعليقات',
                       style: conLittelTxt12.copyWith(fontSize: 15),
                     ),
                   ),
@@ -624,6 +627,20 @@ class _eventDisplayState extends State<eventDisplay>
                                       ),
                                       Text(
                                           ' ${widget.likes == null ? 0 : widget.likes.toString()}'),
+                                    ]),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(children: [
+                                      Icon(
+                                        Icons.star,
+                                        color: conORange.withOpacity(.8),
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                          ' ${widget.rate == null ? 0.0 : widget.rate.toString()}'),
                                     ]),
                                     SizedBox(
                                       height: 5,
@@ -902,6 +919,20 @@ class _eventDisplayState extends State<eventDisplay>
                                           ),
                                           Text(
                                               ' ${widget.likes == null ? 0 : widget.likes.toString()}'),
+                                        ]),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Row(children: [
+                                          Icon(
+                                            Icons.star,
+                                            color: conORange.withOpacity(.8),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                              ' ${widget.rate == null ? 0.0 : widget.rate.toString()}'),
                                         ]),
                                         SizedBox(
                                           height: 5,
@@ -1362,6 +1393,21 @@ class _eventDisplayState extends State<eventDisplay>
                                         SizedBox(
                                           height: 5,
                                         ),
+                                        Row(children: [
+                                          Icon(
+                                            Icons.star,
+                                            color: conORange.withOpacity(.8),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                              ' ${widget.rate == null ? 0 : widget.rate.toString()}'),
+                                        ]),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+
                                         Row(
                                           children: [
                                             Icon(
@@ -1729,9 +1775,13 @@ class _eventDisplayState extends State<eventDisplay>
                         displayParticipants(
                           eventID: widget.id,
                         ),
+                        commentSection(
+                            commenterID: FirebaseAuth.instance.currentUser!.uid,
+                            creatorID: widget.creatorID,
+                            eventID: widget.id),
                         if (Provider.of<siggning>(context, listen: false)
                                 .userInfoDocument!['userType'] ==
-                            3)
+                            3) //display visitors
                           Container(
                             child: displayVisitors(
                               eventID: widget.id,
@@ -1754,6 +1804,7 @@ class _eventDisplayState extends State<eventDisplay>
 
     return widget.wholePage
         ? Scaffold(
+            resizeToAvoidBottomInset: true,
             body: bodyOfEvent(),
           )
         : bodyOfEvent();

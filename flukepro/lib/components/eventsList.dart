@@ -47,6 +47,7 @@ class _eventListState extends State<eventList> {
               //في حال إحتوت السنابشوت على بيانات سيتم بناءها بإستخدام ليست فيو
             } else {
               final events = snapshot.data!.docs;
+
               // print(events);
               for (var eventa in events) {
                 Timestamp strat = eventa['starterDate'];
@@ -57,6 +58,7 @@ class _eventListState extends State<eventList> {
                     ? eventa['likes']
                         [Provider.of<siggning>(context).loggedUser!.uid]
                     : false;
+
                 // print(DateTime.fromMicrosecondsSinceEpoch(
                 //     strat.microsecondsSinceEpoch));
                 // print(DateTime.fromMicrosecondsSinceEpoch(
@@ -118,7 +120,7 @@ class _eventListState extends State<eventList> {
                               elevation: 100,
                               context: context,
                               builder: (context) => eventDisplay(
-                                    wholePage: false,
+                                    wholePage: true,
                                     justDisplay: false,
                                     id: eventa['id'],
                                     title: eventa['title'],
@@ -136,6 +138,7 @@ class _eventListState extends State<eventList> {
                                     acceptsParticapants:
                                         eventa['acceptsParticapants'],
                                     likes: likeCount,
+                                    rate: eventa['rate'].toDouble(),
                                     eventVisibilty: eventa['eventVisibility'],
                                     visitorsNum: visitorsNum,
                                     creatorID: eventa['creatorID'],
@@ -364,7 +367,7 @@ class _webEventListState extends State<webEventList> {
                               elevation: 100,
                               context: context,
                               builder: (context) => eventDisplay(
-                                    wholePage: false,
+                                    wholePage: true,
                                     justDisplay: false,
                                     id: eventa['id'],
                                     title: eventa['title'],
@@ -383,6 +386,7 @@ class _webEventListState extends State<webEventList> {
                                         eventa['acceptsParticapants'],
                                     likes: likesCount,
                                     eventVisibilty: eventa['eventVisibility'],
+                                    rate: eventa['rate'],
                                     visitorsNum: visitorsNum,
                                     creatorID: eventa['creatorID'],
                                     creatorName: eventa['creatorName'],
@@ -592,7 +596,7 @@ class _VisitorVerticalEventListState extends State<VisitorVerticalEventList> {
                               elevation: 100,
                               context: context,
                               builder: (context) => eventDisplay(
-                                    wholePage: false,
+                                    wholePage: true,
                                     justDisplay: false,
                                     id: eventa['id'],
                                     title: eventa['title'],
@@ -610,6 +614,8 @@ class _VisitorVerticalEventListState extends State<VisitorVerticalEventList> {
                                     acceptsParticapants:
                                         eventa['acceptsParticapants'],
                                     eventVisibilty: eventa['eventVisibility'],
+                                    likes: eventa['likes'].length,
+                                    rate: eventa['rate'].toDouble(),
                                     visitorsNum: visitorsNum,
                                     creatorID: eventa['creatorID'],
                                     creatorName:

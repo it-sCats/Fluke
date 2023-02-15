@@ -279,7 +279,7 @@ class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
                                                 context: context,
                                                 builder: (context) =>
                                                     eventDisplay(
-                                                      wholePage: false,
+                                                      wholePage: true,
                                                       justDisplay: true,
                                                       id: eventData['id'],
                                                       title: eventData['title'],
@@ -307,6 +307,7 @@ class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
                                                           'eventVisibility'],
                                                       visitorsNum: visitorsNum,
                                                       likes: likesCount,
+                                                      rate: eventData['rate'],
                                                       creatorID: eventData[
                                                           'creatorID'],
                                                       creatorName: eventData[
@@ -513,7 +514,7 @@ class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
                                                   context: context,
                                                   builder: (context) =>
                                                       eventDisplay(
-                                                        wholePage: false,
+                                                        wholePage: true,
                                                         justDisplay: true,
                                                         id: eventData['id'],
                                                         title:
@@ -542,6 +543,7 @@ class _OprofileState extends State<Oprofile> with TickerProviderStateMixin {
                                                         eventVisibilty: eventData[
                                                             'eventVisibility'],
                                                         likes: likesCount,
+                                                        rate: eventData['rate'],
                                                         visitorsNum:
                                                             visitorsNum,
                                                         creatorID: eventData[
@@ -660,7 +662,7 @@ class eventDrafts extends StatelessWidget {
                           elevation: 100,
                           context: context,
                           builder: (context) => eventDisplay(
-                                wholePage: false,
+                                wholePage: true,
                                 justDisplay: false,
                                 id: eventa['id'],
                                 title: eventa['title'],
@@ -678,6 +680,7 @@ class eventDrafts extends StatelessWidget {
                                 acceptsParticapants:
                                     eventa['acceptsParticapants'],
                                 likes: likesCount,
+                                rate: eventa['rate'],
                                 eventVisibilty: eventa['eventVisibility'],
                                 visitorsNum: visitorsNum,
                                 creatorID: eventa['creatorID'],

@@ -132,7 +132,7 @@ class QrwidgetProfile extends StatelessWidget {
                     elevation: 100,
                     context: context,
                     builder: (context) => eventDisplay(
-                        wholePage: false,
+                        wholePage: true,
                         justDisplay: true,
                         id: eventInfo!['id'],
                         title: eventInfo['title'],
@@ -146,6 +146,7 @@ class QrwidgetProfile extends StatelessWidget {
                         endTime: eventInfo!['endTime'],
                         creationDate: eventInfo!['creationDate'],
                         city: eventInfo!['eventCity'],
+                        rate: eventInfo!['rate'],
                         likes: likesCount,
                         acceptsParticapants: eventInfo!['acceptsParticapants'],
                         eventVisibilty: eventInfo!['eventVisibility'],

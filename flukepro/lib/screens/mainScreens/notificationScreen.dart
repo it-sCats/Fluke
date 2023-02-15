@@ -147,7 +147,7 @@ class _notificationaState extends State<notificationa> {
             context: context,
             builder: (context) => eventDisplay(
                   //نحي ايقونه الابلاغ لما يستعرضه الادمن وحطي حدف
-                  wholePage: false,
+                  wholePage: true,
                   justDisplay: false,
                   id: eventInfo!['id'],
                   title: inf!['title'],
@@ -162,6 +162,7 @@ class _notificationaState extends State<notificationa> {
                   field: inf!['field'],
                   creationDate: inf!['creationDate'],
                   likes: inf!['likes'].length,
+                  rate: inf!['rate'],
                   city: inf!['eventCity'],
                   acceptsParticapants: inf!['acceptsParticapants'],
                   eventVisibilty: inf!['eventVisibility'],
