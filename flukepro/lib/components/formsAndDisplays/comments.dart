@@ -490,7 +490,10 @@ class _TestMeState extends State<TestMe> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Comment Page"),
+        title: Text(
+          "التعليقات",
+          style: conHeadingsStyle,
+        ),
         backgroundColor: conBlue,
       ),
       body: Container(
@@ -498,8 +501,8 @@ class _TestMeState extends State<TestMe> {
           userImage: CommentBox.commentImageParser(
               imageURLorPath: "assets/img/userpic.jpg"),
           child: commentChild(filedata),
-          labelText: 'Write a comment...',
-          errorText: 'Comment cannot be blank',
+          labelText: 'أكتب تعليق',
+          errorText: 'لا يجب أن يكون التعليق فارغا',
           withBorder: false,
           sendButtonMethod: () {
             if (formKey.currentState!.validate()) {
