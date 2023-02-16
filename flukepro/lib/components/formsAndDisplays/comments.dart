@@ -76,7 +76,9 @@ class _commentSectionState extends State<commentSection> {
 
                   for (var comment in comments) {
                     commentsWidget.add(commenta(
+                      commentID: comment.id,
                       creatorID: widget.creatorID,
+                      eventID: widget.eventID,
                       userPic: comment['userPic'],
                       rate: comment['rate'],
                       commentBody: comment['body'],
@@ -309,6 +311,8 @@ class commenta extends StatelessWidget {
   String creatorID;
   Timestamp creationDate;
   String commenterID;
+  String commentID;
+  String eventID;
   String commenterName;
   var rate;
   String userPic;
@@ -317,8 +321,10 @@ class commenta extends StatelessWidget {
   commenta(
       {required this.creatorID,
       required this.commenterID,
+      required this.eventID,
       required this.commenterName,
       required this.userPic,
+      required this.commentID,
       required this.rate,
       required this.commentBody,
       required this.creationDate});
@@ -328,87 +334,164 @@ class commenta extends StatelessWidget {
     return Container(
       decoration:
           BoxDecoration(border: Border.symmetric(vertical: BorderSide())),
-      child: Row(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                child: CircleAvatar(
-                  //Avatar
-                  backgroundColor: conORange.withOpacity(0),
-                  radius: 35,
-                  backgroundImage: NetworkImage(userPic),
+      child: GestureDetector(
+        onLongPress: () {
+          commenterID == FirebaseAuth.instance.currentUser!.uid
+              ? showDialog(
+                  //save to drafts dialog
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      icon: Icon(
+                        Icons.warning,
+                        color: conRed,
+                        size: 50,
+                      ),
+                      title: Text(
+                        'سيتم حذف تعليقك ',
+                        textAlign: TextAlign.center,
+                        style: conHeadingsStyle.copyWith(fontSize: 15),
+                      ),
+                      actions: [
+                        InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              ' إالغاء الحذف',
+                              textAlign: TextAlign.center,
+                              style: conHeadingsStyle.copyWith(
+                                  fontSize: 14, fontWeight: FontWeight.normal),
+                            )),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          decoration: BoxDecoration(
+                              color: conRed,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: InkWell(
+                              onTap: () async {
+                                //todo test the delete function
+                                await FirebaseFirestore.instance
+                                    .collection('comments')
+                                    .doc(eventID.toString().trim())
+                                    .collection('comment')
+                                    .doc(commentID.toString().trim())
+                                    .delete()
+                                    .then((snapshot) async {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                      'تم حذف الجلسات بنجاح',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontFamily: 'Cairo',
+                                      ),
+                                    )),
+                                  );
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                'حدف',
+                                textAlign: TextAlign.center,
+                                style: conHeadingsStyle.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold),
+                              )),
+                        ),
+                      ],
+                      buttonPadding: EdgeInsets.all(20),
+                      actionsAlignment: MainAxisAlignment.spaceAround,
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 100),
+                    );
+                  })
+              : {};
+        },
+        child: Row(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: CircleAvatar(
+                    //Avatar
+                    backgroundColor: conORange.withOpacity(0),
+                    radius: 35,
+                    backgroundImage: NetworkImage(userPic),
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        commenterName,
-                        style: conHeadingsStyle.copyWith(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: conBlack),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      creatorID == commenterID
-                          ? Icon(
-                              Icons.stars,
-                              color: conORange,
-                            )
-                          : Container(),
-                    ],
-                  ),
-                  RatingBar(
-                      ignoreGestures: true,
-                      initialRating: rate,
-                      itemSize: 20,
-                      ratingWidget: RatingWidget(
-                        full: Icon(
-                          Icons.star,
-                          color: Color(0xffFFC93C),
+                SizedBox(
+                  width: 5,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          commenterName,
+                          style: conHeadingsStyle.copyWith(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: conBlack),
                         ),
-                        half: Icon(
-                          Icons.star_half,
-                          color: Color(0xffFFC93C),
+                        SizedBox(
+                          width: 10,
                         ),
-                        empty: Icon(
-                          Icons.star_border,
-                          color: Color(0xffFFC93C),
+                        creatorID == commenterID
+                            ? Icon(
+                                Icons.stars,
+                                color: conORange,
+                              )
+                            : Container(),
+                      ],
+                    ),
+                    RatingBar(
+                        ignoreGestures: true,
+                        initialRating: rate,
+                        itemSize: 20,
+                        ratingWidget: RatingWidget(
+                          full: Icon(
+                            Icons.star,
+                            color: Color(0xffFFC93C),
+                          ),
+                          half: Icon(
+                            Icons.star_half,
+                            color: Color(0xffFFC93C),
+                          ),
+                          empty: Icon(
+                            Icons.star_border,
+                            color: Color(0xffFFC93C),
+                          ),
                         ),
-                      ),
-                      onRatingUpdate: (r) {}),
-                  Text(
-                    commentBody,
-                    textAlign: TextAlign.right,
-                    style: conHeadingsStyle.copyWith(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: conBlack),
-                  ),
-                  Text(
-                    timeago.format(DateTime.fromMicrosecondsSinceEpoch(
-                        creationDate.microsecondsSinceEpoch)),
-                    style: conHeadingsStyle.copyWith(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w500,
-                        color: conBlack),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ],
+                        onRatingUpdate: (r) {}),
+                    Text(
+                      commentBody,
+                      textAlign: TextAlign.right,
+                      style: conHeadingsStyle.copyWith(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: conBlack),
+                    ),
+                    Text(
+                      timeago.format(DateTime.fromMicrosecondsSinceEpoch(
+                          creationDate.microsecondsSinceEpoch)),
+                      style: conHeadingsStyle.copyWith(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                          color: conBlack),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

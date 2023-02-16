@@ -914,6 +914,7 @@ class _creatingEventState extends State<creatingEvent>
                                             .loggedUser!
                                             .uid,
                                         'likes': {'': false},
+                                        'rate': 0.0,
                                         'creationDate': Timestamp.now(),
                                         'isPublic': false
                                       }).then((value) async {
@@ -1012,6 +1013,7 @@ class _creatingEventState extends State<creatingEvent>
                                         'location': _eventLocationCont.text,
                                         'field': _eventFieldCont.text,
                                         'likes': {},
+                                        'rate': 0.0,
                                         'rooms': rooms,
                                         'acceptsParticapants':
                                             acceptsParticipants,
