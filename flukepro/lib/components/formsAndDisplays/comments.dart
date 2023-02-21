@@ -19,10 +19,12 @@ class commentSection extends StatefulWidget {
   String commenterID;
   String creatorID;
   String eventID;
+  bool eventStarted;
 
   commentSection(
       {required this.eventID,
       required this.creatorID,
+      required this.eventStarted,
       required this.commenterID});
 
   @override
@@ -120,7 +122,8 @@ class _commentSectionState extends State<commentSection> {
                 }
               }),
         ),
-        FirebaseAuth.instance.currentUser!.uid != widget.creatorID
+        FirebaseAuth.instance.currentUser!.uid != widget.creatorID &&
+                widget.eventStarted
             ? Directionality(
                 textDirection: TextDirection.ltr,
                 child: Column(

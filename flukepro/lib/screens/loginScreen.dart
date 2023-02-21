@@ -289,7 +289,7 @@ class _loginScreenState extends State<loginScreen> {
                           provider.getUserInfoDoc(success.uid);
                           provider.getCurrentUsertype(provider.loggedUser!.uid);
                           print('logged in ');
-                          Navigator.pushNamed(context,
+                          Navigator.pushReplacementNamed(context,
                               '/redirect'); //here we redirect the user based on his role
 
                           // final newUser = await _auth.createUserWithEmailAndPassword(

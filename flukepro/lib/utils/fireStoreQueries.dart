@@ -59,6 +59,14 @@ Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getCommentsOnEvent(
   ;
 }
 
+isVistor(userID, eventID) {
+  final visitor = FirebaseFirestore.instance
+      .collection('events')
+      .doc(eventID.toString().trim())
+      .collection('visitors')
+      .where('userID', isEqualTo: userID);
+}
+
 getInterstsBasedEvents(userId, context) {
   //make sure that there is the same interest in the event and the user if it didnt work filter in the app
   var info = getTempUser(userId);

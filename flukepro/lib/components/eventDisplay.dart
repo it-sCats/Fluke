@@ -1778,6 +1778,11 @@ class _eventDisplayState extends State<eventDisplay>
                         commentSection(
                             commenterID: FirebaseAuth.instance.currentUser!.uid,
                             creatorID: widget.creatorID,
+                            eventStarted:
+                                widget.starterDate.compareTo(Timestamp.now()) <=
+                                        0
+                                    ? true
+                                    : false,
                             eventID: widget.id),
                         if (Provider.of<siggning>(context, listen: false)
                                 .userInfoDocument!['userType'] ==
